@@ -1,0 +1,132 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+ 
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>${title}</title>
+	
+	<link rel="stylesheet" href="../css/layout.css" type="text/css" media="screen" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="../css/ie.css" type="text/css" media="screen" />
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <!-- Le styles -->
+
+    <!--<link href="../css/bootstrap.css" rel="stylesheet" />-->
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+		.icon { width:75px; height:75px; }
+		.ticon { float:left; margin: .3em .5em; width:25px; height:25px; box-shadow:1px 1px 1px #aaa; }
+		.ui-dialog { text-align:left; }
+		.ui-dialog input[type="text"], .ui-dialog textarea { display:block; width:90%; }
+    </style>
+    <!--<link href="../css/bootstrap-responsive.css" rel="stylesheet" />-->
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <t:pagelink class="brand" page="data/dashboard">LeMo</t:pagelink>
+          <div class="nav-collapse">
+            <ul class="nav">
+				
+				
+			<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				${message:menu}
+				<b class="caret"></b>
+			</a>
+			<ul class="dropdown-menu">
+				<li><t:pagelink page="data/visualization"><i class="icon-cog"></i>${message:visualizationTitle}</t:pagelink></li>
+				<li><t:pagelink page="data/explorer">${message:explorerTitle}</t:pagelink></li>
+				<li class="nav-header">Settings</li>
+				<li><t:pagelink page="account/myaccount">${message:myAccount}</t:pagelink></li>
+			</ul>
+			</li>	
+				
+				
+           
+              <li><a href="#about">${message:myCourses}</a></li>
+              <li><a href="#contact">${message:myFavorites}</a></li>
+              <li><t:pagelink class="btn-primary" page="data/explorer">${message:courseExplorer}</t:pagelink></li>
+            </ul> 
+            
+            <!-- Logout Button-->
+            <ul class="nav pull-right">
+              <t:security.user>
+              	<li class="divider-vertical pull-right"></li>
+                <li><t:actionlink t:id="logoutlink" id="logoutLink">${message:logout}</t:actionlink></li>
+			  </t:security.user>  
+			</ul>
+			
+			<!-- Locale Switch German - English-->
+			 <ul class="nav pull-right">
+			  	<li class="divider-vertical pull-right"></li>
+			  	<li class="dropdown">
+			  		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			  			<img src="${wheel}" height="20" width="20" />
+			  			<b class="caret"></b>
+			  		</a>
+			  		<ul class="dropdown-menu">
+						<li class="nav-header"><i class="icon-flag"></i>${message:language}</li>
+						<li class="${englishLocale}"><a t:type="ActionLink" t:id="enLocaleLink" href="#">en</a></li>
+    					<li class="${germanLocale}"><a t:type="ActionLink" t:id="deLocaleLink" href="#">de</a></li>  
+					</ul>
+			  	</li>
+			  	
+    		 </ul>  
+    		  
+    		  
+
+
+    		  
+           	<!-- Searchfield-->
+            <form class="navbar-search pull-right">
+    			<input type="text" class="search-query pull-right" placeholder="${message:search}" />
+    		</form> 
+             
+           
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+
+    </div>
+
+    <div class="container-fluid">
+    
+    <!--Homepage content-->
+		<t:body/>
+
+     
+
+      <footer>
+        <p>&copy; LeMo Project 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body> 
+ 
+      
+      
+</html>

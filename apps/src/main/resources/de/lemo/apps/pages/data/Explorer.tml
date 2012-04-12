@@ -1,0 +1,111 @@
+<html t:type="layoutdashboard" title="LeMo | Visualization"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+     <!-- Breadcrumb component-->
+	<div class="row-fluid">
+        <div class="span12">
+    	<ul class="breadcrumb">
+  			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
+    			<a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb" />
+  			</li>
+		</ul>
+		</div>
+	</div>
+	
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="thumbnail">
+    		
+				<t:grid class="table" source="courses" model="coursesGridModel" row="course"  t:inPlace="true">
+		            <p:courseNameCell>
+		            	<t:actionlink t:id="show" context="course.id" zone="coursezone">${course.courseName}</t:actionlink>		                
+		            </p:courseNameCell>
+		            <p:favoritecell>
+		            	<label class="checkbox">
+							<input type="checkbox" />
+						</label>
+		            </p:favoritecell>
+		            <p:empty>
+		              <p>${message:noCourses}</p>
+		            </p:empty>
+        		</t:grid>
+        		<form class="form-search">
+        		<div class="">
+    				<input type="text" class="input-large search-query"/>
+    				<button type="submit" class="btn pull-right">${message:search}</button>
+    			</div>
+    			</form>
+    		</div>
+    	</div>
+    	
+    	
+    	
+    	<div class="span9">
+    		<div class="row-fluid">
+	    		<div class="span12">
+	    		    <ul id="summaryTab" class="nav nav-tabs">
+	    		    
+					    <li class="active"><a href="#summary" data-toggle="tab">${message:courseSummary}</a></li>
+					    <li><a href="#profile" data-toggle="tab">Profile</a></li>
+					    <li><a href="#messages" data-toggle="tab">Messages</a></li>
+					    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+					</ul>
+				</div>
+			</div>
+    		<div> <!-- well content  -->
+    		
+				<div class="tab-content">
+				    <div class="tab-pane active" id="summary">
+						<div class="row-fluid">	
+						<div class="span5">
+							<t:zone t:id="courseZone" id="coursezone" t:update="show"> 	
+							<section>
+								<header>
+									<h3>${course.courseName}</h3><br />
+								</header>
+								<p><b>${message:courseDuration}:</b> ${course.beginDate}  -- ${course.endDate} <br /> </p>
+								<p><b>${message:courseDescription}:</b> ${course.courseDescription}<br />  </p>
+								<p><b>${message:courseMaxParticipants}:</b> ${course.maxParticipants}<br />  </p>
+								<p><b>${message:courseEnroledParticipants}:</b> ${course.enroledParticipants}<br /> </p> 
+							</section>	
+							</t:zone> <!-- courseZone  -->
+						</div> <!-- span5 -->
+						
+						<div class="span6">
+							<div t:id="chart2" style="width: auto; height: 300px;"/>
+						</div> <!-- span6 -->
+						
+					</div>
+					</div><!-- tab-pane -->
+				    <div class="tab-pane" id="profile">...</div>
+				    <div class="tab-pane" id="messages">...</div>
+				    <div class="tab-pane" id="settings">...</div>
+				</div> <!-- tab-content -->
+				
+    		</div> <!-- class=well -->
+    		
+    	</div> <!-- span9 -->
+    	
+    	
+    </div>
+
+<!--    <script type="text/javascript">-->
+<!--				    jQuery(document).ready(function ($) {-->
+<!--				        $(".tabs").tabs();-->
+<!--				    });-->
+<!--    				$('#summary').tab('show')-->
+<!--    				-->
+<!--				    $(function () {-->
+<!--				    $('.tabs a:last').tab('show')-->
+<!--				    })-->
+<!--				    -->
+<!--				    $('a[data-toggle="tab"]').on('shown', function (e) {-->
+<!--    					e.target // activated tab-->
+<!--    					e.relatedTarget // previous tab-->
+<!--    				})-->
+<!--				</script>-->
+    
+</html>
+
+

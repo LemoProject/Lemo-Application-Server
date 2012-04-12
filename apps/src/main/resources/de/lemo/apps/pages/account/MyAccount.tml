@@ -1,0 +1,34 @@
+<html t:type="layoutdashboard" title="LeMo | Visualization"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+     <!-- Breadcrumb component-->
+	<div class="row">
+        <div class="span12">
+    	<ul class="breadcrumb">
+  			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
+    			<a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb" />
+  			</li>
+		</ul>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span12">
+			<h2>${message:accountDetailsfor} ${username}</h2>
+			<br />
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">	    	
+			<form t:id="accountform" class="well  pull-left">
+		    	<t:beaneditor t:id="editor" object="myaccount" />
+		    	<br />
+		    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
+		    	<div class="pull-right">&nbsp;&nbsp;</div>
+		    	<t:pagelink page="data/dashboard" class="btn pull-right">${message:cancel}</t:pagelink>
+            	
+		    </form>	
+		 </div>   
+	</div>
+</html>

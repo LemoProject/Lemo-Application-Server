@@ -1,0 +1,21 @@
+<html t:type="layoutdashboard" title="LeMo | Visualization"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+     <!-- Breadcrumb component-->
+	<div class="row">
+        <div class="span12">
+    	<ul class="breadcrumb">
+  			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
+    			<a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb" />
+  			</li>
+		</ul>
+		</div>
+	</div>
+	
+	<div class="well">
+    		<div t:id="chart1" style="width: auto; height: 150px;"/>
+			<div t:id="chart2" style="width: auto; height: 300px;"/>
+
+    	</div>
+</html>

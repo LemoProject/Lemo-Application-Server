@@ -1,0 +1,91 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+ 
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>${title}</title>
+	
+	<link rel="stylesheet" href="../css/layout.css" type="text/css" media="screen" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="../css/ie.css" type="text/css" media="screen" />
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <!-- Le styles -->
+
+    <!--<link href="../css/bootstrap.css" rel="stylesheet" />-->
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <!--<link href="../css/bootstrap-responsive.css" rel="stylesheet" />-->
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">LeMo</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+
+              	<li class="active"><a href="start">Home</a></li>
+              	<li><a href="#about">${message:about}</a></li>
+              	<li><a href="#contact">${message:contact}</a></li>
+			</ul>  
+			  
+			<!-- Locale Switch German - English-->
+			<ul class="nav pull-right">
+			  	<li class="divider-vertical pull-right"></li>
+
+			  	<li class="${englishLocale}"><a t:type="ActionLink" t:id="enLocaleLink" href="#">en</a></li>
+				<li class="inactive"><a  href="">|</a></li> 
+    		  	<li class="${germanLocale}"><a t:type="ActionLink" t:id="deLocaleLink" href="#">de</a></li>
+
+    		</ul>
+           
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+
+    </div>
+
+    <div class="container">
+    
+    
+    
+    <!--Homepage content-->
+		<t:body/>
+
+     
+
+      <footer>
+        <div class="span12">
+        	<p>&copy; LeMo Project 2012</p>
+        </div>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body> 
+ 
+      
+      
+</html>
