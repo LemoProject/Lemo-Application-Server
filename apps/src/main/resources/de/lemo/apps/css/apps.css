@@ -1,0 +1,10 @@
+/*!
+ * LeMo Application Server Default CSS v. 0.1
+ *
+ */
+
+#draggable {
+	width: 100px;
+	height: 70px;
+	background: silver;
+}

@@ -23,8 +23,11 @@ import org.tynamo.security.services.SecurityService;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
+
+@ImportJQueryUI({"jquery.ui.core",  "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
 @Import(library={"../js/bootstrap-alert.js",
-				//"../js/dashboard.js",
+				"../js/dashboard.js",
+				"../js/apps.js",
 		 		"../js/bootstrap-transition.js",
 		 		"../js/bootstrap-modal.js",
 		 		"../js/bootstrap-dropdown.js",
@@ -39,9 +42,9 @@ import de.lemo.apps.pages.data.Dashboard;
 		 },
 			stylesheet={"../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",
-						"../css/jquery-ui.css"})
+						"../css/jquery-ui.css",
+						"../css/apps.css"})
 
-@ImportJQueryUI("jquery.ui.sortable")
 public class LayoutDashboard {
 	
 	/**

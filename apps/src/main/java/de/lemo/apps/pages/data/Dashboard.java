@@ -1,5 +1,6 @@
 package de.lemo.apps.pages.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -17,6 +18,8 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
+import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.ResultList;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 
@@ -38,6 +41,9 @@ public class Dashboard {
 	
 	@Inject
 	private ApplicationStateManager applicationStateManager;
+	
+	@Inject
+	private Initialisation init;
 
 //	@SuppressWarnings("unused")
 //	@SessionState(create = false)
@@ -96,5 +102,29 @@ public class Dashboard {
         return dataList;
     }
 	
+	
+	public String getStartTime(){
+		return 	init.getStartTime();
+	}
+	
+	public String getFirstquestion(){
+		
+		Long starttime = 1108968800L;
+		Long endtime= 1334447632L;
+		int resolution = 30;
+		List<Long> roles = new ArrayList<Long>();
+		List<Long> courses = new ArrayList<Long>();
+		courses.add(2100L);
+		courses.add(2200L);
+		ResultList results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+		if (results != null && results.getElements()!= null) {
+			for (int i = 0;i< results.getElements().size();i++)
+				System.out.println("List element "+i+"; "+results.getElements().get(i));
+//		if (results != null) {
+//			for (int i = 0;i< results.size();i++)
+//				System.out.println("List element "+i+"; "+results.get(i));
+			return "Guck mal";
+		} else return "Guck lieber nicht";
+	}
 
 }

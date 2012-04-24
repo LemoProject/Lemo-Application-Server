@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Match;
@@ -31,6 +32,8 @@ import de.lemo.apps.integration.QuestionDAO;
 import de.lemo.apps.integration.QuestionDAOImpl;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.integration.UserDAOImpl;
+import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.client.InitialisationImpl;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -50,6 +53,9 @@ public class AppModule
     	binder.bind(CourseDAO.class, CourseDAOImpl.class);
     	binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
     	//binder.bind(LemoServiceResource.class, LemoServiceResourceImpl.class);
+    	
+    	// Rest Services
+    	binder.bind(Initialisation.class, InitialisationImpl.class);
     	
     	
 
@@ -84,6 +90,13 @@ public class AppModule
 //		singletons.add(locator.autobuild(LemoServiceResourceImpl.class));
 //	}
 
+    
+//    @Contribute(javax.ws.rs.core.Application.class)
+//    public static void configureRestResources(Configuration<Object> singletons, Initialisation init)
+//    {
+//    	singletons.add(init);
+//    }
+    
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, Object> configuration)
     {
