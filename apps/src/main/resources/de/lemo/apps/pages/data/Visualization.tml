@@ -27,9 +27,38 @@
 			<div class="thumbnail">
         		<form class="form-search">
         		<div class="">
-        			Einstellungen
-    				<input type="text" class="input-large search-query"/>
-    				<button type="submit" class="btn pull-right">${message:search}</button>
+        			<h4>${course.courseName}</h4><br />
+        			
+        			<form t:id="customizeform" class="well  pull-left">
+				    	
+				    	Resolution:
+				    	<br/>
+				    	
+				    	<br/>
+<!--				    	<t:jquery.slider t:value="val" t:params="params"/>-->
+				    	  <t:jquery.slider t:value="slideZone" t:params="paramsZone" t:zone="myZone" t:id="sliderZone" />
+						<br/>
+						<t:zone t:id="myZone" id="myZone">
+						Slider Value: ${slideZone}
+					</t:zone>
+				    	<br />
+				    	Begin:
+				    	<t:datefield t:value="beginDate" />
+				    	<br />
+				    	<br />
+				    	End:&nbsp;&nbsp;&nbsp;
+				    	<t:datefield t:value="endDate" />
+				    	<br />
+				    	<br />
+				    	<t:actionlink t:id="update" class="btn btn-primary pull-right">update</t:actionlink>
+<!--				    	<button type="submit" class="btn btn-primary pull-right">update</button>-->
+		  				<br />
+				    	<br />
+				    </form>	
+				    
+        			
+<!--    				<input type="text" class="input-large search-query"/>-->
+<!--    				<button type="submit" class="btn pull-right">${message:search}</button>-->
     			</div>
     			</form>
     		</div>
