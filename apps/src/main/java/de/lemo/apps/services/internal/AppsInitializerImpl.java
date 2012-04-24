@@ -3,6 +3,9 @@ package de.lemo.apps.services.internal;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.Context;
@@ -32,11 +35,16 @@ public class AppsInitializerImpl implements ApplicationInitializerFilter {
 			Transaction t = session.getTransaction();
 			t.begin();
 		
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(2100L);
+			courses.add(2200L);
+			
 			final User user = new User();
 			user.setEmail("johndoe@example.com");
 			user.setFullname("John Doe");
 			user.setPassword("john");
 			user.setUsername("johndoe");
+			user.setMyCourses(courses);
 			
 			final User user1 = new User();
 			user1.setEmail("petersmith@example.com");
@@ -47,7 +55,7 @@ public class AppsInitializerImpl implements ApplicationInitializerFilter {
 			session.save(user);
 			session.save(user1);
 		
-			//t.commit();
+			t.commit();
 		}
 	}
 

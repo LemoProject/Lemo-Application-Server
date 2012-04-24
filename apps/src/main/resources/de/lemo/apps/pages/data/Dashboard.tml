@@ -63,7 +63,7 @@
 		    	</div>
 				<br />
 				<div t:id="chart2" style="width: auto; height: 300px;"/>
-				<t:pagelink page="data/visualizationjqplot">${message:viewdetails}</t:pagelink>	
+				<t:pagelink page="data/visualization">${message:viewdetails}</t:pagelink>	
 			</div>
    		</div>
    		
@@ -112,7 +112,7 @@
 		    	</div>
 				<br />
 				<div t:id="chart1" style="width: auto; height: auto;"/>	
-				<t:pagelink page="data/visualizationjqplot">${message:viewdetails}</t:pagelink>	
+				<t:pagelink page="data/visualization">${message:viewdetails}</t:pagelink>	
 			</div>
    		</div>
 

@@ -113,7 +113,7 @@ public class AppModule
         // Tynamo's tapestry-security module configuration
     	configuration.add(SecuritySymbols.LOGIN_URL, "/start");
     	configuration.add(SecuritySymbols.UNAUTHORIZED_URL, "/start");
-    	configuration.add(SecuritySymbols.SUCCESS_URL, "/data/dashboard");
+    	configuration.add(SecuritySymbols.SUCCESS_URL, "/data/initialize");
     }
     
 //    @Match("*DAO")
@@ -144,13 +144,13 @@ public class AppModule
     	
     	//Example Courses
     	configuration.add("course1", new Course("Mathematik 2", "Dieser Kurs richtet sich an Studierende, die den Kurs Mathematik 1 erfolgreich bestanden haben ....",
-                new Date(), new Date(), 25, 22));
+                new Date(), new Date(), 25L, 22L));
     	configuration.add("course2", new Course("Mathematik 3", "Dieser Kurs richtet sich an Studierende, die den Kurs Mathematik 2 erfolgreich bestanden haben ....",
-                new Date(), new Date(), 25, 12));
+                new Date(), new Date(), 25L, 12L));
     	configuration.add("course3", new Course("BWL für Mathematiker", "Dieser Kurs richtet sich an Studierende, der Mathematik ....",
-                new Date(), new Date(), 15, 15));
+                new Date(), new Date(), 15L, 15L));
     	configuration.add("course4", new Course("Informatik für Mathematiker", "Dieser Kurs richtet sich an Studierende, dwe Mathematik  ....",
-                new Date(), new Date(), 20, 21));
+                new Date(), new Date(), 20L, 21L));
     	
     	//Example User
         configuration.add("user1", new User("John Doe", "johndoe",

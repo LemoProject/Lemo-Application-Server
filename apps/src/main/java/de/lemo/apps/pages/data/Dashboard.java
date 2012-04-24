@@ -20,6 +20,7 @@ import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultList;
+import de.lemo.apps.restws.entities.ResultListLong;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 
@@ -27,7 +28,7 @@ import de.lemo.apps.services.internal.jqplot.XYDataItem;
 @BreadCrumb(titleKey="dashboardTitle")
 public class Dashboard {
 	
-	@Component(parameters = {"dataItems=testData"})
+	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
     private JqPlotLine chart1;
 	
 	@Component(parameters = {"dataItems=testPieData"})
@@ -107,6 +108,25 @@ public class Dashboard {
 		return 	init.getStartTime();
 	}
 	
+	public List getFirstQuestionDataItems(){
+		List<List<XYDataItem>> dataList = CollectionFactory.newList();
+        List<XYDataItem> list1 = CollectionFactory.newList();
+
+        Long starttime = 1108968800L;
+		Long endtime= 1334447632L;
+		int resolution = 30;
+		List<Long> roles = new ArrayList<Long>();
+		List<Long> courses = new ArrayList<Long>();
+		courses.add(2100L);
+		courses.add(2200L);
+		ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+        for(int i=0 ;i<resolution;i++){
+        	list1.add(new XYDataItem(i, results.getElements().get(i)));
+        }
+        dataList.add(list1);
+        return dataList;
+	}
+	
 	public String getFirstquestion(){
 		
 		Long starttime = 1108968800L;
@@ -116,7 +136,7 @@ public class Dashboard {
 		List<Long> courses = new ArrayList<Long>();
 		courses.add(2100L);
 		courses.add(2200L);
-		ResultList results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+		ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
 		if (results != null && results.getElements()!= null) {
 			for (int i = 0;i< results.getElements().size();i++)
 				System.out.println("List element "+i+"; "+results.getElements().get(i));

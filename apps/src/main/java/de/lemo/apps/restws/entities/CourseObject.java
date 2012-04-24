@@ -45,6 +45,41 @@ public class CourseObject {
 	public Long getLastRequest() {
 		return lastRequest;
 	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param participants the participants to set
+	 */
+	public void setParticipants(Long participants) {
+		this.participants = participants;
+	}
+
+	/**
+	 * @param lastRequest the lastRequest to set
+	 */
+	public void setLastRequest(Long lastRequest) {
+		this.lastRequest = lastRequest;
+	}
 	
 	
 }

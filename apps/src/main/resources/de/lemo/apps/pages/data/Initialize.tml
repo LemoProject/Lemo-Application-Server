@@ -1,0 +1,25 @@
+<html t:type="layoutdashboard" title="LeMo | Dashboard"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+	<div class="row-fluid">
+		<div class="span4">
+
+		</div>
+        <div class="span4">
+
+		    <div class="progress progress-striped active">
+	    		<div class="bar" style="width: 20%;"></div>
+	    	</div>
+	    	<t:ProgressiveDisplay t:id="showThings" t:initial="block:loadingBlock" style="margin-left: 10px;">
+			</t:ProgressiveDisplay>
+    	</div>
+    	<div class="span4">
+		</div>
+	</div>
+	
+	
+	<t:block t:id="loadingBlock">
+ 	</t:block>
+      
+</html>

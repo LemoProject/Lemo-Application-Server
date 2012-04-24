@@ -57,23 +57,26 @@
     		
 				<div class="tab-content">
 				    <div class="tab-pane active" id="summary">
-						<div class="row-fluid">	
+						<div class="row-fluid">
+							
 						<div class="span5">
 							<t:zone t:id="courseZone" id="coursezone" t:update="show"> 	
 							<section>
 								<header>
 									<h3>${course.courseName}</h3><br />
 								</header>
-								<p><b>${message:courseDuration}:</b> ${course.beginDate}  -- ${course.endDate} <br /> </p>
+								<p><b>${message:courseDuration}:</b> ${course.lastRequestDate} <br /> </p>
 								<p><b>${message:courseDescription}:</b> ${course.courseDescription}<br />  </p>
 								<p><b>${message:courseMaxParticipants}:</b> ${course.maxParticipants}<br />  </p>
 								<p><b>${message:courseEnroledParticipants}:</b> ${course.enroledParticipants}<br /> </p> 
+								<t:pagelink page="data/visualization" context="${course.id}">${message:viewdetails}</t:pagelink>
 							</section>	
 							</t:zone> <!-- courseZone  -->
 						</div> <!-- span5 -->
 						
 						<div class="span6">
 							<div t:id="chart2" style="width: auto; height: 300px;"/>
+								
 						</div> <!-- span6 -->
 						
 					</div>

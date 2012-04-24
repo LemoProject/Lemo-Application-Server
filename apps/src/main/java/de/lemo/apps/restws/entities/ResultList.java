@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="results")
 public class ResultList {
 
-	@XmlElement
+	//@XmlElement
 	private List<?> elements;
 	
 	public ResultList()

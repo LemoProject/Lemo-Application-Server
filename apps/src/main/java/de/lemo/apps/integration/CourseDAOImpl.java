@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
+import de.lemo.apps.restws.entities.CourseObject;
 
 public class CourseDAOImpl implements CourseDAO{
 	
@@ -45,6 +46,16 @@ public class CourseDAOImpl implements CourseDAO{
         }
         return true;
     }
+	
+	public boolean doExistByForeignCourseId(Long courseId){
+        Criteria criteria = session.createCriteria(Course.class);
+        criteria.add(Restrictions.eq("courseId", courseId));
+        List<Course> results = criteria.list();
+        if (results.size() == 0) {
+                return false;
+        }
+        return true;
+    }
     
     public Course getCourse(String coursename){
         Criteria criteria = session.createCriteria(Course.class);
@@ -67,7 +78,13 @@ public class CourseDAOImpl implements CourseDAO{
     }
     
     
+    
     public void save(Course course) {
+        session.persist(course);
+    }
+    
+    public void save(CourseObject courseObject) {
+    	Course course = new Course(courseObject);
         session.persist(course);
     }
     

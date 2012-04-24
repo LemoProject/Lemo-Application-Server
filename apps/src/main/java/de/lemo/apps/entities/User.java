@@ -1,6 +1,7 @@
 package de.lemo.apps.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -63,6 +64,8 @@ public class User extends AbstractEntity{
 	private Set<Role> roles = new HashSet<Role>();
 
 	private byte[] passwordSalt;
+	
+	private List<Long> myCourses;
 
     public User()
     {
@@ -172,6 +175,17 @@ public class User extends AbstractEntity{
 	public Set<Role> getRoles() {
 		return roles;
 	}
+	
+	
+	public void setMyCourses(List<Long> myCourses) {
+		this.myCourses = myCourses;
+	}
+	
+	@CollectionOfElements(targetElement = Long.class)
+	public List<Long> getMyCourses() {
+		return myCourses;
+	}
+
 
     
     @Override
@@ -188,5 +202,6 @@ public class User extends AbstractEntity{
 		return username == null ? 0 : username.hashCode();
 	}
 
+	
     
 }
