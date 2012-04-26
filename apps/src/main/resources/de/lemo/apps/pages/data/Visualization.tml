@@ -24,16 +24,30 @@
     	
     	
     	<div class="span3">
+    		<div class="row-fluid">
+    		<div class="span12">
+    			<div class="well">
+    				<h4>${course.courseName}</h4>
+    				<br />
+    				${message:available}: ${FirstRequestDate} - ${LastRequestDate}
+    				<br />
+    				<br />
+    				${message:range}: ${resolution} ${message:days}
+    			</div>
+    		</div>
+    		</div>
+    		<div class="row-fluid">
+    		<div class="span12">
 			<div class="thumbnail">
         		<form class="form-search">
         		<div class="">
-        			<h4>${course.courseName}</h4><br />
+        			
         			<t:zone t:id="formZone" id="formZone">
         			<form t:type="form" t:id="customizeform" class="well  pull-left">
-				    	Range: ${slideZone} days
-				    	<br/>
+				    	<h4>${message:options}</h4><br />
 				    	
-<!--				    	<br/>
+				    	
+<!--				    <br/>
 				    	<t:jquery.slider t:value="val" t:params="params"/>
 				    	  <t:jquery.slider t:value="slideZone" t:params="paramsZone" t:zone="myZone" t:id="sliderZone" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" />
 						<br/>
@@ -41,16 +55,20 @@
 						Slider Value: ${slideZone}
 						</t:zone>-->
 				    	<br />
-				    	Begin:
+				    	${message:begin}:&nbsp;&nbsp;&nbsp;&nbsp;
 				    	<t:datefield t:value="beginDate" />
 				    	<br />
 				    	<br />
-				    	End:&nbsp;&nbsp;&nbsp;
+				    	${message:end}:&nbsp;&nbsp;&nbsp;&nbsp;
 				    	<t:datefield t:value="endDate" />
 				    	<br />
 				    	<br />
+				    	${message:activity}:
+            			<t:select t:id="activity" value="activity" model="literal:Quiz,Wiki,Blog,Files, ..."/>
 			    	 <!--	<t:actionlink t:id="update" class="btn btn-primary pull-right">update</t:actionlink>-->
-				   		<input t:type="submit" value="Update" class="btn btn-primary pull-right" />
+			    	 	<br />
+				    	<br />
+				   		<input t:type="submit" value="Update" class="btn btn-primary pull-left" />
 		  				<br />
 				    	<br />
 				   </form>	
@@ -61,6 +79,8 @@
     			</div>
     			</form>
     		</div>
+    		</div> <!--span12-->
+    		</div> <!--row fluid-->
     	</div>
     	
     </div>

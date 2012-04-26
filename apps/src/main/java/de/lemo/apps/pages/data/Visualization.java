@@ -1,10 +1,12 @@
 package de.lemo.apps.pages.data;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
@@ -57,6 +59,9 @@ public class Visualization {
 	private ComponentResources componentResources;
 	
 	@Inject
+	private Locale currentlocale;
+	
+	@Inject
 	private JavaScriptSupport jsSupport;
 	
 	@Inject 
@@ -98,6 +103,10 @@ public class Visualization {
 	@Property
 	@Persist
 	Integer resolution;
+	
+	@Property
+	@Persist
+	Integer activity;
 	
 //	@Property
 //	private JSONObject params;	
@@ -174,9 +183,9 @@ public class Visualization {
 	
 	
 	
-//	public Course onPassivate(){
-//         return course;
-//	}
+	public Course onPassivate(){
+         return course;
+	}
     
     void cleanupRender() {
 		form.clearErrors();
@@ -197,6 +206,25 @@ public class Visualization {
     	    	
     }
     
+    
+    
+    /**
+	 * Gibt das Datum in der aktuell vom Nutzer gewaehlten Locale Einstellung aus.
+	 * @param inputDate
+	 * @return Ein Objekt vom Typ String
+	 */
+	public String getLocalizedDate(Date inputDate) {
+		SimpleDateFormat df_date = new SimpleDateFormat( "MMM dd, yyyy", currentlocale );
+		return df_date.format(inputDate);
+	}
+	
+	public String getFirstRequestDate() {
+		return getLocalizedDate(this.course.getFirstRequestDate());
+	}
+	
+	public String getLastRequestDate() {
+		return getLocalizedDate(this.course.getLastRequestDate());
+	}
 
     //public List<Course> getCourses() { return courseDAO.findAll(); }
     

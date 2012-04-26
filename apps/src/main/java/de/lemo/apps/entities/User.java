@@ -66,6 +66,13 @@ public class User extends AbstractEntity{
 	private byte[] passwordSalt;
 	
 	private List<Long> myCourses;
+	
+	private Long widget1;
+	
+	private Long widget2;
+	
+	private Long widget3;
+	
 
     public User()
     {
@@ -188,7 +195,49 @@ public class User extends AbstractEntity{
 
 
     
-    @Override
+    /**
+	 * @return the widget1
+	 */
+	public Long getWidget1() {
+		return widget1;
+	}
+
+	/**
+	 * @param widget1 the widget1 to set
+	 */
+	public void setWidget1(Long widget1) {
+		this.widget1 = widget1;
+	}
+
+	/**
+	 * @return the widget2
+	 */
+	public Long getWidget2() {
+		return widget2;
+	}
+
+	/**
+	 * @param widget2 the widget2 to set
+	 */
+	public void setWidget2(Long widget2) {
+		this.widget2 = widget2;
+	}
+
+	/**
+	 * @return the widget3
+	 */
+	public Long getWidget3() {
+		return widget3;
+	}
+
+	/**
+	 * @param widget3 the widget3 to set
+	 */
+	public void setWidget3(Long widget3) {
+		this.widget3 = widget3;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		try {
 			return (obj instanceof User && ((User) obj).getUsername().equals(username));

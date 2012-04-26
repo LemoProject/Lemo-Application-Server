@@ -2,6 +2,7 @@ package de.lemo.apps.restws.client;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.QueryParam;
@@ -36,7 +37,7 @@ public class InitialisationImpl implements Initialisation {
 	}
 	
 	
-	public String getStartTime(){
+	public Date getStartTime(){
 		//Create resource delegate
 		//logger.info("Getting Server Starttime");
 		try {
@@ -56,7 +57,7 @@ public class InitialisationImpl implements Initialisation {
 			Starttime starttime = ProxyFactory.create(Starttime.class,
 			"http://localhost:4443/starttime");
 			if (starttime != null){
-				return starttime.startTimeHtml();
+				return new Date(starttime.startTimeJson().getTime());
 			}
 			
 		} catch (ClientProtocolException e) {
@@ -72,7 +73,7 @@ public class InitialisationImpl implements Initialisation {
 			e.printStackTrace();
 		}
 		
-		return "Keine Antwort!";
+		return null;
 	}
 		
 		

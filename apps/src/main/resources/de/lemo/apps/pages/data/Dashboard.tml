@@ -55,11 +55,11 @@
 	<section class="thumbnails">
     	<div class="span6">
 	    	<div class="thumbnail">
-		    	<a class="close" data-toggle="modal" href="#widgetDialog"><img src="${wheel}" height="20" width="20" /></a>
+		    	<a class="close" data-toggle="modal" href="#widgetDialog1"><img src="${wheel}" height="20" width="20" /></a>
 		    	
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><h5>Widget 1</h5></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><h5>${getWidgetName('1')}</h5></a></li>
 					</ul>
 		    	</div>
 				<br />
@@ -70,14 +70,14 @@
    		
    		<div class="span6">
     		<div class="thumbnail">
-		    	<a class="close" data-toggle="modal" href="#widgetDialog"><img src="${wheel}" height="20" width="20" /></a>
+		    	<a class="close" data-toggle="modal" href="#widgetDialog2"><img src="${wheel}" height="20" width="20" /></a>
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><h5>Widget 2</h5></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><h5>${getWidgetName('2')}</h5></a></li>
 					</ul>
 		    	</div>
 				<br />
-				<img src="http://placehold.it/400x350" alt="" />	
+			<!--	<img src="http://placehold.it/400x350" alt="" />-->	
 			</div>
    		</div>
 <!--   		<div class="span2">-->
@@ -106,10 +106,10 @@
     <section class="thumbnails">
     	<div class="span12">
     		<div class="thumbnail">
-		    	<a class="close" data-toggle="modal" href="#widgetDialog"><img src="${wheel}" height="20" width="20" /></a>
+		    	<a class="close" data-toggle="modal" href="#widgetDialog3"><img src="${wheel}" height="20" width="20" /></a>
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>Widget 3</h5></div></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>${getWidgetName('3')}</h5></div></a></li>
 					</ul>
 		    	</div>
 				<br />
@@ -122,34 +122,107 @@
    </section>
   </div>  
     
-<div class="modal hide fade" id="widgetDialog">
+<div class="modal hide fade" id="widgetDialog3">
+			<form t:type="form" t:id="courseForm3" name="courseForm3">
 				<div class="modal-header">
 					<a href="#" class="close" data-dismiss="modal">&times;</a>
 					<h3>${message:widgetPrefs}</h3>
 					</div>
 				<div class="modal-body">
 					<div class="divDialogElements">
-						<input class="xlarge" id="xlInput" name="xlInput" type="text" />
-						</div>
+						<input class="xlarge" id="xlInput3" name="xlInput3" type="text" />
+					
+						
+							<t:select t:id="widgetCourse3" t:value="widgetCourse3" model="courseModel3"/>
+						
 					</div>
-				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog ();">Cancel</a>
-					<a href="#" class="btn btn-primary" onclick="okClicked ();">OK</a>
 				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn" onclick="closeDialog3 ();">Cancel</a>
+					<a href="#" class="btn btn-primary" onclick="okClicked3 ();">OK</a>
+				</div>
+			</form>
+</div>
+
+<div class="modal hide fade" id="widgetDialog2">
+			<form t:type="form" t:id="courseForm2" name="courseForm2">
+				<div class="modal-header">
+					<a href="#" class="close" data-dismiss="modal">&times;</a>
+					<h3>${message:widgetPrefs}</h3>
+					</div>
+				<div class="modal-body">
+					<div class="divDialogElements">
+						<input class="xlarge" id="xlInput2" name="xlInput2" type="text" />
+					
+						
+							<t:select t:id="widgetCourse2" t:value="widgetCourse2" model="courseModel2"/>
+						
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn" onclick="closeDialog2 ();">Cancel</a>
+					<a href="#" class="btn btn-primary" onclick="okClicked2 ();">OK</a>
+				</div>
+			</form>
+</div>
+
+<div class="modal hide fade" id="widgetDialog1">
+			<form t:type="form" t:id="courseForm1" name="courseForm1">
+				<div class="modal-header">
+					<a href="#" class="close" data-dismiss="modal">&times;</a>
+					<h3>${message:widgetPrefs}</h3>
+					</div>
+				<div class="modal-body">
+					<div class="divDialogElements">
+						<input class="xlarge" id="xlInput1" name="xlInput1" type="text" />
+						
+							<t:select t:id="widgetCourse1" t:value="widgetCourse1" model="courseModel1"/>
+							
+						
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn" onclick="closeDialog1 ();">Cancel</a>
+					<a href="#" class="btn btn-primary" onclick="okClicked1 ();">OK</a>
+				</div>
+			</form>
 </div>
 			     
      
  <script>
 			$(document).ready(function() {
-				$('#widgetDialog').bind('show', function () {
-					document.getElementById("xlInput").value = "widget3";
+				$('#widgetDialog1').bind('show', function () {
+					document.getElementById("xlInput1").value = "widget1";
+					});
+
+				$('#widgetDialog2').bind('show', function () {
+					document.getElementById("xlInput2").value = "widget2";
+					});
+
+				$('#widgetDialog3').bind('show', function () {
+					document.getElementById("xlInput3").value = "widget3";
 					});
 				});
-			function closeDialog () {
-				$('#widgetDialog').modal('hide'); 
+			function closeDialog1 () {
+				$('#widgetDialog1').modal('hide'); 
 				};
-			function okClicked () {
-				closeDialog ();
+			function closeDialog2 () {
+				$('#widgetDialog2').modal('hide'); 
+				};	
+			function closeDialog3 () {
+				$('#widgetDialog3').modal('hide'); 
+				};
+			function okClicked1 () {
+				document.courseForm1.submit();
+				closeDialog1 ();
+				};
+			function okClicked2 () {
+				document.courseForm2.submit();
+				closeDialog2 ();
+				};
+			function okClicked3 () {
+				document.courseForm3.submit();
+				closeDialog3 ();
 				};
 </script>    
      

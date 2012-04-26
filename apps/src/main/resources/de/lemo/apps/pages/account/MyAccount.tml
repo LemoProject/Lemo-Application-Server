@@ -1,34 +1,28 @@
-<html t:type="layoutdashboard" title="LeMo | Visualization"
+<html t:type="layoutaccount" title="LeMo | ${message:myAccountTitle}" subpage="myaccount"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-     
-     <!-- Breadcrumb component-->
-	<div class="row-fluid">
-        <div class="span12">
-    	<ul class="breadcrumb">
-  			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
-    			<a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb" />
-  			</li>
-		</ul>
-		</div>
-	</div>
 	
-	<div class="row-fluid">
-		<div class="span12">
-			<h2>${message:accountDetailsfor} ${username}</h2>
-			<br />
+	
+		
+		<div class="span9">
+			<div class="row-fluid">
+				<div class="span12">
+					<h3>${message:accountDetailsfor} ${username}</h3>
+					<br />
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12">	    	
+					<form t:id="accountform" class="well  pull-left">
+				    	<t:beaneditor t:id="editor" object="myaccount" />
+				    	<br />
+				    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
+				    	<div class="pull-right">&nbsp;&nbsp;</div>
+				    	<t:pagelink page="data/dashboard" class="btn pull-right">${message:cancel}</t:pagelink>
+		            	
+				    </form>	
+			 	</div>  
+			 </div> 
 		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span12">	    	
-			<form t:id="accountform" class="well  pull-left">
-		    	<t:beaneditor t:id="editor" object="myaccount" />
-		    	<br />
-		    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
-		    	<div class="pull-right">&nbsp;&nbsp;</div>
-		    	<t:pagelink page="data/dashboard" class="btn pull-right">${message:cancel}</t:pagelink>
-            	
-		    </form>	
-		 </div>   
-	</div>
+	
 </html>

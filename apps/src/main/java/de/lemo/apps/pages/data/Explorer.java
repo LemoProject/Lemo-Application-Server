@@ -1,7 +1,10 @@
 package de.lemo.apps.pages.data;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
@@ -51,6 +54,9 @@ public class Explorer {
 	
 	@Inject
 	private JavaScriptSupport jsSupport;
+	
+	@Inject
+	private Locale currentlocale;
 	
 //	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
 //    private JqPlotLine chart1;
@@ -113,6 +119,25 @@ public class Explorer {
     	courseDAO.toggleFavorite(id);
     }
     
+  
+    /**
+	 * Gibt das Datum in der aktuell vom Nutzer gewaehlten Locale Einstellung aus.
+	 * @param inputDate
+	 * @return Ein Objekt vom Typ String
+	 */
+	public String getLocalizedDate(Date inputDate) {
+		SimpleDateFormat df_date = new SimpleDateFormat( "MMM dd, yyyy (hh:mm)", currentlocale );
+		return df_date.format(inputDate);
+	}
+	
+	public String getFirstRequestDate() {
+		return getLocalizedDate(this.course.getFirstRequestDate());
+	}
+	
+	public String getLastRequestDate() {
+		return getLocalizedDate(this.course.getLastRequestDate());
+	}
+	
    
     public List getTestPieData()
     {

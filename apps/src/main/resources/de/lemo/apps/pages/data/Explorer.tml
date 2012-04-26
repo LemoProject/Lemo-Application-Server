@@ -69,8 +69,8 @@
 								<header>
 									<h3>${course.courseDescription} (${course.courseId})</h3><br />
 								</header>
-								<p><b>${message:firstRequest}:</b> ${course.firstRequestDate} <br /> </p>
-								<p><b>${message:lastRequest}:</b> ${course.lastRequestDate} <br /> </p>
+								<p><b>${message:firstRequest}:</b> ${firstRequestDate} <br /> </p>
+								<p><b>${message:lastRequest}:</b> ${lastRequestDate} <br /> </p>
 								<p><b>${message:courseMaxParticipants}:</b> ${course.maxParticipants}<br />  </p>
 								<p><b>${message:courseEnroledParticipants}:</b> ${course.enroledParticipants}<br /> </p> 
 								<br />

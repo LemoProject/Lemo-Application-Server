@@ -1,17 +1,20 @@
 package de.lemo.apps.pages.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
 
 import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.ApplicationStateManager;
@@ -19,11 +22,17 @@ import org.got5.tapestry5.jquery.ImportJQueryUI;
 import org.tynamo.security.services.SecurityService;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
+import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.User;
+import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultList;
 import de.lemo.apps.restws.entities.ResultListLong;
+import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 
@@ -42,6 +51,15 @@ public class Dashboard {
     @Property
     private Asset wheel;
 	
+	@Inject
+	private CourseDAO courseDAO;
+	
+	@Inject 
+	private UserDAO userDAO;
+	
+	@Inject
+	private UserWorker userWorker;
+	
 	@Property
 	private BreadCrumbInfo breadCrumb;
 	
@@ -53,6 +71,37 @@ public class Dashboard {
 	
 	@Inject
 	private Initialisation init;
+	
+	@Component(id = "courseForm1")
+	private Form courseForm1;
+	
+	@Component(id = "courseForm2")
+	private Form courseForm2;
+	
+	@Component(id = "courseForm3")
+	private Form courseForm3;
+	
+	
+	@Property
+	@SuppressWarnings("unused")
+	private SelectModel courseModel1;
+	
+	@Property
+	@SuppressWarnings("unused")
+	private SelectModel courseModel2;
+	
+	@Property
+	@SuppressWarnings("unused")
+	private SelectModel courseModel3;
+	
+	@Property
+	private Long widgetCourse1;
+	
+	@Property
+	private Long widgetCourse2;
+	
+	@Property
+	private Long widgetCourse3;
 
 //	@SuppressWarnings("unused")
 //	@SessionState(create = false)
@@ -67,6 +116,18 @@ public class Dashboard {
 //		}
 //
 //	}
+	
+	
+	void onPrepareForRender() {
+		List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
+		courseModel1 = new CourseIdSelectModel(courses);
+		courseModel2 = new CourseIdSelectModel(courses);
+		courseModel3 = new CourseIdSelectModel(courses);
+		
+		widgetCourse1 = userWorker.getCurrentUser().getWidget1();
+		widgetCourse2 = userWorker.getCurrentUser().getWidget2();
+		widgetCourse3 = userWorker.getCurrentUser().getWidget3();
+	}
 	
 	@Cached
     public List getTestData()
@@ -114,9 +175,36 @@ public class Dashboard {
 	@Persist
 	private Integer count;
 	
-	public String getStartTime(){
+	public Date getStartTime(){
 		return 	init.getStartTime();
 	}
+	
+	public List<Course> getMyCourses(){
+		return courseDAO.findAllByOwner(userWorker.getCurrentUser());
+	}
+	
+	void onSuccessFromCourseForm1(){
+		System.out.println("Course ID:"+ widgetCourse1 );
+		User user = userWorker.getCurrentUser();
+		user.setWidget1(widgetCourse1);
+		userDAO.update(user);
+	}
+	
+	void onSuccessFromCourseForm2(){
+		System.out.println("Course ID:"+ widgetCourse2 );
+		User user = userWorker.getCurrentUser();
+		user.setWidget2(widgetCourse2);
+		userDAO.update(user);
+	}
+	
+	
+	void onSuccessFromCourseForm3(){
+		System.out.println("Course ID:"+ widgetCourse2 );
+		User user = userWorker.getCurrentUser();
+		user.setWidget3(widgetCourse3);
+		userDAO.update(user);
+	}
+	
 	
 	public List getFirstQuestionDataItems(){
 		List<List<XYDataItem>> dataList = CollectionFactory.newList();
@@ -141,7 +229,20 @@ public class Dashboard {
 	}
 	
 	
-	
+	public String getWidgetName(int widget){
+		switch(widget){
+		case 1:
+			Long id1 = userWorker.getCurrentUser().getWidget1(); 
+			if(id1!=null) return courseDAO.getCourse(id1).getCourseDescription();
+		case 2:
+			Long id2 = userWorker.getCurrentUser().getWidget2(); 
+			if(id2!=null) return courseDAO.getCourse(id2).getCourseDescription();
+		case 3:
+			Long id3 = userWorker.getCurrentUser().getWidget3(); 
+			if(id3!=null) return courseDAO.getCourse(id3).getCourseDescription();
+		default: return "Widget unused";	
+		}
+	}
 	
 	
 	public String getFirstquestion(){
