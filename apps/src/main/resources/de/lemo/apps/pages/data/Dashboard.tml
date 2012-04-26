@@ -63,7 +63,7 @@
 					</ul>
 		    	</div>
 				<br />
-				<div t:id="chart2" style="width: auto; height: 350px;"/>
+			<div t:id="chart2" style="width: auto; height: 350px;"/>
 				<t:pagelink page="data/visualization">${message:viewdetails}</t:pagelink>	
 			</div>
    		</div>
@@ -113,7 +113,7 @@
 					</ul>
 		    	</div>
 				<br />
-<!--				<div t:id="chart1" style="width: auto; height: auto;"/>	-->
+					<div t:id="chart1" style="width: auto; height: auto;"/>	
 				<t:pagelink page="data/visualization">${message:viewdetails}</t:pagelink>	
 			</div>
    		</div>

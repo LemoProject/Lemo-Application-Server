@@ -1,6 +1,7 @@
 package de.lemo.apps.pages.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -35,13 +36,14 @@ import de.lemo.apps.restws.entities.ResultListLong;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
+import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="dashboardTitle")
 public class Dashboard {
 	
-//	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
-//    private JqPlotLine chart1;
+	@Component(parameters = {"dataItems=FirstQuestionDataItems3"})
+    private JqPlotLine chart1;
 	
 	@Component(parameters = {"dataItems=testPieData"})
     private JqPlotPie chart2 ;
@@ -80,7 +82,6 @@ public class Dashboard {
 	
 	@Component(id = "courseForm3")
 	private Form courseForm3;
-	
 	
 	@Property
 	@SuppressWarnings("unused")
@@ -224,6 +225,59 @@ public class Dashboard {
         	for(int i=0 ;i<resolution;i++){
         		list1.add(new XYDataItem(i, results.getElements().get(i)));
         	}
+        dataList.add(list1);
+        return dataList;
+	}
+	
+	
+	public List getFirstQuestionDataItems3(){
+		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
+        List<XYDateDataItem> list1 = CollectionFactory.newList();
+        Long id3 = userWorker.getCurrentUser().getWidget3();
+        Course course = courseDAO.getCourse(id3);
+        Date endDate = course.getLastRequestDate();
+    	Date beginDate = course.getFirstRequestDate();
+    	Integer resolution = 0;
+        if(id3!=null){
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	
+        	if(endDate!=null){
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} //else endtime= 1334447632L;
+	        
+        	if(beginDate!=null){
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} //else starttime = 1308968800L;
+        	
+			
+			//int resolution = 30;
+			if (resolution == null || resolution < 10 )
+				resolution = 170;
+			List<Long> roles = new ArrayList<Long>();
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(course.getCourseId());
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				System.out.println("Courses: "+courses.get(i));
+			}
+			System.out.println("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+			ResultListLong results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			
+			
+			Calendar beginCal = Calendar.getInstance();
+			beginCal.setTime(beginDate);
+			System.out.println("BeginDate: "+beginDate);
+			//checking if result size matches resolution 
+			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
+	        for(int i=0 ;i<resolution;i++){
+	        	
+	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
+	        	//System.out.println(" Run: "+i+" Date: "+beginCal.getTime()+" Value: "+results.getElements().get(i));
+	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
+	        }
+    	}
         dataList.add(list1);
         return dataList;
 	}
