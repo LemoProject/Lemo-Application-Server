@@ -1,4 +1,4 @@
-<html t:type="layoutdashboard" title="LeMo | Visualization"
+<html t:type="layoutdashboard" title="LeMo | ${message:explorerTitle}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
      
@@ -17,13 +17,15 @@
 		<div class="span3">
 			<div class="thumbnail">
     		
-				<t:grid class="table" source="courses" model="coursesGridModel" row="course"  t:inPlace="true">
+				<t:grid class="table" source="courses" model="coursesGridModel" row="course" rowsPerPage="5" t:inPlace="true">
 		            <p:courseNameCell>
-		            	<t:actionlink t:id="show" context="course.id" zone="coursezone">${course.courseName}</t:actionlink>		                
+		            	<t:actionlink t:id="show" context="course.id" zone="coursezone">${course.courseDescription}</t:actionlink>		                
 		            </p:courseNameCell>
 		            <p:favoritecell>
 		            	<label class="checkbox">
-							<input type="checkbox" />
+		            	<form t:type="form">
+							<t:actionlink t:id="update" context="course.id"><input t:type="checkbox" value="${prop:course.isFavorite}"/></t:actionlink>
+						</form>
 						</label>
 		            </p:favoritecell>
 		            <p:empty>
@@ -42,6 +44,7 @@
     	
     	
     	<div class="span9">
+    		<div class="thumbnail">
     		<div class="row-fluid">
 	    		<div class="span12">
 	    		    <ul id="summaryTab" class="nav nav-tabs">
@@ -58,26 +61,29 @@
 				<div class="tab-content">
 				    <div class="tab-pane active" id="summary">
 						<div class="row-fluid">
+						<div class="span1" />
 							
 						<div class="span5">
 							<t:zone t:id="courseZone" id="coursezone" t:update="show"> 	
 							<section>
 								<header>
-									<h3>${course.courseName}</h3><br />
+									<h3>${course.courseDescription} (${course.courseId})</h3><br />
 								</header>
-								<p><b>${message:courseDuration}:</b> ${course.lastRequestDate} <br /> </p>
-								<p><b>${message:courseDescription}:</b> ${course.courseDescription}<br />  </p>
+								<p><b>${message:firstRequest}:</b> ${course.firstRequestDate} <br /> </p>
+								<p><b>${message:lastRequest}:</b> ${course.lastRequestDate} <br /> </p>
 								<p><b>${message:courseMaxParticipants}:</b> ${course.maxParticipants}<br />  </p>
 								<p><b>${message:courseEnroledParticipants}:</b> ${course.enroledParticipants}<br /> </p> 
+								<br />
 								<t:pagelink page="data/visualization" context="${course.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
 							</section>	
 							</t:zone> <!-- courseZone  -->
 						</div> <!-- span5 -->
 						
-						<div class="span6">
-							<div t:id="chart2" style="width: auto; height: 300px;"/>
-								
-						</div> <!-- span6 -->
+						<div class="span5">
+							<t:zone t:id="courseVisZone" id="courseviszone" t:update="show"> 
+								<div t:id="chart2" style="width: auto; height: 300px;"/>
+							</t:zone> <!-- courseVisZone  -->		
+						</div> <!-- span5 -->
 						
 					</div>
 					</div><!-- tab-pane -->
@@ -87,7 +93,7 @@
 				</div> <!-- tab-content -->
 				
     		</div> <!-- class=well -->
-    		
+    		</div> <!-- thumbnail -->
     	</div> <!-- span9 -->
     	
     	

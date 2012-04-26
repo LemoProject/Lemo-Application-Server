@@ -51,23 +51,44 @@
             <ul class="nav">
 				
 				
-			<li class="dropdown">
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-				${message:menu}
-				<b class="caret"></b>
-			</a>
-			<ul class="dropdown-menu">
-				<li><t:pagelink page="data/visualization"><i class="icon-cog"></i>${message:visualizationTitle}</t:pagelink></li>
-				<li><t:pagelink page="data/explorer">${message:explorerTitle}</t:pagelink></li>
-				<li class="nav-header">Settings</li>
-				<li><t:pagelink page="account/myaccount">${message:myAccount}</t:pagelink></li>
-			</ul>
-			</li>	
+<!--			<li class="dropdown">-->
+<!--			<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+<!--				${message:menu}-->
+<!--				<b class="caret"></b>-->
+<!--			</a>-->
+<!--			<ul class="dropdown-menu">-->
+<!--				<li><t:pagelink page="data/explorer">${message:explorerTitle}</t:pagelink></li>-->
+<!--				-->
+<!--			</ul>-->
+<!--			</li>	-->
 				
 				
            
-              <li><a href="#about">${message:myCourses}</a></li>
-              <li><a href="#contact">${message:myFavorites}</a></li>
+              <li class="dropdown"> 
+              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              			${message:myCourses}
+              			<b class="caret"></b>							
+              		</a>
+              		<ul class="dropdown-menu">
+					<li t:type="Loop" t:source="allCourses" t:value="allCourse">
+						<t:pagelink page="data/visualization" context="allCourse.id">${allCourse.courseDescription}</t:pagelink>
+					</li>
+					
+				
+				</ul>
+              </li>
+              <li class="dropdown">	
+              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              			${message:myFavorites} 
+              			<b class="caret"></b>
+              		</a>
+              	<ul class="dropdown-menu">
+					<li t:type="Loop" t:source="favoriteCourses" t:value="favoriteCourse">
+						<t:pagelink page="data/visualization" context="favoriteCourse.id">${favoriteCourse.courseDescription}</t:pagelink>
+					</li>
+				
+				</ul>
+              </li>
               <li><t:pagelink class="btn-primary" page="data/explorer">${message:courseExplorer}</t:pagelink></li>
             </ul> 
             
@@ -88,7 +109,9 @@
 			  			<b class="caret"></b>
 			  		</a>
 			  		<ul class="dropdown-menu">
-						<li class="nav-header"><i class="icon-flag"></i>${message:language}</li>
+			  			<li class="nav-header">Settings</li>
+						<li><t:pagelink page="account/myaccount">${message:myAccount}</t:pagelink></li>
+						<li class="nav-header">${message:language}</li>
 						<li class="${englishLocale}"><a t:type="ActionLink" t:id="enLocaleLink" href="#">en</a></li>
     					<li class="${germanLocale}"><a t:type="ActionLink" t:id="deLocaleLink" href="#">de</a></li>  
 					</ul>

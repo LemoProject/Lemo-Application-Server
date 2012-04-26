@@ -1,5 +1,6 @@
 package de.lemo.apps.integration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -26,15 +27,31 @@ public class CourseDAOImpl implements CourseDAO{
 		Criteria criteria = session.createCriteria(Course.class);
         List<Course> results = criteria.list();
         if (results.size() == 0) {
-                return null;
+                return new ArrayList<Course>();
         }
         return results;
 	}
 
 	
 	public List<Course> findAllByOwner(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		Criteria criteria = session.createCriteria(Course.class);
+		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
+		List<Course> results = criteria.list();
+        if (results.size() == 0) {
+                return new ArrayList<Course>();
+        }
+        return results;
+	}
+	
+	public List<Course> findFavoritesByOwner(User user) {
+		Criteria criteria = session.createCriteria(Course.class);
+		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
+		criteria.add(Restrictions.eq("isFavorite", true));
+		List<Course> results = criteria.list();
+        if (results.size() == 0) {
+                return new ArrayList<Course>();
+        }
+        return results;
 	}
 	
 	public boolean doExist(Course course){
@@ -77,7 +94,19 @@ public class CourseDAOImpl implements CourseDAO{
         return results.get(0);
     }
     
-    
+    public void toggleFavorite(Long id){
+    	System.out.println("CourseId:" +id);
+        Course favCourse = this.getCourse(id);
+        Boolean favStatus = favCourse.getIsFavorite();
+        System.out.println("FavStatus:" +favStatus);
+        if(favStatus==null) {
+        	favStatus=true;
+        } else favStatus =!favStatus;
+        System.out.println("FavStatus2:" +favStatus);
+        favCourse.setIsFavorite(favStatus);
+        System.out.println("FavStatus3:" +favCourse.getIsFavorite());
+        session.update(favCourse);
+    }
     
     public void save(Course course) {
         session.persist(course);

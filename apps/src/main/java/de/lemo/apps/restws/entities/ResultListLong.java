@@ -1,5 +1,6 @@
 package de.lemo.apps.restws.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -13,7 +14,7 @@ public class ResultListLong {
 	
 	public ResultListLong()
 	{
-		
+		this.elements = new ArrayList<Long>();
 	}
 	
 	public ResultListLong(List<Long> elements)

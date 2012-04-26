@@ -1,16 +1,11 @@
 package de.lemo.apps.components;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.InjectPage;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Path;
-import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.ActionLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
@@ -20,13 +15,19 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.got5.tapestry5.jquery.ImportJQueryUI;
 import org.tynamo.security.services.SecurityService;
 
+import de.lemo.apps.annotation.Exclude;
+import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.entities.Course;
+import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
 
+@Exclude(stylesheet={"core"})  //remove the Tapestry css
 @ImportJQueryUI({"jquery.ui.core",  "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
 @Import(library={"../js/bootstrap-alert.js",
-				"../js/dashboard.js",
+				"../js/excanvas.js",
 				"../js/apps.js",
 		 		"../js/bootstrap-transition.js",
 		 		"../js/bootstrap-modal.js",
@@ -42,7 +43,8 @@ import de.lemo.apps.pages.data.Dashboard;
 		 },
 			stylesheet={"../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",
-						"../css/jquery-ui.css",
+						"../css/jquery.jqplot.css",
+						//"../css/jquery-ui-1.8.16.bootstrap.css",
 						"../css/apps.css"})
 
 public class LayoutDashboard {
@@ -61,6 +63,12 @@ public class LayoutDashboard {
     @Path("../images/icons/glyphicons_019_cogwheel_white.png")
     @Property
     private Asset wheel;
+    
+    @Inject
+    private CourseDAO courseDAO;
+    
+    @Inject
+    private UserWorker userWorker;
     
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -81,6 +89,11 @@ public class LayoutDashboard {
 	@Inject
 	private Request request;
 	
+	@Property
+	private Course favoriteCourse;
+	
+	@Property
+	private Course allCourse;
 	
 	@Component
 	private ActionLink logoutLink;
@@ -100,7 +113,7 @@ public class LayoutDashboard {
     
     void setupRender()
     {
-      javaScriptSupport.importJavaScriptLibrary(dashboardJS);
+      //javaScriptSupport.importJavaScriptLibrary(dashboardJS);
      // javaScriptSupport.addScript("InitDashboard();+" +
      // 		"alert('Hello!');");
     }
@@ -132,7 +145,17 @@ public class LayoutDashboard {
                 
         }
         return startpage;
-} 
+	}
+	
+	@Cached
+	public List<Course> getFavoriteCourses(){
+		return courseDAO.findFavoritesByOwner(userWorker.getCurrentUser());
+	}
+	
+	@Cached
+	public List<Course> getAllCourses(){
+		return courseDAO.findAllByOwner(userWorker.getCurrentUser());
+	}
 
 
 }

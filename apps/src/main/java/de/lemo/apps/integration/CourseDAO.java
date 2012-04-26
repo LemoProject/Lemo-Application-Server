@@ -12,10 +12,13 @@ public interface CourseDAO {
 	
 	public List<Course> findAllByOwner(User user);
 	public List<Course> findAll();
+	public List<Course> findFavoritesByOwner(User user);
 	public boolean doExist(Course course);
 	public boolean doExistByForeignCourseId(Long courseId);
 	public Course getCourse(String coursename);
 	public Course getCourse(Long id);
+	@CommitAfter
+	public void toggleFavorite(Long id);
 	@CommitAfter
 	public void save(Course course); 
 	@CommitAfter

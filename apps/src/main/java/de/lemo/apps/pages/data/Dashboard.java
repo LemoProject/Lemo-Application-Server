@@ -6,8 +6,11 @@ import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
 
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Path;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
@@ -28,11 +31,16 @@ import de.lemo.apps.services.internal.jqplot.XYDataItem;
 @BreadCrumb(titleKey="dashboardTitle")
 public class Dashboard {
 	
-	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
-    private JqPlotLine chart1;
+//	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
+//    private JqPlotLine chart1;
 	
 	@Component(parameters = {"dataItems=testPieData"})
     private JqPlotPie chart2 ;
+	
+	@Inject
+    @Path("../../images/icons/glyphicons_019_cogwheel.png")
+    @Property
+    private Asset wheel;
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -102,7 +110,9 @@ public class Dashboard {
       
         return dataList;
     }
-	
+	@Property
+	@Persist
+	private Integer count;
 	
 	public String getStartTime(){
 		return 	init.getStartTime();
@@ -112,20 +122,27 @@ public class Dashboard {
 		List<List<XYDataItem>> dataList = CollectionFactory.newList();
         List<XYDataItem> list1 = CollectionFactory.newList();
 
-        Long starttime = 1108968800L;
+        Long starttime = 1308968800L;
 		Long endtime= 1334447632L;
 		int resolution = 30;
 		List<Long> roles = new ArrayList<Long>();
 		List<Long> courses = new ArrayList<Long>();
 		courses.add(2100L);
 		courses.add(2200L);
+		//calling dm-server
 		ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
-        for(int i=0 ;i<resolution;i++){
-        	list1.add(new XYDataItem(i, results.getElements().get(i)));
-        }
+		//checking if result size matches resolution 
+        if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
+        	for(int i=0 ;i<resolution;i++){
+        		list1.add(new XYDataItem(i, results.getElements().get(i)));
+        	}
         dataList.add(list1);
         return dataList;
 	}
+	
+	
+	
+	
 	
 	public String getFirstquestion(){
 		

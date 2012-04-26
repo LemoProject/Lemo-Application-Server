@@ -41,10 +41,7 @@ public class Initialize {
 		return request.getRemoteUser();
 		
 	}
-	
-		
-	
-	
+
 	public Object onProgressiveDisplay() {
 		
 		User user = ud.getUser(getUserName());
@@ -68,6 +65,10 @@ public class Initialize {
 		
 		return Dashboard.class;
 		
+	}
+	
+	public String getStatusBar(){
+		return "20%";
 	}
 	
 	private void sleep(long millis) {

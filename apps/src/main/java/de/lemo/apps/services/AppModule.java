@@ -24,6 +24,8 @@ import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 
+import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.UserWorkerImpl;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
@@ -53,6 +55,9 @@ public class AppModule
     	binder.bind(CourseDAO.class, CourseDAOImpl.class);
     	binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
     	//binder.bind(LemoServiceResource.class, LemoServiceResourceImpl.class);
+    	
+    	//Facade Worker
+    	binder.bind(UserWorker.class, UserWorkerImpl.class);
     	
     	// Rest Services
     	binder.bind(Initialisation.class, InitialisationImpl.class);

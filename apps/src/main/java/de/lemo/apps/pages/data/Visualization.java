@@ -1,12 +1,13 @@
 package de.lemo.apps.pages.data;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
@@ -18,8 +19,6 @@ import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.internal.beaneditor.BeanModelImpl;
-import org.apache.tapestry5.internal.services.MapMessages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.json.JSONObject;
@@ -27,6 +26,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
+import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
@@ -35,12 +35,13 @@ import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultListLong;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
+import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey="explorerTitle")
+@BreadCrumb(titleKey="visualizationTitle")
 public class Visualization {
 	
 	@Property
@@ -58,6 +59,9 @@ public class Visualization {
 	@Inject
 	private JavaScriptSupport jsSupport;
 	
+	@Inject 
+	private UserWorker userWorker;
+	
 	@Inject
 	private Initialisation init;
 	
@@ -67,15 +71,15 @@ public class Visualization {
 	@Property
 	private JSONObject paramsZone;
 	
-	@Persist
+	//@Persist
 	@Property
 	private Date endDate;
 	
-	@Persist
+	//@Persist
 	@Property
 	private Date beginDate;
 	
-	@Property
+	//@Property
 	@Persist
 	Integer val;
 	
@@ -95,29 +99,29 @@ public class Visualization {
 	@Persist
 	Integer resolution;
 	
-	@Property
-	private JSONObject params;	
-	
-		
-	@Component
-	private Zone myZone;
-	
-	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
-	public void initSliderZone(){
-		max=30;
-		min=0;
-		//slideZone=30;
-		paramsZone=new JSONObject();
-		paramsZone.put("value", slideZone);
-	}
-
-	@OnEvent(value=org.apache.tapestry5.EventConstants.ACTION, component="sliderZone")
-	public Object returnZone(){
-		String input = request.getParameter("slider");
-		slideZone=Integer.parseInt(input);
-		return myZone.getBody();
-	}
-	
+//	@Property
+//	private JSONObject params;	
+//	
+//		
+//	@Component
+//	private Zone myZone;
+//	
+//	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
+//	public void initSliderZone(){
+//		max=30;
+//		min=0;
+//		slideZone=this.resolution;
+//		paramsZone=new JSONObject();
+//		paramsZone.put("value", slideZone);
+//	}
+//
+//	@OnEvent(value=org.apache.tapestry5.EventConstants.ACTION, component="sliderZone")
+//	public Object returnZone(){
+//		String input = request.getParameter("slider");
+//		slideZone=Integer.parseInt(input);
+//		return myZone.getBody();
+//	}
+//	
 	
 	@Component(id = "customizeform")
 	private Form form;
@@ -128,6 +132,9 @@ public class Visualization {
 	@Inject 
 	private CourseDAO courseDAO;
 	
+	@InjectComponent
+	private Zone formZone;
+	
 	@Property
 	@Persist
     private Course course;
@@ -136,9 +143,32 @@ public class Visualization {
 	@Persist
 	private Long courseId;
 	
-	public Boolean onActivate(Course course){
-		this.courseId = course.getCourseId();
-		this.course = course;
+	void setupRender() {
+		
+	}
+	
+	public Object onActivate(Course course){
+		System.out.println("--- Bin im ersten onActivate");
+		List<Long> allowedCourses = userWorker.getCurrentUser().getMyCourses();
+		if(allowedCourses!=null && course !=null && course.getCourseId()!= null && allowedCourses.contains(course.getCourseId())){
+			System.out.println();
+			this.courseId = course.getCourseId();
+			this.course = course;
+			if(this.endDate==null) 
+				this.endDate = course.getLastRequestDate();
+			if(this.beginDate==null) 
+				this.beginDate= course.getFirstRequestDate();
+			Calendar beginCal = Calendar.getInstance();
+			Calendar endCal = Calendar.getInstance();
+			beginCal.setTime(beginDate);
+			endCal.setTime(endDate);
+			this.resolution=daysBetween(beginCal, endCal);
+			return true;
+		} else return Explorer.class;
+	}
+	
+	public Object onActivate(){
+		System.out.println("--- Bin im zweiten onActivate");
 		return true;
 	}
 	
@@ -147,14 +177,14 @@ public class Visualization {
 //	public Course onPassivate(){
 //         return course;
 //	}
-//    
-//    void cleanupRender() {
-//		form.clearErrors();
-//		// Clear the flash-persisted fields to prevent anomalies in onActivate when we hit refresh on page or browser button
-//		this.courseId = null;
-//		this.course = null;
-//		
-//	}
+    
+    void cleanupRender() {
+		form.clearErrors();
+		// Clear the flash-persisted fields to prevent anomalies in onActivate when we hit refresh on page or browser button
+		this.courseId = null;
+		this.course = null;
+		
+	}
 	
 	
 	@Property(write=false)
@@ -168,39 +198,91 @@ public class Visualization {
     }
     
 
-    public List<Course> getCourses() { return courseDAO.findAll(); }
+    //public List<Course> getCourses() { return courseDAO.findAll(); }
     
     
-    public Object onActionFromUpdate(){
+//    public Object onActionFromUpdate(){
+//    	System.out.println(" ----- Begin: "+beginDate+ " EndDate: "+endDate);
+//		this.resolution = slideZone;
+//		visPage.course = course;
+//		visPage.courseId = courseId;
+//		visPage.slideZone = slideZone;
+//		visPage.resolution = slideZone;
+//		visPage.beginDate = beginDate;
+//		visPage.endDate	 = endDate;
+//		return visPage;
+//    }
+    
+    Object onSuccess(){
+    	System.out.println(" ----- Begin: "+beginDate+ " EndDate: "+endDate);
     	this.resolution = slideZone;
     	visPage.course = course;
     	visPage.courseId = courseId;
     	visPage.slideZone = slideZone;
     	visPage.resolution = slideZone;
-    	return visPage;
+    	visPage.beginDate = beginDate;
+    	visPage.endDate	 = endDate;
+    	return this;
+    	//return request.isXHR() ? formZone.getBody() : null;
     }
     
     public List getFirstQuestionDataItems(){
-		List<List<XYDataItem>> dataList = CollectionFactory.newList();
-        List<XYDataItem> list1 = CollectionFactory.newList();
+		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
+        List<XYDateDataItem> list1 = CollectionFactory.newList();
         if(courseId!=null){
-	        Long starttime = 1308968800L;
-			Long endtime= 1334447632L;
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	if(endDate!=null){
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} //else endtime= 1334447632L;
+	        
+        	if(beginDate!=null){
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} //else starttime = 1308968800L;
+        	
+			
 			//int resolution = 30;
-			if (this.resolution != null && this.resolution < 10 )
+			if (this.resolution == null || this.resolution < 10 )
 				this.resolution = 30;
 			List<Long> roles = new ArrayList<Long>();
 			List<Long> courses = new ArrayList<Long>();
 			courses.add(courseId);
-			ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				System.out.println("Courses: "+courses.get(i));
+			}
+			System.out.println("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+			ResultListLong results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			
+			
+			Calendar beginCal = Calendar.getInstance();
+			beginCal.setTime(beginDate);
+			System.out.println("BeginDate: "+beginDate);
+			//checking if result size matches resolution 
+			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
 	        for(int i=0 ;i<resolution;i++){
-	        	list1.add(new XYDataItem(i, results.getElements().get(i)));
+	        	
+	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
+	        	//System.out.println(" Run: "+i+" Date: "+beginCal.getTime()+" Value: "+results.getElements().get(i));
+	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
 	        }
     	}
         dataList.add(list1);
         return dataList;
 	}
     
+    
+    public static Integer daysBetween(Calendar startDate, Calendar endDate) {
+    	  Calendar date = (Calendar) startDate.clone();
+    	  Integer daysBetween = 0;
+    	  while (date.before(endDate)) {
+    	    date.add(Calendar.DAY_OF_MONTH, 1);
+    	    daysBetween++;
+    	  }
+    	  return daysBetween;
+    	}
+    	
 
 
 }

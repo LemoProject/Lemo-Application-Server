@@ -1,4 +1,4 @@
-<html t:type="layoutdashboard" title="LeMo | Visualization"
+<html t:type="layoutdashboard" title="LeMo | ${message:visualizationTitle}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
      
@@ -19,7 +19,7 @@
     	
     	
     	<div class="span9">
-    		<div t:id="chart1" style="width: auto; height: auto;"/>	
+    			<div t:id="chart1" style="width: auto; height: auto;"/>	
     	</div> <!-- span9 -->
     	
     	
@@ -28,19 +28,18 @@
         		<form class="form-search">
         		<div class="">
         			<h4>${course.courseName}</h4><br />
-        			
-        			<form t:id="customizeform" class="well  pull-left">
-				    	
-				    	Resolution:
+        			<t:zone t:id="formZone" id="formZone">
+        			<form t:type="form" t:id="customizeform" class="well  pull-left">
+				    	Range: ${slideZone} days
 				    	<br/>
 				    	
-				    	<br/>
-<!--				    	<t:jquery.slider t:value="val" t:params="params"/>-->
-				    	  <t:jquery.slider t:value="slideZone" t:params="paramsZone" t:zone="myZone" t:id="sliderZone" />
+<!--				    	<br/>
+				    	<t:jquery.slider t:value="val" t:params="params"/>
+				    	  <t:jquery.slider t:value="slideZone" t:params="paramsZone" t:zone="myZone" t:id="sliderZone" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" />
 						<br/>
 						<t:zone t:id="myZone" id="myZone">
 						Slider Value: ${slideZone}
-					</t:zone>
+						</t:zone>-->
 				    	<br />
 				    	Begin:
 				    	<t:datefield t:value="beginDate" />
@@ -50,12 +49,12 @@
 				    	<t:datefield t:value="endDate" />
 				    	<br />
 				    	<br />
-				    	<t:actionlink t:id="update" class="btn btn-primary pull-right">update</t:actionlink>
-<!--				    	<button type="submit" class="btn btn-primary pull-right">update</button>-->
+			    	 <!--	<t:actionlink t:id="update" class="btn btn-primary pull-right">update</t:actionlink>-->
+				   		<input t:type="submit" value="Update" class="btn btn-primary pull-right" />
 		  				<br />
 				    	<br />
-				    </form>	
-				    
+				   </form>	
+				   </t:zone> 
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
 <!--    				<button type="submit" class="btn pull-right">${message:search}</button>-->

@@ -3,7 +3,7 @@
       xmlns:p="tapestry:parameter">
      
      <!-- Breadcrumb component-->
-	<div class="row">
+	<div class="row-fluid">
         <div class="span12">
     	<ul class="breadcrumb">
   			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
@@ -13,13 +13,13 @@
 		</div>
 	</div>
 	
-	<div class="row">
+	<div class="row-fluid">
 		<div class="span12">
 			<h2>${message:accountDetailsfor} ${username}</h2>
 			<br />
 		</div>
 	</div>
-	<div class="row">
+	<div class="row-fluid">
 		<div class="span12">	    	
 			<form t:id="accountform" class="well  pull-left">
 		    	<t:beaneditor t:id="editor" object="myaccount" />

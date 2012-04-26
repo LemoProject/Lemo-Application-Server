@@ -19,12 +19,15 @@ import org.apache.tapestry5.internal.services.MapMessages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
+import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultListLong;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
@@ -58,14 +61,23 @@ public class Explorer {
 	@Inject 
 	private CourseDAO courseDAO;
 	
+	@Inject 
+	private UserWorker userWorker;
+	
 	@Property
     private Course course;
 	
 	@InjectComponent
 	private Zone courseZone;
 	
+	@InjectComponent
+	private Zone courseVisZone;
+	
 	@Inject
 	private Initialisation init;
+	
+	@Inject
+	private AjaxResponseRenderer ajaxResponseRenderer;
 	
 	
 	@Property(write=false)
@@ -86,15 +98,22 @@ public class Explorer {
                 + "});", courseZone.getClientId());
     } 
 
-    public List<Course> getCourses() { return courseDAO.findAll(); }
+    public List<Course> getCourses() { 
+    	return courseDAO.findAllByOwner(userWorker.getCurrentUser()); 
+    }
     
-    Object onActionFromShow(Long id)
+    void onActionFromShow(Long id)
 	  {
     	this.course = courseDAO.getCourse(id);
-	    return courseZone.getBody();
+    	ajaxResponseRenderer.addRender("courseZone", courseZone.getBody());
+	    //return courseZone.getBody();
 	  }
     
-    @Cached
+    void onActionFromUpdate(Long id){
+    	courseDAO.toggleFavorite(id);
+    }
+    
+   
     public List getTestPieData()
     {
         List<List<TextValueDataItem>> dataList = CollectionFactory.newList();

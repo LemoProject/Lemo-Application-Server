@@ -21,9 +21,10 @@ public class Course extends AbstractEntity{
 	private String courseName;
 	private String courseDescription;
 	private Date lastRequestDate;
-	private Date endDate;
+	private Date firstRequestDate;
 	private Long maxParticipants;
 	private Long enroledParticipants;
+	private Boolean isFavorite;
 	
 	@Inject
 	public Course() {}
@@ -31,8 +32,8 @@ public class Course extends AbstractEntity{
 	public Course(CourseObject courseObject){
 		this.courseName = courseObject.getTitle();
         this.courseDescription = courseObject.getDescription();
-        Timestamp timeStamp = new Timestamp(courseObject.getLastRequest());
-        this.lastRequestDate = new java.sql.Date(timeStamp.getTime());
+        this.firstRequestDate = new java.sql.Date((long)courseObject.getFirstRequest()*1000);
+        this.lastRequestDate = new java.util.Date((long)courseObject.getLastRequest()*1000);
         this.enroledParticipants = courseObject.getParticipants();
         this.courseId=courseObject.getId();
 	}
@@ -42,8 +43,8 @@ public class Course extends AbstractEntity{
 	    {
 	        this.courseName = courseName;
 	        this.courseDescription = courseDescription;
-	        this.lastRequestDate = begin;
-	        this.endDate = end;
+	        this.lastRequestDate = end;
+	        this.firstRequestDate = begin;
 	        this.maxParticipants = maxParticipants;
 	        this.enroledParticipants = enroledParticipants;
 	    }
@@ -101,14 +102,14 @@ public class Course extends AbstractEntity{
 	/**
 	 * @return the endDate
 	 */
-	public Date getEndDate() {
-		return endDate;
+	public Date getFirstRequestDate() {
+		return firstRequestDate;
 	}
 	/**
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setFirstRequestDate(Date firstRequestDate) {
+		this.firstRequestDate = firstRequestDate;
 	}
 	/**
 	 * @return the maxParticipants
@@ -135,6 +136,20 @@ public class Course extends AbstractEntity{
 		this.enroledParticipants = enroledParticipants;
 	}
 	
+	/**
+	 * @return the isFavorite
+	 */
+	public Boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	/**
+	 * @param isFavorite the isFavorite to set
+	 */
+	public void setIsFavorite(Boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		try {

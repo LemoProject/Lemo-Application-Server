@@ -17,17 +17,20 @@ public class CourseObject {
 	private Long participants;
 	@XmlElement
 	private Long lastRequest;
+	@XmlElement
+	private Long firstRequest;
 	
 	public CourseObject()
 	{}
 	
-	public CourseObject(Long id, String title, String description, Long participants, Long lastRequest)
+	public CourseObject(Long id, String title, String description, Long participants, Long lastRequest, Long firstRequest)
 	{
 		this.id = id;
 		this.title = title;
 		this.participants = participants;
 		this.description = description;
 		this.lastRequest = lastRequest;
+		this.firstRequest = lastRequest;
 	}
 	
 	public Long getId() {
@@ -44,6 +47,10 @@ public class CourseObject {
 	}
 	public Long getLastRequest() {
 		return lastRequest;
+	}
+	
+	public Long getFirstRequest() {
+		return firstRequest;
 	}
 
 	/**
@@ -81,5 +88,10 @@ public class CourseObject {
 		this.lastRequest = lastRequest;
 	}
 	
-	
+	/**
+	 * @param lastRequest the lastRequest to set
+	 */
+	public void setFirstRequest(Long firstRequest) {
+		this.firstRequest = firstRequest;
+	}
 }
