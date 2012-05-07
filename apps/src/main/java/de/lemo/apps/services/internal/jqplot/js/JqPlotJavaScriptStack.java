@@ -68,7 +68,7 @@ private final boolean productionMode;
 
      if (productionMode) {
      
-      stylesheetStack = F.flow("classpath:de/lemo/apps/js/jqplot/jquery.jqplot.min.css")
+      stylesheetStack = F.flow("classpath:de/lemo/apps/css/jquery.jqplot.min.css")
       .map(pathToStylesheetLink).toList();
 
          javaScriptStack = F.flow("classpath:de/lemo/apps/js/jqplot/jquery.jqplot.min.js")
@@ -76,7 +76,7 @@ private final boolean productionMode;
 
      } else {
      
-      stylesheetStack = F.flow("classpath:de/lemo/apps/js/jqplot/jquery.jqplot.css")
+      stylesheetStack = F.flow("classpath:de/lemo/apps/css/jquery.jqplot.css")
       .map(pathToStylesheetLink).toList();
 
          javaScriptStack = F.flow( "classpath:de/lemo/apps/js/jqplot/jquery.jqplot.js")
