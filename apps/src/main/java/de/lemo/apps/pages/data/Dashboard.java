@@ -32,7 +32,7 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultList;
-import de.lemo.apps.restws.entities.ResultListLong;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
@@ -219,7 +219,7 @@ public class Dashboard {
 		courses.add(2100L);
 		courses.add(2200L);
 		//calling dm-server
-		ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
 		//checking if result size matches resolution 
         if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
         	for(int i=0 ;i<resolution;i++){
@@ -263,7 +263,7 @@ public class Dashboard {
 				System.out.println("Courses: "+courses.get(i));
 			}
 			System.out.println("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLong results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			ResultListLongObject results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
 			
 			Calendar beginCal = Calendar.getInstance();
@@ -308,7 +308,7 @@ public class Dashboard {
 		List<Long> courses = new ArrayList<Long>();
 		courses.add(2100L);
 		courses.add(2200L);
-		ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
 		if (results != null && results.getElements()!= null) {
 			for (int i = 0;i< results.getElements().size();i++)
 				System.out.println("List element "+i+"; "+results.getElements().get(i));

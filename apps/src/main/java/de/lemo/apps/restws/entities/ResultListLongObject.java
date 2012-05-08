@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ResultListLong {
+public class ResultListLongObject {
 
 	
 	private List<Long> elements;
 	
-	public ResultListLong()
+	public ResultListLongObject()
 	{
 		this.elements = new ArrayList<Long>();
 	}
 	
-	public ResultListLong(List<Long> elements)
+	public ResultListLongObject(List<Long> elements)
 	{
 		this.elements = elements;
 	}

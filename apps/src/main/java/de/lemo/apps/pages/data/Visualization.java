@@ -34,7 +34,7 @@ import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.ResultListLong;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
@@ -281,7 +281,7 @@ public class Visualization {
 				System.out.println("Courses: "+courses.get(i));
 			}
 			System.out.println("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLong results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			ResultListLongObject results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
 			
 			Calendar beginCal = Calendar.getInstance();

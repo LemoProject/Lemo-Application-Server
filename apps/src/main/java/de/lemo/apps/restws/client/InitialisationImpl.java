@@ -19,8 +19,8 @@ import org.slf4j.Logger;
 
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultList;
-import de.lemo.apps.restws.entities.ResultListCourse;
-import de.lemo.apps.restws.entities.ResultListLong;
+import de.lemo.apps.restws.entities.ResultListCourseObject;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.proxies.QCourseActivity;
 import de.lemo.apps.restws.proxies.QUserInformation;
 import de.lemo.apps.restws.proxies.Starttime;
@@ -77,7 +77,7 @@ public class InitialisationImpl implements Initialisation {
 	}
 		
 		
-	public ResultListLong computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,  int resolution) {
+	public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,  int resolution) {
 			//Create resource delegate
 			//logger.info("Getting Server Starttime");
 			try {
@@ -98,7 +98,7 @@ public class InitialisationImpl implements Initialisation {
 				"http://localhost:4443/courseactivity");
 				if (qcourseActivity != null){
 
-					ResultListLong result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution);
+					ResultListLongObject result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution);
 //					if(result!=null && result.getElements()!=null){
 //						ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 //						List<Long> resultList = new ArrayList<Long>();
@@ -125,10 +125,10 @@ public class InitialisationImpl implements Initialisation {
 				e.printStackTrace();
 			}
 			System.out.println("Gebe leere Resultlist zurück");
-			return new ResultListLong();
+			return new ResultListLongObject();
 		}
 		
-		public ResultListCourse getCoursesDetails(List<Long> ids){
+		public ResultListCourseObject getCoursesDetails(List<Long> ids){
 			try {
 				ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
 				
@@ -147,7 +147,7 @@ public class InitialisationImpl implements Initialisation {
 				"http://localhost:4443/information");
 				if (userInformation != null){
 
-					ResultListCourse result = userInformation.getCoursesDetails(ids);
+					ResultListCourseObject result = userInformation.getCoursesDetails(ids);
 					return result;
 				}
 				
@@ -164,7 +164,7 @@ public class InitialisationImpl implements Initialisation {
 				e.printStackTrace();
 			}
 			System.out.println("Gebe leere Resultlist zurück");
-			return new ResultListCourse();
+			return new ResultListCourseObject();
 		}
 		
 		

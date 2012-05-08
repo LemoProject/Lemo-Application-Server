@@ -16,7 +16,7 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.CourseObject;
-import de.lemo.apps.restws.entities.ResultListCourse;
+import de.lemo.apps.restws.entities.ResultListCourseObject;
 
 /**
  * @author johndoe
@@ -56,7 +56,7 @@ public class Initialize {
 					courseDAO.save(courseObject);
 				}
 			}
-		ResultListCourse courses = init.getCoursesDetails(user.getMyCourses());	
+		ResultListCourseObject courses = init.getCoursesDetails(user.getMyCourses());	
 			
 		
 		

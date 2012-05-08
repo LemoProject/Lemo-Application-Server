@@ -32,7 +32,7 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.ResultListLong;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 
@@ -169,7 +169,7 @@ public class Explorer {
 			List<Long> roles = new ArrayList<Long>();
 			List<Long> courses = new ArrayList<Long>();
 			courses.add(course.getCourseId());
-			ResultListLong results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+			ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
 	        for(int i=0 ;i<resolution;i++){
 	        	list1.add(new XYDataItem(i, results.getElements().get(i)));
 	        }

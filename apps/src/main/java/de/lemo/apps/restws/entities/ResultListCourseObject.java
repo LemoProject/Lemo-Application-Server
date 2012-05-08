@@ -7,19 +7,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement
-public class ResultListCourse {
+public class ResultListCourseObject {
 
 	
 	private List<CourseObject> elements;
 	
 	
 
-	public ResultListCourse()
+	public ResultListCourseObject()
 	{
 		
 	}
 	
-	public ResultListCourse(List<CourseObject> elements)
+	public ResultListCourseObject(List<CourseObject> elements)
 	{
 		this.elements = elements;
 	}
