@@ -19,10 +19,11 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.ApplicationStateManager;
-import org.got5.tapestry5.jquery.ImportJQueryUI;
+import org.slf4j.Logger;
 import org.tynamo.security.services.SecurityService;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
@@ -31,7 +32,6 @@ import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.ResultList;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
@@ -40,6 +40,7 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="dashboardTitle")
+@BreadCrumbReset
 public class Dashboard {
 	
 	@Component(parameters = {"dataItems=FirstQuestionDataItems3"})
@@ -47,6 +48,9 @@ public class Dashboard {
 	
 	@Component(parameters = {"dataItems=testPieData"})
     private JqPlotPie chart2 ;
+	
+	@Inject
+    private Logger logger;
 	
 	@Inject
     @Path("../../images/icons/glyphicons_019_cogwheel.png")
@@ -130,30 +134,7 @@ public class Dashboard {
 		widgetCourse3 = userWorker.getCurrentUser().getWidget3();
 	}
 	
-	@Cached
-    public List getTestData()
-    {
-        List<List<XYDataItem>> dataList = CollectionFactory.newList();
-        List<XYDataItem> list1 = CollectionFactory.newList();
-        List<XYDataItem> list2 = CollectionFactory.newList();
 
-        list1.add(new XYDataItem(0, 0));
-        list1.add(new XYDataItem(6, 1));
-        list1.add(new XYDataItem(12, 3));
-        list1.add(new XYDataItem(18, 5));
-        list1.add(new XYDataItem(24, 2));
-
-        list2.add(new XYDataItem(0, 1));
-        list2.add(new XYDataItem(6, 2));
-        list2.add(new XYDataItem(12, 7));
-        list2.add(new XYDataItem(18, 13.5));
-        list2.add(new XYDataItem(24, 10));
-
-        dataList.add(list1);
-        dataList.add(list2);
-
-        return dataList;
-    }
 	
 	@Cached
     public List getTestPieData()
@@ -176,23 +157,19 @@ public class Dashboard {
 	@Persist
 	private Integer count;
 	
-	public Date getStartTime(){
-		return 	init.getStartTime();
-	}
-	
 	public List<Course> getMyCourses(){
 		return courseDAO.findAllByOwner(userWorker.getCurrentUser());
 	}
 	
 	void onSuccessFromCourseForm1(){
-		System.out.println("Course ID:"+ widgetCourse1 );
+		logger.debug("Course ID:"+ widgetCourse1 );
 		User user = userWorker.getCurrentUser();
 		user.setWidget1(widgetCourse1);
 		userDAO.update(user);
 	}
 	
 	void onSuccessFromCourseForm2(){
-		System.out.println("Course ID:"+ widgetCourse2 );
+		logger.debug("Course ID:"+ widgetCourse2 );
 		User user = userWorker.getCurrentUser();
 		user.setWidget2(widgetCourse2);
 		userDAO.update(user);
@@ -200,58 +177,61 @@ public class Dashboard {
 	
 	
 	void onSuccessFromCourseForm3(){
-		System.out.println("Course ID:"+ widgetCourse2 );
+		logger.debug("Course ID:"+ widgetCourse2 );
 		User user = userWorker.getCurrentUser();
 		user.setWidget3(widgetCourse3);
 		userDAO.update(user);
 	}
 	
 	
-	public List getFirstQuestionDataItems(){
-		List<List<XYDataItem>> dataList = CollectionFactory.newList();
-        List<XYDataItem> list1 = CollectionFactory.newList();
-
-        Long starttime = 1308968800L;
-		Long endtime= 1334447632L;
-		int resolution = 30;
-		List<Long> roles = new ArrayList<Long>();
-		List<Long> courses = new ArrayList<Long>();
-		courses.add(2100L);
-		courses.add(2200L);
-		//calling dm-server
-		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
-		//checking if result size matches resolution 
-        if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-        	for(int i=0 ;i<resolution;i++){
-        		list1.add(new XYDataItem(i, results.getElements().get(i)));
-        	}
-        dataList.add(list1);
-        return dataList;
-	}
+//	public List getFirstQuestionDataItems(){
+//		List<List<XYDataItem>> dataList = CollectionFactory.newList();
+//        List<XYDataItem> list1 = CollectionFactory.newList();
+//
+//        Long starttime = 1308968800L;
+//		Long endtime= 1334447632L;
+//		int resolution = 30;
+//		List<Long> roles = new ArrayList<Long>();
+//		List<Long> courses = new ArrayList<Long>();
+//		courses.add(2100L);
+//		courses.add(2200L);
+//		//calling dm-server
+//		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+//		//checking if result size matches resolution 
+//        if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
+//        	for(int i=0 ;i<resolution;i++){
+//        		list1.add(new XYDataItem(i, results.getElements().get(i)));
+//        	}
+//        dataList.add(list1);
+//        return dataList;
+//	}
 	
 	
 	public List getFirstQuestionDataItems3(){
+		
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
         List<XYDateDataItem> list1 = CollectionFactory.newList();
+        
         Long id3 = userWorker.getCurrentUser().getWidget3();
         Course course = courseDAO.getCourse(id3);
         Date endDate = course.getLastRequestDate();
     	Date beginDate = course.getFirstRequestDate();
+    	
     	Integer resolution = 0;
-        if(id3!=null){
+        
+    	if(id3!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
         	
         	if(endDate!=null){
         		endStamp = new Long(endDate.getTime()/1000);
-        	} //else endtime= 1334447632L;
+        	} 
 	        
         	if(beginDate!=null){
         		beginStamp = new Long(beginDate.getTime()/1000);
-        	} //else starttime = 1308968800L;
+        	} 
         	
 			
-			//int resolution = 30;
 			if (resolution == null || resolution < 10 )
 				resolution = 170;
 			List<Long> roles = new ArrayList<Long>();
@@ -260,21 +240,22 @@ public class Dashboard {
 			
 			//calling dm-server
 			for (int i=0;i<courses.size();i++){
-				System.out.println("Courses: "+courses.get(i));
+				logger.debug("Courses: "+courses.get(i));
 			}
-			System.out.println("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			ResultListLongObject results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
-			System.out.println("BeginDate: "+beginDate);
+			
+			logger.debug("BeginDate: "+beginDate);
+			
 			//checking if result size matches resolution 
 			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
 	        for(int i=0 ;i<resolution;i++){
 	        	
 	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	//System.out.println(" Run: "+i+" Date: "+beginCal.getTime()+" Value: "+results.getElements().get(i));
 	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
 	        }
     	}
@@ -299,24 +280,21 @@ public class Dashboard {
 	}
 	
 	
-	public String getFirstquestion(){
-		
-		Long starttime = 1108968800L;
-		Long endtime= 1334447632L;
-		int resolution = 30;
-		List<Long> roles = new ArrayList<Long>();
-		List<Long> courses = new ArrayList<Long>();
-		courses.add(2100L);
-		courses.add(2200L);
-		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
-		if (results != null && results.getElements()!= null) {
-			for (int i = 0;i< results.getElements().size();i++)
-				System.out.println("List element "+i+"; "+results.getElements().get(i));
-//		if (results != null) {
-//			for (int i = 0;i< results.size();i++)
-//				System.out.println("List element "+i+"; "+results.get(i));
-			return "Guck mal";
-		} else return "Guck lieber nicht";
-	}
+//	public String getFirstquestion(){
+//		
+//		Long starttime = 1108968800L;
+//		Long endtime= 1334447632L;
+//		int resolution = 30;
+//		List<Long> roles = new ArrayList<Long>();
+//		List<Long> courses = new ArrayList<Long>();
+//		courses.add(2100L);
+//		courses.add(2200L);
+//		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
+//		if (results != null && results.getElements()!= null) {
+//			for (int i = 0;i< results.getElements().size();i++)
+//				logger.info("List element "+i+"; "+results.getElements().get(i));
+//			return "Guck mal";
+//		} else return "Guck lieber nicht";
+//	}
 
 }

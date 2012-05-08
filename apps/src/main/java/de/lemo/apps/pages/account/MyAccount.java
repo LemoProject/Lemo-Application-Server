@@ -15,9 +15,10 @@ import de.lemo.apps.integration.UserDAO;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey="myAccountTitle")
+@BreadCrumbReset
 public class MyAccount {
 	
 	@Property

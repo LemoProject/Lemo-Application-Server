@@ -6,11 +6,12 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
+import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 
 import de.lemo.apps.restws.client.Initialisation;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey="myAccountTitle")
+@BreadCrumbReset
 public class ServerAdministration {
 	
 	@Inject
