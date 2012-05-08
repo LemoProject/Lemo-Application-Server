@@ -66,12 +66,12 @@
   			<version>1.8.2</version>
 		</dependency>
 		
-		<dependency>
-  			<groupId>org.oscy</groupId>
-  			<artifactId>tapestry-zbreadcrumbs</artifactId>
-  			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-        
+<!--		<dependency>-->
+<!--  			<groupId>org.oscy</groupId>-->
+<!--  			<artifactId>tapestry-zbreadcrumbs</artifactId>-->
+<!--  			<version>0.0.1-SNAPSHOT</version>-->
+<!--		</dependency>-->
+<!--        -->
 
         <dependency>
             <groupId>org.apache.tapestry</groupId>
@@ -254,11 +254,11 @@ of testing facilities designed for use with TestNG (http://testng.org/), so it's
 		</repository>
 		
     
-		<!-- Tapestry zBreadcrumbs https://bitbucket.org/zenios/tapestry-zbreadcrumbs/wiki/Home -->
-    	<repository>
-        	<id>sonatype snapshots</id>
-        	<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-     	</repository>
+<!--		 Tapestry zBreadcrumbs https://bitbucket.org/zenios/tapestry-zbreadcrumbs/wiki/Home -->
+<!--    	<repository>-->
+<!--        	<id>sonatype snapshots</id>-->
+<!--        	<url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+<!--     	</repository>-->
      	
      	<repository>
         	<id>Local Custom Repository 5</id>
