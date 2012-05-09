@@ -21,9 +21,10 @@ import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultList;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
-import de.lemo.apps.restws.proxies.QCourseActivity;
-import de.lemo.apps.restws.proxies.QUserInformation;
-import de.lemo.apps.restws.proxies.Starttime;
+import de.lemo.apps.restws.proxies.questions.QCourseActivity;
+import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
+import de.lemo.apps.restws.proxies.service.ServiceStartTime;
+import de.lemo.apps.restws.proxies.service.ServiceUserInformation;
 
 public class InitialisationImpl implements Initialisation {
 	
@@ -43,9 +44,9 @@ public class InitialisationImpl implements Initialisation {
 		try {
 			ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
 			
-			ClientResponse<Starttime> response;
+			ClientResponse<ServiceStartTime> response;
 			
-				response = request.get(Starttime.class);
+				response = request.get(ServiceStartTime.class);
 			
 				
 			
@@ -54,7 +55,7 @@ public class InitialisationImpl implements Initialisation {
 					+ response.getStatus());
 			}
 			
-			Starttime starttime = ProxyFactory.create(Starttime.class,
+			ServiceStartTime starttime = ProxyFactory.create(ServiceStartTime.class,
 			"http://localhost:4443/starttime");
 			if (starttime != null){
 				return new Date(starttime.startTimeJson().getTime());
@@ -83,9 +84,9 @@ public class InitialisationImpl implements Initialisation {
 			try {
 				ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
 				
-				ClientResponse<Starttime> response;
+				ClientResponse<ServiceStartTime> response;
 				
-					response = request.get(Starttime.class);
+					response = request.get(ServiceStartTime.class);
 				
 					
 				
@@ -95,7 +96,7 @@ public class InitialisationImpl implements Initialisation {
 				}
 				
 				QCourseActivity qcourseActivity = ProxyFactory.create(QCourseActivity.class,
-				"http://localhost:4443/courseactivity");
+				"http://localhost:4443/questions");
 				if (qcourseActivity != null){
 
 					ResultListLongObject result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution);
@@ -132,9 +133,9 @@ public class InitialisationImpl implements Initialisation {
 			try {
 				ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
 				
-				ClientResponse<Starttime> response;
+				ClientResponse<ServiceStartTime> response;
 				
-					response = request.get(Starttime.class);
+					response = request.get(ServiceStartTime.class);
 				
 					
 				
@@ -143,11 +144,11 @@ public class InitialisationImpl implements Initialisation {
 						+ response.getStatus());
 				}
 				
-				QUserInformation userInformation = ProxyFactory.create(QUserInformation.class,
-				"http://localhost:4443/information");
-				if (userInformation != null){
+				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,
+				"http://localhost:4443/");
+				if (courseDetails != null){
 
-					ResultListCourseObject result = userInformation.getCoursesDetails(ids);
+					ResultListCourseObject result = courseDetails.getCoursesDetails(ids);
 					return result;
 				}
 				
@@ -173,9 +174,9 @@ public class InitialisationImpl implements Initialisation {
 			try {
 				ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
 				
-				ClientResponse<Starttime> response;
+				ClientResponse<ServiceStartTime> response;
 				
-					response = request.get(Starttime.class);
+					response = request.get(ServiceStartTime.class);
 				
 					
 				
@@ -184,11 +185,11 @@ public class InitialisationImpl implements Initialisation {
 						+ response.getStatus());
 				}
 				
-				QUserInformation userInformation = ProxyFactory.create(QUserInformation.class,
-				"http://localhost:4443/information");
-				if (userInformation != null){
+				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,
+				"http://localhost:4443/courses");
+				if (courseDetails != null){
 
-					CourseObject result = userInformation.getCourseDetails(id);
+					CourseObject result = courseDetails.getCourseDetails(id);
 					return result;
 				}
 				

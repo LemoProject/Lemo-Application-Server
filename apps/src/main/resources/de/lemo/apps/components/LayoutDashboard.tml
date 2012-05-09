@@ -46,7 +46,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <t:pagelink class="brand" page="data/dashboard">LeMo</t:pagelink>
+<!--          <t:pagelink class="brand" page="data/dashboard">LeMo</t:pagelink>-->
           <div class="nav-collapse">
             <ul class="nav">
 				
@@ -64,19 +64,21 @@
 				
 				
            
-              <li class="dropdown"> 
-              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              			${message:myCourses}
-              			<b class="caret"></b>							
-              		</a>
-              		<ul class="dropdown-menu">
-					<li t:type="Loop" t:source="allCourses" t:value="allCourse">
-						<t:pagelink page="data/visualization" context="allCourse.id">${allCourse.courseDescription}</t:pagelink>
-					</li>
-					
-				
-				</ul>
-              </li>
+<!--              <li class="dropdown"> -->
+<!--              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+<!--              			${message:myCourses}-->
+<!--              			<b class="caret"></b>							-->
+<!--              		</a>-->
+<!--              		<ul class="dropdown-menu">-->
+<!--					<li t:type="Loop" t:source="allCourses" t:value="allCourse">-->
+<!--						<t:pagelink page="data/visualization" context="allCourse.id">${allCourse.courseDescription}</t:pagelink>-->
+<!--					</li>-->
+<!--					-->
+<!--				-->
+<!--				</ul>-->
+<!--              </li>-->
+			  <li><t:pagelink class="btn-primary" page="data/explorer">${message:courseExplorer}</t:pagelink></li>
+
               <li class="dropdown">	
               		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
               			${message:myFavorites} 
@@ -89,7 +91,7 @@
 				
 				</ul>
               </li>
-              <li><t:pagelink class="btn-primary" page="data/explorer">${message:courseExplorer}</t:pagelink></li>
+              
             </ul> 
             
             <!-- Logout Button-->

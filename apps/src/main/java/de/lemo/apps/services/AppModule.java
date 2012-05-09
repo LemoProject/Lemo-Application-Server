@@ -34,8 +34,12 @@ import de.lemo.apps.integration.QuestionDAO;
 import de.lemo.apps.integration.QuestionDAOImpl;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.integration.UserDAOImpl;
+import de.lemo.apps.restws.client.Information;
+import de.lemo.apps.restws.client.InformationImpl;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.client.InitialisationImpl;
+import de.lemo.apps.restws.client.Questions;
+import de.lemo.apps.restws.client.QuestionsImpl;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -61,6 +65,8 @@ public class AppModule
     	
     	// Rest Services
     	binder.bind(Initialisation.class, InitialisationImpl.class);
+    	binder.bind(Information.class, InformationImpl.class);
+    	binder.bind(Questions.class, QuestionsImpl.class);
     	
     	
 

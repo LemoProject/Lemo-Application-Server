@@ -24,18 +24,12 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="visualizationTitle")
-public class VisualizationJqplot {
+public class VisualizationD3 {
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
 	
 	private List<List<XYDataItem>> testData;
-
-    @Component(parameters = {"dataItems=testData"})
-    private JqPlot chart1;
-
-    @Component(parameters = {"dataItems=testPieData"})
-    private JqPlotPie chart2 ;
 
     @Cached
     public List getTestData()

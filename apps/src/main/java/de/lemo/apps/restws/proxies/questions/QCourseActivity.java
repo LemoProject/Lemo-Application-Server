@@ -1,4 +1,4 @@
-package de.lemo.apps.restws.proxies;
+package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 public interface QCourseActivity {
 	
 	@GET
-	@Path("compute")
+	@Path("courseactivity")
 	@Produces("application/json")
     public ResultListLongObject compute(@QueryParam("course_ids") List<Long> courses, @QueryParam("role_ids") List<Long> roles,
     						  @QueryParam("starttime") Long starttime, @QueryParam("endtime") Long endtime, 

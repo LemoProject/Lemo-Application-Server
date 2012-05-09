@@ -1,4 +1,4 @@
-package de.lemo.apps.restws.proxies;
+package de.lemo.apps.restws.proxies.service;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
@@ -8,7 +8,7 @@ import de.lemo.apps.restws.entities.SCTime;
 
 
 
-public interface Starttime {
+public interface ServiceStartTime {
 	
 		
 	@GET

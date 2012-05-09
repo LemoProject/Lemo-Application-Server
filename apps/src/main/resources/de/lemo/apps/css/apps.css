@@ -8,3 +8,20 @@
 	height: 70px;
 	background: silver;
 }
+
+
+/*!
+* Changes to Bootstrap default css behavior
+*/
+
+/*!
+* Changes the textcolor for navbar buttons like "Explorer". Default: white, Hover: Grey
+*/
+.navbar .nav > li > a.btn-primary {
+  color: #ffffff;
+  
+}
+
+.navbar .nav > li > a.btn-primary:hover {
+  color: #bbbbbb;
+}

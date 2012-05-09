@@ -14,8 +14,6 @@
 	</div>
 	
 	<div class="well">
-    		<div t:id="chart1" style="width: auto; height: 150px;"/>
-			<div t:id="chart2" style="width: auto; height: 300px;"/>
-
+    		
     	</div>
 </html>
