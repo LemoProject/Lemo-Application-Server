@@ -27,7 +27,9 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.slf4j.Logger;
 
+import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
@@ -54,6 +56,12 @@ public class Visualization {
 	
 	@Inject
 	private Request request;
+	
+	@Inject
+    private Logger logger;
+	
+	@Inject 
+	private DateWorker dateWorker;
 	
 	@Inject
 	private ComponentResources componentResources;
@@ -157,10 +165,9 @@ public class Visualization {
 	}
 	
 	public Object onActivate(Course course){
-		System.out.println("--- Bin im ersten onActivate");
+		logger.debug("--- Bin im ersten onActivate");
 		List<Long> allowedCourses = userWorker.getCurrentUser().getMyCourses();
 		if(allowedCourses!=null && course !=null && course.getCourseId()!= null && allowedCourses.contains(course.getCourseId())){
-			System.out.println();
 			this.courseId = course.getCourseId();
 			this.course = course;
 			if(this.endDate==null) 
@@ -171,13 +178,13 @@ public class Visualization {
 			Calendar endCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
 			endCal.setTime(endDate);
-			this.resolution=daysBetween(beginCal, endCal);
+			this.resolution=dateWorker.daysBetween(beginDate, endDate);
 			return true;
 		} else return Explorer.class;
 	}
 	
 	public Object onActivate(){
-		System.out.println("--- Bin im zweiten onActivate");
+		logger.debug("--- Bin im zweiten onActivate");
 		return true;
 	}
 	
@@ -242,7 +249,7 @@ public class Visualization {
 //    }
     
     Object onSuccess(){
-    	System.out.println(" ----- Begin: "+beginDate+ " EndDate: "+endDate);
+    	logger.debug(" ----- Begin: "+beginDate+ " EndDate: "+endDate);
     	this.resolution = slideZone;
     	visPage.course = course;
     	visPage.courseId = courseId;
@@ -278,39 +285,25 @@ public class Visualization {
 			
 			//calling dm-server
 			for (int i=0;i<courses.size();i++){
-				System.out.println("Courses: "+courses.get(i));
+				logger.debug("Courses: "+courses.get(i));
 			}
-			System.out.println("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+			logger.info("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			ResultListLongObject results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
-			System.out.println("BeginDate: "+beginDate);
+			logger.debug("BeginDate: "+beginDate);
 			//checking if result size matches resolution 
 			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
 	        for(int i=0 ;i<resolution;i++){
 	        	
 	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	//System.out.println(" Run: "+i+" Date: "+beginCal.getTime()+" Value: "+results.getElements().get(i));
 	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
 	        }
     	}
         dataList.add(list1);
         return dataList;
 	}
-    
-    
-    public static Integer daysBetween(Calendar startDate, Calendar endDate) {
-    	  Calendar date = (Calendar) startDate.clone();
-    	  Integer daysBetween = 0;
-    	  while (date.before(endDate)) {
-    	    date.add(Calendar.DAY_OF_MONTH, 1);
-    	    daysBetween++;
-    	  }
-    	  return daysBetween;
-    	}
-    	
-
 
 }

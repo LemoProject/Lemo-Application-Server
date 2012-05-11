@@ -25,6 +25,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
+import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
@@ -40,7 +41,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey="explorerTitle")
+@BreadCrumb(titleKey="myCourses")
 public class Explorer {
 	
 	@Property
@@ -56,7 +57,10 @@ public class Explorer {
 	private JavaScriptSupport jsSupport;
 	
 	@Inject
-	private Locale currentlocale;
+	private DateWorker dateWorker;
+	
+	@Inject
+	private Locale currentLocale;
 	
 //	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
 //    private JqPlotLine chart1;
@@ -92,7 +96,7 @@ public class Explorer {
     {
     	coursesGridModel = beanModelSource.createDisplayModel(Course.class, componentResources.getMessages());
     	coursesGridModel.include("coursename","lastRequestDate");
-    	coursesGridModel.add("favorite",null);
+    	coursesGridModel.add("compare",null);
     	    	
     }
     
@@ -119,23 +123,13 @@ public class Explorer {
     	courseDAO.toggleFavorite(id);
     }
     
-  
-    /**
-	 * Gibt das Datum in der aktuell vom Nutzer gewaehlten Locale Einstellung aus.
-	 * @param inputDate
-	 * @return Ein Objekt vom Typ String
-	 */
-	public String getLocalizedDate(Date inputDate) {
-		SimpleDateFormat df_date = new SimpleDateFormat( "MMM dd, yyyy (hh:mm)", currentlocale );
-		return df_date.format(inputDate);
-	}
 	
 	public String getFirstRequestDate() {
-		return getLocalizedDate(this.course.getFirstRequestDate());
+		return dateWorker.getLocalizedDateTime(this.course.getFirstRequestDate(),currentLocale);
 	}
 	
 	public String getLastRequestDate() {
-		return getLocalizedDate(this.course.getLastRequestDate());
+		return dateWorker.getLocalizedDateTime(this.course.getLastRequestDate(),currentLocale);
 	}
 	
    

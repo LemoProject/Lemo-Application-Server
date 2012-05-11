@@ -21,13 +21,14 @@
 		            <p:courseNameCell>
 		            	<t:actionlink t:id="show" context="course.id" zone="coursezone">${course.courseDescription}</t:actionlink>		                
 		            </p:courseNameCell>
-		            <p:favoritecell>
+		            <p:compareCell>
 		            	<label class="checkbox">
 		            	<form t:type="form">
-							<t:actionlink t:id="update" context="course.id"><input t:type="checkbox" value="${prop:course.isFavorite}"/></t:actionlink>
+						<!--	<t:actionlink t:id="compare" context="course.id"><input t:type="checkbox" value="false"/></t:actionlink>-->
+							<input t:type="checkbox" value="false"/>
 						</form>
 						</label>
-		            </p:favoritecell>
+		            </p:compareCell>
 		            <p:empty>
 		              <p>${message:noCourses}</p>
 		            </p:empty>
@@ -73,6 +74,11 @@
 								<p><b>${message:lastRequest}:</b> ${lastRequestDate} <br /> </p>
 								<p><b>${message:courseMaxParticipants}:</b> ${course.maxParticipants}<br />  </p>
 								<p><b>${message:courseEnroledParticipants}:</b> ${course.enroledParticipants}<br /> </p> 
+								<label class="checkbox">
+		            			<form t:type="form">
+									Favorite <t:actionlink t:id="update" context="course.id"><input t:type="checkbox" value="${prop:course.isFavorite}"/></t:actionlink>
+								</form>
+								</label>
 								<br />
 								<t:pagelink page="data/visualization" context="${course.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
 							</section>	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
@@ -24,6 +25,8 @@ import org.tynamo.security.services.SecurityService;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
+import de.lemo.apps.application.DateWorker;
+import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
@@ -51,6 +54,15 @@ public class Dashboard {
 	
 	@Inject
     private Logger logger;
+	
+	@Inject
+	private Locale currentLocale;
+	
+	@Inject 
+	private DateWorker dateWorker;
+	
+	@Inject
+	private StatisticWorker statisticWorker;
 	
 	@Inject
     @Path("../../images/icons/glyphicons_019_cogwheel.png")
@@ -100,13 +112,20 @@ public class Dashboard {
 	private SelectModel courseModel3;
 	
 	@Property
-	private Long widgetCourse1;
+	private Long widgetCourse1Id;
 	
 	@Property
-	private Long widgetCourse2;
+	private Long widgetCourse2Id;
 	
 	@Property
-	private Long widgetCourse3;
+	private Long widgetCourse3Id;
+	
+
+	private Course widgetCourse1;
+
+	private Course widgetCourse2;
+	
+	private Course widgetCourse3;
 
 //	@SuppressWarnings("unused")
 //	@SessionState(create = false)
@@ -129,9 +148,12 @@ public class Dashboard {
 		courseModel2 = new CourseIdSelectModel(courses);
 		courseModel3 = new CourseIdSelectModel(courses);
 		
-		widgetCourse1 = userWorker.getCurrentUser().getWidget1();
-		widgetCourse2 = userWorker.getCurrentUser().getWidget2();
-		widgetCourse3 = userWorker.getCurrentUser().getWidget3();
+		widgetCourse1 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget1());
+		widgetCourse2 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget2());
+		widgetCourse3 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget3());
+		widgetCourse1Id = widgetCourse1.getId();
+		widgetCourse2Id = widgetCourse2.getId();
+		widgetCourse3Id = widgetCourse3.getId();
 	}
 	
 
@@ -164,14 +186,14 @@ public class Dashboard {
 	void onSuccessFromCourseForm1(){
 		logger.debug("Course ID:"+ widgetCourse1 );
 		User user = userWorker.getCurrentUser();
-		user.setWidget1(widgetCourse1);
+		user.setWidget1(widgetCourse1Id);
 		userDAO.update(user);
 	}
 	
 	void onSuccessFromCourseForm2(){
 		logger.debug("Course ID:"+ widgetCourse2 );
 		User user = userWorker.getCurrentUser();
-		user.setWidget2(widgetCourse2);
+		user.setWidget2(widgetCourse2Id);
 		userDAO.update(user);
 	}
 	
@@ -179,34 +201,12 @@ public class Dashboard {
 	void onSuccessFromCourseForm3(){
 		logger.debug("Course ID:"+ widgetCourse2 );
 		User user = userWorker.getCurrentUser();
-		user.setWidget3(widgetCourse3);
+		user.setWidget3(widgetCourse3Id);
 		userDAO.update(user);
 	}
 	
 	
-//	public List getFirstQuestionDataItems(){
-//		List<List<XYDataItem>> dataList = CollectionFactory.newList();
-//        List<XYDataItem> list1 = CollectionFactory.newList();
-//
-//        Long starttime = 1308968800L;
-//		Long endtime= 1334447632L;
-//		int resolution = 30;
-//		List<Long> roles = new ArrayList<Long>();
-//		List<Long> courses = new ArrayList<Long>();
-//		courses.add(2100L);
-//		courses.add(2200L);
-//		//calling dm-server
-//		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
-//		//checking if result size matches resolution 
-//        if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-//        	for(int i=0 ;i<resolution;i++){
-//        		list1.add(new XYDataItem(i, results.getElements().get(i)));
-//        	}
-//        dataList.add(list1);
-//        return dataList;
-//	}
-	
-	
+	@Cached
 	public List getFirstQuestionDataItems3(){
 		
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
@@ -215,25 +215,33 @@ public class Dashboard {
         Long id3 = userWorker.getCurrentUser().getWidget3();
         Course course = courseDAO.getCourse(id3);
         Date endDate = course.getLastRequestDate();
-    	Date beginDate = course.getFirstRequestDate();
-    	
-    	Integer resolution = 0;
+        Date beginDate = endDate;
+        if(endDate!=null){
+        	Calendar cal = Calendar.getInstance();
+    		cal.setTime(beginDate);
+    		cal.add(Calendar.MONTH,-1);
+    		beginDate = cal.getTime();
+        } 
+        
+    	Integer resolution = dateWorker.daysBetween(beginDate, endDate);
         
     	if(id3!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
         	
         	if(endDate!=null){
+        		
         		endStamp = new Long(endDate.getTime()/1000);
         	} 
 	        
         	if(beginDate!=null){
+        		
         		beginStamp = new Long(beginDate.getTime()/1000);
         	} 
         	
 			
 			if (resolution == null || resolution < 10 )
-				resolution = 170;
+				resolution = 30;
 			List<Long> roles = new ArrayList<Long>();
 			List<Long> courses = new ArrayList<Long>();
 			courses.add(course.getCourseId());
@@ -264,20 +272,81 @@ public class Dashboard {
 	}
 	
 	
+	public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){
+		return statisticWorker.getAverageRequest(dataItemList);
+	}
+	
+	public Long getOverallRequest(List<List<XYDateDataItem>> dataItemList){
+		return statisticWorker.getOverallRequest(dataItemList);
+	}
+	
+	public Long getMaxRequest(List<List<XYDateDataItem>> dataItemList){
+		return statisticWorker.getMaxRequest(dataItemList);
+	}
+	
+	public Date getMaxRequestDate(List<List<XYDateDataItem>> dataItemList){
+		return statisticWorker.getMaxRequestDate(dataItemList);
+	}
+	
+	
 	public String getWidgetName(int widget){
 		switch(widget){
 		case 1:
 			Long id1 = userWorker.getCurrentUser().getWidget1(); 
-			if(id1!=null) return courseDAO.getCourse(id1).getCourseDescription();
+			if(id1!=null) return getWidgetCourse1().getCourseDescription(); //courseDAO.getCourse(id1).getCourseDescription();
 		case 2:
 			Long id2 = userWorker.getCurrentUser().getWidget2(); 
-			if(id2!=null) return courseDAO.getCourse(id2).getCourseDescription();
+			if(id2!=null) return getWidgetCourse2().getCourseDescription(); //courseDAO.getCourse(id2).getCourseDescription();
 		case 3:
 			Long id3 = userWorker.getCurrentUser().getWidget3(); 
-			if(id3!=null) return courseDAO.getCourse(id3).getCourseDescription();
+			if(id3!=null) return getWidgetCourse3().getCourseDescription(); //courseDAO.getCourse(id3).getCourseDescription();
 		default: return "Widget unused";	
 		}
 	}
+	
+	@Cached
+	public Course getWidgetCourse1(){
+		Long id1 = userWorker.getCurrentUser().getWidget1(); 
+		return courseDAO.getCourse(id1);
+	}
+	
+	@Cached
+	public Course getWidgetCourse2(){
+		Long id2 = userWorker.getCurrentUser().getWidget2(); 
+		return courseDAO.getCourse(id2);
+	}
+	
+	@Cached
+	public Course getWidgetCourse3(){
+		Long id3 = userWorker.getCurrentUser().getWidget3(); 
+		return courseDAO.getCourse(id3);
+	}
+	
+	public String getLocalizedDate(Date date){
+		return dateWorker.getLocalizedDate(date,currentLocale);
+	}
+	
+	
+	public String getLocalizedDateTime(Date date){
+		return dateWorker.getLocalizedDateTime(date,currentLocale);
+	}
+	
+//	public Course getWidgetCourse(int widget){
+//		switch(widget){
+//		case 1:
+//			Long id1 = userWorker.getCurrentUser().getWidget1(); 
+//			if(id1!=null) return courseDAO.getCourse(id1);
+//		case 2:
+//			Long id2 = userWorker.getCurrentUser().getWidget2(); 
+//			if(id2!=null) return courseDAO.getCourse(id2);
+//		case 3:
+//			Long id3 = userWorker.getCurrentUser().getWidget3(); 
+//			if(id3!=null) return courseDAO.getCourse(id3);
+//		default: return new Course();	
+//		}
+//	}
+	
+	
 	
 	
 //	public String getFirstquestion(){

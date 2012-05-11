@@ -24,6 +24,10 @@ import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 
+import de.lemo.apps.application.DateWorker;
+import de.lemo.apps.application.DateWorkerImpl;
+import de.lemo.apps.application.StatisticWorker;
+import de.lemo.apps.application.StatisticWorkerImpl;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.UserWorkerImpl;
 import de.lemo.apps.entities.Course;
@@ -62,6 +66,9 @@ public class AppModule
     	
     	//Facade Worker
     	binder.bind(UserWorker.class, UserWorkerImpl.class);
+    	binder.bind(DateWorker.class, DateWorkerImpl.class);
+    	binder.bind(StatisticWorker.class, StatisticWorkerImpl.class);
+    	
     	
     	// Rest Services
     	binder.bind(Initialisation.class, InitialisationImpl.class);
