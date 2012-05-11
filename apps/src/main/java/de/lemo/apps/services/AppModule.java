@@ -24,6 +24,8 @@ import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 
+import de.lemo.apps.application.AnalysisWorker;
+import de.lemo.apps.application.AnalysisWorkerImpl;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.DateWorkerImpl;
 import de.lemo.apps.application.StatisticWorker;
@@ -42,8 +44,8 @@ import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.InformationImpl;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.client.InitialisationImpl;
-import de.lemo.apps.restws.client.Questions;
-import de.lemo.apps.restws.client.QuestionsImpl;
+import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.AnalysisImpl;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -68,12 +70,13 @@ public class AppModule
     	binder.bind(UserWorker.class, UserWorkerImpl.class);
     	binder.bind(DateWorker.class, DateWorkerImpl.class);
     	binder.bind(StatisticWorker.class, StatisticWorkerImpl.class);
+    	binder.bind(AnalysisWorker.class, AnalysisWorkerImpl.class);
     	
     	
     	// Rest Services
     	binder.bind(Initialisation.class, InitialisationImpl.class);
     	binder.bind(Information.class, InformationImpl.class);
-    	binder.bind(Questions.class, QuestionsImpl.class);
+    	binder.bind(Analysis.class, AnalysisImpl.class);
     	
     	
 

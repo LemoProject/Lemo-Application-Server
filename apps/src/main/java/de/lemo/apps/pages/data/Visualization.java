@@ -35,6 +35,7 @@ import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
@@ -77,6 +78,9 @@ public class Visualization {
 	
 	@Inject
 	private Initialisation init;
+	
+	@Inject
+	private Analysis analysis;
 	
 	@InjectPage
 	Visualization visPage;
@@ -288,7 +292,7 @@ public class Visualization {
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.info("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = init.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
 			
 			Calendar beginCal = Calendar.getInstance();

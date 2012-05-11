@@ -51,8 +51,8 @@
 	    		    <ul id="summaryTab" class="nav nav-tabs">
 	    		    
 					    <li class="active"><a href="#summary" data-toggle="tab">${message:courseSummary}</a></li>
-					    <li><a href="#profile" data-toggle="tab">Profile</a></li>
-					    <li><a href="#messages" data-toggle="tab">Messages</a></li>
+					    <li><a href="#lastmonth" data-toggle="tab">Last month</a></li>
+					    <li><a href="#overall" data-toggle="tab">Overall</a></li>
 					    <li><a href="#settings" data-toggle="tab">Settings</a></li>
 					</ul>
 				</div>
@@ -92,9 +92,44 @@
 						</div> <!-- span5 -->
 						
 					</div>
-					</div><!-- tab-pane -->
-				    <div class="tab-pane" id="profile">...</div>
-				    <div class="tab-pane" id="messages">...</div>
+					</div><!-- tab-pane summary -->
+				    
+				    <div class="tab-pane" id="lastmonth">
+						<div class="row-fluid">
+						<div class="span1" />
+							
+						<div class="span5">
+							<t:zone t:id="courseLastMonthZone" id="courseLastMonthZone" t:update="show"> 	
+							<section>
+								<header>
+									<h3>${course.courseDescription} (${course.courseId})</h3><br />
+								</header>
+								<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(course.lastRequestDate)} <br /> </p>
+		    					<br />
+		    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysis)}<br /> </p> 
+		    					<br />
+		    					<p><b>${message:avgRequests}:</b> ${getAverageRequest(usageAnalysis)}<br /> </p> 
+		    					<br />
+		    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(usageAnalysis))}  - (${getMaxRequest(usageAnalysis)})<br /> </p> 	
+		    					<br />
+
+								<label class="checkbox">
+								</label>
+								<br />
+							</section>	
+							</t:zone> <!-- courseLastMonthZone  -->
+						</div> <!-- span5 -->
+						
+						<div class="span5">
+							<t:zone t:id="courseVisLastMonthZone" id="courseVisLastMonthZone" t:update="show"> 
+<!--								<div t:id="chart2" style="width: auto; height: 300px;"/>-->
+							</t:zone> <!-- courseVisZone  -->		
+						</div> <!-- span5 -->
+						
+					</div><!-- tab-pane  last month -->
+					
+					</div>
+				    <div class="tab-pane" id="overall">...</div>
 				    <div class="tab-pane" id="settings">...</div>
 				</div> <!-- tab-content -->
 				

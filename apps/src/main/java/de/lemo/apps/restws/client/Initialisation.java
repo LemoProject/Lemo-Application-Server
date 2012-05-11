@@ -11,8 +11,6 @@ public interface Initialisation {
 	
 	public Date getStartTime();
 	
-	public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,  int resolution);
-	
 	public CourseObject getCourseDetails(Long id);
 	
 	public ResultListCourseObject getCoursesDetails(List<Long> ids);
