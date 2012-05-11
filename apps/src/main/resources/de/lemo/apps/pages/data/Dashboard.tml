@@ -121,11 +121,11 @@
 	    					<br />
 	    					<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(widgetCourse3.lastRequestDate)} <br /> </p>
 	    					<br />
-	    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(firstQuestionDataItems3)}<br /> </p> 
+	    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysisWidget3)}<br /> </p> 
 	    					<br />
-	    					<p><b>${message:avgRequests}:</b> ${getAverageRequest(firstQuestionDataItems3)}<br /> </p> 
+	    					<p><b>${message:avgRequests}:</b> ${getAverageRequest(usageAnalysisWidget3)}<br /> </p> 
 	    					<br />
-	    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(firstQuestionDataItems3))}  - (${getMaxRequest(firstQuestionDataItems3)})<br /> </p> 	
+	    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(usageAnalysisWidget3))}  - (${getMaxRequest(usageAnalysisWidget3)})<br /> </p> 	
 	    					<br />
 	    					<p><b>${message:courseEnroledParticipants}:</b> ${widgetCourse3.enroledParticipants}<br /> </p> 
 	    					<br />

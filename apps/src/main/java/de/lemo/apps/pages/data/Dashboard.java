@@ -1,6 +1,5 @@
 package de.lemo.apps.pages.data;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,10 +36,8 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
-import de.lemo.apps.services.internal.jqplot.XYDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 @RequiresAuthentication
@@ -48,7 +45,7 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 @BreadCrumbReset
 public class Dashboard {
 	
-	@Component(parameters = {"dataItems=FirstQuestionDataItems3"})
+	@Component(parameters = {"dataItems=usageAnalysisWidget3"})
     private JqPlotLine chart1;
 	
 	@Component(parameters = {"dataItems=testPieData"})
@@ -215,77 +212,12 @@ public class Dashboard {
 
 	
 	@Cached
-	public List getFirstQuestionDataItems3(){
+	public List getUsageAnalysisWidget3(){
 		Long id3 = userWorker.getCurrentUser().getWidget3();
 		Course course = courseDAO.getCourse(id3);
 		Date endDate = course.getLastRequestDate();
 		return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1);
 	}
-	
-//	@Cached
-//	public List getFirstQuestionDataItems3(){
-//		
-//		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
-//        List<XYDateDataItem> list1 = CollectionFactory.newList();
-//        
-//        Long id3 = userWorker.getCurrentUser().getWidget3();
-//        Course course = courseDAO.getCourse(id3);
-//        Date endDate = course.getLastRequestDate();
-//        Date beginDate = endDate;
-//        if(endDate!=null){
-//        	Calendar cal = Calendar.getInstance();
-//    		cal.setTime(beginDate);
-//    		cal.add(Calendar.MONTH,-1);
-//    		beginDate = cal.getTime();
-//        } 
-//        
-//    	Integer resolution = dateWorker.daysBetween(beginDate, endDate);
-//        
-//    	if(id3!=null){
-//        	Long endStamp=0L;
-//        	Long beginStamp=0L;
-//        	
-//        	if(endDate!=null){
-//        		
-//        		endStamp = new Long(endDate.getTime()/1000);
-//        	} 
-//	        
-//        	if(beginDate!=null){
-//        		
-//        		beginStamp = new Long(beginDate.getTime()/1000);
-//        	} 
-//        	
-//			
-//			if (resolution == null || resolution < 10 )
-//				resolution = 30;
-//			List<Long> roles = new ArrayList<Long>();
-//			List<Long> courses = new ArrayList<Long>();
-//			courses.add(course.getCourseId());
-//			
-//			//calling dm-server
-//			for (int i=0;i<courses.size();i++){
-//				logger.debug("Courses: "+courses.get(i));
-//			}
-//			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-//			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
-//			
-//			
-//			Calendar beginCal = Calendar.getInstance();
-//			beginCal.setTime(beginDate);
-//			
-//			logger.debug("BeginDate: "+beginDate);
-//			
-//			//checking if result size matches resolution 
-//			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-//	        for(int i=0 ;i<resolution;i++){
-//	        	
-//	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
-//	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
-//	        }
-//    	}
-//        dataList.add(list1);
-//        return dataList;
-//	}
 	
 	
 	public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){
@@ -346,40 +278,5 @@ public class Dashboard {
 	public String getLocalizedDateTime(Date date){
 		return dateWorker.getLocalizedDateTime(date,currentLocale);
 	}
-	
-//	public Course getWidgetCourse(int widget){
-//		switch(widget){
-//		case 1:
-//			Long id1 = userWorker.getCurrentUser().getWidget1(); 
-//			if(id1!=null) return courseDAO.getCourse(id1);
-//		case 2:
-//			Long id2 = userWorker.getCurrentUser().getWidget2(); 
-//			if(id2!=null) return courseDAO.getCourse(id2);
-//		case 3:
-//			Long id3 = userWorker.getCurrentUser().getWidget3(); 
-//			if(id3!=null) return courseDAO.getCourse(id3);
-//		default: return new Course();	
-//		}
-//	}
-	
-	
-	
-	
-//	public String getFirstquestion(){
-//		
-//		Long starttime = 1108968800L;
-//		Long endtime= 1334447632L;
-//		int resolution = 30;
-//		List<Long> roles = new ArrayList<Long>();
-//		List<Long> courses = new ArrayList<Long>();
-//		courses.add(2100L);
-//		courses.add(2200L);
-//		ResultListLongObject results = init.computeQ1(courses, roles, starttime, endtime, resolution);
-//		if (results != null && results.getElements()!= null) {
-//			for (int i = 0;i< results.getElements().size();i++)
-//				logger.info("List element "+i+"; "+results.getElements().get(i));
-//			return "Guck mal";
-//		} else return "Guck lieber nicht";
-//	}
 
 }
