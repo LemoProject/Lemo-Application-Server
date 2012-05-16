@@ -6,6 +6,8 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
@@ -24,7 +26,11 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="visualizationTitle")
+@Import(library={"../../js/d3/d3_custom.js"})
 public class VisualizationD3 {
+	
+	@Environmental
+    private JavaScriptSupport javaScriptSupport;
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -55,6 +61,13 @@ public class VisualizationD3 {
 
         return dataList;
     }
+    
+    @AfterRender
+    public void afterRender() {
+            javaScriptSupport.addScript("" 
+            );
+    }
+    
 	
 	@Cached
     public List getTestPieData()

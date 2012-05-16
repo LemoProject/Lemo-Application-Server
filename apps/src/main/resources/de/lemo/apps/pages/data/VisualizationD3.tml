@@ -13,7 +13,24 @@
 		</div>
 	</div>
 	
-	<div class="well">
-    		
-    	</div>
+	<div class="row-fluid">
+		
+    	
+    	
+    	
+    	<div class="span12">
+    			 <div id="viz"></div>
+    	</div> <!-- span9 -->
+    
+   </div>
+    <script type="text/javascript">
+
+
+
+	
+	
+
+	
+    </script>
+    
 </html>

@@ -84,13 +84,14 @@
               			${message:myFavorites} 
               			<b class="caret"></b>
               		</a>
-              	<ul class="dropdown-menu">
-					<li t:type="Loop" t:source="favoriteCourses" t:value="favoriteCourse">
-						<t:pagelink page="data/visualization" context="favoriteCourse.id">${favoriteCourse.courseDescription}</t:pagelink>
-					</li>
-				
-				</ul>
+	              	<ul class="dropdown-menu">
+						<li t:type="Loop" t:source="favoriteCourses" t:value="favoriteCourse">
+							<t:pagelink page="data/visualization" context="favoriteCourse.id">${favoriteCourse.courseDescription}</t:pagelink>
+						</li>
+					
+					</ul>
               </li>
+               <li><t:pagelink page="data/visualizationd3">VisD3</t:pagelink></li>
               
             </ul> 
             
