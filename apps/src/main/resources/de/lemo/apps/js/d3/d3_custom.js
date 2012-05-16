@@ -1,9 +1,12 @@
 $(document).ready(function() {
 	
 	
-	var nodes = [{"name":"Bio1","value":15,"group":1},{"name":"Bio2","value":10,"group":1},{"name":"Bio3","value":5,"group":1}],
+	var nodes = [{"name":"Bio1","value":15,"group":1},{"name":"Bio2","value":10,"group":1},{"name":"Bio3","value":5,"group":1},
+	             {"name":"Bio4","value":5,"group":1},
+	             {"name":"Chem1","value":15,"group":2},{"name":"Chem2","value":12,"group":2},{"name":"Chem3","value":10,"group":2}],
 	             
-	    links= [{"source":1,"target":0,"value":18},{"source":2,"target":1,"value":2}];
+	    links= [{"source":1,"target":0,"value":18},{"source":2,"target":1,"value":2},{"source":3,"target":1,"value":2},
+	            {"source":5,"target":4,"value":18},{"source":6,"target":4,"value":2}];
 	
 	var w = 960,
     h = 500
