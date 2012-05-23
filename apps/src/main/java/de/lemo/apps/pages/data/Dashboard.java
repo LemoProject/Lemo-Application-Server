@@ -31,6 +31,7 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
@@ -45,11 +46,17 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 @BreadCrumbReset
 public class Dashboard {
 	
-	@Component(parameters = {"dataItems=usageAnalysisWidget3"})
+	@Component(parameters = {"dataItems=usageAnalysisWidget1"})
     private JqPlotLine chart1;
 	
-	@Component(parameters = {"dataItems=testPieData"})
-    private JqPlotPie chart2 ;
+	@Component(parameters = {"dataItems=usageAnalysisWidget2"})
+    private JqPlotLine chart2;
+	
+	@Component(parameters = {"dataItems=usageAnalysisWidget3"})
+    private JqPlotLine chart3;
+	
+//	@Component(parameters = {"dataItems=testPieData"})
+//    private JqPlotPie chart4 ;
 	
 	@Inject
     private Logger logger;
@@ -125,7 +132,9 @@ public class Dashboard {
 	@Property
 	private Long widgetCourse3Id;
 	
-
+	@Persist("Flash")
+	private UsageStatisticsContainer usageStatistics;
+	
 	private Course widgetCourse1;
 
 	private Course widgetCourse2;
@@ -213,12 +222,42 @@ public class Dashboard {
 	
 	@Cached
 	public List getUsageAnalysisWidget3(){
-		Long id3 = userWorker.getCurrentUser().getWidget3();
-		Course course = courseDAO.getCourse(id3);
+		Long id = userWorker.getCurrentUser().getWidget3();
+		return getUsageAnalysis(id);
+	}
+	
+	@Cached
+	public List getUsageAnalysisWidget2(){
+		Long id = userWorker.getCurrentUser().getWidget2();
+		return getUsageAnalysis(id);
+	}
+	
+	
+	@Cached
+	public List getUsageAnalysisWidget1(){
+		Long id = userWorker.getCurrentUser().getWidget1();
+		return getUsageAnalysis(id);
+	}
+	
+	public List getUsageAnalysis(Long courseId){
+		Course course = courseDAO.getCourse(courseId);
 		Date endDate = course.getLastRequestDate();
 		return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1);
 	}
 	
+	//TODO reduce recomputation of analysis results per widget - method should provide a container class for all necessary stats data
+	public UsageStatisticsContainer getUsageStatistics(Long courseId){
+		logger.debug("######### Getting stats info for course Id: "+courseId);
+		if (this.usageStatistics != null && this.usageStatistics.getCourseId() == courseId)
+			return usageStatistics;
+		List<List<XYDateDataItem>> dataItemList = getUsageAnalysis(courseId);
+		this.usageStatistics = new UsageStatisticsContainer(courseId);
+		this.usageStatistics.setAverageRequest(statisticWorker.getAverageRequest(dataItemList));
+		this.usageStatistics.setMaxRequest(statisticWorker.getMaxRequest(dataItemList));
+		this.usageStatistics.setMaxRequestDate(statisticWorker.getMaxRequestDate(dataItemList));
+		this.usageStatistics.setOverallRequest(statisticWorker.getOverallRequest(dataItemList));
+		return this.usageStatistics;
+	}
 	
 	public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){
 		return statisticWorker.getAverageRequest(dataItemList);

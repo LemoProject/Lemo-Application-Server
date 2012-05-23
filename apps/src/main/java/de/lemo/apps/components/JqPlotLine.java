@@ -7,7 +7,10 @@ import org.apache.tapestry5.json.JSONObject;
 @Import( library={ 	"../js/jqplot/plugins/jqplot.barRenderer.js",
 					"../js/jqplot/plugins/jqplot.highlighter.min.js",
 					"../js/jqplot/plugins/jqplot.cursor.min.js",
-					"../js/jqplot/plugins/jqplot.dateAxisRenderer.js"
+					"../js/jqplot/plugins/jqplot.dateAxisRenderer.js",
+					"../js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
+					"../js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"
+					
 		})
 public class JqPlotLine extends JqPlot {
 
@@ -38,14 +41,14 @@ public class JqPlotLine extends JqPlot {
       renderer.put("fillAndStroke", new JSONLiteral("true"));
       
       seriesDefaults.put("seriesDefaults", renderer);
-      seriesDefaults.put("legend", new JSONObject("{ show:true, location: 'e' }"));
+      seriesDefaults.put("legend", new JSONObject("{ show:false, location: 'e' }"));
       //seriesDefaults.put("shadowAngle", new JSONLiteral("5"));
       //seriesDefaults.put("pointLabels", new JSONObject("{ show:true }"));
       //seriesDefaults.put("title",new JSONLiteral("'Überschrift'"));
       seriesDefaults.put("highlighter",new JSONObject("{show: true, showLabel: true, tooltipAxes: 'y',sizeAdjust: 10.5 , tooltipLocation : 'ne'}"));
       seriesDefaults.put("cursor", new JSONObject("{ show:true, zoom: true, constrainZoomTo: x, showTooltip:true }"));
       seriesDefaults.put("grid", new JSONObject("{background: '#FFF', drawGridlines: false, gridLineColor: '#222', borderColor: '#222', shadow: false, drawBorder: false}"));
-      axisDefaults.put("yaxis", new JSONObject("{padMin: 0}"));
+      axisDefaults.put("yaxis", new JSONLiteral("{padMin: 0, label: 'CLicks', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
       axisDefaults.put("xaxis", new JSONLiteral("{padMin: 0, renderer:jQuery.jqplot.DateAxisRenderer}"));
       //dateAxisRenderer.put("renderer", new JSONLiteral("jQuery.jqplot.DateAxisRenderer"));
       

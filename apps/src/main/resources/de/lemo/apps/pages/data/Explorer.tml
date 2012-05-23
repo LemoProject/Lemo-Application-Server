@@ -68,28 +68,31 @@
 							<t:zone t:id="courseZone" id="coursezone" t:update="show"> 	
 							<section>
 								<header>
-									<h3>${course.courseDescription} (${course.courseId})</h3><br />
+									<h3>${CurrentCourse.courseDescription} (${CurrentCourse.courseId})</h3><br />
 								</header>
 								<p><b>${message:firstRequest}:</b> ${firstRequestDate} <br /> </p>
 								<p><b>${message:lastRequest}:</b> ${lastRequestDate} <br /> </p>
-								<p><b>${message:courseMaxParticipants}:</b> ${course.maxParticipants}<br />  </p>
-								<p><b>${message:courseEnroledParticipants}:</b> ${course.enroledParticipants}<br /> </p> 
+								<p><b>${message:courseMaxParticipants}:</b> ${CurrentCourse.maxParticipants}<br />  </p>
+								<p><b>${message:courseEnroledParticipants}:</b> ${CurrentCourse.enroledParticipants}<br /> </p> 
 								<label class="checkbox">
 		            			<form t:type="form">
-									Favorite <t:actionlink t:id="update" context="course.id"><input t:type="checkbox" value="${prop:course.isFavorite}"/></t:actionlink>
+									Favorite <t:actionlink t:id="update" context="CurrentCourse.id"><input t:type="checkbox" value="${prop:CurrentCourse.isFavorite}"/></t:actionlink>
 								</form>
 								</label>
 								<br />
-								<t:pagelink page="data/visualization" context="${course.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
+								<t:pagelink page="data/visualization" context="${CurrentCourse.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
+								
 							</section>	
 							</t:zone> <!-- courseZone  -->
 						</div> <!-- span5 -->
 						
-						<div class="span5">
-							<t:zone t:id="courseVisZone" id="courseviszone" t:update="show"> 
-								<div t:id="chart2" style="width: auto; height: 300px;"/>
+						<div class="span6">
+							<t:zone t:id="courseVisZone" id="courseVisZone" t:update="show"> 
+								<div t:id="chart1" style="width: 450px; height: 250px;"/>
+									
+								<br /><br />
 							</t:zone> <!-- courseVisZone  -->		
-						</div> <!-- span5 -->
+						</div> <!-- span6 -->
 						
 					</div>
 					</div><!-- tab-pane summary -->
@@ -102,9 +105,9 @@
 							<t:zone t:id="courseLastMonthZone" id="courseLastMonthZone" t:update="show"> 	
 							<section>
 								<header>
-									<h3>${course.courseDescription} (${course.courseId})</h3><br />
+									<h3>${CurrentCourse.courseDescription} (${CurrentCourse.courseId})</h3><br />
 								</header>
-								<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(course.lastRequestDate)} <br /> </p>
+								<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(CurrentCourse.lastRequestDate)} <br /> </p>
 		    					<br />
 		    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysis)}<br /> </p> 
 		    					<br />
@@ -135,6 +138,42 @@
 				
     		</div> <!-- class=well -->
     		</div> <!-- thumbnail -->
+    		
+    		<div class="row-fluid">
+    			<div class="thumbnail">
+    				<div class="row-fluid">
+    					<div class="span1">
+	    				</div>
+	    				<div class="span11">
+	    					<br />
+	    					<b>${message:chooseAnalysisType}</b>
+    						<br />
+    						<br />
+	    				</div>
+    					
+    				</div>
+    				<t:zone t:id="analysisSelectZone" id="analysisSelectZone" t:update="show"> 
+							
+		    			<div class="row-fluid">
+		    				
+		    				<div class="span1">
+		    				</div>
+			    			<div class="span2">
+			    				<t:pagelink page="data/visualization" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50" width="75" /><br /><b>Usage</b> </t:pagelink> 
+			    				<br /><br />
+			    			</div>
+			    			<div class="span2">
+			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50" width="75" /><br /><b>Path</b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
+			    			<div class="span2">
+			    			</div>
+			    			<div class="span2">
+			    			</div>
+			    		</div>
+		    		</t:zone> <!-- analysisSelectZone  -->		
+    			</div>
+    		</div>
     	</div> <!-- span9 -->
     	
     	

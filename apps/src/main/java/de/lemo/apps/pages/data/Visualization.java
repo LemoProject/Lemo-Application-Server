@@ -209,11 +209,11 @@ public class Visualization {
 	
 	@Property(write=false)
 	@Retain
-	private BeanModel coursesGridModel;
+	private BeanModel analysisGridModel;
     {
-    	coursesGridModel = beanModelSource.createDisplayModel(Course.class, componentResources.getMessages());
-    	coursesGridModel.include("coursename","lastRequestDate");
-    	coursesGridModel.add("favorite",null);
+    	analysisGridModel = beanModelSource.createDisplayModel(Course.class, componentResources.getMessages());
+    	analysisGridModel.include("coursename","lastRequestDate");
+    	analysisGridModel.add("favorite",null);
     	    	
     }
     

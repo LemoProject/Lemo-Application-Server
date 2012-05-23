@@ -3,10 +3,13 @@ $(document).ready(function() {
 	
 	var nodes = [{"name":"Bio1","value":15,"group":1},{"name":"Bio2","value":10,"group":1},{"name":"Bio3","value":5,"group":1},
 	             {"name":"Bio4","value":5,"group":1},
-	             {"name":"Chem1","value":15,"group":2},{"name":"Chem2","value":12,"group":2},{"name":"Chem3","value":10,"group":2}],
+	             {"name":"Chem1","value":15,"group":2},{"name":"Chem2","value":12,"group":2},{"name":"Chem3","value":10,"group":2},{"name":"Chem4","value":10,"group":2},
+	             {"name":"Chem5","value":10,"group":2},{"name":"Chem6","value":10,"group":2},{"name":"Chem7","value":10,"group":2},{"name":"Chem8","value":5,"group":2}],
 	             
 	    links= [{"source":1,"target":0,"value":18},{"source":2,"target":1,"value":2},{"source":3,"target":1,"value":2},
-	            {"source":5,"target":4,"value":18},{"source":6,"target":4,"value":2}];
+	            
+	            {"source":4,"target":5,"value":18},{"source":5,"target":6,"value":2},{"source":6,"target":7,"value":2},{"source":7,"target":8,"value":2},
+	            {"source":8,"target":9,"value":2},{"source":9,"target":10,"value":2},{"source":6,"target":4,"value":2}];
 	
 	var w = 960,
     h = 500
@@ -21,7 +24,7 @@ var vis = d3.select("#viz").append("svg:svg")
 	var force = d3.layout.force()
         .nodes(nodes)
         .links(links)
-        .gravity(.05)
+        .gravity(.03)
         .distance(100)
         .charge(-100)
         .size([w, h])
@@ -40,9 +43,9 @@ var vis = d3.select("#viz").append("svg:svg")
 
     var node = vis.selectAll("g.node")
     		.data(nodes)
-    	.enter().append("svg:g")
-    	.attr("class", "node")
-    	.call(force.drag);
+	    	.enter().append("svg:g")
+	    	.attr("class", "node")
+	    	.call(force.drag);
 
     	node.append("circle")
            .attr("class", "node")
@@ -54,16 +57,21 @@ var vis = d3.select("#viz").append("svg:svg")
         .attr("class", "nodetext")
         .attr("dx", 12)
         .attr("dy", ".35em")
-        .text(function(d) { return d.name+" ("+d.group+")" });
+        .text(function(d) { return d.name+" ("+d.value+")" });
 
     force.on("tick", function() {
       link.attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; });
-
+      
       node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      /**node.attr("transform", function(d) { return "translate(" + (1.3*d.x) + "," + (20*d.value) + ")"; });*/
+      
+     
     });
+    
+    
 
 	
 });

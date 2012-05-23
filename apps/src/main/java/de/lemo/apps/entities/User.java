@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
@@ -205,6 +206,7 @@ public class User extends AbstractEntity{
 	/**
 	 * @param widget1 the widget1 to set
 	 */
+	@NonVisual
 	public void setWidget1(Long widget1) {
 		this.widget1 = widget1;
 	}
@@ -219,6 +221,7 @@ public class User extends AbstractEntity{
 	/**
 	 * @param widget2 the widget2 to set
 	 */
+	@NonVisual
 	public void setWidget2(Long widget2) {
 		this.widget2 = widget2;
 	}
@@ -233,6 +236,7 @@ public class User extends AbstractEntity{
 	/**
 	 * @param widget3 the widget3 to set
 	 */
+	@NonVisual
 	public void setWidget3(Long widget3) {
 		this.widget3 = widget3;
 	}
