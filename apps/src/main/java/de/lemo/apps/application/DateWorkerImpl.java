@@ -8,7 +8,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.annotations.Path;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONLiteral;
 
 /**
  * @author johndoe
@@ -16,6 +21,13 @@ import org.apache.tapestry5.ioc.annotations.Inject;
  */
 public class DateWorkerImpl implements DateWorker {
 	
+	@Inject
+	private Messages messages;
+	
+//	@Inject
+//    @Path("context:images/icons/glyphicons_045_calendar.png")
+//    private Asset calendarIcon;
+//	
 
 	public Integer daysBetween(Calendar startDate, Calendar endDate) {
   	  Calendar date = (Calendar) startDate.clone();
@@ -60,6 +72,21 @@ public class DateWorkerImpl implements DateWorker {
 	public String getLocalizedDateTime(Date date, Locale currentLocale){
 		SimpleDateFormat df_date = new SimpleDateFormat( "MMM dd, yyyy (hh:mm)", currentLocale );
 		return df_date.format(date);
+	}
+	
+	public JSONLiteral getDatePickerParams(){
+		JSONLiteral datePickerConfig = new JSONLiteral("{	nextText: 'Next Month', " +
+				"								prevText: 'Previous Month'," +
+				"								changeMonth: true," +
+				"								changeYear: true," +
+				"								buttonText: '"+ messages.get("chooseDate") +"'," +		
+				//"								minDate: '01.07.2012'," +
+				//"								maxDate: '"+this.course.getLastRequestDate()+
+				//"								buttonImage: '"+this.calendarIcon+"'," +
+				"								buttonImageOnly: false," +
+				"								showButtonPanel: true," +
+				"								showOn: 'both'}");
+		return datePickerConfig;
 	}
 
 }

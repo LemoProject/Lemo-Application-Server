@@ -172,7 +172,6 @@ public class Explorer {
     	return new MultiZoneUpdate("courseZone", courseZone.getBody()).add("courseLastMonthZone", courseLastMonthZone.getBody())
     																  .add("analysisSelectZone", analysisSelectZone.getBody());
     																  //.add("courseVisZone", courseVisZone.getBody());
-    	//return courseZone.getBody();
 	  }
     
     void onActionFromUpdate(Long id){

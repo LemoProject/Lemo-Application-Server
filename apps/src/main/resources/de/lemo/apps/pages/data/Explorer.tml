@@ -158,17 +158,17 @@
 		    				
 		    				<div class="span1">
 		    				</div>
-			    			<div class="span2">
-			    				<t:pagelink page="data/visualization" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50" width="75" /><br /><b>Usage</b> </t:pagelink> 
+			    			<div class="span1" align="center">
+			    				<t:pagelink page="data/visualization" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
-			    			<div class="span2">
-			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50" width="75" /><br /><b>Path</b> </t:pagelink>
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:pathAnalysis}</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
-			    			<div class="span2">
+			    			<div class="span1">
 			    			</div>
-			    			<div class="span2">
+			    			<div class="span5">
 			    			</div>
 			    		</div>
 		    		</t:zone> <!-- analysisSelectZone  -->		

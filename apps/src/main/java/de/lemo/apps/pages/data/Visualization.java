@@ -9,20 +9,24 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.Request;
@@ -48,6 +52,8 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 @RequiresAuthentication
 @BreadCrumb(titleKey="visualizationTitle")
 public class Visualization {
+	
+	
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -78,6 +84,8 @@ public class Visualization {
 	
 	@Inject
 	private Initialisation init;
+	
+	
 	
 	@Inject
 	private Analysis analysis;
@@ -192,7 +200,10 @@ public class Visualization {
 		return true;
 	}
 	
-	
+	// returns datepicker params
+	public JSONLiteral getDatePickerParams(){
+		return dateWorker.getDatePickerParams();
+	}
 	
 	public Course onPassivate(){
          return course;

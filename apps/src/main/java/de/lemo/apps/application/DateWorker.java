@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.tapestry5.json.JSONLiteral;
+
 public interface DateWorker {
 	
 	public Integer daysBetween(Calendar startDate, Calendar endDate);
@@ -13,6 +15,8 @@ public interface DateWorker {
 	public String getLocalizedDate(Date date, Locale currentLocale);
 	
 	public String getLocalizedDateTime(Date date, Locale currentLocale);
+	
+	public JSONLiteral getDatePickerParams();
 	
 
 }

@@ -25,3 +25,8 @@
 .navbar .nav > li > a.btn-primary:hover {
   color: #bbbbbb;
 }
+
+.accordion-toggle .caret {
+  margin-top: 8px;
+  margin-left: 2px;
+}

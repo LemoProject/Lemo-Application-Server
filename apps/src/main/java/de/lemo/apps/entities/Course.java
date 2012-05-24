@@ -1,6 +1,5 @@
 package de.lemo.apps.entities;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,6 +8,32 @@ import javax.persistence.Table;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import de.lemo.apps.restws.entities.CourseObject;
+
+/**
+* The course is a domain class which is responsible for .... 
+* <p> 
+* Based on the basic system structure, next to getter and setter methods there are only a few methods with ....
+* Most of the domainspecific logic is 
+* 
+* 
+* Aufgrund der allgemeinen Systemarchitektur sind neben Getter- und Setter-Methoden nur wenige Methoden
+* direkt in dieser Domainklasse implementiert. Ein Grossteil der Methoden die Klassenuebergreifende Funktionen implementieren sind im 
+* Rahmen des Application-Layer als Teil einer Service Klasse *Worker.java implementiert. 
+* <p> 
+* ACHTUNG: Important methods are commonly defined at the end of the class and are often marked with a @Transient annotation, to indicate
+* that hibernate can ignore these methods 
+* <p> 
+* Die Klasse wird mittels @Entity Annotation als zu persistierende Klasse gekennzeichnet
+* und darauf hin via Hibernate persistiert. Hierfuer erweitert sie die abstrakte Klasse AbstractEntity, welche uebergeordnete Methoden
+* und Attribute enthaelt, die Hibernate fuer jede zu persistierende Klasse erwartet (z.B. ID, etc.). Das Datenbank-Mapping kann 
+* Hibernate fuer Basisdatentypen (String, Integer, Date, etc.) selbst vornehmen. Erst bei komplexen Datentypen bzw. expl. 
+* Assoziationen ist eine Auszeichnung durch zusaetzliche Annotationen an den Getter-Methoden der jeweiligen Attribute notwendig. 
+* Beispiele hierfuer sind z.B. @OneToOne fuer eine 1:1 Assoziation und @OneToMany fuer eine 1:n Assoziation.
+* <p> 
+* @version 1.0
+* @author Andreas Pursian
+*
+*/
 
 @Entity
 @Table(name = "course")
