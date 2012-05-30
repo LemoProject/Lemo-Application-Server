@@ -79,7 +79,7 @@
 			                <div class="accordion-inner">
 			                 	<br />
 						    	${message:activityOption}:
-		            			<t:select t:id="activity" value="activity" model="literal:Quiz,Wiki,Blog,Files, ..."/>
+		            			<t:jquery.palette t:id="activities" encoder="activityEncoder" model="activityModel"/>
 			                </div>
 			              </div>
 			            </div>

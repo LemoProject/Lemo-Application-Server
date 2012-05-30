@@ -6,7 +6,9 @@ package de.lemo.apps.application;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.slf4j.Logger;
 
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
@@ -16,6 +18,8 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
  */
 public class StatisticWorkerImpl implements StatisticWorker{
 	
+	@Inject
+    private Logger logger;
 	
 	public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){
 		List<XYDateDataItem> innerList = CollectionFactory.newList();

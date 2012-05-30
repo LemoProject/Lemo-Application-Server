@@ -11,7 +11,10 @@ import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 
+import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResultListLongObject;
+import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
+import de.lemo.apps.restws.proxies.questions.QActivityResourceType;
 import de.lemo.apps.restws.proxies.questions.QCourseActivity;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
@@ -70,6 +73,58 @@ public class AnalysisImpl implements Analysis{
 		}
 		System.out.println("Gebe leere Resultlist zurück");
 		return new ResultListLongObject();
+	}
+	
+	
+	public ResultListResourceRequestInfo computeQ1Extended(List<Long> courses, Long startTime, Long endTime,  List<EResourceType> resourceTypes) {
+		//Create resource delegate
+		//logger.info("Getting Server Starttime");
+		try {
+			ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
+			
+			ClientResponse<ServiceStartTime> response;
+			
+				response = request.get(ServiceStartTime.class);
+			
+				
+			
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+					+ response.getStatus());
+			}
+			
+			QActivityResourceType qActivityResourceType = ProxyFactory.create(QActivityResourceType.class,
+			"http://localhost:4443/questions");
+			if (qActivityResourceType != null){
+
+				ResultListResourceRequestInfo result = qActivityResourceType.compute(courses, startTime, endTime, resourceTypes);
+//				if(result!=null && result.getElements()!=null){
+//					ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+//					List<Long> resultList = new ArrayList<Long>();
+//					for (int i=0; i<result.getElements().size();i++)  { 
+//						Long value = mapper.readValue(result.getElements().get(i).toString(), Long.class);
+//						resultList.add(i, value);
+//					}
+//					 
+//					return new ResultList(resultList);
+//				}
+				return result;
+			}
+			
+		} catch (ClientProtocolException e) {
+		 
+		e.printStackTrace();
+ 
+		} catch (IOException e) {
+ 
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Gebe leere Resultlist zurück");
+		return new ResultListResourceRequestInfo();
 	}
 
 }

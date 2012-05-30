@@ -11,6 +11,8 @@ import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
@@ -26,13 +28,17 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.apache.tapestry5.util.EnumSelectModel;
+import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
 
+import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
@@ -41,7 +47,9 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResultListLongObject;
+import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
@@ -74,6 +82,12 @@ public class Visualization {
 	private ComponentResources componentResources;
 	
 	@Inject
+	private Messages messages;
+	
+	@Inject
+	private TypeCoercer coercer;
+	
+	@Inject
 	private Locale currentlocale;
 	
 	@Inject
@@ -85,7 +99,8 @@ public class Visualization {
 	@Inject
 	private Initialisation init;
 	
-	
+	@Inject
+	private AnalysisWorker analysisWorker;
 	
 	@Inject
 	private Analysis analysis;
@@ -166,6 +181,10 @@ public class Visualization {
 	
 	@Property
 	@Persist
+	private List<EResourceType> activities;
+	
+	@Property
+	@Persist
     private Course course;
 	
 	@Property
@@ -216,7 +235,14 @@ public class Visualization {
 		this.course = null;
 		
 	}
-	
+    
+    // Value Encoder for activity multi-select component
+    @Property(write=false)
+    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer, EResourceType.class);
+    
+    // Select Model for activity multi-select component
+    @Property(write=false)
+    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
 	
 	@Property(write=false)
 	@Retain
@@ -305,6 +331,22 @@ public class Visualization {
 			logger.info("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
+			List<EResourceType> resList = new ArrayList<EResourceType>();
+			resList.add(EResourceType.COURSE);
+			resList.add(EResourceType.FORUM);
+			resList.add(EResourceType.RESOURCE);
+			resList.add(EResourceType.ASSIGNMENT);
+			resList.add(EResourceType.QUESTION);
+			resList.add(EResourceType.WIKI);
+			resList.add(EResourceType.UNKNOWN);
+			
+			List resultlist =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, resList);
+			
+			logger.debug("ExtendedAnalysisWorker: "+resultlist);
+			
+			ResultListResourceRequestInfo resultsExtended = analysis.computeQ1Extended(courses, beginStamp, endStamp, resList);
+			
+			logger.debug("ExtendedAnalysis: "+resultsExtended);
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);

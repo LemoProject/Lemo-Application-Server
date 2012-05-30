@@ -14,7 +14,10 @@ import org.slf4j.Logger;
 
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
+import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 /**
@@ -31,6 +34,45 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	
 	@Inject
 	private Analysis analysis;
+	
+	public List usageAnalysisExtended(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes){
+        
+    	if(course!=null && course.getId()!=null){
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	
+        	if(endDate!=null){
+        		
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} 
+	        
+        	if(beginDate!=null){
+        		
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} 
+        	
+
+			List<Long> roles = new ArrayList<Long>();
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(course.getCourseId());
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				logger.debug("Courses: "+courses.get(i));
+			}
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
+			
+			logger.debug("Starting Extended Analysis");
+			ResultListResourceRequestInfo results = analysis.computeQ1Extended(courses, beginStamp, endStamp, resourceTypes);
+			logger.debug("Extended Analysis: "+ results);
+			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0)
+		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
+		        	ResourceRequestInfo res = results.getResourceRequestInfos().get(i);
+		        	logger.debug("ResourceRequest"+ res.getTitle());
+		        }
+    		} else logger.debug("Extended Analysis Result is null!");
+		return null;
+	}
 	
 	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier){
 		

@@ -9,11 +9,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.slf4j.Logger;
 
 /**
  * @author johndoe
@@ -24,10 +27,24 @@ public class DateWorkerImpl implements DateWorker {
 	@Inject
 	private Messages messages;
 	
+	@Inject
+    private Logger log;
+	
+	
+//	@Inject
+//	@Symbol(SymbolConstants.ASSET_PATH_PREFIX)
+//	private String assetPath;
+	
 //	@Inject
 //    @Path("context:images/icons/glyphicons_045_calendar.png")
 //    private Asset calendarIcon;
 //	
+	
+	public DateWorkerImpl(Logger logger, @Symbol(SymbolConstants.ASSET_PATH_PREFIX) String assetPath
+		//	, 								 @Path("context:/images/icons/glyphicons_045_calendar.png") Asset calendarIcon
+										 ){
+		logger.debug("Asset Context path: "+assetPath, " -- ");
+	}
 
 	public Integer daysBetween(Calendar startDate, Calendar endDate) {
   	  Calendar date = (Calendar) startDate.clone();
