@@ -9,6 +9,7 @@ import org.apache.tapestry5.json.JSONObject;
 					"../js/jqplot/plugins/jqplot.cursor.min.js",
 					"../js/jqplot/plugins/jqplot.dateAxisRenderer.js",
 					"../js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
+					"../js/jqplot/plugins/jqplot.trendline.min.js",
 					"../js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"
 					
 		})

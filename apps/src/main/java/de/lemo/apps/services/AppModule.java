@@ -46,6 +46,8 @@ import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.client.InitialisationImpl;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.AnalysisImpl;
+import de.lemo.apps.services.internal.CourseIdValueEncoder;
+import de.lemo.apps.services.internal.CourseIdValueEncoderWorker;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -64,7 +66,7 @@ public class AppModule
     	binder.bind(UserDAO.class, UserDAOImpl.class);
     	binder.bind(CourseDAO.class, CourseDAOImpl.class);
     	binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
-    	//binder.bind(LemoServiceResource.class, LemoServiceResourceImpl.class);
+    	binder.bind(CourseIdValueEncoder.class, CourseIdValueEncoderWorker.class);
     	
     	//Facade Worker
     	binder.bind(UserWorker.class, UserWorkerImpl.class);

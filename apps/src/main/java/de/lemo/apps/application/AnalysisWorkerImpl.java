@@ -128,7 +128,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 					if(ass.size() > 0){
 						for(int i=0 ;i<ass.size();i++){
 							ResourceRequestInfo res = ass.get(i);
-							logger.debug("ASS ResourceRequest "+ res.getTitle()+" ----- "+ res.getResourcetype());
+							logger.debug("ASS ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
 						}
 					}
 				}
@@ -138,7 +138,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 					if(cou.size() > 0){
 						for(int i=0 ;i<cou.size();i++){
 							ResourceRequestInfo res = cou.get(i);
-							logger.debug("Cou ResourceRequest "+ res.getTitle()+" ----- "+ res.getResourcetype());
+							logger.debug("Cou ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
 						}
 					}
 				}
@@ -148,7 +148,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 					if(ress.size() > 0){
 						for(int i=0 ;i<ress.size();i++){
 							ResourceRequestInfo res = ress.get(i);
-							logger.debug("Cou ResourceRequest "+ res.getTitle()+" ----- "+ res.getResourcetype());
+							logger.debug("Cou ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
 						}
 					}
 				}

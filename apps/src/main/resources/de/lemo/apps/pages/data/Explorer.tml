@@ -186,7 +186,7 @@
 		    				<div class="span1">
 		    				</div>
 			    			<div class="span1" align="center">
-			    				<t:pagelink page="data/visualization" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
+			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">

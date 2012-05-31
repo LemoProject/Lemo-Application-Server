@@ -172,23 +172,24 @@ public class Dashboard {
 	
 
 	
-	@Cached
-    public List getTestPieData()
-    {
-        List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-        List<TextValueDataItem> list1 = CollectionFactory.newList();
-      
-        list1.add(new TextValueDataItem("Mozilla Firefox",12));
-        list1.add(new TextValueDataItem("Google Chrome", 9));
-        list1.add(new TextValueDataItem("Safari (Webkit)",14));
-        list1.add(new TextValueDataItem("Internet Explorer", 16));
-        list1.add(new TextValueDataItem("Opera", 2));
-
-      
-        dataList.add(list1);
-      
-        return dataList;
-    }
+//	@Cached
+//    public List getTestPieData()
+//    {
+//        List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
+//        List<TextValueDataItem> list1 = CollectionFactory.newList();
+//      
+//        list1.add(new TextValueDataItem("Mozilla Firefox",12));
+//        list1.add(new TextValueDataItem("Google Chrome", 9));
+//        list1.add(new TextValueDataItem("Safari (Webkit)",14));
+//        list1.add(new TextValueDataItem("Internet Explorer", 16));
+//        list1.add(new TextValueDataItem("Opera", 2));
+//
+//      
+//        dataList.add(list1);
+//      
+//        return dataList;
+//    }
+	
 	@Property
 	@Persist
 	private Integer count;

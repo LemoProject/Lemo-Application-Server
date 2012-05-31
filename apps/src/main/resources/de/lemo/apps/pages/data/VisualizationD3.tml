@@ -86,12 +86,13 @@
 			            <div class="accordion-group">
 			              <div class="accordion-heading">
 			                <a class="accordion-toggle dropdown-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-			                 Misc <b class="caret"></b>
+			                 Member <b class="caret"></b>
 			                </a>
 			              </div>
 			              <div style="height: 0px;" id="collapseThree" class="accordion-body collapse">
 			                <div class="accordion-inner">
-			                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute,  </div>
+<!--			                 	<t:jquery.palette t:id="courses" encoder="courseValueEncoder" model="courseModel"/>	-->
+			                </div>
 			              </div>
 			            </div>
 			          </div>

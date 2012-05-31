@@ -22,6 +22,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
@@ -36,7 +37,11 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlot;
 import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.services.internal.CourseIdSelectModel;
+import de.lemo.apps.services.internal.CourseIdValueEncoder;
+import de.lemo.apps.services.internal.GenericValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 
@@ -58,8 +63,14 @@ public class VisualizationD3 {
 	@Inject 
 	private DateWorker dateWorker;
 	
+	@Inject
+	private CourseIdValueEncoder courseValueEncoder;
+	
 	@Inject 
 	private UserWorker userWorker;
+	
+	@Inject
+	private CourseDAO courseDAO;
 	
 	@Inject
 	private Locale currentlocale;
@@ -78,6 +89,10 @@ public class VisualizationD3 {
 	
 	@Component(id = "customizeform")
 	private Form form;
+	
+	@Property
+	@SuppressWarnings("unused")
+	private SelectModel courseModel;
 	
 	@Property
 	@Persist
@@ -100,6 +115,10 @@ public class VisualizationD3 {
 	@Property
 	@Persist
 	private List<EResourceType> activities;
+	
+	@Property
+	@Persist
+	private List<Course> courses;
 	
 	private List<List<XYDataItem>> testData;
 	
@@ -146,6 +165,18 @@ public class VisualizationD3 {
 		this.course = null;
 		
 	}
+   
+   
+   void onPrepareForRender() {
+		List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
+		courseModel = new CourseIdSelectModel(courses);
+   }
+   
+   
+   public final ValueEncoder<Course> getCourseValueEncoder(){
+	   			//List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
+	   			return courseValueEncoder.create(Course.class);
+  } 
     
     
  // returns datepicker params

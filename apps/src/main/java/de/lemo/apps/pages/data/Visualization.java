@@ -441,14 +441,27 @@ public class Visualization {
 			beginCal.setTime(beginDate);
 			logger.debug("BeginDate: "+beginDate);
 			//checking if result size matches resolution 
+			
+			List<ResourceRequestInfo> resInfoList = rri.getResourcesRRI();
+			int i = 0;
+			List<Long> resLongList = new ArrayList<Long>(resolution+1);
+			while (i < resInfoList.size()) {
+				if(resInfoList.get(i).getId() == 46267)
+					resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), resInfoList.get(i).getRequests());
+				//else resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), 0L);
+				i++;
+			}
+			
+			
 			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-	        for(int i=0 ;i<resolution;i++){
+	        for(int j=0 ;j<resolution;j++){
 	        	
 	        	if(this.twentyFourhMode)
 	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
 	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
-	        	//list2.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)+25L));
+	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(j)));
+	        	
+	        	list2.add(new XYDateDataItem(beginCal.getTime() , resLongList.get(j)));
 	        }
     	}
         dataList.add(list1);
