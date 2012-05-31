@@ -30,3 +30,10 @@
   margin-top: 8px;
   margin-left: 2px;
 }
+
+
+/*!
+* Changes to Tapestry palette component (multiple select)
+*/
+
+DIV.t-palette SELECT { width: 100px; }

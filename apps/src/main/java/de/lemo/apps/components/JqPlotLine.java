@@ -30,12 +30,12 @@ public class JqPlotLine extends JqPlot {
       JSONObject renderer= new JSONObject();
       JSONObject dateAxisRenderer= new JSONObject();
       JSONObject rendererOptions= new JSONObject();
-      renderer.put("renderer", new JSONLiteral("jQuery.jqplot.BarRenderer"));
-      renderer.put("rendererOptions",new JSONLiteral("{barDirection: 'vertical', highlightMouseDown: false, barWidth: 10}"));
+      renderer.put("renderer", new JSONLiteral("jQuery.jqplot.LineRenderer"));
+      renderer.put("rendererOptions",new JSONLiteral("{barDirection: 'vertical', highlightMouseDown: false, barWidth: 10, barPadding: 5}"));
       
       renderer.put("pointLabels", new JSONLiteral("{show: true}"));
       renderer.put("shadowAngle", new JSONLiteral("135"));
-      renderer.put("fill", new JSONLiteral("true"));
+      renderer.put("fill", new JSONLiteral("false"));
       renderer.put("fillColor", new JSONLiteral("'#222'"));
       renderer.put("fillAlpha", new JSONLiteral("0.2"));
       renderer.put("fillAndStroke", new JSONLiteral("true"));

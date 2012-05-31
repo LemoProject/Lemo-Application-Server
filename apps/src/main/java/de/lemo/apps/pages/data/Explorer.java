@@ -117,7 +117,13 @@ public class Explorer {
 	private Zone courseLastMonthZone;
 	
 	@InjectComponent
+	private Zone courseOverallZone;
+	
+	@InjectComponent
 	private Zone courseVisLastMonthZone;
+	
+	@InjectComponent
+	private Zone courseVisOverallZone;
 	
 	@Inject
 	private Initialisation init;
@@ -149,7 +155,6 @@ public class Explorer {
     void afterRender() {
         jsSupport.addScript("$('#%s').bind(Tapestry.ZONE_UPDATED_EVENT, function() { "
                 + " $('.tabs a:first').tab('show');"
-              //  + " alert('Hello'); "
                 + "});", courseZone.getClientId());
     } 
 
@@ -186,31 +191,27 @@ public class Explorer {
 	public String getLastRequestDate() {
 		return dateWorker.getLocalizedDateTime(getCurrentCourse().getLastRequestDate(),currentLocale);
 	}
-	
-   
-//    public List getTestPieData()
-//    {
-//        List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-//        List<TextValueDataItem> list1 = CollectionFactory.newList();
-//      
-//        list1.add(new TextValueDataItem("Mozilla Firefox",12));
-//        list1.add(new TextValueDataItem("Google Chrome", 9));
-//        list1.add(new TextValueDataItem("Safari (Webkit)",14));
-//        list1.add(new TextValueDataItem("Internet Explorer", 16));
-//        list1.add(new TextValueDataItem("Opera", 2));
-//
-//      
-//        dataList.add(list1);
-//      
-//        return dataList;
-//    }
     
     @Cached
-	public List getUsageAnalysis(){
-		//if (this.initCourse!=null && this.initCourse.getCourseId()!=null){
+	public List getUsageAnalysisLastMonth(){
+    	
 			Date endDate = getCurrentCourse().getLastRequestDate();
-			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1);
-		//} else return new ArrayList();
+			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1);	
+	}
+    
+    //TODO Scheinbar greift ein Template Property noch auf diese Funktion zu ... auch wen dem nicht so sein sollte -> die korrekte Methode lautet ...LastMonth
+    @Cached
+	public List getUsageAnalysis(){
+			Date endDate = getCurrentCourse().getLastRequestDate();
+			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1);	
+	}
+    
+    @Cached
+	public List getUsageAnalysisOverall(){
+		
+			Date endDate = getCurrentCourse().getLastRequestDate();
+			Date beginDate = getCurrentCourse().getFirstRequestDate();
+			return analysisWorker.usageAnalysis(course, beginDate, endDate);
 	}
     
     public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){

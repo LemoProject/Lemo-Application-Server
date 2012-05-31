@@ -94,6 +94,16 @@ public class CourseDAOImpl implements CourseDAO{
         return results.get(0);
     }
     
+    public Course getCourseByDMSId(Long id){
+        Criteria criteria = session.createCriteria(Course.class);
+        criteria.add(Restrictions.eq("courseId", id));
+        List<Course> results = criteria.list();
+        if (results.size() == 0) {
+                return null;
+        }
+        return results.get(0);
+    }
+    
     public void toggleFavorite(Long id){
     	System.out.println("CourseId:" +id);
         Course favCourse = this.getCourse(id);

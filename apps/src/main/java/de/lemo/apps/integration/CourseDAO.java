@@ -17,6 +17,7 @@ public interface CourseDAO {
 	public boolean doExistByForeignCourseId(Long courseId);
 	public Course getCourse(String coursename);
 	public Course getCourse(Long id);
+	public Course getCourseByDMSId(Long id);
 	@CommitAfter
 	public void toggleFavorite(Long id);
 	@CommitAfter

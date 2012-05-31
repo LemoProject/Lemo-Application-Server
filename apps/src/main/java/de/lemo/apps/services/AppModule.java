@@ -128,6 +128,7 @@ public class AppModule
         // the first locale name is the default when there's no reasonable match).
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,de");
         
+        
         // Disable Prototype Support in Tap5
         configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "true");
         

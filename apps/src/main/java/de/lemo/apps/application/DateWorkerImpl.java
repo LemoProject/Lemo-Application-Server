@@ -16,6 +16,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.apache.tapestry5.services.AssetSource;
 import org.slf4j.Logger;
 
 /**
@@ -29,21 +30,12 @@ public class DateWorkerImpl implements DateWorker {
 	
 	@Inject
     private Logger log;
+
+    private AssetSource assetSource;
+    
 	
-	
-//	@Inject
-//	@Symbol(SymbolConstants.ASSET_PATH_PREFIX)
-//	private String assetPath;
-	
-//	@Inject
-//    @Path("context:images/icons/glyphicons_045_calendar.png")
-//    private Asset calendarIcon;
-//	
-	
-	public DateWorkerImpl(Logger logger, @Symbol(SymbolConstants.ASSET_PATH_PREFIX) String assetPath
-		//	, 								 @Path("context:/images/icons/glyphicons_045_calendar.png") Asset calendarIcon
-										 ){
-		logger.debug("Asset Context path: "+assetPath, " -- ");
+	public DateWorkerImpl(Logger logger, AssetSource assetSource){
+		this.assetSource = assetSource;
 	}
 
 	public Integer daysBetween(Calendar startDate, Calendar endDate) {
@@ -91,6 +83,10 @@ public class DateWorkerImpl implements DateWorker {
 		return df_date.format(date);
 	}
 	
+	public String getCalendarIconPath(){
+		return assetSource.getContextAsset("layout/images/glyphicons_045_calendar.png",null).toString();
+	}
+	
 	public JSONLiteral getDatePickerParams(){
 		JSONLiteral datePickerConfig = new JSONLiteral("{	nextText: 'Next Month', " +
 				"								prevText: 'Previous Month'," +
@@ -99,9 +95,10 @@ public class DateWorkerImpl implements DateWorker {
 				"								buttonText: '"+ messages.get("chooseDate") +"'," +		
 				//"								minDate: '01.07.2012'," +
 				//"								maxDate: '"+this.course.getLastRequestDate()+
-				//"								buttonImage: '"+this.calendarIcon+"'," +
+				"								buttonImage: '"+getCalendarIconPath()+"'," +
 				"								buttonImageOnly: false," +
 				"								showButtonPanel: true," +
+				"								dateFormat: 'M dd, yy',"+
 				"								showOn: 'both'}");
 		return datePickerConfig;
 	}

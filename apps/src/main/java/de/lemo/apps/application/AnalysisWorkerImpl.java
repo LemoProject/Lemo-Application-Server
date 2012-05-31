@@ -17,6 +17,7 @@ import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
+import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
@@ -35,11 +36,12 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	@Inject
 	private Analysis analysis;
 	
-	public List usageAnalysisExtended(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes){
+	public List<ResourceRequestInfo> usageAnalysisExtended(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes){
         
     	if(course!=null && course.getId()!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
+        	List<String> resourceTypesNames = null;
         	
         	if(endDate!=null){
         		
@@ -51,6 +53,12 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
         		beginStamp = new Long(beginDate.getTime()/1000);
         	} 
         	
+        	if(resourceTypes!=null && resourceTypes.size() >=1){
+        		resourceTypesNames = new ArrayList<String>();
+        		for(int i = 0; i<resourceTypes.size();i++){
+        			resourceTypesNames.add(resourceTypes.get(i).toString());
+        		}
+        	}
 
 			List<Long> roles = new ArrayList<Long>();
 			List<Long> courses = new ArrayList<Long>();
@@ -63,16 +71,97 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis");
-			ResultListResourceRequestInfo results = analysis.computeQ1Extended(courses, beginStamp, endStamp, resourceTypes);
+			ResultListResourceRequestInfo results = analysis.computeQ1Extended(courses, beginStamp, endStamp, resourceTypesNames);
 			logger.debug("Extended Analysis: "+ results);
-			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0)
+			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
 		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
 		        	ResourceRequestInfo res = results.getResourceRequestInfos().get(i);
-		        	logger.debug("ResourceRequest"+ res.getTitle());
+		        	logger.debug("ResourceRequest"+ res.getTitle()+" ----- "+ res.getResourcetype());
 		        }
+				return results.getResourceRequestInfos();
+			}
     		} else logger.debug("Extended Analysis Result is null!");
-		return null;
+		return new ArrayList<ResourceRequestInfo>();
 	}
+	
+	
+	public ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate, Integer resolution, List<EResourceType> resourceTypes){
+        
+    	if(course!=null && course.getId()!=null){
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	List<String> resourceTypesNames = null;
+        	
+        	if(endDate!=null){
+        		
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} 
+	        
+        	if(beginDate!=null){
+        		
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} 
+        	
+        	if(resourceTypes!=null && resourceTypes.size() >=1){
+        		resourceTypesNames = new ArrayList<String>();
+        		for(int i = 0; i<resourceTypes.size();i++){
+        			resourceTypesNames.add(resourceTypes.get(i).toString());
+        		}
+        	}
+
+			List<Long> roles = new ArrayList<Long>();
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(course.getCourseId());
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				logger.debug("Courses: "+courses.get(i));
+			}
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
+			
+			logger.debug("Starting Extended Analysis");
+			ResultListRRITypes results = analysis.computeQ1ExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
+			logger.debug("Extended Analysis: "+ results);
+			if(results!= null ){
+				if(results.getAssignmentRRI()!=null){
+					List<ResourceRequestInfo> ass = results.getAssignmentRRI();
+					if(ass.size() > 0){
+						for(int i=0 ;i<ass.size();i++){
+							ResourceRequestInfo res = ass.get(i);
+							logger.debug("ASS ResourceRequest "+ res.getTitle()+" ----- "+ res.getResourcetype());
+						}
+					}
+				}
+				
+				if(results.getCoursesRRI()!=null){
+					List<ResourceRequestInfo> cou = results.getCoursesRRI();
+					if(cou.size() > 0){
+						for(int i=0 ;i<cou.size();i++){
+							ResourceRequestInfo res = cou.get(i);
+							logger.debug("Cou ResourceRequest "+ res.getTitle()+" ----- "+ res.getResourcetype());
+						}
+					}
+				}
+				
+				if(results.getResourcesRRI()!=null){
+					List<ResourceRequestInfo> ress = results.getResourcesRRI();
+					if(ress.size() > 0){
+						for(int i=0 ;i<ress.size();i++){
+							ResourceRequestInfo res = ress.get(i);
+							logger.debug("Cou ResourceRequest "+ res.getTitle()+" ----- "+ res.getResourcetype());
+						}
+					}
+				}
+				
+				return results;
+			}
+    	
+    	} else logger.debug("Extended Analysis Result is null!");
+			
+		return new ResultListRRITypes();
+	}
+	
+	
 	
 	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier){
 		

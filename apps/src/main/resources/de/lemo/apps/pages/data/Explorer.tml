@@ -80,7 +80,7 @@
 								</form>
 								</label>
 								<br />
-								<t:pagelink page="data/visualization" context="${CurrentCourse.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
+								<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
 								
 							</section>	
 							</t:zone> <!-- courseZone  -->
@@ -109,15 +109,12 @@
 								</header>
 								<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(CurrentCourse.lastRequestDate)} <br /> </p>
 		    					<br />
-		    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysis)}<br /> </p> 
+		    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysisLastMonth)}<br /> </p> 
 		    					<br />
-		    					<p><b>${message:avgRequests}:</b> ${getAverageRequest(usageAnalysis)}<br /> </p> 
+		    					<p><b>${message:avgRequests}:</b> ${getAverageRequest(usageAnalysisLastMonth)}<br /> </p> 
 		    					<br />
-		    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(usageAnalysis))}  - (${getMaxRequest(usageAnalysis)})<br /> </p> 	
+		    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(usageAnalysisLastMonth))}  - (${getMaxRequest(usageAnalysisLastMonth)})<br /> </p> 	
 		    					<br />
-
-								<label class="checkbox">
-								</label>
 								<br />
 							</section>	
 							</t:zone> <!-- courseLastMonthZone  -->
@@ -132,8 +129,38 @@
 					</div><!-- tab-pane  last month -->
 					
 					</div>
-				    <div class="tab-pane" id="overall">...</div>
-				    <div class="tab-pane" id="settings">...</div>
+				    <div class="tab-pane" id="overall">
+				    	<div class="row-fluid">
+						<div class="span1" />
+							
+						<div class="span5">
+							<t:zone t:id="courseOverallZone" id="courseOverallZone" t:update="show"> 	
+							<section>
+								<header>
+									<h3>${CurrentCourse.courseDescription} (${CurrentCourse.courseId})</h3><br />
+								</header>
+								<p><b>${message:firstRequest}:</b> ${getLocalizedDateTime(CurrentCourse.firstRequestDate)} <br /> </p>
+		    					<br />
+		    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysisOverall)}<br /> </p> 
+		    					<br />
+		    					<p><b>${message:avgRequests}:</b> ${getAverageRequest(usageAnalysisOverall)}<br /> </p> 
+		    					<br />
+		    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(usageAnalysisOverall))}  - (${getMaxRequest(usageAnalysisOverall)})<br /> </p> 	
+		    					<br />
+								<br />
+							</section>	
+							</t:zone> <!-- courseLastMonthZone  -->
+						</div> <!-- span5 -->
+						
+						<div class="span5">
+							<t:zone t:id="courseVisOverallZone" id="courseVisOverallZone" t:update="show"> 
+<!--								<div t:id="chart2" style="width: auto; height: 300px;"/>-->
+							</t:zone> <!-- courseVisZone  -->		
+						</div> <!-- span5 -->
+						
+					</div><!-- tab-pane  overall -->
+				    </div>
+				    <div class="tab-pane" id="settings">${message:notYetImplemented}</div>
 				</div> <!-- tab-content -->
 				
     		</div> <!-- class=well -->

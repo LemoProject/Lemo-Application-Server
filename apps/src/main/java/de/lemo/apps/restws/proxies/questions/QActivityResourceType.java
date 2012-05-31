@@ -20,7 +20,7 @@ public interface QActivityResourceType {
 	@GET
 	@Path("activityresourcetype")
 	@Produces("application/json")
-	public ResultListResourceRequestInfo compute(@QueryParam("course_ids") List<Long> courses, @QueryParam("starttime") long startTime, @QueryParam("endtime") long endTime, @QueryParam("types") List<EResourceType> resourceTypes);
+	public ResultListResourceRequestInfo compute(@QueryParam("course_ids") List<Long> courses, @QueryParam("starttime") long startTime, @QueryParam("endtime") long endTime, @QueryParam("types") List<String> resourceTypes);
 	    
 
 }

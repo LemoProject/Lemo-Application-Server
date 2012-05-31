@@ -19,7 +19,30 @@
     	
     	
     	<div class="span9">
-    			<div t:id="chart1" style="width: auto; height: auto;"/>	
+    			<div t:id="chart1" style="width: auto; height: 400px;"/>	
+    			<br />
+    			<br />
+    			<div class="accordion2" id="accordion3">
+			            <div class="accordion-group">
+			              <div class="accordion-heading">
+			                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse4">
+				    		  ${message:detailView}<b class="caret"></b>
+			                </a>
+			              </div>
+			              <div style="height: auto;" id="collapse4" class="accordion-body in collapseExt">
+			                <div class="accordion-inner">	
+				    			<t:grid source="analysisList" row="analysisItem" model="analysisGridModel" inPlace="true" width="100%">
+				    				<p:resourcetypeCell>
+				    					${resourceTypeName}
+				    				</p:resourcetypeCell>
+				    				<p:showCell>
+				    					<a href="#">details</a>
+				    				</p:showCell>
+				    			</t:grid>
+    					   </div>
+			              </div>
+			            </div>
+			         </div>
     	</div> <!-- span9 -->
     	
     	
@@ -29,21 +52,29 @@
     			<div class="well">
     				<h4>${course.courseDescription}</h4>
     				<br />
-    				${message:available}: ${FirstRequestDate} - ${LastRequestDate}
+    				${message:available}: ${getLocalizedDate(beginDate)} - ${getLocalizedDate(endDate)}
     				<br />
     				<br />
-    				${message:range}: ${resolution} ${message:days}
+    				${message:range}: ${resolution} 
+    				<t:if test="twentyFourhMode">
+    					${message:hours}
+    					<p:else>
+    						${message:days}
+    					</p:else>
+        			</t:if>
     			</div>
     		</div>
     		</div>
     		<div class="row-fluid">
     		<div class="span12">
-<!--			<div class="thumbnail">-->
-        		<form class="form-search">
-        		<div class="">
-        			
+
+        		
+        		
+        		
         			<t:zone t:id="formZone" id="formZone">
-        			<form t:type="form" t:id="customizeform" class="well  pull-left">
+        			 </t:zone> 
+        			<t:form t:type="form" t:id="optionForm" class="pull-left">
+        				<t:errors/>
 <!--				    	-->
 <!--				    <h4>${message:options}</h4>-->
 <!--				    <br />-->
@@ -57,15 +88,18 @@
 			              </div>
 			              <div style="height: auto;" id="collapseOne" class="accordion-body in collapse">
 			                <div class="accordion-inner">
-			                
+			                	
 			                	<br />
 						    	${message:begin}:&nbsp;&nbsp;
-						    	<t:datefield class="input-small" t:value="beginDate" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+						    	<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
 						    	<br />
 						    	<br />
 						    	${message:end}:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						    	<t:datefield class="input-small" t:value="endDate"  t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+						    	<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" disabled="${twentyFourhMode}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
 						    	<br />
+						    	<br />
+						    	24h Mode <t:actionlink t:id="updateTimeMode"><input t:type="checkbox" value="twentyFourhMode"/></t:actionlink>
+						    	
 			                </div>
 			              </div>
 			            </div>
@@ -78,7 +112,7 @@
 			              <div style="height: 0px;" id="collapseTwo" class="accordion-body collapse">
 			                <div class="accordion-inner">
 			                 	<br />
-						    	${message:activityOption}:
+						  
 		            			<t:jquery.palette t:id="activities" encoder="activityEncoder" model="activityModel"/>
 			                </div>
 			              </div>
@@ -110,17 +144,17 @@
 			    	 	<!--	<t:actionlink t:id="update" class="btn btn-primary pull-right">update</t:actionlink>-->
 			    	 	
 				    	
-				   		<input t:type="submit" value="Update" class="btn btn-primary pull-left" />
+				   		<input type="submit" value="Update" class="btn btn-primary pull-left" />
 		  				<br />
 				    	
-				   </form>	
-				   </t:zone> 
+				   </t:form>	
+				  
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
 <!--    				<button type="submit" class="btn pull-right">${message:search}</button>-->
-    			</div>
-    			</form>
-<!--    		</div> THUMBNAIL-->
+    			
+    			
+    		
     		</div> <!--span12-->
     		</div> <!--row fluid-->
     	</div>
