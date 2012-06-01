@@ -40,6 +40,9 @@ import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
 
+import se.unbound.tapestry.breadcrumbs.BreadCrumb;
+import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
@@ -58,8 +61,6 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
-import se.unbound.tapestry.breadcrumbs.BreadCrumb;
-import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="visualizationTitle")
@@ -168,7 +169,7 @@ public class Visualization {
 	Integer slideZone;
 	
 	@Property
-	//@Persist
+	@Persist
 	Integer resolution;
 	
 	@Property
@@ -178,6 +179,12 @@ public class Visualization {
 	@Property
 	@Persist
 	private Boolean twentyFourhMode;
+	
+	@Property
+    private ResourceRequestInfo resourceItem;
+	
+	@Persist
+	private List<ResourceRequestInfo> showDetailsList;
 	
 //	@Property
 //	private JSONObject params;	
@@ -212,10 +219,14 @@ public class Visualization {
 		if (this.twentyFourhMode == null) this.twentyFourhMode = false;
 		logger.debug("SetupRender Begin --- Is24H: "+twentyFourhMode+" BeginDate:"+ beginDate+" EndDate: "+endDate+" Res: "+resolution);
 		this.course = courseDAO.getCourseByDMSId(courseId);
+		if(showDetailsList== null){
+			showDetailsList = new ArrayList<ResourceRequestInfo>();
+		}
 		if(this.endDate==null) 
 			this.endDate = course.getLastRequestDate();
 		if(this.beginDate==null) 
 			this.beginDate= course.getFirstRequestDate();
+		this.resolution=(dateWorker.daysBetween(beginDate, endDate)+1);
 		Calendar beginCal = Calendar.getInstance();
 		Calendar endCal = Calendar.getInstance();
 		beginCal.setTime(beginDate);
@@ -251,9 +262,9 @@ public class Visualization {
 	
 	Long onPassivate(){
 		Boolean is24hModeTemp = this.twentyFourhMode;
-		logger.debug("On Passivate Begin --- Is24H: "+twentyFourhMode+" BeginDate:"+ beginDate+" EndDate: "+endDate+" Res: "+resolution);
+		//logger.debug("On Passivate Begin --- Is24H: "+twentyFourhMode+" BeginDate:"+ beginDate+" EndDate: "+endDate+" Res: "+resolution);
 		//componentResources.discardPersistentFieldChanges();
-		logger.debug("On Passivate End --- Is24H: "+twentyFourhMode+" BeginDate:"+ beginDate+" EndDate: "+endDate+" Res: "+resolution);
+		//logger.debug("On Passivate End --- Is24H: "+twentyFourhMode+" BeginDate:"+ beginDate+" EndDate: "+endDate+" Res: "+resolution);
 		this.twentyFourhMode = is24hModeTemp;
         return courseId;
 	}
@@ -302,6 +313,41 @@ public class Visualization {
 	 }
 	
 	
+	@Persist
+	private Long[] resLongList3;
+	
+	
+	Object onActionFromShowDetails(Long resourceId, String resourceType) {
+		int k= 0;
+		if (this.resolution == null)
+			this.resolution=(dateWorker.daysBetween(beginDate, endDate)+1);
+		Long[] resLongList2 = new Long[this.resolution];
+		while (k < resLongList2.length) {
+			resLongList2[k] = 0L;
+			k++;
+		}
+		//this.showDetailsList.add(e)
+		List<ResourceRequestInfo> resourceTypeDetailList = getResourceDetails().getResultListByResourceType(EResourceType.valueOf(resourceType));
+		int i = 0;
+		if(resourceTypeDetailList!=null)
+			logger.debug("Bin in OnActionFromShowDetails ---- Size: "+resourceTypeDetailList.size());
+			else logger.debug("Bin in OnActionFromShowDetails ---- ResourceTypeDetails List ist null");
+		while (i < resourceTypeDetailList.size()) {
+			logger.debug("Looking for Ressource "+resourceTypeDetailList.get(i).getResourcetype()+ " ID: "+resourceId+" ---- Resolution: "+resolution+" Index:" +i);
+			if(resourceTypeDetailList.get(i).getId() == resourceId){
+				logger.debug("Ressource "+resourceId+" found ---- Resolution: "+resolution+" Index: "+i+" ResSlot: "+resourceTypeDetailList.get(i).getResolutionSlot().intValue()+" Value: "+resourceTypeDetailList.get(i).getRequests());
+				resLongList2[resourceTypeDetailList.get(i).getResolutionSlot().intValue()] = resourceTypeDetailList.get(i).getRequests();
+				
+			}
+				//else resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), 0L);
+			i++;
+		}
+		logger.debug("Called Show Details with ResId: "+resourceId+ " --- ResType: "+resourceType);
+		this.resLongList3 = resLongList2;
+		return formZone;
+	}
+	
+	
 	// returns datepicker params
 	public JSONLiteral getDatePickerParams(){
 		return dateWorker.getDatePickerParams();
@@ -327,16 +373,15 @@ public class Visualization {
 	
 	@Property(write=false)
 	@Retain
-	private BeanModel analysisGridModel;
+	private BeanModel resourceGridModel;
     {
-    	analysisGridModel = beanModelSource.createDisplayModel(ResourceRequestInfo.class, componentResources.getMessages());
-    	analysisGridModel.include("resourcetype","title","requests");
-    	analysisGridModel.add("show",null);
+    	resourceGridModel = beanModelSource.createDisplayModel(ResourceRequestInfo.class, componentResources.getMessages());
+    	resourceGridModel.include("resourcetype","title","requests");
+    	resourceGridModel.add("show",null);
     	    	
     }
     
-    @Property
-    private ResourceRequestInfo analysisItem;
+    
     
     /**
 	 * Gibt das Datum in der aktuell vom Nutzer gewaehlten Locale Einstellung aus.
@@ -374,26 +419,17 @@ public class Visualization {
 
     
     public String getResourceTypeName(){
-    	if(this.analysisItem!=null && this.analysisItem.getResourcetype() != "")
-    		return messages.get("EResourceType."+this.analysisItem.getResourcetype());
+    	if(this.resourceItem!=null && this.resourceItem.getResourcetype() != "")
+    		return messages.get("EResourceType."+this.resourceItem.getResourcetype());
     	else return messages.get("EResourceType.UNKNOWN");
     }
     
     @Cached
-    public List getAnalysisList(){
-    	
-    	List<String> resList = new ArrayList<String>();
-		resList.add(EResourceType.COURSE.toString());
-		resList.add(EResourceType.FORUM.toString());
-		resList.add(EResourceType.RESOURCE.toString());
-		//resList.add(EResourceType.ASSIGNMENT.toString());
-		resList.add(EResourceType.QUESTION.toString());
-		resList.add(EResourceType.WIKI.toString());
-		resList.add(EResourceType.UNKNOWN.toString());
+    public List<ResourceRequestInfo> getResourceList(){
 	
 		logger.debug("Starting Extended Analysis");
 		
-		List resultList;
+		List<ResourceRequestInfo> resultList;
 		
 		if(activities!=null && activities.size()>=1)
 			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, activities);
@@ -401,6 +437,16 @@ public class Visualization {
 		logger.debug("ExtendedAnalysisWorker: "+resultList);
 		
     	return resultList;
+    }
+    
+    @Cached
+    public ResultListRRITypes getResourceDetails(){
+    	ResultListRRITypes rri;
+		 if(activities!=null && activities.size()>=1)
+			rri =  analysisWorker.usageAnalysisExtendedDetails(this.course, beginDate, endDate, resolution, activities);
+		else rri =  analysisWorker.usageAnalysisExtendedDetails(this.course, beginDate, endDate, resolution, null);
+		
+		return rri;	
     }
     
     
@@ -432,36 +478,43 @@ public class Visualization {
 			logger.info("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
-			ResultListRRITypes rri;
-			 if(activities!=null && activities.size()>=1)
-				rri =  analysisWorker.usageAnalysisExtendedDetails(this.course, beginDate, endDate, resolution, activities);
-			else rri =  analysisWorker.usageAnalysisExtendedDetails(this.course, beginDate, endDate, resolution, null);
+			
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
 			logger.debug("BeginDate: "+beginDate);
 			//checking if result size matches resolution 
-			
-			List<ResourceRequestInfo> resInfoList = rri.getResourcesRRI();
-			int i = 0;
-			List<Long> resLongList = new ArrayList<Long>(resolution+1);
-			while (i < resInfoList.size()) {
-				if(resInfoList.get(i).getId() == 46267)
-					resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), resInfoList.get(i).getRequests());
-				//else resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), 0L);
-				i++;
-			}
-			
+//			ResultListRRITypes rri = getResourceDetails();
+//			List<ResourceRequestInfo> resInfoList = rri.getResourcesRRI();
+//			int i = 0;
+//			int k= 0;
+//			Long[] resLongList2 = new Long[resolution];
+//			while (k < resLongList2.length) {
+//				resLongList2[k] = 0L;
+//				k++;
+//			}
+//			//List<Long> resLongList = new ArrayList<Long>();
+//			while (i < resInfoList.size()) {
+//				logger.debug("Looking for Ressource 46267 ---- Resolution: "+resolution+" Index:" +i);
+//				if(resInfoList.get(i).getId() == 46267){
+//					logger.debug("Ressource 46267 found ---- Resolution: "+resolution+" Index: "+i+" ResSlot: "+resInfoList.get(i).getResolutionSlot().intValue()+" Value: "+resInfoList.get(i).getRequests());
+//					resLongList2[resInfoList.get(i).getResolutionSlot().intValue()] = resInfoList.get(i).getRequests();
+//					
+//				}
+//					//else resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), 0L);
+//				i++;
+//			}
+//			
 			
 			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
 	        for(int j=0 ;j<resolution;j++){
-	        	
+	        	logger.debug("Building Chart JSON ---- Index:" +j);
 	        	if(this.twentyFourhMode)
 	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
 	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
 	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(j)));
-	        	
-	        	list2.add(new XYDateDataItem(beginCal.getTime() , resLongList.get(j)));
+	        	if(resLongList3!=null)
+	        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j]));
 	        }
     	}
         dataList.add(list1);

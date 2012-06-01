@@ -76,7 +76,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
 		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
 		        	ResourceRequestInfo res = results.getResourceRequestInfos().get(i);
-		        	logger.debug("ResourceRequest"+ res.getTitle()+" ----- "+ res.getResourcetype());
+		        	//logger.debug("ResourceRequest"+ res.getTitle()+" ----- "+ res.getResourcetype());
 		        }
 				return results.getResourceRequestInfos();
 			}
@@ -123,35 +123,35 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 			ResultListRRITypes results = analysis.computeQ1ExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
 			logger.debug("Extended Analysis: "+ results);
 			if(results!= null ){
-				if(results.getAssignmentRRI()!=null){
-					List<ResourceRequestInfo> ass = results.getAssignmentRRI();
-					if(ass.size() > 0){
-						for(int i=0 ;i<ass.size();i++){
-							ResourceRequestInfo res = ass.get(i);
-							logger.debug("ASS ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
-						}
-					}
-				}
-				
-				if(results.getCoursesRRI()!=null){
-					List<ResourceRequestInfo> cou = results.getCoursesRRI();
-					if(cou.size() > 0){
-						for(int i=0 ;i<cou.size();i++){
-							ResourceRequestInfo res = cou.get(i);
-							logger.debug("Cou ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
-						}
-					}
-				}
-				
-				if(results.getResourcesRRI()!=null){
-					List<ResourceRequestInfo> ress = results.getResourcesRRI();
-					if(ress.size() > 0){
-						for(int i=0 ;i<ress.size();i++){
-							ResourceRequestInfo res = ress.get(i);
-							logger.debug("Cou ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
-						}
-					}
-				}
+//				if(results.getAssignmentRRI()!=null){
+//					List<ResourceRequestInfo> ass = results.getAssignmentRRI();
+//					if(ass.size() > 0){
+//						for(int i=0 ;i<ass.size();i++){
+//							ResourceRequestInfo res = ass.get(i);
+//							//logger.debug("ASS ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
+//						}
+//					}
+//				}
+//				
+//				if(results.getCoursesRRI()!=null){
+//					List<ResourceRequestInfo> cou = results.getCoursesRRI();
+//					if(cou.size() > 0){
+//						for(int i=0 ;i<cou.size();i++){
+//							ResourceRequestInfo res = cou.get(i);
+//							//logger.debug("Cou ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
+//						}
+//					}
+//				}
+//				
+//				if(results.getResourcesRRI()!=null){
+//					List<ResourceRequestInfo> ress = results.getResourcesRRI();
+//					if(ress.size() > 0){
+//						for(int i=0 ;i<ress.size();i++){
+//							ResourceRequestInfo res = ress.get(i);
+//							//logger.debug("Cou ResourceRequest "+ res.getId() + " ----- "+ res.getTitle()+" ----- "+ res.getResourcetype()+ " ------- "+res.getRequests()+" ----- " +res.getResolutionSlot());
+//						}
+//					}
+//				}
 				
 				return results;
 			}

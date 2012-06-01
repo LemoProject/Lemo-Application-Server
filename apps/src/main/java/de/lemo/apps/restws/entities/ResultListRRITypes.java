@@ -110,5 +110,34 @@ public class ResultListRRITypes {
 		return wikis;
 	}
 	
+	public List<ResourceRequestInfo> getResultListByResourceType(EResourceType resourceType){
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.ASSIGNMENT))
+			return this.assignments;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.FORUM))
+			return this.forums;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.COURSE))
+			return this.courses;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.QUESTION))
+			return this.questions;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.QUIZ))
+			return this.quiz;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.RESOURCE))
+			return this.resources;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.SCORM))
+			return this.scorms;
+		
+		if(resourceType!= null &&  resourceType.equals(EResourceType.WIKI))
+			return this.wikis;
+		
+		return new ArrayList<ResourceRequestInfo>();
+	}
+	
 
 }

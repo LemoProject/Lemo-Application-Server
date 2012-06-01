@@ -31,12 +31,12 @@
 			              </div>
 			              <div style="height: auto;" id="collapse4" class="accordion-body in collapseExt">
 			                <div class="accordion-inner">	
-				    			<t:grid source="analysisList" row="analysisItem" model="analysisGridModel" inPlace="true" width="100%">
+				    			<t:grid source="resourceList" row="resourceItem" model="resourceGridModel" inPlace="true" width="100%">
 				    				<p:resourcetypeCell>
 				    					${resourceTypeName}
 				    				</p:resourcetypeCell>
 				    				<p:showCell>
-				    					<a href="#">details</a>
+				    					<t:actionlink t:id="showDetails" context="[resourceItem.id, resourceItem.resourceType]">details</t:actionlink>
 				    				</p:showCell>
 				    			</t:grid>
     					   </div>
