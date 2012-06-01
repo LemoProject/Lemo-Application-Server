@@ -318,28 +318,34 @@ public class Visualization {
 	
 	
 	Object onActionFromShowDetails(Long resourceId, String resourceType) {
+		
+		this.course = courseDAO.getCourseByDMSId(courseId);
 		int k= 0;
 		if (this.resolution == null)
 			this.resolution=(dateWorker.daysBetween(beginDate, endDate)+1);
-		Long[] resLongList2 = new Long[this.resolution];
+		Long[] resLongList2 = new Long[this.resolution+1];
 		while (k < resLongList2.length) {
 			resLongList2[k] = 0L;
 			k++;
 		}
-		//this.showDetailsList.add(e)
+		// Setze KurzID als Identifier
+		resLongList2[0]=courseId;
+		
+		logger.debug("Bin in OnActionFromShowDetails ---- Hole ResourceDetailList ");
 		List<ResourceRequestInfo> resourceTypeDetailList = getResourceDetails().getResultListByResourceType(EResourceType.valueOf(resourceType));
 		int i = 0;
-		if(resourceTypeDetailList!=null)
+		logger.debug("Bin in OnActionFromShowDetails ---- Hole ResourceDetailList .... Fertig");
+		if(resourceTypeDetailList!=null){
 			logger.debug("Bin in OnActionFromShowDetails ---- Size: "+resourceTypeDetailList.size());
-			else logger.debug("Bin in OnActionFromShowDetails ---- ResourceTypeDetails List ist null");
+		}else logger.debug("Bin in OnActionFromShowDetails ---- ResourceTypeDetails List ist null");
 		while (i < resourceTypeDetailList.size()) {
-			logger.debug("Looking for Ressource "+resourceTypeDetailList.get(i).getResourcetype()+ " ID: "+resourceId+" ---- Resolution: "+resolution+" Index:" +i);
-			if(resourceTypeDetailList.get(i).getId() == resourceId){
+			logger.debug("Looking for Ressource "+resourceTypeDetailList.get(i).getResourcetype()+ " ID aktuell : "+resourceTypeDetailList.get(i).getId()+ " ID gesucht : "+resourceId+" ---- Resolution: "+resolution+" Index:" +i);
+			if(resourceTypeDetailList.get(i).getId().equals(resourceId)){
 				logger.debug("Ressource "+resourceId+" found ---- Resolution: "+resolution+" Index: "+i+" ResSlot: "+resourceTypeDetailList.get(i).getResolutionSlot().intValue()+" Value: "+resourceTypeDetailList.get(i).getRequests());
-				resLongList2[resourceTypeDetailList.get(i).getResolutionSlot().intValue()] = resourceTypeDetailList.get(i).getRequests();
+				resLongList2[resourceTypeDetailList.get(i).getResolutionSlot().intValue()+1] = resourceTypeDetailList.get(i).getRequests();
 				
 			}
-				//else resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), 0L);
+			
 			i++;
 		}
 		logger.debug("Called Show Details with ResId: "+resourceId+ " --- ResType: "+resourceType);
@@ -426,7 +432,7 @@ public class Visualization {
     
     @Cached
     public List<ResourceRequestInfo> getResourceList(){
-	
+    	this.course = courseDAO.getCourseByDMSId(courseId);
 		logger.debug("Starting Extended Analysis");
 		
 		List<ResourceRequestInfo> resultList;
@@ -508,13 +514,16 @@ public class Visualization {
 			
 			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
 	        for(int j=0 ;j<resolution;j++){
-	        	logger.debug("Building Chart JSON ---- Index:" +j);
+	        	//logger.debug("Building Chart JSON ---- Index:" +j);
 	        	if(this.twentyFourhMode)
 	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
 	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
 	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(j)));
-	        	if(resLongList3!=null)
-	        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j]));
+	        	logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
+	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
+	        		logger.debug("Bin drin CourseID: "+this.courseId);
+	        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
+	        	}
 	        }
     	}
         dataList.add(list1);
