@@ -17,6 +17,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Path;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
@@ -102,6 +103,7 @@ public class Explorer {
     private Course course;
 	
 	@Property
+	@Persist
     private Course initCourse;
 	
 	@InjectComponent
@@ -173,14 +175,16 @@ public class Explorer {
     Object onActionFromShow(Long id)
 	  {
     	this.initCourse = courseDAO.getCourse(id);
-    	//ajaxResponseRenderer.addRender("courseZone", courseZone.getBody()).add(courseLastMonthZone, courseLastMonthZone.getBody() );
-    	return new MultiZoneUpdate("courseZone", courseZone.getBody()).add("courseLastMonthZone", courseLastMonthZone.getBody())
-    																  .add("analysisSelectZone", analysisSelectZone.getBody());
+    	//TODO Till problem with chart painting and zone updates is not solved, incremental page rendering is off
+    	//return new MultiZoneUpdate("courseZone", courseZone.getBody()).add("courseLastMonthZone", courseLastMonthZone.getBody())
+    	//															  .add("analysisSelectZone", analysisSelectZone.getBody());
     																  //.add("courseVisZone", courseVisZone.getBody());
+    	return this;
 	  }
     
     void onActionFromUpdate(Long id){
     	courseDAO.toggleFavorite(id);
+    	this.initCourse = courseDAO.getCourse(id);
     }
     
 	
