@@ -481,7 +481,7 @@ public class Visualization {
 			for (int i=0;i<courses.size();i++){
 				logger.debug("Courses: "+courses.get(i));
 			}
-			logger.info("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
 			
 			
@@ -519,7 +519,7 @@ public class Visualization {
 	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
 	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
 	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(j)));
-	        	logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
+	        	//logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
 	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
 	        		logger.debug("Bin drin CourseID: "+this.courseId);
 	        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
