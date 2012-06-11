@@ -39,11 +39,9 @@
     		<div class="row-fluid">
     		<div class="span12">
 <!--			<div class="thumbnail">-->
-        		<form class="form-search">
-        		<div class="">
         			
         			<t:zone t:id="formZone" id="formZone">
-        			<form t:type="form" t:id="customizeform" class="well  pull-left">
+        			<form t:type="form" t:id="customizeForm" class="well pull-left">
 <!--				    	-->
 <!--				    <h4>${message:options}</h4>-->
 <!--				    <br />-->
@@ -119,23 +117,21 @@
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
 <!--    				<button type="submit" class="btn pull-right">${message:search}</button>-->
-    			</div>
-    			</form>
 <!--    		</div> THUMBNAIL-->
     		</div> <!--span12-->
     		</div> <!--row fluid-->
     	</div>
     	
     
-   </div>
-    <script type="text/javascript">
-
-
-
-	
-	
-
-	
-    </script>
+  </div>
+  <script type="text/javascript">
+    (function(d3custom, $, undefined) {
     
+      var q2result = ${questionResult};
+      
+      d3custom.nodes = q2result.nodes;
+      d3custom.links = q2result.links;
+      
+    })(window.d3custom = window.d3custom || {}, jQuery);
+  </script>
 </html>
