@@ -5,9 +5,8 @@
       xmlns:p="tapestry:parameter">
  
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 	<title>${title}</title>
-	
 	<link rel="stylesheet" href="../css/layout.css" type="text/css" media="screen" />
 	<!--[if lt IE 9]>
 	<link rel="stylesheet" href="../css/ie.css" type="text/css" media="screen" />

@@ -137,7 +137,7 @@ public class InitialisationImpl implements Initialisation {
 				}
 				
 				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,
-				"http://localhost:4443/courses");
+				"http://localhost:4443/");
 				if (courseDetails != null){
 
 					CourseObject result = courseDetails.getCourseDetails(id);

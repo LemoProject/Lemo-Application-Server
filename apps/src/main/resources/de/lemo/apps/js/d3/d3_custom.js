@@ -17,9 +17,9 @@
     var force = d3.layout.force()
           .nodes(d3custom.nodes)
           .links(d3custom.links)
-          .gravity(.03)
-          .distance(100)
-          .charge(-100)
+          .gravity(.04)
+          .distance(500)
+          .charge(-10)
           .size([w, h])
           .start();
 
@@ -44,7 +44,7 @@
              .attr("class", "node")
              .attr("r", function(d) { 
             	 	var c = d.value/10;
-            	 	return (c > 20 ? 20 : c);
+            	 	return (c > 100 ? 100 : c);
             	 })
              .style("fill", function(d) { return color(d.group); })
              .call(force.drag);

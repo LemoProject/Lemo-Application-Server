@@ -21,12 +21,12 @@ import de.lemo.apps.restws.entities.ResultListCourseObject;
 public interface ServiceCourseDetails {
 	
 	@GET
-	@Path("courses/{course_id}")
+	@Path("{course_id}")
 	@Produces("application/json")
     public CourseObject getCourseDetails(@PathParam("course_id") Long id);
 	
 	@GET
-	//@Path("courses")
+	@Path("courses")
 	@Produces("application/json")
     public ResultListCourseObject getCoursesDetails(@QueryParam("course_id") List<Long> ids);
 
