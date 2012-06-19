@@ -19,8 +19,24 @@
     	
     	
     	<div class="span9">
-    			<div t:id="chart1" style="width: auto; height: 400px;"/>	
-    			<br />
+    		<div t:id="chart1" style="width: auto; height: 400px;"/>
+    		
+    			
+<!--	#####	Test Block for progressive Display - Begin 	####	-->
+<!--    			<t:zone t:id="chartZone" id="chartZone">-->
+<!--    				<t:progressivedisplay t:id="showChart" update="slideDown"/> -->
+<!--    						<t:delegate to="activeChart" />-->
+<!-- -->
+<!--   			</t:zone>		-->
+<!--    			-->
+<!--    			<t:block id="chart">-->
+<!--    					blub-->
+<!--    				<div t:id="chart1" style="width: auto; height: 400px;"/>	-->
+<!--    			</t:block>-->
+<!--    			<div t:id="chart1" style="width: auto; height: 400px;"/>-->
+<!--    			<br />-->
+<!--	#####	Test Block for progressive Display - End 	####	-->
+
     			<br />
     			<div class="accordion2" id="accordion3">
 			            <div class="accordion-group">

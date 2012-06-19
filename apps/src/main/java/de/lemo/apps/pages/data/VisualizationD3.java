@@ -158,6 +158,9 @@ public class VisualizationD3 {
         return course;
 	}
    
+	/**
+	 * 
+	 */
    void cleanupRender() {
 		form.clearErrors();
 		// Clear the flash-persisted fields to prevent anomalies in onActivate when we hit refresh on page or browser button
@@ -176,38 +179,16 @@ public class VisualizationD3 {
    public final ValueEncoder<Course> getCourseValueEncoder(){
 	   			//List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
 	   			return courseValueEncoder.create(Course.class);
-  } 
+   } 
     
     
- // returns datepicker params
+	/**
+	 * @return Returns a JSON Option Array with all parameters for the datepicker component
+	 */
 	public JSONLiteral getDatePickerParams(){
 		return dateWorker.getDatePickerParams();
 	}
 
-    @Cached
-    public List getTestData()
-    {
-        List<List<XYDataItem>> dataList = CollectionFactory.newList();
-        List<XYDataItem> list1 = CollectionFactory.newList();
-        List<XYDataItem> list2 = CollectionFactory.newList();
-
-        list1.add(new XYDataItem(0, 0));
-        list1.add(new XYDataItem(6, 1));
-        list1.add(new XYDataItem(12, 3));
-        list1.add(new XYDataItem(18, 5));
-        list1.add(new XYDataItem(24, 2));
-
-        list2.add(new XYDataItem(0, 1));
-        list2.add(new XYDataItem(6, 2));
-        list2.add(new XYDataItem(12, 7));
-        list2.add(new XYDataItem(18, 13.5));
-        list2.add(new XYDataItem(24, 10));
-
-        dataList.add(list1);
-        dataList.add(list2);
-
-        return dataList;
-    }
     
     @AfterRender
     public void afterRender() {

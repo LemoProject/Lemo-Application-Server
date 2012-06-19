@@ -1,6 +1,5 @@
 package de.lemo.apps.pages.data;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,17 +8,16 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
+import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
-import org.apache.tapestry5.annotations.OnEvent;
-import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
@@ -47,7 +45,6 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
-import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.restws.client.Analysis;
@@ -56,9 +53,6 @@ import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
-import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
-import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
-import de.lemo.apps.services.internal.jqplot.XYDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 
@@ -114,8 +108,12 @@ public class Visualization {
 	@Inject 
 	private CourseDAO courseDAO;
 	
+//	@Inject
+//    private Block chart;
+	
 	@InjectComponent
 	private Zone formZone;
+				//chartZone;
 	
 	@Component(id = "optionForm")
 	private Form optionForm;
@@ -186,34 +184,6 @@ public class Visualization {
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
 	
-//	@Property
-//	private JSONObject params;	
-//	
-//		
-//	@Component
-//	private Zone myZone;
-//	
-//	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
-//	public void initSliderZone(){
-//		max=30;
-//		min=0;
-//		slideZone=this.resolution;
-//		paramsZone=new JSONObject();
-//		paramsZone.put("value", slideZone);
-//	}
-//
-//	@OnEvent(value=org.apache.tapestry5.EventConstants.ACTION, component="sliderZone")
-//	public Object returnZone(){
-//		String input = request.getParameter("slider");
-//		slideZone=Integer.parseInt(input);
-//		return myZone.getBody();
-//	}
-//	
-	
-
-
-
-	
 	void setupRender() {
 		logger.debug(" ----- Bin in Setup Render");
 		if (this.twentyFourhMode == null) this.twentyFourhMode = false;
@@ -243,6 +213,13 @@ public class Visualization {
 		logger.debug("SetupRender End --- Is24H: "+twentyFourhMode+" BeginDate:"+ beginDate+" EndDate: "+endDate+" Res: "+resolution);
 	}
 	
+	/**
+	 * Evaluates the Page Activation Context and checks if the current user is permitted to see the selected course. If permission could not be granted, 
+	 * the user will be send back to explorer page.
+	 * 
+	 * @param courseId
+	 * @return
+	 */
 	Object onActivate(Long courseId){
 		
 		logger.debug("--- Bin im ersten onActivate");
@@ -269,6 +246,35 @@ public class Visualization {
         return courseId;
 	}
 	
+//	 @OnEvent(org.apache.tapestry5.EventConstants.PROGRESSIVE_DISPLAY) 
+//	 public Object getActiveChart()
+//	    {
+//	        return chart;
+//	    }
+	
+	@Inject
+	private JavaScriptSupport javascriptSupport;
+
+	
+//	Object onProgressiveDisplayFromShowChart(){
+//		//getFirstQuestionDataItems();
+//		
+//		try {  
+//            Thread.sleep(2000);  
+//        } catch (InterruptedException e) {  
+//              
+//            e.printStackTrace();  
+//        }  
+//        
+//		return chart;
+//	}
+	
+	@AfterRender
+    void afterRender() {
+		JSONObject spec = new JSONObject();
+        javascriptSupport.addInitializerCall("jqPlotChart",spec);
+	}
+	
 	void onPrepareFromOptionForm(){
 		
 		logger.debug(" ----- Bin in On Prepare");
@@ -284,17 +290,7 @@ public class Visualization {
 		//return this;//request.isXHR() ? formZone.getBody() : null;
 	}
 	
-//    Object onSuccess(){
-//    	logger.debug(" ----- Begin: "+beginDate+ " EndDate: "+endDate);
-//    	visPage.course = course;
-//    	visPage.courseId = courseId;
-//    	visPage.slideZone = slideZone;
-//    	visPage.resolution = slideZone;
-//    	visPage.beginDate = beginDate;
-//    	visPage.endDate	 = endDate;
-//    	return this;
-//    	//return request.isXHR() ? formZone.getBody() : null;
-//    }
+
 	
 	Object onActionFromUpdateTimeMode() {
 		
@@ -354,7 +350,9 @@ public class Visualization {
 	}
 	
 	
-	// returns datepicker params
+	/**
+	 * @return Returns a JSON Option Array with all parameters for the datepicker component
+	 */
 	public JSONLiteral getDatePickerParams(){
 		return dateWorker.getDatePickerParams();
 	}
@@ -369,11 +367,15 @@ public class Visualization {
 		
 	}
     
-    // Value Encoder for activity multi-select component
+    /**
+     *  Value Encoder for activity multi-select component
+     */
     @Property(write=false)
     private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer, EResourceType.class);
     
-    // Select Model for activity multi-select component
+    /**
+     *  Select Model for activity multi-select component
+     */
     @Property(write=false)
     private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
 	
@@ -406,23 +408,6 @@ public class Visualization {
 	public String getLastRequestDate() {
 		return getLocalizedDate(this.course.getLastRequestDate());
 	}
-
-    //public List<Course> getCourses() { return courseDAO.findAll(); }
-    
-    
-//    public Object onActionFromUpdate(){
-//    	System.out.println(" ----- Begin: "+beginDate+ " EndDate: "+endDate);
-//		this.resolution = slideZone;
-//		visPage.course = course;
-//		visPage.courseId = courseId;
-//		visPage.slideZone = slideZone;
-//		visPage.resolution = slideZone;
-//		visPage.beginDate = beginDate;
-//		visPage.endDate	 = endDate;
-//		return visPage;
-//    }
-    
-
     
     public String getResourceTypeName(){
     	if(this.resourceItem!=null && this.resourceItem.getResourcetype() != "")
@@ -455,7 +440,7 @@ public class Visualization {
 		return rri;	
     }
     
-    
+    @Cached
     public List getFirstQuestionDataItems(){
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
         List<XYDateDataItem> list1 = CollectionFactory.newList();
