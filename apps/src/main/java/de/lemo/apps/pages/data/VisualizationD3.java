@@ -184,24 +184,30 @@ public class VisualizationD3 {
     public String getQuestionResult() {
         ArrayList<Long> courseIds = new ArrayList<Long>();
         courseIds.add(courseId);
+        
+        ArrayList<Long> userIds = new ArrayList<Long>();
+        userIds.add(1L);
+        
+        ArrayList<String> types = new ArrayList<String>();
+        types.add("wiki");
+        
+        boolean considerLogouts = false;
+        
         Long endStamp = 0L;
         Long beginStamp = 0L;
-        if(endDate != null) {
-            endStamp = new Long(endDate.getTime() / 1000);
-        }
         if(beginDate != null) {
             beginStamp = new Long(beginDate.getTime() / 1000);
         }
+        if(endDate != null) {
+            endStamp = new Long(endDate.getTime() / 1000);
+        }
 
-        String computeQ2 = analysis.computeCourseUserPaths(courseIds, beginStamp, endStamp);
-
-        return computeQ2;
+        return analysis.computeUserPathAnalysis(courseIds, userIds, types, considerLogouts, beginStamp, endStamp);
     }
 
     @AfterRender
     public void afterRender() {
-        javaScriptSupport.addScript(""
-                );
+        javaScriptSupport.addScript("");
     }
 
     void setupRender() {
