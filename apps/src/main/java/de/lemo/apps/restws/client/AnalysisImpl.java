@@ -6,6 +6,8 @@ package de.lemo.apps.restws.client;
 import java.io.IOException;
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.tapestry5.json.JSONObject;
 import org.jboss.resteasy.client.ClientRequest;
@@ -20,6 +22,7 @@ import de.lemo.apps.restws.proxies.questions.QActivityResourceType;
 import de.lemo.apps.restws.proxies.questions.QActivityResourceTypeResolution;
 import de.lemo.apps.restws.proxies.questions.QCourseActivity;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
+import de.lemo.apps.restws.proxies.questions.QCourseUsers;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
@@ -166,6 +169,20 @@ public class AnalysisImpl implements Analysis {
         }
         System.out.println("Gebe leere Resultlist zurück");
         return new ResultListRRITypes();
+    }
+
+    @Override
+    public ResultListLongObject computeCourseUsers(
+            List<Long> courseIds,
+            long startTime,
+            long endTime) {
+        ResultListLongObject result = null;
+        QCourseUsers analysis = ProxyFactory.create(QCourseUsers.class, QUESTIONS_BASE_URL);
+        if(analysis != null) 
+            result = analysis.compute(courseIds, startTime, endTime);
+        if(result == null)
+            result = new ResultListLongObject();
+        return result;
     }
 
     @Override

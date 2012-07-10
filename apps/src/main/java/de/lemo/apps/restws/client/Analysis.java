@@ -41,4 +41,10 @@ public interface Analysis {
             Long startTime,
             Long endTime);
 
+    ResultListLongObject computeCourseUsers(
+            List<Long> courseIds,
+            long startTime,
+            long endTime);
+
+
 }

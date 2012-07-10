@@ -11,6 +11,15 @@
 
 
 /*!
+* CSS fixes
+*/
+
+/* prevent scroll bar jump */
+html {
+  overflow-y:scroll;
+}
+
+/*!
 * Changes to Bootstrap default css behavior
 */
 
@@ -32,6 +41,15 @@
 }
 
 
+.form-horizontal .accordion-inner {
+  padding: 9px 0;
+}
+.form-horizontal .accordion .control-label {
+  width: 70px;
+}
+.form-horizontal .accordion .controls {
+  margin-left: 80px;
+}
 /*!
 * Changes to Tapestry palette component (multiple select)
 */

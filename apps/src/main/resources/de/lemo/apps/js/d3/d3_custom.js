@@ -13,10 +13,22 @@
       .attr("width", w)
       .attr("height", h);
     
+    var nodes = d3custom.nodes;
+    var links = d3custom.links;
+    
+    if(!nodes || !links) {
+    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
+    	return;
+    }
+
+    $.each(links, function(i,e) {
+  		e.target = nodes[e.target];
+  		e.source = nodes[e.source];
+    });
     
     var force = d3.layout.force()
-          .nodes(d3custom.nodes)
-          .links(d3custom.links)
+          .nodes(nodes)
+          .links(links)
           .gravity(.04)
           .distance(500)
           .charge(-10)
@@ -24,7 +36,7 @@
           .start();
 
       var link = vis.selectAll("line.link")
-          .data(d3custom.links)
+          .data(links)
           .enter().append("svg:line")
           .attr("class", "link")
           .attr("x1", function(d) { return d.source.x; })
@@ -32,10 +44,10 @@
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; })
           .style("stroke", "#999")
-          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+          .style("stroke-width", function(d) { return 1; });
 
       var node = vis.selectAll("g.node")
-          .data(d3custom.nodes)
+          .data(nodes)
           .enter().append("svg:g")
           .attr("class", "node")
           .call(force.drag);

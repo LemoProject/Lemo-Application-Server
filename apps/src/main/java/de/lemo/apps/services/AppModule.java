@@ -5,13 +5,12 @@ import java.util.Date;
 
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
-import org.apache.tapestry5.*;
+import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateTransactionDecorator;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Match;
@@ -40,14 +39,16 @@ import de.lemo.apps.integration.QuestionDAO;
 import de.lemo.apps.integration.QuestionDAOImpl;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.integration.UserDAOImpl;
+import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.AnalysisImpl;
 import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.InformationImpl;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.client.InitialisationImpl;
-import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.client.AnalysisImpl;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.CourseIdValueEncoderWorker;
+import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.LongValueEncoderWorker;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -66,7 +67,10 @@ public class AppModule
     	binder.bind(UserDAO.class, UserDAOImpl.class);
     	binder.bind(CourseDAO.class, CourseDAOImpl.class);
     	binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
+    	
+    	// Encoder
     	binder.bind(CourseIdValueEncoder.class, CourseIdValueEncoderWorker.class);
+    	binder.bind(LongValueEncoder.class, LongValueEncoderWorker.class);
     	
     	//Facade Worker
     	binder.bind(UserWorker.class, UserWorkerImpl.class);
