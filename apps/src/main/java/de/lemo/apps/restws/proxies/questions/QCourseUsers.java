@@ -1,22 +1,27 @@
 package de.lemo.apps.restws.proxies.questions;
 
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
+
 import java.util.List;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
 public interface QCourseUsers {
 
-    @GET
+    @POST
     @Path("activecourseusers")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public ResultListLongObject compute(
-            @QueryParam("course_ids") List<Long> courseIds,
-            @QueryParam("startTime") long startTime,
-            @QueryParam("endTime") long endTime);
+            @FormParam(COURSE_IDS) List<Long> courseIds,
+            @FormParam(START_TIME) long startTime,
+            @FormParam(END_TIME) long endTime);
 
 }

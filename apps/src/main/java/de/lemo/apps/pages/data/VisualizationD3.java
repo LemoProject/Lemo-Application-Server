@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;

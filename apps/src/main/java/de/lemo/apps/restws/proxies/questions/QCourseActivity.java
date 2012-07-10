@@ -1,24 +1,31 @@
 package de.lemo.apps.restws.proxies.questions;
 
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.RESOLUTION;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.ROLE_IDS;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
+
 import java.util.List;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-
+import javax.ws.rs.core.MediaType;
 
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
-
-
 public interface QCourseActivity {
-	
-	@GET
-	@Path("courseactivity")
-	@Produces("application/json")
-    public ResultListLongObject compute(@QueryParam("course_ids") List<Long> courses, @QueryParam("role_ids") List<Long> roles,
-    						  @QueryParam("starttime") Long starttime, @QueryParam("endtime") Long endtime, 
-    						  @QueryParam("resolution") int resolution);
+
+    @POST
+    @Path("courseactivity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResultListLongObject compute(
+            @FormParam(COURSE_IDS) List<Long> courses,
+            @FormParam(ROLE_IDS) List<Long> roles,
+            @FormParam(START_TIME) Long starttime,
+            @FormParam(END_TIME) Long endtime,
+            @FormParam(RESOLUTION) int resolution);
 
 }
