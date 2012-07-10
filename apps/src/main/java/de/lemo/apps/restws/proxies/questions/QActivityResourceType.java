@@ -22,8 +22,8 @@ public interface QActivityResourceType {
     @Produces(MediaType.APPLICATION_JSON)
     public ResultListResourceRequestInfo compute(
             @FormParam(COURSE_IDS) List<Long> courses,
-            @FormParam(START_TIME) long startTime,
-            @FormParam(END_TIME) long endTime,
+            @FormParam(START_TIME) Long startTime,
+            @FormParam(END_TIME) Long endTime,
             @FormParam(TYPES) List<String> resourceTypes);
 
 }

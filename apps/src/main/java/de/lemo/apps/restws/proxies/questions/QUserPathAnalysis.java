@@ -24,7 +24,7 @@ public interface QUserPathAnalysis {
             @FormParam(COURSE_IDS) List<Long> courseIds,
             @FormParam(USER_IDS) List<Long> userIds,
             @FormParam(TYPES) List<String> types,
-            @FormParam(LOGOUT_FLAG) boolean considerLogouts,
+            @FormParam(LOGOUT_FLAG) Boolean considerLogouts,
             @FormParam(START_TIME) Long startTime,
             @FormParam(END_TIME) Long endTime);
 

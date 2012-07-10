@@ -26,6 +26,5 @@ public interface QCourseActivity {
             @FormParam(ROLE_IDS) List<Long> roles,
             @FormParam(START_TIME) Long starttime,
             @FormParam(END_TIME) Long endtime,
-            @FormParam(RESOLUTION) int resolution);
-
+            @FormParam(RESOLUTION) Integer resolution);
 }
