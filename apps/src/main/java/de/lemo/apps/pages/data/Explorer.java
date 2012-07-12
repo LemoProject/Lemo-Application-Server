@@ -80,9 +80,6 @@ public class Explorer {
 	@Component(parameters = {"dataItems=usageAnalysis"})
     private JqPlotLine chart1;
 	
-	//@Component(parameters = {"dataItems=testPieData"})
-    //private JqPlotPie chart2 ;
-	
 	@Inject
     @Path("../../images/icons/UsageAnalysis_Icon.png")
     @Property
@@ -136,7 +133,9 @@ public class Explorer {
 	@Inject
 	private AjaxResponseRenderer ajaxResponseRenderer;
 	
-	
+	/**
+	 * Preparing the Grid Model for the 
+	 */
 	@Property(write=false)
 	@Retain
 	private BeanModel coursesGridModel;
@@ -152,7 +151,10 @@ public class Explorer {
     		this.initCourse = course;
     	return true;
     }
-    
+
+    /**
+	 * Inserting a some js to deal with tab changes (e.g. Summary, Last Month, etc.) after the page rendering is finished
+	 */
     @AfterRender
     void afterRender() {
         jsSupport.addScript("$('#%s').bind(Tapestry.ZONE_UPDATED_EVENT, function() { "
@@ -182,9 +184,10 @@ public class Explorer {
     	return this;
 	  }
     
-    void onActionFromUpdate(Long id){
+    Object onActionFromFavorite(Long id){
     	courseDAO.toggleFavorite(id);
     	this.initCourse = courseDAO.getCourse(id);
+    	return this;
     }
     
 	
@@ -244,33 +247,5 @@ public class Explorer {
 	public String getLocalizedDateTime(Date date){
 		return dateWorker.getLocalizedDateTime(date,currentLocale);
 	}
-    
-    
-    //@OnEvent(EventConstants.PROGRESSIVE_DISPLAY) 
-//    public List getFirstQuestionDataItems(){
-//    	List<List<XYDataItem>> dataList = CollectionFactory.newList();
-//		if (course!=null && course.getCourseId()!=null){
-//	        List<XYDataItem> list1 = CollectionFactory.newList();
-//	    
-//	        Long starttime = 1108968800L;
-//			Long endtime= 1334447632L;
-//			int resolution = 30;
-//			List<Long> roles = new ArrayList<Long>();
-//			List<Long> courses = new ArrayList<Long>();
-//			courses.add(course.getCourseId());
-//			ResultListLongObject results = analysis.computeQ1(courses, roles, starttime, endtime, resolution);
-//	        for(int i=0 ;i<resolution;i++){
-//	        	list1.add(new XYDataItem(i, results.getElements().get(i)));
-//	        }
-//	        dataList.add(list1);
-//	        return dataList;
-//		}
-//		return dataList;
-//	}
-    
-//    @Cached
-//    public Object getChart2(){
-//    	return chart2;
-//    }
 
 }
