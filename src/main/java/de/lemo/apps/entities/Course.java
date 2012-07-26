@@ -55,13 +55,17 @@ public class Course extends AbstractEntity{
 	public Course() {}
 	
 	public Course(CourseObject courseObject){
-		this.courseName = courseObject.getTitle();
-        this.courseDescription = courseObject.getDescription();
-        this.firstRequestDate = new java.util.Date((long)courseObject.getFirstRequest()*1000);
-        this.lastRequestDate = new java.util.Date((long)courseObject.getLastRequest()*1000);
-        this.enroledParticipants = courseObject.getParticipants();
-        this.enroledParticipants = 1L;
-        this.courseId=courseObject.getId();
+		if(courseObject!=null){
+			this.courseName = courseObject.getTitle();
+	        this.courseDescription = courseObject.getDescription();
+	        if(courseObject.getFirstRequest()!=null)
+	        this.firstRequestDate = new java.util.Date((long)courseObject.getFirstRequest()*1000);
+	        if(courseObject.getLastRequest()!=null)
+	        this.lastRequestDate = new java.util.Date((long)courseObject.getLastRequest()*1000);
+	        this.enroledParticipants = courseObject.getParticipants();
+	        this.enroledParticipants = 1L;
+	        this.courseId=courseObject.getId();
+		}
 	}
 	
 	public Course(	final String courseName, final String courseDescription, final Date begin, 

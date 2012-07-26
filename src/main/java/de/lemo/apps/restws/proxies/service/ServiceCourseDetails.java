@@ -10,6 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
 
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
@@ -21,14 +23,16 @@ import de.lemo.apps.restws.entities.ResultListCourseObject;
 public interface ServiceCourseDetails {
 	
 	@GET
-	@Path("{course_id}")
-	@Produces("application/json")
-    public CourseObject getCourseDetails(@PathParam("course_id") Long id);
+	@Path("{cid}")
+	@Produces(MediaType.APPLICATION_JSON)
+    public CourseObject getCourseDetails(
+		@PathParam("cid") Long id);
 	
 	@GET
-	@Path("courses")
-	@Produces("application/json")
-    public ResultListCourseObject getCoursesDetails(@QueryParam("course_id") List<Long> ids);
+	//@Path("courses")
+	@Produces(MediaType.APPLICATION_JSON)
+    public ResultListCourseObject getCoursesDetails(
+    		@QueryParam(COURSE_IDS) List<Long> courseIds);
 
 
 }

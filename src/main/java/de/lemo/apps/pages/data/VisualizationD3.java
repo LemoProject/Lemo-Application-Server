@@ -238,7 +238,7 @@ public class VisualizationD3 {
         }
 
         //return analysis.computeUserPathAnalysis(courseIds, selectedUsers, types, considerLogouts, beginStamp, endStamp);
-        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, 1L, false, beginStamp, endStamp);
+        return analysis.computeQFrequentPathBIDE(courseIds, null, 0.6, false, beginStamp, endStamp);
     }
 
     void setupRender() {

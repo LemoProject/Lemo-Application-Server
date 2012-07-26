@@ -56,12 +56,12 @@ public class Initialize {
 					courseDAO.save(courseObject);
 				}
 			}
-		ResultListCourseObject courses = init.getCoursesDetails(user.getMyCourses());	
+		//ResultListCourseObject courses = init.getCoursesDetails(user.getMyCourses());	
 			
 		
 		
 		// Sleep 2 seconds to simulate a long-running operation
-		sleep(2000);
+		sleep(1000);
 		
 		return Dashboard.class;
 		

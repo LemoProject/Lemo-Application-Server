@@ -77,11 +77,26 @@
             <groupId>org.apache.tapestry</groupId>
             <artifactId>tapestry-hibernate</artifactId>
             <version>${tapestry-release-version}</version>
-        </dependency><dependency>
+        </dependency>
+        
+        <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>1.8.0.7</version>
         </dependency>
+        
+        <dependency>
+    		<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-c3p0</artifactId>
+    		<version>3.6.0.Final</version>
+		</dependency>
+        
+        
+        <dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
         
         <dependency>
 			<groupId>mysql</groupId>

@@ -197,7 +197,9 @@ public class AnalysisImpl implements Analysis {
 
         QUserPathAnalysis analysis = ProxyFactory.create(QUserPathAnalysis.class, QUESTIONS_BASE_URL);
         if(analysis != null) {
-            return analysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
+            String result = analysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
+            System.out.println("PATH result: "+result);
+        	return result;
         }
         return "{}";
     }
@@ -250,6 +252,7 @@ public class AnalysisImpl implements Analysis {
             QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class, QUESTIONS_BASE_URL);
             if(qFrequentPath != null) {
                 String result = qFrequentPath.compute(courseIds, userIds, minSup, sessionWise, startTime, endTime);
+                System.out.println("BIDE result: "+result);
                 return result;
             }
 

@@ -28,8 +28,9 @@ import de.lemo.apps.restws.proxies.service.ServiceUserInformation;
 
 public class InitialisationImpl implements Initialisation {
 	
-	//@Inject
-	//private Logger logger;
+	private static final String SERVICE_STARTTIME_URL = "http://localhost:4443/starttime";
+	private static final String SERVICE_COURSE_URL = "http://localhost:4443/courses";
+    //private static final String QUESTIONS_BASE_URL = "http://localhost:4443/questions";
 
 	public InitialisationImpl(){
 		//Initialise the Rest session
@@ -42,7 +43,7 @@ public class InitialisationImpl implements Initialisation {
 		//Create resource delegate
 		//logger.info("Getting Server Starttime");
 		try {
-			ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
+			ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
 			
 			ClientResponse<ServiceStartTime> response;
 			
@@ -55,8 +56,7 @@ public class InitialisationImpl implements Initialisation {
 					+ response.getStatus());
 			}
 			
-			ServiceStartTime starttime = ProxyFactory.create(ServiceStartTime.class,
-			"http://localhost:4443/starttime");
+			ServiceStartTime starttime = ProxyFactory.create(ServiceStartTime.class,SERVICE_STARTTIME_URL);
 			if (starttime != null){
 				return new Date(starttime.startTimeJson().getTime());
 			}
@@ -82,7 +82,7 @@ public class InitialisationImpl implements Initialisation {
 		
 		public ResultListCourseObject getCoursesDetails(List<Long> ids){
 			try {
-				ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
+				ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
 				
 				ClientResponse<ServiceStartTime> response;
 				
@@ -95,8 +95,7 @@ public class InitialisationImpl implements Initialisation {
 						+ response.getStatus());
 				}
 				
-				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,
-				"http://localhost:4443/");
+				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,SERVICE_COURSE_URL);
 				if (courseDetails != null){
 
 					ResultListCourseObject result = courseDetails.getCoursesDetails(ids);
@@ -115,7 +114,7 @@ public class InitialisationImpl implements Initialisation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Gebe leere Resultlist zurück");
+			System.out.println("Gebe leere Resultlist zurueck");
 			return new ResultListCourseObject();
 		}
 		
@@ -123,7 +122,7 @@ public class InitialisationImpl implements Initialisation {
 		
 		public CourseObject getCourseDetails(Long id){
 			try {
-				ClientRequest request = new ClientRequest("http://localhost:4443/starttime");
+				ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
 				
 				ClientResponse<ServiceStartTime> response;
 				
@@ -136,8 +135,7 @@ public class InitialisationImpl implements Initialisation {
 						+ response.getStatus());
 				}
 				
-				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,
-				"http://localhost:4443/");
+				ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class,SERVICE_COURSE_URL);
 				if (courseDetails != null){
 
 					CourseObject result = courseDetails.getCourseDetails(id);
@@ -156,7 +154,7 @@ public class InitialisationImpl implements Initialisation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Gebe leere Resultlist zurück");
+			System.out.println("Gebe leere Resultlist zurueck");
 			return new CourseObject();
 		}
 		
