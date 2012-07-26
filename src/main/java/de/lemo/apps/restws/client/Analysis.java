@@ -45,6 +45,13 @@ public interface Analysis {
             List<Long> courseIds,
             long startTime,
             long endTime);
-
+    
+    public String computeQFrequentPathBIDE(
+    		List<Long> courseIds, 
+    		List<Long> userIds, 
+    		double minSup, 
+    		boolean sessionWise,
+    		long startTime,
+    		long endTime);
 
 }

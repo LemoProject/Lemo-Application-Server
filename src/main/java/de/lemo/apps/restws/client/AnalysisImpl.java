@@ -23,6 +23,7 @@ import de.lemo.apps.restws.proxies.questions.QActivityResourceTypeResolution;
 import de.lemo.apps.restws.proxies.questions.QCourseActivity;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;
+import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
@@ -225,7 +226,41 @@ public class AnalysisImpl implements Analysis {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Gebe leere Resultlist zurück");
+        System.out.println("Gebe leere Resultlist zurueck");
+        return "{}";
+    }
+    
+    @Override
+    public String computeQFrequentPathBIDE(
+	    		List<Long> courseIds, 
+	    		List<Long> userIds, 
+	    		double minSup, 
+	    		boolean sessionWise,
+	    		long startTime,
+	    		long endTime)  {
+    	System.out.println("Starte BIDE Request");
+        try {
+            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+            ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
+
+            if(response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+            }
+
+            QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class, QUESTIONS_BASE_URL);
+            if(qFrequentPath != null) {
+                String result = qFrequentPath.compute(courseIds, userIds, minSup, sessionWise, startTime, endTime);
+                return result;
+            }
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Gebe leere Resultlist zurueck");
         return "{}";
     }
 

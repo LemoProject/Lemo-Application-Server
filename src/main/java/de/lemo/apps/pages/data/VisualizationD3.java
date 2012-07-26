@@ -237,7 +237,8 @@ public class VisualizationD3 {
             endStamp = new Long(endDate.getTime() / 1000);
         }
 
-        return analysis.computeUserPathAnalysis(courseIds, selectedUsers, types, considerLogouts, beginStamp, endStamp);
+        //return analysis.computeUserPathAnalysis(courseIds, selectedUsers, types, considerLogouts, beginStamp, endStamp);
+        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, 1L, false, beginStamp, endStamp);
     }
 
     void setupRender() {
