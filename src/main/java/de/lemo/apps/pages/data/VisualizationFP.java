@@ -15,6 +15,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
@@ -24,6 +25,8 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -44,8 +47,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom.js" })
-public class VisualizationD3 {
+@Import(library = { "../../js/d3/d3_custom_Path2.js" })
+public class VisualizationFP {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -76,12 +79,16 @@ public class VisualizationD3 {
 
     @Inject
     private TypeCoercer coercer;
+    
+	@Inject
+	private Request request;
+
 
     @Property
     private BreadCrumbInfo breadCrumb;
 
-    @InjectComponent
-    private Zone formZone;
+//    @InjectComponent
+//    private Zone formZone;
 
     @Component(id = "customizeForm")
     private Form customizeForm;
@@ -208,6 +215,51 @@ public class VisualizationD3 {
         // courseDAO.findAllByOwner(userWorker.getCurrentUser());
         return courseValueEncoder.create(Course.class);
     }
+    
+    
+	@Property
+	@Persist
+	Integer val;
+	
+	@Property
+	@Persist
+	Double max;
+	
+	@Property
+	@Persist
+	Double min;
+	
+	@Property
+	@Persist
+	Integer slideZone;
+
+	@Property
+	private JSONObject paramsZone;
+
+		
+//	@Component
+//	private Zone myZone;
+	
+	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
+	public void initSliderZone(){
+		max=1.0;
+		min=0.5;
+		slideZone=this.resolution;
+		paramsZone=new JSONObject();
+		paramsZone.put("value", slideZone);
+	}
+
+	@OnEvent(value=org.apache.tapestry5.EventConstants.ACTION, component="sliderZone")
+	public Object returnZone(){
+		String input = request.getParameter("slider");
+		slideZone=Integer.parseInt(input);
+		return this;
+	}
+
+    
+    
+    
+    
 
     // returns datepicker params
     public JSONLiteral getDatePickerParams() {
@@ -236,9 +288,8 @@ public class VisualizationD3 {
         if(endDate != null) {
             endStamp = new Long(endDate.getTime() / 1000);
         }
-
-        return analysis.computeUserPathAnalysis(courseIds, selectedUsers, types, considerLogouts, beginStamp, endStamp);
-        //return analysis.computeQFrequentPathBIDE(courseIds, null, 0.9, false, beginStamp, endStamp);
+        
+        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, 0.6, false, beginStamp, endStamp);
     }
 
     void setupRender() {

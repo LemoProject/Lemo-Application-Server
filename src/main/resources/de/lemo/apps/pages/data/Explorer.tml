@@ -197,6 +197,10 @@
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationFP" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Frequent ${message:pathAnalysis} </b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
+			    			<div class="span2" align="center">
 			    				<t:pagelink page="data/visualizationD3_2" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:pathAnalysis} Directed</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>

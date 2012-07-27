@@ -51,7 +51,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="visualizationTitle")
-@Import(library={"../../js/d3/d3_custom_Path.js"})
+@Import(library={"../../js/d3/d3_custom_Path1.js"})
 public class VisualizationD3_2 {
 	
 	@Environmental

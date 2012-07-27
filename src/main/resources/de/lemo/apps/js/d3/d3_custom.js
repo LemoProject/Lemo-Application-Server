@@ -3,7 +3,7 @@
 
    
   var w = 960, 
-      h = 500; 
+      h = 700; 
    
   d3custom.run = function() {
 
@@ -12,6 +12,19 @@
     var vis = d3.select("#viz").append("svg:svg")
       .attr("width", w)
       .attr("height", h);
+    
+    vis.append("svg:defs")
+    .append("svg:marker")
+      .attr("id", "Triangle")
+      .attr("viewBox", "0 0 10 10")
+      .attr("refX", 30)
+      .attr("refY", 5)
+      .attr("markerUnits", "strokeWidth")
+      .attr("markerWidth", 10)
+      .attr("markerHeight", 10)
+      .attr("orient", "auto")
+      .append("svg:path")
+    	 .attr("d", "M 0 0 L 10 5 L 0 10 z");
     
     var nodes = d3custom.nodes;
     var links = d3custom.links;
@@ -29,16 +42,22 @@
     var force = d3.layout.force()
           .nodes(nodes)
           .links(links)
-          .gravity(.04)
-          .distance(500)
+          .gravity(.2)
+          .distance(400)
           .charge(-10)
           .size([w, h])
           .start();
+    
+    	function selectArcs(d) {
+    		return vis.selectAll("line.to-" + d.index +
+                             ",line.from-" + d.index);
+    	}
 
       var link = vis.selectAll("line.link")
           .data(links)
           .enter().append("svg:line")
-          .attr("class", "link")
+          .attr("class", function(d) { return "link from-" + d.source.index +
+                                   " to-" + d.target.index; })
           .attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
@@ -59,14 +78,21 @@
             	 	return (c > 100 ? 100 : c);
             	 })
              .style("fill", function(d) { return color(d.group); })
-             .call(force.drag);
+             .call(force.drag)
+        	 .on("mouseout", function(d) {
+        		 selectArcs(d).attr("marker-end", null);
+        		 selectArcs(d).style("stroke", "grey");
+        	 })
+            .on("mouseover", function(d) {
+            	selectArcs(d).attr("marker-end", "url(#Triangle)");
+            	selectArcs(d).style("stroke", "red");
+            	
+            });
       
-        node.append("text")
-          .attr("class", "nodetext")
-          .attr("dx", 12)
-          .attr("dy", ".35em")
-          .text(function(d) { return d.name+" ("+d.value+")" });
-
+        node.append("svg:title")
+	    .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /> <b>Besuche</b>: "+d.value;});
+        
+        
       force.on("tick", function() {
         link.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
@@ -78,6 +104,12 @@
         
        
       });
+      
+      $('svg title').parent().tipsy({ 
+	        gravity: 'sw', 
+	        html: true, 
+	        title: function() { return $(this).find('title').text(); }
+	      });
     
   };
   

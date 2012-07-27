@@ -30,6 +30,7 @@ import de.lemo.apps.pages.data.Dashboard;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/d3/d3.v2.js",
+				"../js/d3/jquery.tipsy.js",
 		 		"../js/bootstrap-transition.js",
 		 		"../js/bootstrap-modal.js",
 		 		"../js/bootstrap-dropdown.js",
