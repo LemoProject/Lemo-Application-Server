@@ -1,5 +1,6 @@
 package de.lemo.apps.pages.data;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -165,8 +166,11 @@ public class Dashboard {
 		widgetCourse1 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget1());
 		widgetCourse2 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget2());
 		widgetCourse3 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget3());
+		if(widgetCourse1!=null)
 		widgetCourse1Id = widgetCourse1.getId();
+		if(widgetCourse2!=null)
 		widgetCourse2Id = widgetCourse2.getId();
+		if(widgetCourse3!=null)
 		widgetCourse3Id = widgetCourse3.getId();
 	}
 	
@@ -242,8 +246,11 @@ public class Dashboard {
 	
 	public List getUsageAnalysis(Long courseId){
 		Course course = courseDAO.getCourse(courseId);
-		Date endDate = course.getLastRequestDate();
-		return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1);
+		if(course !=null){
+			Date endDate = course.getLastRequestDate();
+			return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1);
+		} 
+		return new ArrayList();
 	}
 	
 	//TODO reduce recomputation of analysis results per widget - method should provide a container class for all necessary stats data
@@ -281,13 +288,13 @@ public class Dashboard {
 		switch(widget){
 		case 1:
 			Long id1 = userWorker.getCurrentUser().getWidget1(); 
-			if(id1!=null) return getWidgetCourse1().getCourseDescription(); //courseDAO.getCourse(id1).getCourseDescription();
+			if(id1!=null && getWidgetCourse1()!= null) return getWidgetCourse1().getCourseDescription(); //courseDAO.getCourse(id1).getCourseDescription();
 		case 2:
 			Long id2 = userWorker.getCurrentUser().getWidget2(); 
-			if(id2!=null) return getWidgetCourse2().getCourseDescription(); //courseDAO.getCourse(id2).getCourseDescription();
+			if(id2!=null && getWidgetCourse2()!= null) return getWidgetCourse2().getCourseDescription(); //courseDAO.getCourse(id2).getCourseDescription();
 		case 3:
 			Long id3 = userWorker.getCurrentUser().getWidget3(); 
-			if(id3!=null) return getWidgetCourse3().getCourseDescription(); //courseDAO.getCourse(id3).getCourseDescription();
+			if(id3!=null && getWidgetCourse3()!= null) return getWidgetCourse3().getCourseDescription(); //courseDAO.getCourse(id3).getCourseDescription();
 		default: return "Widget unused";	
 		}
 	}

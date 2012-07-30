@@ -78,7 +78,7 @@
 						<div class="well">
 							<div class="row-fluid">
 							<div class="span6">				
-		    					<p><b>${message:lastRequest}:</b> <br /> ${getLocalizedDateTime(widgetCourse1.lastRequestDate)} <br /> </p>
+		    					<p><b>${message:lastRequest}:</b> <br /> ${getLocalizedDateTime(widgetCourse1?.lastRequestDate)} <br /> </p>
 		    					<br />
 		    					<p><b>${message:overallRequests}: </b> <br /> ${getOverallRequest(usageAnalysisWidget1)}<br /> </p> 
 		    					<br />
@@ -86,11 +86,11 @@
 		    					
 		    				</div>
 		    				<div class="span6">	
-		    					<p><b>${message:courseEnroledParticipants}:</b> <br /> ${widgetCourse1.enroledParticipants}<br /> </p> 
+		    					<p><b>${message:courseEnroledParticipants}:</b> <br /> ${widgetCourse1?.enroledParticipants}<br /> </p> 
 		    					<br />
 		    					<p><b>${message:avgRequests}:</b> <br />  ${getAverageRequest(usageAnalysisWidget1)}<br /> </p> 		    					
 		    					<br />
-		    					<t:pagelink page="data/visualization" context="${widgetCourse1.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>		    					
+		    					<t:pagelink page="data/visualization" context="${widgetCourse1?.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>		    					
 		    				</div>
 		    				</div>
 
@@ -125,7 +125,7 @@
 						<div class="well">
 							<div class="row-fluid">
 							<div class="span6">				
-		    					<p><b>${message:lastRequest}:</b> <br /> ${getLocalizedDateTime(widgetCourse2.lastRequestDate)} <br /> </p>
+		    					<p><b>${message:lastRequest}:</b> <br /> ${getLocalizedDateTime(widgetCourse2?.lastRequestDate)} <br /> </p>
 		    					<br />
 		    					<p><b>${message:overallRequests}: </b> <br /> ${getOverallRequest(usageAnalysisWidget2)}<br /> </p> 
 		    					<br />
@@ -133,11 +133,11 @@
 		    					
 		    				</div>
 		    				<div class="span6">	
-		    					<p><b>${message:courseEnroledParticipants}:</b> <br /> ${widgetCourse2.enroledParticipants}<br /> </p> 
+		    					<p><b>${message:courseEnroledParticipants}:</b> <br /> ${widgetCourse2?.enroledParticipants}<br /> </p> 
 		    					<br />
 		    					<p><b>${message:avgRequests}:</b> <br />  ${getAverageRequest(usageAnalysisWidget2)}<br /> </p> 		    					
 		    					<br />
-		    					<t:pagelink page="data/visualization" context="${widgetCourse2.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>		    					
+		    					<t:pagelink page="data/visualization" context="${widgetCourse2?.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>		    					
 		    				</div>
 		    				</div>
 
@@ -187,7 +187,7 @@
 						<div class="well">
 	    					<h4>${widgetCourse3?.courseDescription} </h4>
 	    					<br />
-	    					<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(widgetCourse3.lastRequestDate)} <br /> </p>
+	    					<p><b>${message:lastRequest}:</b> ${getLocalizedDateTime(widgetCourse3?.lastRequestDate)} <br /> </p>
 	    					<br />
 	    					<p><b>${message:overallRequests}: </b> ${getOverallRequest(usageAnalysisWidget3)}<br /> </p> 
 	    					<br />
@@ -195,9 +195,9 @@
 	    					<br />
 	    					<p><b>${message:mostRequests}:</b> ${getLocalizedDate(getMaxRequestDate(usageAnalysisWidget3))}  - (${getMaxRequest(usageAnalysisWidget3)})<br /> </p> 	
 	    					<br />
-	    					<p><b>${message:courseEnroledParticipants}:</b> ${widgetCourse3.enroledParticipants}<br /> </p> 
+	    					<p><b>${message:courseEnroledParticipants}:</b> ${widgetCourse3?.enroledParticipants}<br /> </p> 
 	    					<br />
-	    					<t:pagelink page="data/visualization" context="${widgetCourse3.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
+	    					<t:pagelink page="data/visualization" context="${widgetCourse3?.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
 	    					<br />
 	    					<br />
     					</div>
