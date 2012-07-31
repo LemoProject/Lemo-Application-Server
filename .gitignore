@@ -2,3 +2,4 @@
 /apps/src/main/resources/hibernate.cfg.xml
 /apps/target/apps
 .gitignore
+/target
