@@ -1,6 +1,8 @@
+// Credit to Thomson Reuters http://bl.ocks.org/1153292	
+
 $(document).ready(function() {
 	
-	
+
 
 	var links = [
 //		             {"source": "Bio1", "target": "Bio2", "type": "click", value:2},
@@ -80,9 +82,7 @@ $(document).ready(function() {
 	    .start();
 
 
-	    
-
-	// Per-type markers, as they don't inherit styles.
+	// Defining triangle path elements, Source : https://groups.google.com/forum/?fromgroups#!topic/d3-js/6QEenzf1fdI%5B1-25%5D
 	svg.append("svg:defs")
     .append("svg:marker")
     .attr("id", "Triangle")
@@ -96,6 +96,8 @@ $(document).ready(function() {
     .append("svg:path")
   	 .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
+	
+	//Adding path elements (links) with corresponding color and direction triangles
 	var path = svg.append("svg:g").selectAll("path")
 	    .data(force.links())
 	  .enter().append("svg:path")
@@ -110,12 +112,14 @@ $(document).ready(function() {
 	    											else {return strokeWidth}; });
 
 
+	//Adding circle elements (nodes) with default size
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
 	  .enter().append("svg:circle")
 	    .attr("r", 8)
 	    .call(force.drag);
-	    
+	 
+	//Adding title attribute for tipsy mouse over tooltip
 	 circle.append("svg:title")
 	    .text(function(d) { return "Value is: " + d.name;});
 	 
@@ -125,21 +129,15 @@ $(document).ready(function() {
 	    .data(force.nodes())
 	  .enter().append("svg:g");
 
-	// A copy of the text with a thick white stroke for legibility.
+	// Adding node description
 	text.append("svg:text")
-	    .attr("x", 8)
-	    .attr("y", ".31em")
-	    .attr("class", "shadow")
-	    .text(function(d) { return d.name; });
+	    .attr("x", "10")
+	    .attr("y", "10")
+	    .text(function(d) { return d.name;});
 
-	text.append("svg:text")
-	    .attr("x", 8)
-	    .attr("y", ".31em")
-	    .text(function(d) { return d.name; });
-	    
-	 
 
-	// Use elliptical arc path segments to doubly-encode directionality.
+	// Adding path arc elements 
+	// Adding triangle path elements, Source : https://groups.google.com/forum/?fromgroups#!topic/d3-js/6QEenzf1fdI%5B1-25%5D
 	function tick() {
 	  path.attr("d", function(d) {
 	    var dx = d.target.x - d.source.x,
@@ -157,8 +155,8 @@ $(document).ready(function() {
 	  });
 	}
 
-
-	 $('svg title').parent().tipsy({ 
+	//Preparing tipsy tooltip
+	$('svg title').parent().tipsy({ 
 	        gravity: 'sw', 
 	        html: true, 
 	        title: function() { return $(this).find('title').text(); }

@@ -44,7 +44,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom.js" })
+@Import(library = { "../../js/d3/d3_custom_adjustableGraph.js" })
 public class VisualizationD3 {
 
     @Environmental
@@ -218,7 +218,7 @@ public class VisualizationD3 {
         ArrayList<Long> courseIds = new ArrayList<Long>();
         courseIds.add(courseId);
 
-        boolean considerLogouts = false;
+        boolean considerLogouts = true;
 
         ArrayList<String> types = null;
         if(selectedActivities != null && !selectedActivities.isEmpty()) {

@@ -3,3 +3,4 @@
 /apps/target/apps
 .gitignore
 /target
+/bin

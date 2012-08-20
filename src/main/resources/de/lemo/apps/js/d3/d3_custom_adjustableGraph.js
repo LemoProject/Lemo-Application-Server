@@ -11,7 +11,11 @@
 	  var w = 960, 
       h = 700,
       visits_min=1,
-      visits_max=100; 
+      visits_max=20, 
+	  minDistance=1,
+	  maxDistance=20,
+	  minCharge=0,
+	  maxCharge=10;
   
   var selectedNodes,
   	  node,
@@ -219,10 +223,12 @@ function update(_nodes,___links) {
 	        title: function() { return $(this).find('title').text(); }
 	      });
      
+      $(".slider").slider();
+
       
       $('#supportSlider').slider({
 
-			//range: true,
+			range: true,
 			min : 0,
 			max :  100,
 			values :  [visits_min, visits_max],
@@ -242,7 +248,39 @@ function update(_nodes,___links) {
       $('#supportSlider').mouseup(function(){
     	  update(filterNodes(nodes, min, max), links);
       });
-    
+      
+      $('#distancesupportSlider').slider({
+
+    	  	range: false,
+			min : minDistance,
+			max :  maxDistance,
+			value : maxDistance,
+			slide : function( event, ui ) {
+				$( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + ui.value );
+				console.log("Distance Value: "+ui.value);
+				
+      		}
+	     
+      });
+      
+      
+      
+      
+
+      $('#chargesupportSlider').slider({
+    	  
+    	  
+			range: false,
+			min : minCharge,
+			max :  maxCharge,
+			value: maxCharge,
+			slide : function( event, ui ) {
+				$( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + ui.value );
+      		
+				console.log("Charge Value: "+ui.value);
+      		}
+      });
+      
   };
   
 })(window.d3custom = window.d3custom || {}, jQuery);

@@ -25,7 +25,7 @@ import de.lemo.apps.pages.data.Dashboard;
 
 
 @Exclude(stylesheet={"core"})  //remove the Tapestry css
-@ImportJQueryUI({"jquery.ui.core",  "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
+@ImportJQueryUI({"jquery.ui.core", "jquery.ui.slider", "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
 @Import(library={"../js/bootstrap-alert.js",
 				"../js/excanvas.js",
 				"../js/apps.js",

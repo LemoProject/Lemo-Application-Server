@@ -50,7 +50,16 @@
 			              </div>
 			              <div id="collapseOne" class="accordion-body collapse in">
 			                <div class="accordion-inner">
+			                
+			             
+			                
   			                <div class="control-group">
+  			                
+  			                			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
+  			                			<div class="slider" id="supportSlider"></div><br />
+  			                			<button id="reset" class="btn btn-tiny reset">Reset</button>
+        						    	
+        						    	
         						    	<label class="control-label">${message:begin}:</label>
       						    	  <div class="controls">
                             <input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
@@ -84,27 +93,49 @@
 			              </div>
                   </div>
                   
-                  <!-- Users -->
+                  <!-- Member -->
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
                        Member <b class="caret"></b>
                       </a>
                     </div>   
-			              <div id="collapseThree" class="accordion-body collapse">  
-			                <div class="accordion-inner">               
+			        <div id="collapseThree" class="accordion-body collapse">  
+			        	<div class="accordion-inner">               
                         
-                            <t:jquery.palette
-                              t:id="users"
-                              encoder="userIdEncoder"
-                              selected="selectedUsers"
-                              model="userIds"/>
+	                            <t:jquery.palette
+	                              t:id="users"
+	                              encoder="userIdEncoder"
+	                              selected="selectedUsers"
+	                              model="userIds"/>
                        
-                      </div>
-			              </div>
-			            </div>
+                     	 </div>
+			        </div>
+			      </div>
+			       
+			       
+			      <!-- Advanced-->
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                       Advanced <b class="caret"></b>
+                      </a>
+                    </div>   
+			        <div id="collapseFour" class="accordion-body collapse">  
+			        	<div class="accordion-inner">               
+                        
+	                            <label class="control-label" id="chargeslider-label">Charge 1 - Max.:</label>
+  			                	<div class="slider" id="chargesupportSlider"></div><br />
+  			                	<br/>
+  			                	
+  			                	<label class="control-label" id="distanceslider-label">Distance 1 - Max.:</label>
+  			                	<div class="slider" id="distancesupportSlider"></div><br />
+                       
+                     	 </div>
+			        </div>
+			      </div>  
 			            
-			        </div><!-- accordion -->
+			 </div><!-- accordion -->
   			   		
   			   		<input t:type="submit" value="Update" class="btn btn-primary" />
 
