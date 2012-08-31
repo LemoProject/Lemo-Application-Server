@@ -44,7 +44,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_adjustableGraph.js" })
+@Import(library = { "../../js/d3/d3_custom_OnClick2.js" })
 public class VisualizationD3 {
 
     @Environmental

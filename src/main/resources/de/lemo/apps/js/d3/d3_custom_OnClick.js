@@ -11,7 +11,7 @@
 	  var w = 960, 
       h = 700,
       visits_min=1,
-      visits_max=20, 
+      visits_max=30, 
 	  minDistance=1,
 	  maxDistance=20,
 	  minCharge=0,
@@ -51,15 +51,20 @@
     
     
     //selectedNodes = filterNodes(nodes, );
+    var k = Math.sqrt(nodes.length / (w * h));
     
     var force = d3.layout.force()
     .nodes(nodes)
     .links(links)
     .on("tick",tick)
-    .gravity(.2)
+    //.gravity(.2)
     .distance(400)
-    .charge(-10)
+    //.charge(-10)
+    .charge(-10 / k)
+    .gravity(100 * k)
     .size([w, h]);
+    
+   
     
     if(!nodes || !links) {
     	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
@@ -146,21 +151,24 @@ function update(_nodes,___links) {
         .enter().append("svg:g")
           .attr("class", "node");
       
-      node.append("svg:title")
+    node.append("nodetitle")
 	    .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /> <b>Besuche</b>: "+d.value;});
     
     node.append("circle")
-             .attr("class", "node")
+             .attr("class",  function(d,i) { return "node nodeId-" + i; })
              .attr("r", function(d) { 
             	 	var c = d.value/2;
             	 	return (c > visits_max ? visits_max : c);
             	 })
-             .style("fill", function(d) { return color(d.group); })
-             .on("click", function(d){
+             .style("fill", function(d) { return color(1); })
+             //.call(force.drag)
+             
+            .on("click", function(d){
             	vis.selectAll("line.link").attr("marker-end", null);
             	vis.selectAll("line.link").style("stroke", "grey");
             	
             	selectArcs(d).classed("highlightable",false)
+            	
             	selectArcs(d).attr("marker-end", "url(#Triangle)");
             	selectArcs(d).style("stroke", "red");
             })
@@ -168,18 +176,26 @@ function update(_nodes,___links) {
             	 vis.selectAll( "line.highlightable").attr("marker-end", null);
             	 vis.selectAll( "line.highlightable").style("stroke", "grey");
             	 vis.selectAll( "line.highlightable").classed("highlightable",false)
-        		 $this = $(this);
-                 $this.attr('title', $this.data('title'));	 
+            	 selectedCircle = vis.selectAll("circle.nodeId-"+d.index).transition()
+	             	.duration(250)
+	             	.attr("r", function(d) { 
+	             		var c = d.value/2;
+	             		return (c > visits_max ? visits_max : c);} )
+            	 .style("fill", function(d) { return color(1); });
+            	 
         	 })
             .on("mouseover", function(d) {
             	selectArcs(d).attr("marker-end", "url(#Triangle)");
             	selectArcs(d).style("stroke", "blue");
             	selectArcs(d).classed("highlightable",true)
-            	$this = $(this);
-            	$this.data('title', $this.attr('title'));
-       	     	//alert($(this).attr('title'));
-       	     	// Using null here wouldn't work in IE, but empty string will work just fine.
-       	     	$this.attr('title', '');
+            	
+            	selectedCircle = vis.selectAll("circle.nodeId-"+d.index).transition()
+                	.duration(250)
+                	.attr("r", function(d) { 
+                	 	var c = d.value/2;
+                	 	return (c > visits_max ? visits_max+6 : c+6);} )
+                	.style("fill", function(d) { return "red"; });
+            	 console.log("Selected Circle: "+selectedCircle);
             })
             //.exit().remove()
             .call(force.drag);
@@ -189,7 +205,6 @@ function update(_nodes,___links) {
 	    .attr("dx", 12)
 	    .attr("dy", ".35em")
 	    .text(function(d) { return d.value; });
-	    
 
       
         // Exit any old nodes.
@@ -222,23 +237,25 @@ function update(_nodes,___links) {
                     ",line.from-" + d.index);
      	   console.log(visSelect);
      	   return vis.selectAll( "line.to-" + d.index +
-                                  ",line.from-" + d.index);
+                                  ",line.from-" + d.index)
         }        
         
-     
+        function selectNodes(d) {
+      	   return vis.selectAll( "line.to-" + d.index +
+                                   ",line.from-" + d.index)
+         }       
+        
       
-      $('svg title').parent().tipsy({ 
+      $('nodetitle').parent().tipsy({ 
 	        gravity: 'sw', 
 	        html: true, 
-	        title: function() { return $(this).find('title').text(); }
+	        title: function() { return $(this).find('nodetitle').text(); }
 	      });
      
-      $(".slider").slider();
-
       
       $('#supportSlider').slider({
 
-			range: true,
+			//range: true,
 			min : 0,
 			max :  100,
 			values :  [visits_min, visits_max],
@@ -261,7 +278,7 @@ function update(_nodes,___links) {
       
       $('#distancesupportSlider').slider({
 
-    	  	range: false,
+  	  	range: false,
 			min : minDistance,
 			max :  maxDistance,
 			value : maxDistance,
@@ -269,28 +286,31 @@ function update(_nodes,___links) {
 				$( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + ui.value );
 				console.log("Distance Value: "+ui.value);
 				
-      		}
+    		}
 	     
-      });
-      
-      
-      
-      
+    });
+    
+    
+    
+    
 
-      $('#chargesupportSlider').slider({
-    	  
-    	  
+    $('#chargesupportSlider').slider({
+  	  
+  	  
 			range: false,
 			min : minCharge,
 			max :  maxCharge,
 			value: maxCharge,
 			slide : function( event, ui ) {
 				$( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + ui.value );
-      		
+    		
 				console.log("Charge Value: "+ui.value);
-      		}
-      });
+    		}
+    });
       
+      
+      
+    
   };
   
 })(window.d3custom = window.d3custom || {}, jQuery);

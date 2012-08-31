@@ -43,6 +43,7 @@ import de.lemo.apps.pages.data.Dashboard;
 		 		"../js/bootstrap-carousel.js",
 		 		"../js/bootstrap-typeahead.js"
 		 },
+		 
 			stylesheet={"../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",
 						"../css/jquery.jqplot.css",

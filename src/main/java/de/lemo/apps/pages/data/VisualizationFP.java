@@ -289,7 +289,7 @@ public class VisualizationFP {
             endStamp = new Long(endDate.getTime() / 1000);
         }
         
-        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, 0.6, false, beginStamp, endStamp);
+        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, 0.5 , false, beginStamp, endStamp);
     }
 
     void setupRender() {

@@ -55,11 +55,7 @@
 			                
   			                <div class="control-group">
   			                
-  			                			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
-  			                			<div class="slider" id="supportSlider"></div><br />
-  			                			<button id="reset" class="btn btn-tiny reset">Reset</button>
-        						    	
-        						    	
+  			                			
         						    	<label class="control-label">${message:begin}:</label>
       						    	  <div class="controls">
                             <input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
@@ -122,7 +118,14 @@
                       </a>
                     </div>   
 			        <div id="collapseFour" class="accordion-body collapse">  
-			        	<div class="accordion-inner">               
+			        	<div class="accordion-inner">  
+			        	
+			        			
+			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
+  			                	<div class="slider" id="supportSlider"></div><br />
+  			                	<br />
+  			                	
+             
                         
 	                            <label class="control-label" id="chargeslider-label">Charge 1 - Max.:</label>
   			                	<div class="slider" id="chargesupportSlider"></div><br />
@@ -130,6 +133,9 @@
   			                	
   			                	<label class="control-label" id="distanceslider-label">Distance 1 - Max.:</label>
   			                	<div class="slider" id="distancesupportSlider"></div><br />
+  			                	<br/>
+  			                	
+  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   
                        
                      	 </div>
 			        </div>
