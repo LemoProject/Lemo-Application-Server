@@ -127,11 +127,11 @@
   			                	
              
                         
-	                            <label class="control-label" id="chargeslider-label">Charge 1 - Max.:</label>
+	                            <label class="control-label" id="chargeslider-label"></label>
   			                	<div class="slider" id="chargesupportSlider"></div><br />
   			                	<br/>
   			                	
-  			                	<label class="control-label" id="distanceslider-label">Distance 1 - Max.:</label>
+  			                	<label class="control-label" id="distanceslider-label"></label>
   			                	<div class="slider" id="distancesupportSlider"></div><br />
   			                	<br/>
   			                	

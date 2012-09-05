@@ -7,7 +7,6 @@
 	  
 	  var w = 960, 
       h = 700,
-      fill = d3.scale.category20(),
       selectedNodes,
   	  vis,
   	  root;
@@ -24,14 +23,14 @@
     .append("svg:marker")
       .attr("id", "Triangle")
       .attr("viewBox", "0 0 10 10")
-      .attr("refX", 50)
+      .attr("refX", 30)
       .attr("refY", 5)
       .attr("markerUnits", "strokeWidth")
       .attr("markerWidth", 10)
       .attr("markerHeight", 10)
       .attr("orient", "auto")
       .append("svg:path")
-      .attr("d", "M 0 0 L 10 5 L 0 10 z");
+    	 .attr("d", "M 0 0 L 10 5 L 0 10 z");
     
     var _nodes = d3custom.nodes,
     	_links = d3custom.links;
@@ -40,27 +39,20 @@
     
     
     //calculate initial multiplier for charge and gravity
-   var k = Math.sqrt(_nodes.length / (w * h));
+    var k = Math.sqrt(_nodes.length / (w * h));
     
    var 	visits_min=1,
    		visits_max=500, 
 		  minDistance=1,
 		  maxDistance=400,
 		  minCharge=0,
-		  maxCharge=10;
+		  maxCharge=10/k;
     
-   //Calculation of the optimal value for d3 Charge between nodes 
-   	var optCharge = maxCharge/k;
-   
-   	//Calculation of the optimal value for d3 LinkDistance between nodes 
-   	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/_nodes.length;
-	
-   	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" = "+optDistance+" with k:"+k);
-   	
+    
     var force = d3.layout.force()
     .on("tick",tick)
-    .distance(optDistance)
-    .charge(-optCharge)
+    .distance(maxDistance)
+    .charge(-maxCharge)
     .gravity(100 * k)
     .size([w, h]);
     
@@ -90,22 +82,16 @@
     
     function init(){
     	 $.each(_nodes, function(i,v) {
-    		 nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
+    		 nodes.push({"id":i, "name":v.name, "value": v.value});
     	 });
     	 $.each(_links, function(i,v) {
-    		 links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value});
+    		 links.push({"source":nodes[v.source],"target":nodes[v.target]});
     	 });
-    	 
-    	 $( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + optCharge*k );
-    	 
-    	 $( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + optDistance );
-    	 
-    	 $( "#slider-label" ).html( "Visits: " + visits_min + " - " + visits_max );
     	 
     	 //$.each(links, function(i,v) {
         	// console.log("Links Array ["+i+"]:"+v.target.name +"-"+v.source.name);
         //});
-    	 printLegend();
+    	 
     	 update2();
     	 
     }
@@ -137,11 +123,11 @@
     	$.each(_nodes, function(i,v) {
     		//console.log("Schreibe Nodes"+i);
     		if(v.value >= min && v.value <= max){
-    			 nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
+   		 		nodes.push({"id":i, "name":v.name, "value": v.value});
    		 		//console.log("Nodes"+nodesCounter+" --- "+nodes[nodesCounter].name +" ---ID:"+nodes[nodesCounter].id +" ---- "+v.name);
    		 		nodesCounter++;
     		} else {
-				oldNodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
+				oldNodes.push({"id":i, "name":v.name, "value": v.value});
 				//console.log("OldNodes"+oldNodesCounter+" --- "+oldNodes[oldNodesCounter].name +" ---- "+v.name);
 				oldNodesCounter++;
 				}
@@ -150,8 +136,8 @@
     	$.each(_links, function(i,v) {
     		//console.log("Bin in Links Schleife -- Target: "+ v.target +" Source: "+ v.source+" --- " +existNode(v.target,nodes)+"----"+existNode(v.source,nodes));
 			if(existNode(v.target,nodes) && existNode(v.source,nodes)){
-					
-				 links.push({"source":findNode(v.source,nodes),"target":findNode(v.target,nodes),"value":v.value});
+				
+				 links.push({"source":findNode(v.source,nodes),"target":findNode(v.target,nodes)});
 				// console.log("Links"+linkCounter+" --- "+links[linkCounter].source.name +" ---- "+v.source.name);
 				 linkCounter++;
 			}
@@ -173,18 +159,8 @@ function update2() {
 	     .attr("y1", function(d) { return d.source.y; })
 	     .attr("x2", function(d) { return d.target.x; })
 	     .attr("y2", function(d) { return d.target.y; })
-	     .style("stroke", function(d) { 
-	    	 		if(d.value <= 10) return "lightgrey"
-	    	 		else if(d.value > 10 && d.value <= 50) return "green"
-	    	 			else if(d.value > 50 ) return "darkgreen"
-	    	 				else return "lightgrey";
-	    	 })
-	     .style("stroke-width", function(d) { 
- 	 		if(d.value <= 10) return 1
-	 		else if(d.value > 10 && d.value <= 50) return 2
-	 			else if(d.value > 50 ) return 3
-	 				else return 1;
-	     });
+	     .style("stroke", "#999")
+	     .style("stroke-width", function(d) { return 1; });
  
  link.exit().remove();
 
@@ -200,26 +176,19 @@ function update2() {
 	 .attr("class",  function(d,i) { return "node nodeId-" + i; })
 	 .attr("r", function(d) {
 		 	var c = 0;
-		 	if(d.value<=5 ) c = 5
-		 	if(d.value>5 && d.value<=20) c = d.value;
-		 	if(d.value>20) c = 20 + Math.sqrt(d.value);
-		 	return (c > 100 ? 100 : c);
+		 	if(d.value<=10 ) c = 8
+		 		else c = d.value/4;
+		 	return (c > visits_max ? visits_max/4 : c);
 		 })
-	 //.style("fill", function(d) { return color(1); })
-	 .style("fill", function(d) { return fill(d.type); })
-		 //.call(force.drag)
+	 .style("fill", function(d) { return color(1); })
+	 //.call(force.drag)
 	 
 	.on("click", function(d){
 		var edges = vis.selectAll("line.link"),
 			clickedEdges = selectArcs(d);
 		
 		edges.attr("marker-end", null);
-		edges.style("stroke", function(d) { 
-	 		if(d.value <= 10) return "lightgrey"
-	 		else if(d.value > 10 && d.value <= 50) return "green"
-	 			else if(d.value > 50 ) return "darkgreen"
-	 				else return "lightgrey";
-	 });
+		edges.style("stroke", "grey");
 		
 		clickedEdges.classed("highlightable",false)
 		
@@ -241,13 +210,8 @@ function update2() {
 		
 		neighbourNodes.append("svg:text")
 	   .attr("class", "nametext")
-	   .attr("dx", function(d) { var c = 0;
-							 if(d.value<=5 ) c = 5
-							 	else if(d.value>5 && d.value<=20) c = parseInt(d.value);
-							 		else if(d.value>20) c = 20 + Math.sqrt(d.value);
-							 return (c > 100 ? 100+6 : c+6 ); 
-							 }) //-24
-	   .attr("dy", "1em")
+	   .attr("dx", 12)
+	   .attr("dy", ".35em")
 	   .text(function(d) { return d.name; });
 		
 		//console.log("Number of neighbours: "+neighbours.length);
@@ -255,22 +219,16 @@ function update2() {
 	.on("mouseout", function(d) {
 		 var edges = vis.selectAll( "line.highlightable");
 		 edges.attr("marker-end", null);
-		 edges.style("stroke", function(d) { 
- 	 		if(d.value <= 10) return "lightgrey"
-	 		else if(d.value > 10 && d.value <= 50) return "green"
-	 			else if(d.value > 50 ) return "darkgreen"
-	 				else return "lightgrey";
-		 });
+		 edges.style("stroke", "grey");
 		 edges.classed("highlightable",false)
 		 selectedCircle = vis.selectAll("circle.nodeId-"+d.index).transition()
 	     	.duration(250)
 	     	.attr("r", function(d) { 
 	     		var c = 0;
-			 	if(d.value<=5 ) c = 5
-			 	if(d.value>5 && d.value<=20) c = d.value;
-			 	if(d.value>20) c = 20 + Math.sqrt(d.value);
-			 	return (c > 100 ? 100 : c);} )
-		 .style("fill", function(d) { return fill(d.type); });
+			 	if(d.value<=10 ) c = 8
+			 		else c = d.value/4;
+			 	return (c > visits_max ? visits_max/4 : c);} )
+		 .style("fill", function(d) { return color(1); });
 		 
 	 })
 	.on("mouseover", function(d) {
@@ -283,28 +241,22 @@ function update2() {
 	    	.duration(250)
 	    	.attr("r", function(d) { 
 	    		var c = 0;
-			 	if(d.value<=5 ) c = 5
-			 	else if(d.value>5 && d.value<=20) c = parseInt(d.value);
-			 		else if(d.value>20) c = 20 + Math.sqrt(d.value);
-			 	return (c > 100 ? 100+6 : c+6 );} )
+			 	if(d.value<=10 ) c = 8
+			 		else c = d.value/4;
+			 	return (c > visits_max ? visits_max/4+6 : c+6);} )
 	    	.style("fill", function(d) { return "red"; });
 		 console.log("Selected Circle: "+selectedCircle);
 	});
 	
 	nodeEnter.append("nodetitle")
-	   .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /><b>Lernobjekttyp:</b> "+ d.type+"<br /><br /> <b>Besuche</b>: "+d.value;});
+	   .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /> <b>Besuche</b>: "+d.value;});
 
 
 
    nodeEnter.append("svg:text")
    .attr("class", "valuetext")
-   .attr("dx", function(d) { var c = 0;
-							 if(d.value<=5 ) c = 5
-							 	else if(d.value>5 && d.value<=20) c = parseInt(d.value);
-							 		else if(d.value>20) c = 20 + Math.sqrt(d.value);
-							 return (c > 100 ? 100+6 : c+6 ); 
-							 }) 
-   .attr("dy", "-.35em")
+   .attr("dx", -24)
+   .attr("dy", ".35em")
    .text(function(d) { return d.value; });
 
    
@@ -316,51 +268,9 @@ function update2() {
    .nodes(nodes)
    .links(links)
    .start();
-   
-
+	
 }
-    	
-
-	function printLegend() {
-    		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
-    		   .attr("y", 50)
-    		   .attr("stroke", "lightgrey")
-    		   .attr("height", 1)
-    		   .attr("width", 40);
-
-    		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3)
-    		   .attr("y", 55)
-    		   .text("1 to 10 requests");
-
-    		vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
-    		   .attr("y", 80)
-    		   .attr("stroke", "green")
-    		    .attr("fill", "green")
-    		   .attr("height", 1)
-    		   .attr("width", 40);
-
-    		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3)
-    		   .attr("y", 85)
-    		   .text("11 to 50 requests")
-    		   
-    		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
-    		   .attr("y", 110)
-    		   .attr("stroke", "darkgreen")
-    		   .attr("fill", "darkgreen")
-    		   .attr("height", 2)
-    		   .attr("width", 40);
-    		
-    		vis.append("svg:text")
-	 		   .attr("x", 30 + (w/4)*3)
-	 		   .attr("y", 115)
-	 		   .text("More than 50 requests")
-    		
-    	}
+    
 
 		function tick() {
 			vis.selectAll("line.link")
@@ -421,7 +331,7 @@ function update2() {
       
       $('#supportSlider').slider({
 
-			range: true,
+			//range: true,
 			min : visits_min,
 			max : visits_max,
 			values :  [visits_min, visits_max],
@@ -446,7 +356,7 @@ function update2() {
   	  		range: false,
 			min : minDistance,
 			max :  maxDistance,
-			value : optDistance,
+			value : maxDistance,
 			slide : function( event, ui ) {
 				$( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + ui.value );
 				console.log("Distance Value: "+ui.value);
