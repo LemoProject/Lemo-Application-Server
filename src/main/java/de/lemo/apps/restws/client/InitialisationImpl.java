@@ -28,9 +28,9 @@ import de.lemo.apps.restws.proxies.service.ServiceUserInformation;
 
 public class InitialisationImpl implements Initialisation {
 	
-	private static final String SERVICE_STARTTIME_URL = "http://localhost:4443/starttime";
-	private static final String SERVICE_COURSE_URL = "http://localhost:4443/courses";
-    //private static final String QUESTIONS_BASE_URL = "http://localhost:4443/questions";
+	private static final String SERVICE_STARTTIME_URL = "http://localhost:8080/dms/services/starttime";
+	private static final String SERVICE_COURSE_URL = "http://localhost:8080/dms/services/courses";
+    //private static final String QUESTIONS_BASE_URL = "http://localhost:8080/dms//questions";
 
 	public InitialisationImpl(){
 		//Initialise the Rest session
