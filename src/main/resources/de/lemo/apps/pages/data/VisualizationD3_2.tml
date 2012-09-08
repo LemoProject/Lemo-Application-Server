@@ -167,14 +167,15 @@ text.shadow {
     	
     
    </div>
-    <script type="text/javascript">
-
-
-
-	
-	
-
-	
-    </script>
+     <script type="text/javascript">
+    (function(d3custom, $, undefined) {
+    
+      var q2result = ${questionResult};
+      
+      d3custom.nodes = {};
+      d3custom.links = q2result.links;
+      
+    })(window.d3custom = window.d3custom || {}, jQuery);
+  </script>
     
 </html>

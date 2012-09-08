@@ -189,7 +189,7 @@ text.shadow {
     
       var q2result = ${questionResult};
       
-      d3custom.nodes = {};
+      d3custom.nodes = q2result.nodes;
       d3custom.links = q2result.links;
       
     })(window.d3custom = window.d3custom || {}, jQuery);

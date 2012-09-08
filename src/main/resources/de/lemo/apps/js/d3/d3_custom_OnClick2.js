@@ -270,13 +270,14 @@ function update2() {
 			 	if(d.value>5 && d.value<=20) c = d.value;
 			 	if(d.value>20) c = 20 + Math.sqrt(d.value);
 			 	return (c > 100 ? 100 : c);} )
-		 .style("fill", function(d) { return fill(d.type); });
+		 .style("fill", function(d) { return fill(d.type); })
+		 .style("stroke", "#333");
 		 
 	 })
 	.on("mouseover", function(d) {
 		var edges = selectArcs(d);
 		edges.attr("marker-end", "url(#Triangle)");
-		edges.style("stroke", "blue");
+		edges.style("stroke", "red");
 		edges.classed("highlightable",true)
 		
 		selectedCircle = vis.selectAll("circle.nodeId-"+d.index).transition()
@@ -287,7 +288,8 @@ function update2() {
 			 	else if(d.value>5 && d.value<=20) c = parseInt(d.value);
 			 		else if(d.value>20) c = 20 + Math.sqrt(d.value);
 			 	return (c > 100 ? 100+6 : c+6 );} )
-	    	.style("fill", function(d) { return "red"; });
+	    	//.style("fill", function(d) { return "red"; })
+	    	.style("stroke", "red");
 		 console.log("Selected Circle: "+selectedCircle);
 	});
 	
