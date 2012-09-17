@@ -54,11 +54,17 @@
 		<!-- </dependency> -->
 		<!-- -->
 
-		<dependency>
-			<groupId>se.unbound</groupId>
-			<artifactId>tapestry-breadcrumbs</artifactId>
-			<version>1.8.2</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>se.unbound</groupId> -->
+<!-- 			<artifactId>tapestry-breadcrumbs</artifactId> -->
+<!-- 			<version>1.8.2</version> -->
+<!-- 		</dependency> -->
+
+			<dependency> 
+			  <groupId>se.unbound</groupId>
+			  <artifactId>tapestry-breadcrumbs</artifactId>
+			  <version>1.9</version>
+			</dependency>
 
 		<!-- <dependency> -->
 		<!-- <groupId>org.oscy</groupId> -->
