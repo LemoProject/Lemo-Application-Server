@@ -4,19 +4,26 @@
   d3custom.run = function() {
 
 	var w = 960,
-    h = 400,
+    h = 600,
     amt = 20,
     maxPos = 11,
     fill = d3.scale.category20(),
     nodes = [],
-    //nodes2 = [],
     links = [],
-    foci = [/*{x: 30+900/amt, y: 20}, {x: 30, y: 20}, {x: 600, y: 20}, {x: 800, y: 20}*/];
+    foci = [];
 	
 	
 	var _nodes = d3custom.nodes,
 		_links = d3custom.links;
 	
+	
+
+	
+	//check if we have values to work with
+    if(!_nodes || !_links) {
+    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
+    	return;
+    }
 	
 	
 	function init(){
@@ -37,111 +44,7 @@
 
 for (var i=0; i<amt; i++) {
 	foci.push({x:50+860/(amt-1)*(i), y:20});
-}
-
-//nodes2.push({pfad:1, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:1, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//          
-//        {pfad:2, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:2, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//          
-//        {pfad:3, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:3, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//            
-//  		
-//        {pfad:4, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:4, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:5, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:5, pos: 2, name: "Folien Einfuehrung"},
-//        
-//        
-//        {pfad:6, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:6, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:7, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:7, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:8, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:8, pos: 2, name: "Folien Einfuehrung"},
-//        {pfad:8, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:9, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:9, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:9, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:10, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:10, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:10, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:11, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:11, pos: 2, name: "Folien Einfuehrung"},
-//        {pfad:11, pos: 3, name: "Folien Einfuehrung"},
-//         
-//        {pfad:12, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:12, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:12, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//         
-//        {pfad:13, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:13, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:13, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//       
-//         
-//        {pfad:14, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:14, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:14, pos: 3, name: "Folien Einfuehrung"},
-//        
-//        {pfad:15, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:15, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:15, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:16, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:16, pos: 2, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:16, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:16, pos: 4, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//       
-//        
-//        {pfad:17, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:17, pos: 2, name: "Folien Einfuehrung"},
-//        {pfad:17, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:17, pos: 4, name: "Folien Einfuehrung"},
-//        {pfad:17, pos: 5, name: "Folien 01"},
-//        {pfad:17, pos: 6, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:18, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:18, pos: 2, name: "Folien Einfuehrung"},
-//        {pfad:18, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:18, pos: 4, name: "Folien 01"},
-//        {pfad:18, pos: 5, name: "Folien 02"},
-//        {pfad:18, pos: 6, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:18, pos: 7, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},          
-//        
-//        {pfad:19, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:19, pos: 2, name: "Folien Einfuehrung"},
-//        {pfad:19, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:19, pos: 4, name: "Folien Einfuehrung"},
-//        {pfad:19, pos: 5, name: "Folien 01"},
-//        {pfad:19, pos: 6, name: "Folien 02"},
-//        {pfad:19, pos: 7, name: "Folien 03"},
-//        {pfad:19, pos: 8, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        
-//        {pfad:20, pos: 1, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:20, pos: 2, name: "Folien Einfuehrung"},
-//        {pfad:20, pos: 3, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:20, pos: 4, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"},
-//        {pfad:20, pos: 5, name: "Folien Einfuehrung"},
-//        {pfad:20, pos: 6, name: "Folien 01"},
-//        {pfad:20, pos: 7, name: "Folien 02"},
-//        {pfad:20, pos: 8, name: "Folien 03"},
-//        {pfad:20, pos: 9, name: "Folien 04"},
-//        {pfad:20, pos: 10, name: "Folien 05"},
-//        {pfad:20, pos: 11, name: "BPK Bioprozesstechnik II - Bioprozesskontrolle (Gotz)"}
-//        
-//       
-//       
-//        );
-          
+}          
 
 
 var vis = d3.select("#viz").append("svg:svg")
@@ -149,8 +52,6 @@ var vis = d3.select("#viz").append("svg:svg")
 .attr("height", h);
 
 var force = d3.layout.force()
-//    .nodes(nodes2)
-//    .links(links)
     .friction(.9)
     .gravity(0)
     .linkStrength(0)
@@ -183,7 +84,7 @@ var force = d3.layout.force()
 
 
  	nodes = force.nodes(),
-		links = force.links();
+	links = force.links();
 
 init();
 
@@ -254,6 +155,27 @@ nodeEnter.append("nodetitle")
 force.start();
 	
 
+
+//$('#minSup2-slider').slider({
+//	
+//	range: false,
+//	min : 1,
+//	max :  10,
+//	value: 10,
+//	slide : function( event, ui ) {
+//		$( "#minSupSlider2-label" ).html( "Minimum Support (0.1 - 1): " + ui.value );
+//	
+//		
+//		console.log("MinSup Value: "+ui.value);
+//	}
+//});
+//
+
+
+//Bind slide event to update minSup Value in front end 
+$( "#minSup-slider" ).bind( "slide", function(event, ui) {
+	$( "#minSupSlider-label" ).html( "Minimum Support (0.1 - 1): " + ui.value/10 );
+});
 	
 $('nodetitle').parent().tipsy({ 
     gravity: 'sw', 

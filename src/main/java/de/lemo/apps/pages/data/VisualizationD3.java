@@ -191,16 +191,18 @@ public class VisualizationD3 {
         // button
         this.courseId = null;
         this.course = null;
+        selectedUsers = null;
     }
 
-    void pageReset() {
-        selectedUsers = null;
-        userIds = getUsers();
-    }
+//    void pageReset() {
+//        selectedUsers = null;
+//        userIds = getUsers();
+//    }
 
     void onPrepareForRender() {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
+        userIds = getUsers();
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {

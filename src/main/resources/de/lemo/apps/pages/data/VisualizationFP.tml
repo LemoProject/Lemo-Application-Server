@@ -75,8 +75,8 @@ text.shadow {
     		<div class="span12">
         			
 <!--    			<t:zone t:id="formZone" id="formZone">-->
-				<t:zone t:id="formZone" id="formZone">
-    			</t:zone> 
+<!--				<t:zone t:id="formZone" id="formZone">-->
+<!--    			</t:zone> -->
       			<t:form t:type="form" t:id="customizeForm" class="pull-left">
         			<div class="accordion" id="accordion2">
 			            
@@ -89,25 +89,23 @@ text.shadow {
 			              </div>
 			              <div id="collapseOne" class="accordion-body collapse in">
 			                <div class="accordion-inner">
-  			                	 <div class="control-group pull-left">
+  			               		<div class="control-group">
         						    	<label class="control-label">${message:begin}:</label>
-      						    	  <div class="controls">
-                            <input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+      						    	  	<div class="controls">
+                           				 	<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
 	
-      						    	  </div>
-        						    </div>
-        						    </div>
-        						    <div class="control-group">
+      						    	  	</div>
+        						</div>
+        							
+        						<div class="control-group">
         						    
-        						    	<label class="control-label">${message:end}:</label>
-        						    	<div class="controls">
-                            		<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
-  			                  
-  			                  
-  			                  
-  			                 
-  			                </div>
-  			              </div>
+        						    <label class="control-label">${message:end}:</label>
+        						    <div class="controls">
+        						   		<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+
+  			                		</div>
+  			             		</div>
+  			             	</div>
 			              </div>
 			            </div>
 			            
@@ -119,12 +117,14 @@ text.shadow {
                       </a>
                     </div>
 			              <div id="collapseTwo" class="accordion-body collapse">
-			                <div class="accordion-inner">    
-		            			 <t:jquery.palette 
-		            			   t:id="activities" 
-		            			   encoder="activityEncoder"
-		            			   model="activityModel"
-		            			   selected="selectedActivities"/>
+			                <div class="accordion-inner"> 
+			                	
+			            			 <t:jquery.palette 
+			            			   t:id="activities" 
+			            			   encoder="activityEncoder"
+			            			   model="activityModel"
+			            			   selected="selectedActivities"/>
+		            		  		
 		            		  </div>
 			              </div>
                   </div>
@@ -138,13 +138,13 @@ text.shadow {
                     </div>   
 			              <div id="collapseThree" class="accordion-body collapse">  
 			                <div class="accordion-inner">               
-                        
-                            <t:jquery.palette
-                              t:id="users"
-                              encoder="userIdEncoder"
-                              selected="selectedUsers"
-                              model="userIds"/>
-                         </div>
+                        		        <t:jquery.palette
+			                              t:id="users"
+			                              encoder="userIdEncoder"
+			                              selected="selectedUsers"
+			                              model="userIds"/>
+			                     	
+                         	</div>
 			              </div>
 			            </div>
 			         
@@ -156,15 +156,12 @@ text.shadow {
                       </a>
                     </div>   
 			              <div id="collapseFour" class="accordion-body collapse">  
-			                <div class="accordion-inner">               
-                        
-
-  			                 	Min. Support:  <t:jquery.slider t:value="slideZone" t:params="paramsZone" t:zone="myZone" t:id="sliderZone" />
-										<br/>
-<!--										<t:zone t:id="myZone" id="myZone">-->
-<!--										Slider Value: ${slideZone}-->
-<!--									</t:zone>-->
-                         </div>
+			                <div class="accordion-inner"> 
+			                		<label class="control-label" id="minSupSlider-label">Minimum Support (0.1 - 1): ${minSupDouble}</label>         
+	                        		
+	  			                	<t:jquery.slider t:value="minSup" t:params="minSupParams" t:id="minSup" />
+									
+                         	</div>
 			              </div>
 			            </div> 
 			            

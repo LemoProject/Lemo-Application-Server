@@ -2,8 +2,6 @@ package de.lemo.apps.restws.entities;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-
 @XmlRootElement
 public class ResourceRequestInfo{
 
@@ -66,15 +64,7 @@ public class ResourceRequestInfo{
 	{
 		this.requests++;
 	}
-	
-//	public ResourceRequestInfo(Long id, EResourceType resourceType, Long requests, String title)
-//	{
-//		this.id = id;
-//		this.resourcetype = resourceType.toString();
-//		this.requests = requests;
-//		this.title = title;
-//	}
-	
+		
 	public ResourceRequestInfo(Long id, String resourceType, Long requests, String title, Long resolutionSlot)
 	{
 		this.id = id;

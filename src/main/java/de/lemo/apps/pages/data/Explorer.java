@@ -88,6 +88,11 @@ public class Explorer {
 	@Inject
     @Path("../../images/icons/PathAnalysis_Icon.png")
     @Property
+    private Asset navAnalysisIcon;
+	
+	@Inject
+    @Path("../../images/icons/PathAnalysis2_Icon.png")
+    @Property
     private Asset pathAnalysisIcon;
 	
 	@Inject 

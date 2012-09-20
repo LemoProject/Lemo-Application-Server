@@ -171,7 +171,7 @@ function update2() {
 	
 	
 	var link = vis.selectAll("line.link")
-		.data(links, function(d) { return d.target.id; });
+		.data(links);//, function(d) { return d.target.id; });
      
 	 link.enter().insert("svg:line" , ".node")
      	 .attr("class", function(d) { return "link from-" + d.source.id +
