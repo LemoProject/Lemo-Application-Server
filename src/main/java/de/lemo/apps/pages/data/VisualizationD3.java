@@ -160,10 +160,18 @@ public class VisualizationD3 {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.endDate == null)
+            if(this.endDate == null){
                 this.endDate = course.getLastRequestDate();
-            if(this.beginDate == null)
+	        } else {
+	       	 	this.selectedUsers = null;
+	       	 	userIds = getUsers();
+	       }
+            if(this.beginDate == null){
                 this.beginDate = course.getFirstRequestDate();
+	        } else {
+	       	 	this.selectedUsers = null;
+	       	 	userIds = getUsers();
+	        }
             Calendar beginCal = Calendar.getInstance();
             Calendar endCal = Calendar.getInstance();
             beginCal.setTime(beginDate);
@@ -191,7 +199,8 @@ public class VisualizationD3 {
         // button
         this.courseId = null;
         this.course = null;
-        selectedUsers = null;
+        this.selectedUsers = null;
+        this.selectedActivities = null;
     }
 
 //    void pageReset() {

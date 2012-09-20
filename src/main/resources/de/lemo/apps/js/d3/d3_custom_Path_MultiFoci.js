@@ -37,7 +37,11 @@
     var _nodes = d3custom.nodes,
     	_links = d3custom.links;
     	
-
+  //check if we have values to work with
+    if(!_nodes || !_links) {
+    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
+    	return;
+    }
     
     
     //calculate initial multiplier for charge and gravity
@@ -122,12 +126,7 @@
 		links = force.links();
    
 
-   //check if we have values to work with
-    if(!_nodes || !_links) {
-    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
-    	return;
-    }
-
+   
     
     //init visualisation
     init();
