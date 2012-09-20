@@ -130,17 +130,17 @@ public class VisualizationFP {
     private List<Course> courses;
 
     // Value Encoder for activity multi-select component
-    @Property(write = false)
-    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
-            EResourceType.class);
+//    @Property(write = false)
+//    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
+//            EResourceType.class);
 
     // Select Model for activity multi-select component
-    @Property(write = false)
-    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
+//    @Property(write = false)
+//    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
 
-    @Property
-    @Persist
-    private List<EResourceType> selectedActivities;
+//    @Property
+//    @Persist
+//    private List<EResourceType> selectedActivities;
 
     @Inject
     @Property
@@ -169,10 +169,19 @@ public class VisualizationFP {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.endDate == null)
+            if(this.endDate == null) {
                 this.endDate = course.getLastRequestDate();
-            if(this.beginDate == null)
+            } else {
+            	 this.selectedUsers = null;
+            	userIds = getUsers();
+            }
+            
+            if(this.beginDate == null){
                 this.beginDate = course.getFirstRequestDate();
+        	} else {
+        		this.selectedUsers = null;
+        		userIds = getUsers();
+        	}
             Calendar beginCal = Calendar.getInstance();
             Calendar endCal = Calendar.getInstance();
             beginCal.setTime(beginDate);
@@ -201,6 +210,7 @@ public class VisualizationFP {
         this.courseId = null;
         this.course = null;
         this.selectedUsers = null;
+        this.minSup=8;
     }
 
 //    void pageReset() {
@@ -251,7 +261,7 @@ public class VisualizationFP {
 		max=10;
 		min=1;
 		if(minSup==null)
-				minSup=7;
+				minSup=8;
 		//minSupParams=new JSONArray();
 		minSupParams=new JSONObject();
 		
@@ -282,11 +292,11 @@ public class VisualizationFP {
     }
 
     @Property
-    @Persist
+    //@Persist
     private double minSupDouble;
     
-    @Property
-    @Persist
+    //@Property
+    //@Persist
     private Double minSupValue;
     
     public String getQuestionResult() {
@@ -295,13 +305,13 @@ public class VisualizationFP {
 
         boolean considerLogouts = false;
 
-        ArrayList<String> types = null;
-        if(selectedActivities != null && !selectedActivities.isEmpty()) {
-            types = new ArrayList<String>();
-            for(EResourceType resourceType : selectedActivities) {
-                types.add(resourceType.name().toLowerCase());
-            }
-        }
+//        ArrayList<String> types = null;
+//        if(selectedActivities != null && !selectedActivities.isEmpty()) {
+//            types = new ArrayList<String>();
+//            for(EResourceType resourceType : selectedActivities) {
+//                types.add(resourceType.name().toLowerCase());
+//            }
+//        }
 
         Long endStamp = 0L;
         Long beginStamp = 0L;
@@ -311,14 +321,18 @@ public class VisualizationFP {
         if(endDate != null) {
             endStamp = new Long(endDate.getTime() / 1000);
         }
-        logger.debug("MinSupValueBefore:"+ minSup + "  --  "+ minSup.longValue());
-        if(minSup==null || minSup.equals(0)) minSup = 7;
+        if(minSup==null || minSup.equals(0)) minSup = 8;
         minSupValue = new Double(minSup);
-        logger.debug("MinSupValueBetween:"+ minSupValue + "  --  "+ minSupValue.doubleValue()); 
         minSupValue = minSupValue / 10;
         logger.debug("MinSupValue:"+ minSupValue + "  --  "+ minSupValue.doubleValue());
-        minSupDouble = minSupValue.doubleValue(); //minSupValue.toString().doubleValue();
+        minSupDouble = minSupValue.doubleValue(); 
         return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, minSupDouble , considerLogouts, beginStamp, endStamp);
+    }
+    
+    public String getSupportValue(){
+    	Double minSupTemp = new Double(minSup);
+        minSupTemp = minSupTemp / 10;
+    	return minSupTemp.toString();
     }
 
     void setupRender() {
@@ -351,7 +365,7 @@ public class VisualizationFP {
 		if(input!=null)
 			minSup=Integer.parseInt(input);
 		logger.debug("MinSup Value: "+minSup);
-        logger.debug("Selected activities: " + selectedActivities);
+//        logger.debug("Selected activities: " + selectedActivities);
         logger.debug("Selected users: " + selectedUsers);
     }
 

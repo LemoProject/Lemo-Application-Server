@@ -68,6 +68,9 @@ text.shadow {
       				<br />
       				<br />
       				${message:range}: ${resolution} ${message:days}
+      				<br />
+      				<br />
+      				${message:support}: ${supportValue}
       			</div>
       		</div>
 			</div>
@@ -109,25 +112,25 @@ text.shadow {
 			              </div>
 			            </div>
 			            
-			            <!-- Learn Object Types -->
-                  <div class="accordion-group">
-                    <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                        ${message:activityOption} <b class="caret"></b>
-                      </a>
-                    </div>
-			              <div id="collapseTwo" class="accordion-body collapse">
-			                <div class="accordion-inner"> 
-			                	
-			            			 <t:jquery.palette 
-			            			   t:id="activities" 
-			            			   encoder="activityEncoder"
-			            			   model="activityModel"
-			            			   selected="selectedActivities"/>
-		            		  		
-		            		  </div>
-			              </div>
-                  </div>
+<!--			             Learn Object Types -->
+<!--                  <div class="accordion-group">-->
+<!--                    <div class="accordion-heading">-->
+<!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">-->
+<!--                        ${message:activityOption} <b class="caret"></b>-->
+<!--                      </a>-->
+<!--                    </div>-->
+<!--			              <div id="collapseTwo" class="accordion-body collapse">-->
+<!--			                <div class="accordion-inner"> -->
+<!--			                	-->
+<!--			            			 <t:jquery.palette -->
+<!--			            			   t:id="activities" -->
+<!--			            			   encoder="activityEncoder"-->
+<!--			            			   model="activityModel"-->
+<!--			            			   selected="selectedActivities"/>-->
+<!--		            		  		-->
+<!--		            		  </div>-->
+<!--			              </div>-->
+<!--                  </div>-->
                   
                   <!-- Users -->
                   <div class="accordion-group">
@@ -157,7 +160,7 @@ text.shadow {
                     </div>   
 			              <div id="collapseFour" class="accordion-body collapse">  
 			                <div class="accordion-inner"> 
-			                		<label class="control-label" id="minSupSlider-label">Minimum Support (0.1 - 1): ${minSupDouble}</label>         
+			                		<label class="control-label" id="minSupSlider-label">Minimum Support (0.1 - 1): ${supportValue}</label>         
 	                        		
 	  			                	<t:jquery.slider t:value="minSup" t:params="minSupParams" t:id="minSup" />
 									

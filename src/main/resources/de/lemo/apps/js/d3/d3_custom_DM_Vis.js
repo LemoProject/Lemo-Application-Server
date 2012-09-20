@@ -5,7 +5,7 @@
 
 	var w = 960,
     h = 600,
-    amt = 20,
+    amt = 24,
     maxPos = 11,
     fill = d3.scale.category20(),
     nodes = [],
@@ -27,23 +27,38 @@
 	
 	
 	function init(){
-		console.log("Bin im Init");
+		console.log("Bin im Init - Starting Node Init");
 	   	var posCounter = 1; 
 		$.each(_nodes, function(i,v) {
 			
-			if (i >=1 && _nodes[i-1].pathId==_nodes[i].pathId) {
-				posCounter++;
-			} else {posCounter = 1; console.log("Neuer Pfad");}
-			console.log("Schreibe Node "+i+" Pfad: "+v.pathId+" Position: "+posCounter+" Name:"+v.title);
-	   		nodes.push({"pid":v.pathId , "pos":posCounter, "name":v.title, "value": v.value, "type": v.type, "totalRequests": v.totalRequests, "totalUsers":v.totalUsers});
-	   	 });
-	   	 $.each(_links, function(i,v) {
-	   		 links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value});
-	   	 });
+			if(v.pathId <= amt){
+				if (i >=1 && _nodes[i-1].pathId==_nodes[i].pathId) {
+					posCounter++;
+				} else {posCounter = 1; console.log("Neuer Pfad");}
+				console.log("Schreibe Node "+i+" Pfad: "+v.pathId+" Position: "+posCounter+" Name:"+v.title);
+		   		nodes.push({"pid":v.pathId , "pos":posCounter, "name":v.title, "value": v.value, "type": v.type, "totalRequests": v.totalRequests, "totalUsers":v.totalUsers});
+			} else console.log("Max. number of pathes ("+amt+") reached ...!");	
+		});
+		console.log("Bin im Init - Finished Node Init, starting Link Init " +_links.length);
+	   	
+	   	if(_links.length){ 
+	   		console.log("Handle Links as Array");
+			$.each(_links, function(i,v) {
+				if(v.pathId <= amt){	 
+					links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value});
+		   			 console.log("Schreibe Link: PathId "+nodes[v.source].pid+"("+v.source+"--"+v.target+")"+" Source: "+nodes[v.source].name+" Target: "+nodes[v.target].name);
+				} else console.log("Max. number of pathes ("+amt+") reached ...!");	
+			});
+	   	} else {
+	   			console.log("Handle Links as Object");
+	   			links.push({"source":nodes[_links.source],"target":nodes[_links.target],"value":_links.value});
+	   		}
+	   	console.log("Bin im Init - Finished Link Init .... Leaving");
+	   	
 	}
 
 for (var i=0; i<amt; i++) {
-	foci.push({x:50+860/(amt-1)*(i), y:20});
+	foci.push({x:20+920/(amt-1)*(i), y:20});
 }          
 
 
@@ -86,9 +101,9 @@ var force = d3.layout.force()
  	nodes = force.nodes(),
 	links = force.links();
 
-init();
+ 	init();
 
-var pathAmount = [];
+ 	var pathAmount = [];
 
 //for (var i=0; i<nodes2.length;i++) {
 //	
