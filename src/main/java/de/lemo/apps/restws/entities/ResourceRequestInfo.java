@@ -9,8 +9,17 @@ public class ResourceRequestInfo{
 	//private EResourceType resourcetype;
 	private String resourcetype;
 	private Long requests;
+	private Long users;
 	private String title;
 	private Long resolutionSlot;
+	
+	public Long getUsers() {
+		return users;
+	}
+
+	public void setUsers(Long users) {
+		this.users = users;
+	}
 	
 	public Long getResolutionSlot() {
 		return resolutionSlot;
