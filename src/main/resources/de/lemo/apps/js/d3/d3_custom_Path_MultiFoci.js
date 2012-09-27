@@ -51,8 +51,10 @@
    		visits_max=500, 
 		  minDistance=1,
 		  maxDistance=400,
+		  currentDistance=-1;
 		  minCharge=0,
-		  maxCharge=10;
+		  maxCharge=10,
+		  currentCharge=-1;
     
    //Calculation of the optimal value for d3 Charge between nodes 
    	var optCharge = maxCharge/k;
@@ -115,6 +117,8 @@
         	// console.log("Links Array ["+i+"]:"+v.target.name +"-"+v.source.name);
         //});
     	 
+    	 currentCharge = -optCharge;
+    	 currentDistance = optDistance;
     	 
     	 printLegend();
     	 update2();
@@ -256,6 +260,7 @@ function update2() {
 	   .attr("dy", "1em")
 	   .text(function(d) { return d.name; });
 		
+		
 		focus(d);
 		
 		
@@ -303,7 +308,7 @@ function update2() {
 	});
 	
 	nodeEnter.append("nodetitle")
-	   .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /><b>Lernobjekttyp:</b> "+ d.type+"<br /><br /> <b>Besuche</b>: "+d.value;});
+	   .text(function(d) { return "<b>Lernobjekt:</b> "+ d.name+"<br /><br /><b>Lernobjekttyp:</b> "+ d.type+"<br /><br /> <b>Besuche</b>: "+d.value;});
 
 
 
@@ -336,6 +341,7 @@ function focus(d) {
 	  if (d.focus==1) {
 	      nodes.forEach(function (o) {
 	      o.focus=-1;});
+	      console.log("onFocus: optDistance:"+optDistance+" -- optCharge: -"+optCharge);
 	      force.distance(optDistance)
 	    	 .charge(-optCharge);
 		
@@ -343,8 +349,9 @@ function focus(d) {
 	  else {
 	    nodes.forEach(function (o) {
 	      o.focus=0;});
-	    force.distance(300)
-   	 		 .charge(-200);
+	    console.log("onFocus: optDistance:"+currentDistance+" -- optCharge: -"+currentCharge);
+	    force.distance(currentDistance)
+   	 		 .charge(currentCharge);
 	    d.focus=1;
 	    for (var i=0; i<links.length; i++) {
 	      if (links[i].target.id==d.id) {
@@ -432,7 +439,7 @@ function focus(d) {
 				  
 				  var delta = 260/nAmount; 
 				  nPos+=(delta);
-				  console.log("Delta:"+delta)
+				  //console.log("Delta:"+delta)
 				  }
 				  else if (o.focus==0) {
 					  o.y += (foci[2].y - o.y) * k;
@@ -474,13 +481,18 @@ function focus(d) {
       
       
       $( "#distancesupportSlider" ).bind( "slide", function(event, ui) {
-          force.linkDistance(ui.value);
+    	  currentDistance=ui.value;
+    	  force.linkDistance(currentDistance);
+          
           console.log("dist Value: "+ui.value);
           update2();
       });
       
       $( "#chargesupportSlider" ).bind( "slide", function(event, ui) {
-          force.charge(-1*ui.value);
+    	  currentCharge=-1*(optCharge/ui.value);
+    	  force.charge(currentCharge);
+          
+    	  console.log("charge Value: "+currentCharge);
           update2();
       });
      

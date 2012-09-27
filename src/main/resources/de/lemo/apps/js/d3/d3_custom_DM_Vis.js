@@ -164,7 +164,7 @@ vis.selectAll("line.link")
       //.call(force.drag);
  
 nodeEnter.append("nodetitle")
-.text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><b>Requests:</b> "+ d.totalRequests+" ("+d.totalUsers+" User)<br /><br /> <b>Support</b>: "+d.value});
+.text(function(d) { return "<b>Lernobjekt:</b> "+ d.name+"<br /><b>Requests:</b> "+ d.totalRequests+" ("+d.totalUsers+" User)<br /><br /> <b>Support</b>: "+d.value});
 
 
 force.start();

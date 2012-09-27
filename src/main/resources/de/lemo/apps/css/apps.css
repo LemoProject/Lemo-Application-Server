@@ -71,6 +71,8 @@ circle {
 text {
   font: 15px sans-serif;
   pointer-events: none;
+  z-index: 100000; 
+  opacity: 1.0; background-color: #FFF; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center;
 }
 
 text.shadow {

@@ -364,6 +364,7 @@ public class Visualization {
 		// Clear the flash-persisted fields to prevent anomalies in onActivate when we hit refresh on page or browser button
 		this.courseId = null;
 		this.course = null;
+		this.activities = null;
 		
 	}
     

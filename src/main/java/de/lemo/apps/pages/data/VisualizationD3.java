@@ -160,24 +160,7 @@ public class VisualizationD3 {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.endDate == null){
-                this.endDate = course.getLastRequestDate();
-	        } else {
-	       	 	this.selectedUsers = null;
-	       	 	userIds = getUsers();
-	       }
-            if(this.beginDate == null){
-                this.beginDate = course.getFirstRequestDate();
-	        } else {
-	       	 	this.selectedUsers = null;
-	       	 	userIds = getUsers();
-	        }
-            Calendar beginCal = Calendar.getInstance();
-            Calendar endCal = Calendar.getInstance();
-            beginCal.setTime(beginDate);
-            endCal.setTime(endDate);
-            this.resolution = dateWorker.daysBetween(beginDate, endDate);
-
+            
             return true;
         } else
             return Explorer.class;
@@ -257,13 +240,35 @@ public class VisualizationD3 {
 
         ArrayList<Long> courseList = new ArrayList<Long>();
         courseList.add(course.getCourseId());
-
+        
+        
+        if(this.endDate == null){
+            this.endDate = course.getLastRequestDate();
+        } else {
+       	 	this.selectedUsers = null;
+       	 	userIds = getUsers();
+       }
+        if(this.beginDate == null){
+            this.beginDate = course.getFirstRequestDate();
+        } else {
+       	 	this.selectedUsers = null;
+       	 	userIds = getUsers();
+        }
         Calendar beginCal = Calendar.getInstance();
         Calendar endCal = Calendar.getInstance();
         beginCal.setTime(beginDate);
         endCal.setTime(endDate);
         this.resolution = dateWorker.daysBetween(beginDate, endDate);
-        logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
+
+        
+        
+//
+//        Calendar beginCal = Calendar.getInstance();
+//        Calendar endCal = Calendar.getInstance();
+//        beginCal.setTime(beginDate);
+//        endCal.setTime(endDate);
+//        this.resolution = dateWorker.daysBetween(beginDate, endDate);
+//        logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
     }
 
     @AfterRender
