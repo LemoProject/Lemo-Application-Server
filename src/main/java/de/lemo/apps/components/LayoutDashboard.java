@@ -25,7 +25,7 @@ import de.lemo.apps.pages.data.Dashboard;
 
 
 @Exclude(stylesheet={"core"})  //remove the Tapestry css
-@ImportJQueryUI({"jquery.ui.core",  "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
+@ImportJQueryUI({"jquery.ui.core", "jquery.ui.slider", "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
 @Import(library={"../js/bootstrap-alert.js",
 				"../js/excanvas.js",
 				"../js/apps.js",
@@ -43,6 +43,7 @@ import de.lemo.apps.pages.data.Dashboard;
 		 		"../js/bootstrap-carousel.js",
 		 		"../js/bootstrap-typeahead.js"
 		 },
+		 
 			stylesheet={"../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",
 						"../css/jquery.jqplot.css",

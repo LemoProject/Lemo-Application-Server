@@ -11,7 +11,11 @@
 	  var w = 960, 
       h = 700,
       visits_min=1,
-      visits_max=100; 
+      visits_max=20, 
+	  minDistance=1,
+	  maxDistance=20,
+	  minCharge=0,
+	  maxCharge=10;
   
   var selectedNodes,
   	  node,
@@ -142,7 +146,8 @@ function update(_nodes,___links) {
         .enter().append("svg:g")
           .attr("class", "node");
       
-  
+      node.append("svg:title")
+	    .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /> <b>Besuche</b>: "+d.value;});
     
     node.append("circle")
              .attr("class", "node")
@@ -151,16 +156,25 @@ function update(_nodes,___links) {
             	 	return (c > visits_max ? visits_max : c);
             	 })
              .style("fill", function(d) { return color(d.group); })
-             //.call(force.drag)
-             .on("mouseout", function(d) {
-        		 selectArcs(d).attr("marker-end", null);
-        		 selectArcs(d).style("stroke", "grey");
+             .on("click", function(d){
+            	vis.selectAll("line.link").attr("marker-end", null);
+            	vis.selectAll("line.link").style("stroke", "grey");
+            	
+            	selectArcs(d).classed("highlightable",false)
+            	selectArcs(d).attr("marker-end", "url(#Triangle)");
+            	selectArcs(d).style("stroke", "red");
+            })
+            .on("mouseout", function(d) {
+            	 vis.selectAll( "line.highlightable").attr("marker-end", null);
+            	 vis.selectAll( "line.highlightable").style("stroke", "grey");
+            	 vis.selectAll( "line.highlightable").classed("highlightable",false)
         		 $this = $(this);
                  $this.attr('title', $this.data('title'));	 
         	 })
             .on("mouseover", function(d) {
             	selectArcs(d).attr("marker-end", "url(#Triangle)");
-            	selectArcs(d).style("stroke", "red");
+            	selectArcs(d).style("stroke", "blue");
+            	selectArcs(d).classed("highlightable",true)
             	$this = $(this);
             	$this.data('title', $this.attr('title'));
        	     	//alert($(this).attr('title'));
@@ -175,13 +189,13 @@ function update(_nodes,___links) {
 	    .attr("dx", 12)
 	    .attr("dy", ".35em")
 	    .text(function(d) { return d.value; });
+	    
 
       
         // Exit any old nodes.
         //node.exit().remove();
         
-        node.append("svg:title")
-	    .text(function(d) { return "<b>Ressource:</b> "+ d.name+"<br /><br /> <b>Besuche</b>: "+d.value;});
+       
         
          
 } // Update End
@@ -219,10 +233,12 @@ function update(_nodes,___links) {
 	        title: function() { return $(this).find('title').text(); }
 	      });
      
+      $(".slider").slider();
+
       
       $('#supportSlider').slider({
 
-			//range: true,
+			range: true,
 			min : 0,
 			max :  100,
 			values :  [visits_min, visits_max],
@@ -242,7 +258,39 @@ function update(_nodes,___links) {
       $('#supportSlider').mouseup(function(){
     	  update(filterNodes(nodes, min, max), links);
       });
-    
+      
+      $('#distancesupportSlider').slider({
+
+    	  	range: false,
+			min : minDistance,
+			max :  maxDistance,
+			value : maxDistance,
+			slide : function( event, ui ) {
+				$( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + ui.value );
+				console.log("Distance Value: "+ui.value);
+				
+      		}
+	     
+      });
+      
+      
+      
+      
+
+      $('#chargesupportSlider').slider({
+    	  
+    	  
+			range: false,
+			min : minCharge,
+			max :  maxCharge,
+			value: maxCharge,
+			slide : function( event, ui ) {
+				$( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + ui.value );
+      		
+				console.log("Charge Value: "+ui.value);
+      		}
+      });
+      
   };
   
 })(window.d3custom = window.d3custom || {}, jQuery);

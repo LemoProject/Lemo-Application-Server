@@ -24,12 +24,14 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
+import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
@@ -47,7 +49,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_Path2.js" })
+@Import(library = { "../../js/d3/d3_custom_DM_Vis.js" })
 public class VisualizationFP {
 
     @Environmental
@@ -128,17 +130,17 @@ public class VisualizationFP {
     private List<Course> courses;
 
     // Value Encoder for activity multi-select component
-    @Property(write = false)
-    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
-            EResourceType.class);
+//    @Property(write = false)
+//    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
+//            EResourceType.class);
 
     // Select Model for activity multi-select component
-    @Property(write = false)
-    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
+//    @Property(write = false)
+//    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
 
-    @Property
-    @Persist
-    private List<EResourceType> selectedActivities;
+//    @Property
+//    @Persist
+//    private List<EResourceType> selectedActivities;
 
     @Inject
     @Property
@@ -167,16 +169,25 @@ public class VisualizationFP {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.endDate == null)
+            if(this.endDate == null) {
                 this.endDate = course.getLastRequestDate();
-            if(this.beginDate == null)
+            } else {
+            	 this.selectedUsers = null;
+            	userIds = getUsers();
+            }
+            
+            if(this.beginDate == null){
                 this.beginDate = course.getFirstRequestDate();
+        	} else {
+        		this.selectedUsers = null;
+        		userIds = getUsers();
+        	}
             Calendar beginCal = Calendar.getInstance();
             Calendar endCal = Calendar.getInstance();
             beginCal.setTime(beginDate);
             endCal.setTime(endDate);
             this.resolution = dateWorker.daysBetween(beginDate, endDate);
-
+            logger.debug("MinSup:"+minSup);
             return true;
         } else
             return Explorer.class;
@@ -198,16 +209,20 @@ public class VisualizationFP {
         // button
         this.courseId = null;
         this.course = null;
+        this.selectedUsers = null;
+        this.minSup=8;
     }
 
-    void pageReset() {
-        selectedUsers = null;
-        userIds = getUsers();
-    }
+//    void pageReset() {
+//        selectedUsers = null;
+//        userIds = getUsers();
+//    }
 
     void onPrepareForRender() {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
+        
+        userIds = getUsers();
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -222,41 +237,51 @@ public class VisualizationFP {
 	Integer val;
 	
 	@Property
-	@Persist
-	Double max;
+	//@Persist
+	Integer max;
+	
+	@Property
+	//@Persist
+	Integer min;
 	
 	@Property
 	@Persist
-	Double min;
-	
-	@Property
-	@Persist
-	Integer slideZone;
+	Integer minSup;
 
 	@Property
-	private JSONObject paramsZone;
-
+	private JSONObject minSupParams,
+					minValue,
+					maxValue;
 		
 //	@Component
 //	private Zone myZone;
 	
 	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
 	public void initSliderZone(){
-		max=1.0;
-		min=0.5;
-		slideZone=this.resolution;
-		paramsZone=new JSONObject();
-		paramsZone.put("value", slideZone);
+		max=10;
+		min=1;
+		if(minSup==null)
+				minSup=8;
+		//minSupParams=new JSONArray();
+		minSupParams=new JSONObject();
+		
+		minSupParams.put("min", 1);
+		minSupParams.put("max", 10);
+		minSupParams.put("value", minSup);
+		//JSONLiteral slideFunction = new JSONLiteral("function( event, ui ) {$( '#minSupSlider-label' ).html( 'Minimum Support (0.1 - 1): ' + ui.value ); console.log('MinSup Value: '+ui.value);}");
+		//minSupParams.put("slide", slideFunction);
+		
 	}
 
-	@OnEvent(value=org.apache.tapestry5.EventConstants.ACTION, component="sliderZone")
-	public Object returnZone(){
-		String input = request.getParameter("slider");
-		slideZone=Integer.parseInt(input);
-		return this;
-	}
-
-    
+//	@OnEvent(value=org.apache.tapestry5.EventConstants.SUBMIT, component="minSup")
+//	public Object returnZone(){
+//		String input = request.getParameter("jquery.slider");
+//		minSup=Integer.parseInt(input);
+//		System.out.println("MinSup Value: "+minSup);
+//		return this;
+//	}
+//
+//    
     
     
     
@@ -266,19 +291,27 @@ public class VisualizationFP {
         return dateWorker.getDatePickerParams();
     }
 
+    @Property
+    //@Persist
+    private double minSupDouble;
+    
+    //@Property
+    //@Persist
+    private Double minSupValue;
+    
     public String getQuestionResult() {
         ArrayList<Long> courseIds = new ArrayList<Long>();
         courseIds.add(courseId);
 
         boolean considerLogouts = false;
 
-        ArrayList<String> types = null;
-        if(selectedActivities != null && !selectedActivities.isEmpty()) {
-            types = new ArrayList<String>();
-            for(EResourceType resourceType : selectedActivities) {
-                types.add(resourceType.name().toLowerCase());
-            }
-        }
+//        ArrayList<String> types = null;
+//        if(selectedActivities != null && !selectedActivities.isEmpty()) {
+//            types = new ArrayList<String>();
+//            for(EResourceType resourceType : selectedActivities) {
+//                types.add(resourceType.name().toLowerCase());
+//            }
+//        }
 
         Long endStamp = 0L;
         Long beginStamp = 0L;
@@ -288,8 +321,18 @@ public class VisualizationFP {
         if(endDate != null) {
             endStamp = new Long(endDate.getTime() / 1000);
         }
-        
-        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, 0.6, false, beginStamp, endStamp);
+        if(minSup==null || minSup.equals(0)) minSup = 8;
+        minSupValue = new Double(minSup);
+        minSupValue = minSupValue / 10;
+        logger.debug("MinSupValue:"+ minSupValue + "  --  "+ minSupValue.doubleValue());
+        minSupDouble = minSupValue.doubleValue(); 
+        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, minSupDouble , considerLogouts, beginStamp, endStamp);
+    }
+    
+    public String getSupportValue(){
+    	Double minSupTemp = new Double(minSup);
+        minSupTemp = minSupTemp / 10;
+    	return minSupTemp.toString();
     }
 
     void setupRender() {
@@ -304,6 +347,7 @@ public class VisualizationFP {
         endCal.setTime(endDate);
         this.resolution = dateWorker.daysBetween(beginDate, endDate);
         logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
+        
     }
 
     @AfterRender
@@ -317,7 +361,11 @@ public class VisualizationFP {
 
     void onSuccessFromCustomizeForm() {
         logger.debug("   ---  onSuccessFromCustomizeForm ");
-        logger.debug("Selected activities: " + selectedActivities);
+        String input = request.getParameter("minSup-slider");
+		if(input!=null)
+			minSup=Integer.parseInt(input);
+		logger.debug("MinSup Value: "+minSup);
+//        logger.debug("Selected activities: " + selectedActivities);
         logger.debug("Selected users: " + selectedUsers);
     }
 

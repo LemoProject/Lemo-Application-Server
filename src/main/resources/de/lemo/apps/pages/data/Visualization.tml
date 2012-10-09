@@ -19,7 +19,7 @@
     	
     	
     	<div class="span9">
-    		<div t:id="chart1" style="width: auto; height: 400px;"/>
+    		<div t:id="chart1" style="width: auto; height: 400px;"><!-- chart visualization --></div>
     		
     			
 <!--	#####	Test Block for progressive Display - Begin 	####	-->
@@ -96,27 +96,56 @@
 <!--				    <br />-->
         			
         			<div class="accordion" id="accordion2">
+        			
+        				 <!-- Dates -->
 			            <div class="accordion-group">
 			              <div class="accordion-heading">
 			                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
 			                  ${message:dateTimeOption} <b class="caret"></b>
 			                </a>
 			              </div>
-			              <div style="height: auto;" id="collapseOne" class="accordion-body in collapse">
+<!--			              <div style="height: auto;" id="collapseOne" class="accordion-body in collapse">-->
+<!--			                <div class="accordion-inner">-->
+<!--			                	-->
+<!--			                	<br />-->
+<!--						    	${message:begin}:&nbsp;&nbsp;-->
+<!--						    	<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>-->
+<!--						    	<br />-->
+<!--						    	<br />-->
+<!--						    	${message:end}:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--						    	<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" disabled="${twentyFourhMode}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>-->
+<!--						    	<br />-->
+<!--						    	<br />-->
+<!--						    	24h Mode <t:actionlink t:id="updateTimeMode"><input t:type="checkbox" value="twentyFourhMode"/></t:actionlink>-->
+<!--						    	-->
+<!--			                </div>-->
+<!--			              </div>-->
+						<div id="collapseOne" class="accordion-body collapse in">
 			                <div class="accordion-inner">
-			                	
-			                	<br />
-						    	${message:begin}:&nbsp;&nbsp;
-						    	<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
-						    	<br />
-						    	<br />
-						    	${message:end}:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						    	<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" disabled="${twentyFourhMode}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
-						    	<br />
-						    	<br />
-						    	24h Mode <t:actionlink t:id="updateTimeMode"><input t:type="checkbox" value="twentyFourhMode"/></t:actionlink>
-						    	
-			                </div>
+  			                	 <div class="control-group ">
+        						    	<label class="control-label">${message:begin}:</label>
+      						    	  	<div class="controls">
+                           				 	<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+	
+      						    	  	</div>
+        						  </div>
+        							
+        						    <div class="control-group ">
+        						    
+        						    	<label class="control-label">${message:end}:</label>
+        						    	<div class="controls">
+                            				<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" disabled="${twentyFourhMode}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+
+  			                			</div>
+  			             			</div>
+  			             			<div class="control-group">
+        						    
+        						    	<label class="control-label">24h Mode:</label>
+        						    	<div class="controls">
+                            				<t:actionlink t:id="updateTimeMode">Select: <input t:type="checkbox" value="twentyFourhMode"/></t:actionlink>
+  			                			</div>
+  			             			</div>
+  			             	</div>
 			              </div>
 			            </div>
 			            <div class="accordion-group">
@@ -127,23 +156,25 @@
 			              </div>
 			              <div style="height: 0px;" id="collapseTwo" class="accordion-body collapse">
 			                <div class="accordion-inner">
-			                 	<br />
-						  
-		            			<t:jquery.palette t:id="activities" encoder="activityEncoder" model="activityModel"/>
+			                 	<div class="control-group">
+			                 		<div class="controls">
+			                 			<t:jquery.palette t:id="activities" encoder="activityEncoder" model="activityModel"/>
+			                 		</div>
+  			             		</div>
 			                </div>
 			              </div>
 			            </div>
-			            <div class="accordion-group">
-			              <div class="accordion-heading">
-			                <a class="accordion-toggle dropdown-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-			                 Misc <b class="caret"></b>
-			                </a>
-			              </div>
-			              <div style="height: 0px;" id="collapseThree" class="accordion-body collapse">
-			                <div class="accordion-inner">
-			                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute,  </div>
-			              </div>
-			            </div>
+<!--			            <div class="accordion-group">-->
+<!--			              <div class="accordion-heading">-->
+<!--			                <a class="accordion-toggle dropdown-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">-->
+<!--			                 Misc <b class="caret"></b>-->
+<!--			                </a>-->
+<!--			              </div>-->
+<!--			              <div style="height: 0px;" id="collapseThree" class="accordion-body collapse">-->
+<!--			                <div class="accordion-inner">-->
+<!--			                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute,  </div>-->
+<!--			              </div>-->
+<!--			            </div>-->
 			          </div>
         			
 				    	

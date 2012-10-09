@@ -328,7 +328,7 @@ public class Visualization {
 		resLongList2[0]=courseId;
 		
 		logger.debug("Bin in OnActionFromShowDetails ---- Hole ResourceDetailList ");
-		List<ResourceRequestInfo> resourceTypeDetailList = getResourceDetails().getResultListByResourceType(EResourceType.valueOf(resourceType));
+		List<ResourceRequestInfo> resourceTypeDetailList = getResourceDetails().getResultListByResourceType(EResourceType.valueOf(resourceType.toUpperCase()));
 		int i = 0;
 		logger.debug("Bin in OnActionFromShowDetails ---- Hole ResourceDetailList .... Fertig");
 		if(resourceTypeDetailList!=null){
@@ -364,6 +364,7 @@ public class Visualization {
 		// Clear the flash-persisted fields to prevent anomalies in onActivate when we hit refresh on page or browser button
 		this.courseId = null;
 		this.course = null;
+		this.activities = null;
 		
 	}
     
@@ -418,14 +419,17 @@ public class Visualization {
     @Cached
     public List<ResourceRequestInfo> getResourceList(){
     	this.course = courseDAO.getCourseByDMSId(courseId);
-		logger.debug("Starting Extended Analysis");
 		
 		List<ResourceRequestInfo> resultList;
 		
-		if(activities!=null && activities.size()>=1)
+		if(activities!=null && activities.size()>=1){
+			logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
 			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, activities);
-		else resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, null);
-		logger.debug("ExtendedAnalysisWorker: "+resultList);
+		}else {
+			logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
+			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, null);
+		}
+		logger.debug("ExtendedAnalysisWorker Results: "+resultList);
 		
     	return resultList;
     }

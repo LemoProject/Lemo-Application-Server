@@ -75,7 +75,7 @@ $(document).ready(function() {
 	    .on("tick", tick)
 	    .start();
 
-
+ 
 	    
 
 	// Per-type markers, as they don't inherit styles.

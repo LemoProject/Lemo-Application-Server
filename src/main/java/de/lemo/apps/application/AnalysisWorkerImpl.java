@@ -120,9 +120,9 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
-			logger.debug("Starting Extended Analysis");
+			logger.debug("Starting Extended Analysis Details");
 			ResultListRRITypes results = analysis.computeQ1ExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
-			logger.debug("Extended Analysis: "+ results);
+			logger.debug("Extended Analysls Details: "+ results);
 			if(results!= null ){
 				if(results.getAssignmentRRI()!=null){
 					List<ResourceRequestInfo> ass = results.getAssignmentRRI();
@@ -167,7 +167,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 				return results;
 			}
     	
-    	} else logger.debug("Extended Analysis Result is null!");
+    	} else logger.debug("Extended Analysis Details Result is null!");
 			
 		return new ResultListRRITypes();
 	}

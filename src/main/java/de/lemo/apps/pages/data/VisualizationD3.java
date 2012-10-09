@@ -44,7 +44,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom.js" })
+@Import(library = { "../../js/d3/d3_custom_Path_MultiFoci.js" })
 public class VisualizationD3 {
 
     @Environmental
@@ -160,16 +160,7 @@ public class VisualizationD3 {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.endDate == null)
-                this.endDate = course.getLastRequestDate();
-            if(this.beginDate == null)
-                this.beginDate = course.getFirstRequestDate();
-            Calendar beginCal = Calendar.getInstance();
-            Calendar endCal = Calendar.getInstance();
-            beginCal.setTime(beginDate);
-            endCal.setTime(endDate);
-            this.resolution = dateWorker.daysBetween(beginDate, endDate);
-
+            
             return true;
         } else
             return Explorer.class;
@@ -191,16 +182,19 @@ public class VisualizationD3 {
         // button
         this.courseId = null;
         this.course = null;
+        this.selectedUsers = null;
+        this.selectedActivities = null;
     }
 
-    void pageReset() {
-        selectedUsers = null;
-        userIds = getUsers();
-    }
+//    void pageReset() {
+//        selectedUsers = null;
+//        userIds = getUsers();
+//    }
 
     void onPrepareForRender() {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
+        userIds = getUsers();
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -218,7 +212,7 @@ public class VisualizationD3 {
         ArrayList<Long> courseIds = new ArrayList<Long>();
         courseIds.add(courseId);
 
-        boolean considerLogouts = false;
+        boolean considerLogouts = true;
 
         ArrayList<String> types = null;
         if(selectedActivities != null && !selectedActivities.isEmpty()) {
@@ -246,13 +240,35 @@ public class VisualizationD3 {
 
         ArrayList<Long> courseList = new ArrayList<Long>();
         courseList.add(course.getCourseId());
-
+        
+        
+        if(this.endDate == null){
+            this.endDate = course.getLastRequestDate();
+        } else {
+       	 	this.selectedUsers = null;
+       	 	userIds = getUsers();
+       }
+        if(this.beginDate == null){
+            this.beginDate = course.getFirstRequestDate();
+        } else {
+       	 	this.selectedUsers = null;
+       	 	userIds = getUsers();
+        }
         Calendar beginCal = Calendar.getInstance();
         Calendar endCal = Calendar.getInstance();
         beginCal.setTime(beginDate);
         endCal.setTime(endDate);
         this.resolution = dateWorker.daysBetween(beginDate, endDate);
-        logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
+
+        
+        
+//
+//        Calendar beginCal = Calendar.getInstance();
+//        Calendar endCal = Calendar.getInstance();
+//        beginCal.setTime(beginDate);
+//        endCal.setTime(endDate);
+//        this.resolution = dateWorker.daysBetween(beginDate, endDate);
+//        logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
     }
 
     @AfterRender

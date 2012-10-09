@@ -193,17 +193,17 @@
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:pathAnalysis}</b> </t:pagelink>
+			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${navAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:navAnalysis}</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationFP" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Frequent ${message:pathAnalysis} </b> </t:pagelink>
+			    				<t:pagelink page="data/visualizationFP" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:freqPathAnalysis} </b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
-			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationD3_2" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:pathAnalysis} Directed</b> </t:pagelink>
-			    				<br /><br />
-			    			</div>
+<!--			    			<div class="span2" align="center">-->
+<!--			    				<t:pagelink page="data/visualizationD3_2" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Frequent ${message:pathAnalysis} 2</b> </t:pagelink>-->
+<!--			    				<br /><br />-->
+<!--			    			</div>-->
 			    			<div class="span1">
 			    			</div>
 			    			<div class="span5">

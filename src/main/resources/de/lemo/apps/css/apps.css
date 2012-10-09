@@ -71,6 +71,8 @@ circle {
 text {
   font: 15px sans-serif;
   pointer-events: none;
+  z-index: 100000; 
+  opacity: 1.0; background-color: #FFF; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center;
 }
 
 text.shadow {
@@ -85,7 +87,7 @@ text.shadow {
 */
 
 .tipsy { font-size: 13px; position: absolute; padding: 5px; z-index: 100000; }
-  .tipsy-inner { background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
+  .tipsy-inner { opacity: 0.7; background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
 
   /* Rounded corners */
   .tipsy-inner { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
@@ -93,7 +95,7 @@ text.shadow {
   /* Uncomment for shadow */
   /*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
   
-  .tipsy-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
+  .tipsy-arrow { opacity: 0.7; position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
   
   /* Rules to colour arrows */
   .tipsy-arrow-n { border-bottom-color: #000; }
@@ -111,4 +113,19 @@ text.shadow {
   .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
 
 
+/**
+* jQuery UI Slider Custom css
+*/
 
+#supportSlider{
+
+	display:inline-block;
+	float:left;
+	margin:5px;
+	width:250px;
+
+}
+
+label#slider-label{
+	display:inline;
+}
