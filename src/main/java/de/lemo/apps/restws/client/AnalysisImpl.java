@@ -33,8 +33,8 @@ import de.lemo.apps.restws.proxies.service.ServiceStartTime;
  */
 public class AnalysisImpl implements Analysis {
 
-    private static final String SERVICE_STARTTIME_URL = "http://localhost:4443/starttime";
-    private static final String QUESTIONS_BASE_URL = "http://localhost:4443/questions";
+    private static final String SERVICE_STARTTIME_URL = "http://localhost:8080/dms/services/starttime";
+    private static final String QUESTIONS_BASE_URL = "http://localhost:8080/dms/questions";
 
     @Override
     public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,

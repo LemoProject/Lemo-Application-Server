@@ -4,12 +4,27 @@
 <hibernate-configuration>
     <session-factory>
 
+<!---->
+<!--		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>-->
+<!--		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/lemo_apps?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</property>-->
+<!--		-->
+<!--		<property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>-->
+<!--		<property name="hibernate.connection.username">root</property>-->
+<!--		<property name="hibernate.connection.password">RegALOB78</property>-->
+<!--        <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>-->
+<!--        <property name="hibernate.connection.url">jdbc:hsqldb:./target/apps/appsdb;shutdown=true</property>-->
+<!--        <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>-->
+<!--        <property name="hibernate.connection.username">lemo</property>-->
+<!--        <property name="hibernate.connection.password">123321</property>-->
+<!--        <property name="hbm2ddl.auto">update</property>-->
+<!--        <property name="hibernate.show_sql">true</property>-->
+<!--        <property name="hibernate.format_sql">true</property>-->
+
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/lemo_apps?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</property>
-		
 		<property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">RegALOB78</property>
+		<property name="hibernate.connection.username">lemo</property>
+		<property name="hibernate.connection.password">123</property>
 		<property name="show_sql">false</property>
 		<property name="format_sql">true</property>
 		<!--      comment following line during 2nd run  -->
@@ -40,3 +55,4 @@
         
     </session-factory>
 </hibernate-configuration>
+

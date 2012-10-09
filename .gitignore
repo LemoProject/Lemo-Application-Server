@@ -1,4 +1,7 @@
 /apps/run.cmd
 /src/main/resources/hibernate.cfg.xml
+/apps/src/main/resources/hibernate.cfg.xml
+/apps/target
+/apps/bin
 .gitignore
 /target
