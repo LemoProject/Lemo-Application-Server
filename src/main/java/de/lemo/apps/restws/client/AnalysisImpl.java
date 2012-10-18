@@ -24,6 +24,7 @@ import de.lemo.apps.restws.proxies.questions.QCourseActivity;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
+import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
@@ -33,8 +34,12 @@ import de.lemo.apps.restws.proxies.service.ServiceStartTime;
  */
 public class AnalysisImpl implements Analysis {
 
-    private static final String SERVICE_STARTTIME_URL = "http://localhost:4443/starttime";
-    private static final String QUESTIONS_BASE_URL = "http://localhost:4443/questions";
+//	  Pre Maven DMS connection String
+//    private static final String SERVICE_STARTTIME_URL = "http://localhost:4443/starttime";
+//    private static final String QUESTIONS_BASE_URL = "http://localhost:4443/questions";
+    
+    private static final String SERVICE_STARTTIME_URL = "http://localhost:8081/beuth/dms/services/starttime";
+    private static final String QUESTIONS_BASE_URL = "http://localhost:8081/beuth/dms/questions";
 
     @Override
     public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,
@@ -125,7 +130,7 @@ public class AnalysisImpl implements Analysis {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println("Gebe leere Resultlist zur√ºck");
+        System.out.println("Gebe leere Resultlist zurück");
         return new ResultListResourceRequestInfo();
     }
 
@@ -168,8 +173,37 @@ public class AnalysisImpl implements Analysis {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println("Gebe leere Resultlist zur√ºck");
+        System.out.println("Gebe leere Resultlist zurück");
         return new ResultListRRITypes();
+    }
+    
+    
+    @Override
+    public ResultListResourceRequestInfo computeLearningObjectUsage(List<Long> courseIds, List<Long> userIds, List<String> types, Long startTime, Long endTime) {
+
+        try {
+            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+            ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
+
+            if(response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+            }
+
+            QLearningObjectUsage qLOUsage = ProxyFactory.create(QLearningObjectUsage.class, QUESTIONS_BASE_URL);
+            if(qLOUsage != null) {
+            	ResultListResourceRequestInfo result = qLOUsage.compute(courseIds, userIds, types, startTime, endTime);
+                return result;
+            }
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Gebe leere Resultlist zurueck");
+        return new ResultListResourceRequestInfo();
     }
 
     @Override

@@ -193,7 +193,7 @@ $( "#minSup-slider" ).bind( "slide", function(event, ui) {
 });
 	
 $('nodetitle').parent().tipsy({ 
-    gravity: 'sw', 
+    gravity: 's', 
     html: true, 
     title: function() { return $(this).find('nodetitle').text(); }
   });

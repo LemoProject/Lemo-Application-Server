@@ -27,6 +27,14 @@ public interface Analysis {
             Long endTime,
             Long resolution,
             List<String> resourceTypes);
+    
+    ResultListResourceRequestInfo computeLearningObjectUsage(
+    		List<Long> courseIds, 
+    		List<Long> userIds, 
+    		List<String> types, 
+    		Long startTime, 
+    		Long endTime);
+
 
     String computeCourseUserPaths(
             List<Long> courseIds,
