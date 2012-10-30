@@ -3,18 +3,17 @@
  */
 package de.lemo.apps.restws.client;
 
+import static de.lemo.apps.restws.client.InitialisationImpl.DMS_BASE_URL;
+import static de.lemo.apps.restws.client.InitialisationImpl.SERVICE_STARTTIME_URL;
+
 import java.io.IOException;
 import java.util.List;
 
-import javax.ws.rs.QueryParam;
-
 import org.apache.http.client.ClientProtocolException;
-import org.apache.tapestry5.json.JSONObject;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -33,8 +32,7 @@ import de.lemo.apps.restws.proxies.service.ServiceStartTime;
  */
 public class AnalysisImpl implements Analysis {
 
-    private static final String SERVICE_STARTTIME_URL = "http://localhost:8080/dms/services/starttime";
-    private static final String QUESTIONS_BASE_URL = "http://localhost:8080/dms/questions";
+    private static final String QUESTIONS_BASE_URL = DMS_BASE_URL + "/questions";
 
     @Override
     public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,
@@ -54,7 +52,7 @@ public class AnalysisImpl implements Analysis {
             }
 
             QCourseActivity qcourseActivity = ProxyFactory.create(QCourseActivity.class,
-                                                                  QUESTIONS_BASE_URL);
+                QUESTIONS_BASE_URL);
             if(qcourseActivity != null) {
 
                 ResultListLongObject result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution);
@@ -104,11 +102,11 @@ public class AnalysisImpl implements Analysis {
             }
 
             QActivityResourceType qActivityResourceType = ProxyFactory.create(QActivityResourceType.class,
-                                                                              QUESTIONS_BASE_URL);
+                QUESTIONS_BASE_URL);
             if(qActivityResourceType != null) {
 
                 ResultListResourceRequestInfo result = qActivityResourceType.compute(courses, startTime, endTime,
-                                                                                     resourceTypes);
+                    resourceTypes);
 
                 return result;
             }
@@ -147,11 +145,11 @@ public class AnalysisImpl implements Analysis {
 
             QActivityResourceTypeResolution qActivityResourceType = ProxyFactory
                     .create(QActivityResourceTypeResolution.class,
-                            QUESTIONS_BASE_URL);
+                        QUESTIONS_BASE_URL);
             if(qActivityResourceType != null) {
 
                 ResultListRRITypes result = qActivityResourceType.compute(courses, startTime, endTime, resolution,
-                                                                          resourceTypes);
+                    resourceTypes);
 
                 return result;
             }
@@ -179,7 +177,7 @@ public class AnalysisImpl implements Analysis {
             long endTime) {
         ResultListLongObject result = null;
         QCourseUsers analysis = ProxyFactory.create(QCourseUsers.class, QUESTIONS_BASE_URL);
-        if(analysis != null) 
+        if(analysis != null)
             result = analysis.compute(courseIds, startTime, endTime);
         if(result == null)
             result = new ResultListLongObject();
@@ -198,8 +196,8 @@ public class AnalysisImpl implements Analysis {
         QUserPathAnalysis analysis = ProxyFactory.create(QUserPathAnalysis.class, QUESTIONS_BASE_URL);
         if(analysis != null) {
             String result = analysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
-            System.out.println("PATH result: "+result);
-        	return result;
+            System.out.println("PATH result: " + result);
+            return result;
         }
         return "{}";
     }
@@ -231,16 +229,16 @@ public class AnalysisImpl implements Analysis {
         System.out.println("Gebe leere Resultlist zurueck");
         return "{}";
     }
-    
+
     @Override
     public String computeQFrequentPathBIDE(
-	    		List<Long> courseIds, 
-	    		List<Long> userIds, 
-	    		double minSup, 
-	    		boolean sessionWise,
-	    		long startTime,
-	    		long endTime)  {
-    	System.out.println("Starte BIDE Request");
+            List<Long> courseIds,
+            List<Long> userIds,
+            double minSup,
+            boolean sessionWise,
+            long startTime,
+            long endTime) {
+        System.out.println("Starte BIDE Request");
         try {
             ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
             ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
@@ -252,7 +250,7 @@ public class AnalysisImpl implements Analysis {
             QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class, QUESTIONS_BASE_URL);
             if(qFrequentPath != null) {
                 String result = qFrequentPath.compute(courseIds, userIds, minSup, sessionWise, startTime, endTime);
-                System.out.println("BIDE result: "+result);
+                System.out.println("BIDE result: " + result);
                 return result;
             }
 
