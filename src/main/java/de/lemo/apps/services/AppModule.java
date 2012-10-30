@@ -6,6 +6,8 @@ import java.util.Date;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.hibernate.HibernateConfigurer;
+import org.apache.tapestry5.hibernate.HibernateSymbols;
 import org.apache.tapestry5.hibernate.HibernateTransactionDecorator;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -20,11 +22,13 @@ import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.got5.tapestry5.jquery.JQuerySymbolConstants;
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
+import de.lemo.apps.application.ApplicationInfo;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.DateWorkerImpl;
 import de.lemo.apps.application.StatisticWorker;
@@ -53,38 +57,35 @@ import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
 /**
- * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
- * configure and extend Tapestry, or to place your own service definitions.
+ * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to configure and extend
+ * Tapestry, or to place your own service definitions.
  */
 public class AppModule
 {
     public static void bind(ServiceBinder binder)
     {
         // binder.bind(MyServiceInterface.class, MyServiceImpl.class);
-    	
-    	// Service for basic user authentification 
-    	binder.bind(AuthorizingRealm.class, BasicSecurityRealm.class);
-    	binder.bind(UserDAO.class, UserDAOImpl.class);
-    	binder.bind(CourseDAO.class, CourseDAOImpl.class);
-    	binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
-    	
-    	// Encoder
-    	binder.bind(CourseIdValueEncoder.class, CourseIdValueEncoderWorker.class);
-    	binder.bind(LongValueEncoder.class, LongValueEncoderWorker.class);
-    	
-    	//Facade Worker
-    	binder.bind(UserWorker.class, UserWorkerImpl.class);
-    	binder.bind(DateWorker.class, DateWorkerImpl.class);
-    	binder.bind(StatisticWorker.class, StatisticWorkerImpl.class);
-    	binder.bind(AnalysisWorker.class, AnalysisWorkerImpl.class);
-    	
-    	
-    	// Rest Services
-    	binder.bind(Initialisation.class, InitialisationImpl.class);
-    	binder.bind(Information.class, InformationImpl.class);
-    	binder.bind(Analysis.class, AnalysisImpl.class);
-    	
-    	
+
+        // Service for basic user authentification
+        binder.bind(AuthorizingRealm.class, BasicSecurityRealm.class);
+        binder.bind(UserDAO.class, UserDAOImpl.class);
+        binder.bind(CourseDAO.class, CourseDAOImpl.class);
+        binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
+
+        // Encoder
+        binder.bind(CourseIdValueEncoder.class, CourseIdValueEncoderWorker.class);
+        binder.bind(LongValueEncoder.class, LongValueEncoderWorker.class);
+
+        // Facade Worker
+        binder.bind(UserWorker.class, UserWorkerImpl.class);
+        binder.bind(DateWorker.class, DateWorkerImpl.class);
+        binder.bind(StatisticWorker.class, StatisticWorkerImpl.class);
+        binder.bind(AnalysisWorker.class, AnalysisWorkerImpl.class);
+
+        // Rest Services
+        binder.bind(Initialisation.class, InitialisationImpl.class);
+        binder.bind(Information.class, InformationImpl.class);
+        binder.bind(Analysis.class, AnalysisImpl.class);
 
         // Make bind() calls on the binder object to define most IoC services.
         // Use service builder methods (example below) when the implementation
@@ -103,27 +104,26 @@ public class AppModule
         // QaModule.
         configuration.override(SymbolConstants.APPLICATION_VERSION, "0.0.1-SNAPSHOT");
     }
-    
+
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration)
     {
-     configuration.addInstance(JqPlotJavaScriptStack.STACK_ID, JqPlotJavaScriptStack.class);
+        configuration.addInstance(JqPlotJavaScriptStack.STACK_ID, JqPlotJavaScriptStack.class);
     }
-    
-//    /**
-//	 * Contributions to the RESTeasy main Application.
-//	 */
-//	public static void contributeApplication(Configuration<Object> singletons, ObjectLocator locator)
-//	{
-//		singletons.add(locator.autobuild(LemoServiceResourceImpl.class));
-//	}
 
-    
-//    @Contribute(javax.ws.rs.core.Application.class)
-//    public static void configureRestResources(Configuration<Object> singletons, Initialisation init)
-//    {
-//    	singletons.add(init);
-//    }
-    
+    // /**
+    // * Contributions to the RESTeasy main Application.
+    // */
+    // public static void contributeApplication(Configuration<Object> singletons, ObjectLocator locator)
+    // {
+    // singletons.add(locator.autobuild(LemoServiceResourceImpl.class));
+    // }
+
+    // @Contribute(javax.ws.rs.core.Application.class)
+    // public static void configureRestResources(Configuration<Object> singletons, Initialisation init)
+    // {
+    // singletons.add(init);
+    // }
+
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, Object> configuration)
     {
@@ -133,88 +133,100 @@ public class AppModule
         // you can extend this list of locales (it's a comma separated series of locale names;
         // the first locale name is the default when there's no reasonable match).
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,de");
-        
+
+        // Disable call to hibernateConfig.configure() to call it manually 
+        configuration.add(HibernateSymbols.DEFAULT_CONFIGURATION, "false");
         
         // Disable Prototype Support in Tap5
         configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "true");
-        
+
         // Tynamo's tapestry-security module configuration
-    	configuration.add(SecuritySymbols.LOGIN_URL, "/start");
-    	configuration.add(SecuritySymbols.UNAUTHORIZED_URL, "/start");
-    	configuration.add(SecuritySymbols.SUCCESS_URL, "/data/initialize");
+        configuration.add(SecuritySymbols.LOGIN_URL, "/start");
+        configuration.add(SecuritySymbols.UNAUTHORIZED_URL, "/start");
+        configuration.add(SecuritySymbols.SUCCESS_URL, "/data/initialize");
     }
-    
-//    @Match("*DAO")
-//    public static void adviseTransactions(HibernateTransactionAdvisor advisor, MethodAdviceReceiver receiver)
-//    {
-//        advisor.addTransactionCommitAdvice(receiver);
-//    }
-    
+
+    // @Match("*DAO")
+    // public static void adviseTransactions(HibernateTransactionAdvisor advisor, MethodAdviceReceiver receiver)
+    // {
+    // advisor.addTransactionCommitAdvice(receiver);
+    // }
+
     @Match("*DAO")
     public static <T> T decorateTransactionally(HibernateTransactionDecorator decorator, Class<T> serviceInterface,
-                                                T delegate,
-                                                String serviceId)
+            T delegate,
+            String serviceId)
     {
         System.out.println("AppModule: Generating Decorator for DAO Interface");
-    	return decorator.build(serviceInterface, delegate, serviceId);
+        return decorator.build(serviceInterface, delegate, serviceId);
     }
-    
-    
-    
+
     public static void contributeWebSecurityManager(Configuration<Realm> configuration,
             @Inject AuthorizingRealm realm)
     {
         configuration.add(realm);
     }
-    
+
     public static void contributeSeedEntity(OrderedConfiguration<Object> configuration)
     {
-    	
-    	//Example Courses
-    	configuration.add("course1", new Course("Mathematik 2", "Dieser Kurs richtet sich an Studierende, die den Kurs Mathematik 1 erfolgreich bestanden haben ....",
+
+        // Example Courses
+        configuration.add("course1", new Course("Mathematik 2",
+                "Dieser Kurs richtet sich an Studierende, die den Kurs Mathematik 1 erfolgreich bestanden haben ....",
                 new Date(), new Date(), 25L, 22L));
-    	configuration.add("course2", new Course("Mathematik 3", "Dieser Kurs richtet sich an Studierende, die den Kurs Mathematik 2 erfolgreich bestanden haben ....",
+        configuration.add("course2", new Course("Mathematik 3",
+                "Dieser Kurs richtet sich an Studierende, die den Kurs Mathematik 2 erfolgreich bestanden haben ....",
                 new Date(), new Date(), 25L, 12L));
-    	configuration.add("course3", new Course("BWL für Mathematiker", "Dieser Kurs richtet sich an Studierende, der Mathematik ....",
+        configuration.add("course3", new Course("BWL für Mathematiker",
+                "Dieser Kurs richtet sich an Studierende, der Mathematik ....",
                 new Date(), new Date(), 15L, 15L));
-    	configuration.add("course4", new Course("Informatik für Mathematiker", "Dieser Kurs richtet sich an Studierende, dwe Mathematik  ....",
+        configuration.add("course4", new Course("Informatik für Mathematiker",
+                "Dieser Kurs richtet sich an Studierende, dwe Mathematik  ....",
                 new Date(), new Date(), 20L, 21L));
-    	
-    	//Example User
+
+        // Example User
         configuration.add("user1", new User("John Doe", "johndoe",
                 "johndoe@example.com", "john"));
         configuration.add("user2", new User("Peter Smith", "petersmith", "petersmith@example.com",
                 "peter"));
     }
-    
-    
+
     /**
      * 
      * @param configuration
-     * Contribution for hibernate domain package
+     *            Contribution for hibernate domain package
      */
     public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
     {
         configuration.add("de.lemo.apps.entities");
     }
 
+    public void contributeHibernateSessionSource(OrderedConfiguration<HibernateConfigurer> configurer) {
+        configurer.add("hibernate-session-source", new HibernateConfigurer() {
+            public void configure(org.hibernate.cfg.Configuration configuration) {
+                try {
+                    configuration.configure();
+                } catch (HibernateException e) {
+                    configuration.configure(ApplicationInfo.getSystemName() + ".apps.hibernate.cfg.xml");
+                }
+            }
+        });
+    }
+
     /**
-     * This is a service definition, the service will be named "TimingFilter". The interface,
-     * RequestFilter, is used within the RequestHandler service pipeline, which is built from the
-     * RequestHandler service configuration. Tapestry IoC is responsible for passing in an
-     * appropriate Logger instance. Requests for static resources are handled at a higher level, so
-     * this filter will only be invoked for Tapestry related requests.
+     * This is a service definition, the service will be named "TimingFilter". The interface, RequestFilter, is used within
+     * the RequestHandler service pipeline, which is built from the RequestHandler service configuration. Tapestry IoC is
+     * responsible for passing in an appropriate Logger instance. Requests for static resources are handled at a higher
+     * level, so this filter will only be invoked for Tapestry related requests.
      * <p/>
      * <p/>
-     * Service builder methods are useful when the implementation is inline as an inner class
-     * (as here) or require some other kind of special initialization. In most cases,
-     * use the static bind() method instead.
+     * Service builder methods are useful when the implementation is inline as an inner class (as here) or require some
+     * other kind of special initialization. In most cases, use the static bind() method instead.
      * <p/>
      * <p/>
-     * If this method was named "build", then the service id would be taken from the
-     * service interface and would be "RequestFilter".  Since Tapestry already defines
-     * a service named "RequestFilter" we use an explicit service id that we can reference
-     * inside the contribution method.
+     * If this method was named "build", then the service id would be taken from the service interface and would be
+     * "RequestFilter". Since Tapestry already defines a service named "RequestFilter" we use an explicit service id that
+     * we can reference inside the contribution method.
      */
     public RequestFilter buildTimingFilter(final Logger log)
     {
@@ -243,15 +255,13 @@ public class AppModule
     }
 
     /**
-     * This is a contribution to the RequestHandler service configuration. This is how we extend
-     * Tapestry using the timing filter. A common use for this kind of filter is transaction
-     * management or security. The @Local annotation selects the desired service by type, but only
-     * from the same module.  Without @Local, there would be an error due to the other service(s)
-     * that implement RequestFilter (defined in other modules).
+     * This is a contribution to the RequestHandler service configuration. This is how we extend Tapestry using the timing
+     * filter. A common use for this kind of filter is transaction management or security. The @Local annotation selects
+     * the desired service by type, but only from the same module. Without @Local, there would be an error due to the other
+     * service(s) that implement RequestFilter (defined in other modules).
      */
     public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
-                                         @Local
-                                         RequestFilter filter)
+            @Local RequestFilter filter)
     {
         // Each contribution to an ordered configuration has a name, When necessary, you may
         // set constraints to precisely control the invocation order of the contributed filter

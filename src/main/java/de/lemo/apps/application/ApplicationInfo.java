@@ -14,4 +14,12 @@ public class ApplicationInfo {
     public static String getDMSBaseUrl() {
         return resourceBundle.getString("apps.dms-base-url");
     }
+
+    public static String getSystemName() {
+        return resourceBundle.getString("lemo.system-name");
+    }
+
+    public static String getDisplayName() {
+        return resourceBundle.getString("lemo.display-name");
+    }
 }
