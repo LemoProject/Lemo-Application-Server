@@ -341,9 +341,11 @@
 				<configuration>
 					<warDirectory>target/${project.build.finalName}.war</warDirectory>
 					<!-- remote tomcat manager -->
-					<url>${tomcat-url}</url>
 					<server>${tomcat-server}</server>
-					<!-- deployed application (tomcat:deploy) -->
+					<url>${tomcat-url}/manager</url>
+					<!-- can't use slashes the middle part of an url, like '/lemo/apps' 
+						here due to a tapestry bug. Workaround is to avoid slashes: '/lemo-apps'. 
+						Bug got fixed in Tapestry 5.3.7 (not yet released). -->
 					<path>/${lemo-system-name}-${project.artifactId}</path>
 					<update>true</update>
 					<!-- local server (tomcat:run) -->
@@ -432,6 +434,6 @@
 		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.9</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>
-		<lemo3-tomcat-url>http://141.45.146.174:8080/manager</lemo3-tomcat-url>
+		<lemo3-tomcat-url>http://141.45.146.174:8080</lemo3-tomcat-url>
 	</properties>
 </project>
