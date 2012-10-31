@@ -44,7 +44,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
-import de.lemo.apps.components.JqPlotLine;
+import de.lemo.apps.components.JqPlotBar;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.restws.client.Analysis;
@@ -53,12 +53,14 @@ import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
+import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
+import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 
 @RequiresAuthentication
 @BreadCrumb(titleKey="visualizationTitle")
-public class Visualization {
+public class VisualizationLO {
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -103,7 +105,7 @@ public class Visualization {
 	private Analysis analysis;
 	
 	@InjectPage
-	Visualization visPage;
+	VisualizationLO visPage;
 	
 	@Inject 
 	private CourseDAO courseDAO;
@@ -119,7 +121,7 @@ public class Visualization {
 	private Form optionForm;
 	
 	@Component(parameters = {"dataItems=FirstQuestionDataItems"})
-    private JqPlotLine chart1;
+    private JqPlotBar chart1;
 	
 	@Property
 	@Persist
@@ -444,11 +446,11 @@ public class Visualization {
 		return rri;	
     }
     
-   
+    @Cached
     public List getFirstQuestionDataItems(){
-		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
-        List<XYDateDataItem> list1 = CollectionFactory.newList();
-        List<XYDateDataItem> list2 = CollectionFactory.newList();
+		List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
+        List<TextValueDataItem> list1 = CollectionFactory.newList();
+        List<TextValueDataItem> list2 = CollectionFactory.newList();
         if(courseId!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
@@ -466,23 +468,12 @@ public class Visualization {
 			List<Long> courses = new ArrayList<Long>();
 			courses.add(courseId);
 			
-			List<String> resourceTypesNames = null;
-			
-			if(activities!=null && activities.size() >=1){
-        		resourceTypesNames = new ArrayList<String>();
-        		for(int i = 0; i<activities.size();i++){
-        			resourceTypesNames.add(activities.get(i).toString());
-        		}
-        	}
-			
 			//calling dm-server
 			for (int i=0;i<courses.size();i++){
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			
-			
-			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution, resourceTypesNames);
+			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, activities);
 			
 			
 			
@@ -512,18 +503,19 @@ public class Visualization {
 //			}
 //			
 			
-			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-	        for(int j=0 ;j<resolution;j++){
-	        	//logger.debug("Building Chart JSON ---- Index:" +j);
-	        	if(this.twentyFourhMode)
-	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
-	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(j)));
+			if(results!= null && results.size() > 0)
+	        for(int j=0 ;j<results.size();j++){
+	        	logger.debug("Building Chart JSON ---- Index:" +j);
+//	        	if(this.twentyFourhMode)
+//	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
+//	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
+	        	list1.add(new TextValueDataItem(results.get(j).getTitle() , results.get(j).getRequests()));
+	        	list2.add(new TextValueDataItem(results.get(j).getTitle() , results.get(j).getUsers()));
 	        	//logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
-	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
-	        		logger.debug("Bin drin CourseID: "+this.courseId);
-	        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
-	        	}
+//	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
+//	        		logger.debug("Bin drin CourseID: "+this.courseId);
+//	        		//list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
+//	        	}
 	        }
     	}
         dataList.add(list1);

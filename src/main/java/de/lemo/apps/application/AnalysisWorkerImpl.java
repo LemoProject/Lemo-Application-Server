@@ -86,6 +86,57 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	}
 	
 	
+public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes){
+        
+    	if(course!=null && course.getId()!=null){
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	List<String> resourceTypesNames = null;
+        	
+        	if(endDate!=null){
+        		
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} 
+	        
+        	if(beginDate!=null){
+        		
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} 
+        	
+        	if(resourceTypes!=null && resourceTypes.size() >=1){
+        		resourceTypesNames = new ArrayList<String>();
+        		for(int i = 0; i<resourceTypes.size();i++){
+        			resourceTypesNames.add(resourceTypes.get(i).toString());
+        			logger.debug("Resource Typ: "+resourceTypes.get(i).toString());
+        		}
+        	}
+
+			List<Long> roles = new ArrayList<Long>();
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(course.getCourseId());
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				logger.debug("Courses: "+courses.get(i));
+			}
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
+			
+			logger.debug("Starting Extended Analysis");
+			ResultListResourceRequestInfo results = analysis.computeLearningObjectUsage(courses, null, resourceTypesNames, beginStamp, endStamp);
+			logger.debug("Extended Analysis: "+ results);
+			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
+		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
+		        	ResourceRequestInfo res = results.getResourceRequestInfos().get(i);
+		        	//logger.debug("ResourceRequest"+ res.getTitle()+" ----- "+ res.getResourcetype());
+		        }
+				return results.getResourceRequestInfos();
+			}
+    		} else logger.debug("Extended Analysis Result is null!");
+		return new ArrayList<ResourceRequestInfo>();
+	}
+	
+	
+	
 	public ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate, Integer resolution, List<EResourceType> resourceTypes){
         
     	if(course!=null && course.getId()!=null){
@@ -174,7 +225,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	
 	
 	
-	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier){
+	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier, List<EResourceType> resourceTypes ){
 		
 		Date beginDate = endDate;
 		
@@ -188,11 +239,11 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
     		beginDate = cal.getTime();
     		logger.debug("BeginDate after computation: "+beginDate);
         } 
-		return usageAnalysis(course, beginDate, endDate);
+		return usageAnalysis(course, beginDate, endDate, resourceTypes );
 	}
 		
 	
-	public List usageAnalysis(Course course, Date beginDate, Date endDate){
+	public List usageAnalysis(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes ){
 		
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
         List<XYDateDataItem> list1 = CollectionFactory.newList();
@@ -204,6 +255,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
     	if(course!=null && course.getId()!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
+        	List<String> resourceTypesNames = null;
+        	
         	
         	if(endDate!=null){
         		
@@ -215,6 +268,13 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
         		beginStamp = new Long(beginDate.getTime()/1000);
         	} 
         	
+        	if(resourceTypes!=null && resourceTypes.size() >=1){
+        		resourceTypesNames = new ArrayList<String>();
+        		for(int i = 0; i<resourceTypes.size();i++){
+        			resourceTypesNames.add(resourceTypes.get(i).toString());
+        		}
+        	}
+        	
 
 			List<Long> roles = new ArrayList<Long>();
 			List<Long> courses = new ArrayList<Long>();
@@ -225,7 +285,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution,resourceTypesNames);
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);

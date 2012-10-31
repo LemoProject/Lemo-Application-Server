@@ -122,7 +122,7 @@ private static final long serialVersionUID = -2264289557350915525L;
         return String.format("[%s,%s]", _text.toString(), _value.toString());
     }
 
-public JSONArray toJSONArray() {
-return new JSONArray(_text, _value);
-}
+    public JSONArray toJSONArray() {
+    		return new JSONArray(_text, _value);
+    }
 }

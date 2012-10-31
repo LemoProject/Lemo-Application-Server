@@ -55,8 +55,12 @@ text.shadow {
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        <div id="viz"><!-- d3js visualization --></div>
-    	</div>
+        	<div id="viz"><!-- d3js visualization --></div>
+    		<p>page: </p>
+		    <p  id="pages"></p>
+		    <button id="prev" onclick="next(false);" class="btn btn-primary">prev page</button>
+		    <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">next page</button>
+		</div>
       
     	<div class="span3">
     		<div class="row-fluid">

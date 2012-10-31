@@ -192,12 +192,20 @@
 			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
+			    			<div class="span1" align="center">
+			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} LO</b> </t:pagelink> 
+			    				<br /><br />
+			    			</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${navAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:navAnalysis}</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="data/visualizationFP" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:freqPathAnalysis} </b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationNVD3" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>NVD3 Testing </b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 <!--			    			<div class="span2" align="center">-->

@@ -13,12 +13,27 @@ public interface Analysis {
             List<Long> roles,
             Long starttime,
             Long endtime,
-            int resolution);
+            int resolution,
+            List<String> resourceTypes);
+    
+    String computeQ1JSON(
+    		List<Long> courses, 
+    		List<Long> roles, 
+    		Long starttime, 
+    		Long endtime,
+            int resolution, 
+            List<String> resourceTypes);
 
     ResultListResourceRequestInfo computeQ1Extended(
             List<Long> courses,
             Long startTime,
             Long endTime,
+            List<String> resourceTypes);
+    
+    String computeQ1ExtendedJSON(
+    		List<Long> courses, 
+    		Long startTime, 
+    		Long endTime,
             List<String> resourceTypes);
 
     ResultListRRITypes computeQ1ExtendedDetails(
@@ -27,6 +42,14 @@ public interface Analysis {
             Long endTime,
             Long resolution,
             List<String> resourceTypes);
+    
+    ResultListResourceRequestInfo computeLearningObjectUsage(
+    		List<Long> courseIds, 
+    		List<Long> userIds, 
+    		List<String> types, 
+    		Long startTime, 
+    		Long endTime);
+
 
     String computeCourseUserPaths(
             List<Long> courseIds,

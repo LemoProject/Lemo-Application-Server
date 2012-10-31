@@ -208,14 +208,14 @@ public class Explorer {
 	public List getUsageAnalysisLastMonth(){
     	
 			Date endDate = getCurrentCourse().getLastRequestDate();
-			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1);	
+			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1,null);	
 	}
     
     //TODO Scheinbar greift ein Template Property noch auf diese Funktion zu ... auch wen dem nicht so sein sollte -> die korrekte Methode lautet ...LastMonth
     @Cached
 	public List getUsageAnalysis(){
 			Date endDate = getCurrentCourse().getLastRequestDate();
-			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1);	
+			return analysisWorker.usageAnalysis(getCurrentCourse(), endDate, Calendar.MONTH, -1,null);	
 	}
     
     @Cached
@@ -223,7 +223,7 @@ public class Explorer {
 		
 			Date endDate = getCurrentCourse().getLastRequestDate();
 			Date beginDate = getCurrentCourse().getFirstRequestDate();
-			return analysisWorker.usageAnalysis(course, beginDate, endDate);
+			return analysisWorker.usageAnalysis(course, beginDate, endDate,null);
 	}
     
     public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){
