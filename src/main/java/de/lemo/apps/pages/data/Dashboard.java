@@ -248,7 +248,7 @@ public class Dashboard {
 		Course course = courseDAO.getCourse(courseId);
 		if(course !=null){
 			Date endDate = course.getLastRequestDate();
-			return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1);
+			return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1,null);
 		} 
 		return new ArrayList();
 	}

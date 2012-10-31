@@ -71,13 +71,9 @@
     				${message:available}: ${getLocalizedDate(beginDate)} - ${getLocalizedDate(endDate)}
     				<br />
     				<br />
-    				${message:range}: ${resolution} 
-    				<t:if test="twentyFourhMode">
-    					${message:hours}
-    					<p:else>
-    						${message:days}
-    					</p:else>
-        			</t:if>
+    				${message:range}: ${resolution} ${message:days}
+    					
+        			
     			</div>
     		</div>
     		</div>
@@ -140,7 +136,7 @@
   			             			</div>
   			             			<div class="control-group">
         						    
-        						    	<label class="control-label">24h Mode:</label>
+        						    	<label class="control-label">Sort by usage:</label>
         						    	<div class="controls">
                             				<t:actionlink t:id="updateTimeMode">Select: <input t:type="checkbox" value="twentyFourhMode"/></t:actionlink>
   			                			</div>

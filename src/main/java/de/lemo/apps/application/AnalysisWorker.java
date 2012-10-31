@@ -16,8 +16,8 @@ public interface AnalysisWorker {
 	
 	public ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate, Integer resolution, List<EResourceType> resourceTypes);
 	
-	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier);
+	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier, List<EResourceType> resourceTypes  );
 	
-	public List usageAnalysis(Course course, Date beginDate, Date endDate);
-
+	public List usageAnalysis(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes );
+		
 }

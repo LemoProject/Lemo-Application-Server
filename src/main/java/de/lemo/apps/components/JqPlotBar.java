@@ -12,7 +12,8 @@ import org.apache.tapestry5.json.JSONObject;
 					"../js/jqplot/plugins/jqplot.trendline.min.js",
 					"../js/jqplot/plugins/jqplot.canvasTextRenderer.min.js",
 					"../js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js",
-					"../js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"
+					"../js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js",
+					"../js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"
 					
 		})
 public class JqPlotBar extends JqPlot {
@@ -48,12 +49,12 @@ public class JqPlotBar extends JqPlot {
       renderer.put("fillAndStroke", new JSONLiteral("true"));
       
       seriesDefaults.put("seriesDefaults", renderer);
-      seriesDefaults.put("legend", new JSONObject("{ show:false, location: 'e' }"));
-     
+      seriesDefaults.put("legend", new JSONLiteral("{  renderer: jQuery.jqplot.EnhancedLegendRenderer, show:true, location: 'ne', rendererOptions: { fontSize: '10pt'}, labels: ['Clicks', 'User']}"));
+      
       seriesDefaults.put("highlighter",new JSONObject("{show: true, showLabel: true, tooltipAxes: 'y',sizeAdjust: 10.5 , tooltipLocation : 'ne'}"));
-      seriesDefaults.put("cursor", new JSONObject("{ show:true, zoom: true, constrainZoomTo: x, showTooltip:true }"));
+      seriesDefaults.put("cursor", new JSONObject("{ show:true, zoom: true, constrainZoomTo: y, showTooltip:true }"));
       seriesDefaults.put("grid", new JSONObject("{background: '#FFF', drawGridlines: true, gridLineColor: '#222', borderColor: '#222', shadow: false, drawBorder: false}"));
-      axisDefaults.put("yaxis", new JSONLiteral("{padMin: 0, label: 'Clicks', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
+      axisDefaults.put("yaxis", new JSONLiteral("{padMin: 0, labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '12px'}}"));
       axisDefaults.put("xaxis", new JSONLiteral("{padMin: 0, renderer:jQuery.jqplot.CategoryAxisRenderer}"));
       axisDefaults2.put("tickRenderer", new JSONLiteral("jQuery.jqplot.CanvasAxisTickRenderer "));
       axisDefaults2.put("tickOptions", new JSONLiteral("{angle: -30, fontSize: '10pt'}"));

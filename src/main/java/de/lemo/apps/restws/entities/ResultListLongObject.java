@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ResultListLongObject {
+public class ResultListLongObject{
 
 	
 	private List<Long> elements;
@@ -32,5 +32,6 @@ public class ResultListLongObject {
 	{
 		this.elements = elements;
 	}
+	
 	
 }

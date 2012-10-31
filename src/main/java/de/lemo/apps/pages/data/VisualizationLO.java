@@ -512,10 +512,10 @@ public class VisualizationLO {
 	        	list1.add(new TextValueDataItem(results.get(j).getTitle() , results.get(j).getRequests()));
 	        	list2.add(new TextValueDataItem(results.get(j).getTitle() , results.get(j).getUsers()));
 	        	//logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
-	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
-	        		logger.debug("Bin drin CourseID: "+this.courseId);
-	        		//list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
-	        	}
+//	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
+//	        		logger.debug("Bin drin CourseID: "+this.courseId);
+//	        		//list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
+//	        	}
 	        }
     	}
         dataList.add(list1);

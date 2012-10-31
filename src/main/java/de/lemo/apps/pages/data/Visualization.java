@@ -444,7 +444,7 @@ public class Visualization {
 		return rri;	
     }
     
-    @Cached
+   
     public List getFirstQuestionDataItems(){
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
         List<XYDateDataItem> list1 = CollectionFactory.newList();
@@ -466,12 +466,23 @@ public class Visualization {
 			List<Long> courses = new ArrayList<Long>();
 			courses.add(courseId);
 			
+			List<String> resourceTypesNames = null;
+			
+			if(activities!=null && activities.size() >=1){
+        		resourceTypesNames = new ArrayList<String>();
+        		for(int i = 0; i<activities.size();i++){
+        			resourceTypesNames.add(activities.get(i).toString());
+        		}
+        	}
+			
 			//calling dm-server
 			for (int i=0;i<courses.size();i++){
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			
+			
+			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution, resourceTypesNames);
 			
 			
 			

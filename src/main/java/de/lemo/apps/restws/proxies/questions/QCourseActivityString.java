@@ -17,12 +17,12 @@ import javax.ws.rs.core.MediaType;
 
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
-public interface QCourseActivity {
+public interface QCourseActivityString {
 
     @POST
     @Path("courseactivity")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultListLongObject compute(
+    public String compute(
             @FormParam(COURSE_IDS) List<Long> courses,
             @FormParam(ROLE_IDS) List<Long> roles,
             @FormParam(START_TIME) Long starttime,

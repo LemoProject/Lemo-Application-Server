@@ -30,6 +30,7 @@ import de.lemo.apps.pages.data.Dashboard;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/d3/d3.v2.js",
+				"../js/d3/nv.d3.js",
 				"../js/d3/jquery.tipsy.js",
 		 		"../js/bootstrap-transition.js",
 		 		"../js/bootstrap-modal.js",
@@ -47,6 +48,7 @@ import de.lemo.apps.pages.data.Dashboard;
 			stylesheet={"../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",
 						"../css/jquery.jqplot.css",
+						"../css/nv.d3.css",
 						//"../css/jquery-ui-1.8.16.bootstrap.css",
 						"../css/apps.css"})
 

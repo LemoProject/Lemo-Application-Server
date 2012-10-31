@@ -3,7 +3,7 @@ package de.lemo.apps.restws.entities;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ResourceRequestInfo{
+public class ResourceRequestInfo { //implements Comparable<ResourceRequestInfo>{
 
 	private Long id;
 	//private EResourceType resourcetype;
@@ -83,7 +83,15 @@ public class ResourceRequestInfo{
 		this.resolutionSlot = resolutionSlot;
 	}
 
-
-	
+//	// Compare method for comparison of object within lists ....
+//	public int compareTo(ResourceRequestInfo compareObject)
+//    {
+//        if (getNumber() < compareObject.getNumber())
+//            return -1;
+//        else if (getNumber() == compareObject.getNumber())
+//            return 0;
+//        else
+//            return 1;
+//    }
 	
 }

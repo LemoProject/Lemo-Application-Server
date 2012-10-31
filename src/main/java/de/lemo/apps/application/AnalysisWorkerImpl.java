@@ -225,7 +225,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 	
 	
 	
-	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier){
+	public List usageAnalysis(Course course, Date endDate, final int dateRange, Integer dateMultiplier, List<EResourceType> resourceTypes ){
 		
 		Date beginDate = endDate;
 		
@@ -239,11 +239,11 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
     		beginDate = cal.getTime();
     		logger.debug("BeginDate after computation: "+beginDate);
         } 
-		return usageAnalysis(course, beginDate, endDate);
+		return usageAnalysis(course, beginDate, endDate, resourceTypes );
 	}
 		
 	
-	public List usageAnalysis(Course course, Date beginDate, Date endDate){
+	public List usageAnalysis(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes ){
 		
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
         List<XYDateDataItem> list1 = CollectionFactory.newList();
@@ -255,6 +255,8 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
     	if(course!=null && course.getId()!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
+        	List<String> resourceTypesNames = null;
+        	
         	
         	if(endDate!=null){
         		
@@ -266,6 +268,13 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
         		beginStamp = new Long(beginDate.getTime()/1000);
         	} 
         	
+        	if(resourceTypes!=null && resourceTypes.size() >=1){
+        		resourceTypesNames = new ArrayList<String>();
+        		for(int i = 0; i<resourceTypes.size();i++){
+        			resourceTypesNames.add(resourceTypes.get(i).toString());
+        		}
+        	}
+        	
 
 			List<Long> roles = new ArrayList<Long>();
 			List<Long> courses = new ArrayList<Long>();
@@ -276,7 +285,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution);
+			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution,resourceTypesNames);
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
