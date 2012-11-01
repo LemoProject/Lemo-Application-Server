@@ -1633,11 +1633,11 @@ nv.models.cumulativeLineChart = function() {
     d.i = Math.round(dx.invert(d.x));
 
     d3.select(this).attr('transform', 'translate(' + dx(d.i) + ',0)');
-    chart.update();
+    //chart.update();
   }
 
   function dragEnd(d,i) {
-    chart.update();
+   // chart.update();
   }
 
   //============================================================
@@ -1808,19 +1808,20 @@ nv.models.cumulativeLineChart = function() {
       //d3.transition(linesWrap).call(lines);
       linesWrap.call(lines);
 
-
-      var indexLine = linesWrap.selectAll('.nv-indexLine')
-          .data([index]);
-      indexLine.enter().append('rect').attr('class', 'nv-indexLine')
-          .attr('width', 3)
-          .attr('x', -2)
-          .attr('fill', 'red')
-          .attr('fill-opacity', .5)
-          .call(indexDrag)
-
-      indexLine
-          .attr('transform', function(d) { return 'translate(' + dx(d.i) + ',0)' })
-          .attr('height', availableHeight)
+// LeMo: commented out because usage is not clear
+      
+//      var indexLine = linesWrap.selectAll('.nv-indexLine')
+//          .data([index]);
+//      indexLine.enter().append('rect').attr('class', 'nv-indexLine')
+//          .attr('width', 3)
+//          .attr('x', -2)
+//          .attr('fill', 'red')
+//          .attr('fill-opacity', .5)
+//          .call(indexDrag)
+//
+//      indexLine
+//          .attr('transform', function(d) { return 'translate(' + dx(d.i) + ',0)' })
+//          .attr('height', availableHeight)
 
       //------------------------------------------------------------
 
