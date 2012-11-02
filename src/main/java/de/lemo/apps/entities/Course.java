@@ -49,7 +49,7 @@ public class Course extends AbstractEntity{
 	private Date firstRequestDate;
 	private Long maxParticipants;
 	private Long enroledParticipants;
-	private Boolean isFavorite;
+	private Boolean favorite;
 	
 	@Inject
 	public Course() {}
@@ -169,15 +169,15 @@ public class Course extends AbstractEntity{
 	/**
 	 * @return the isFavorite
 	 */
-	public Boolean getIsFavorite() {
-		return isFavorite;
+	public Boolean getFavorite() {
+		return favorite;
 	}
 
 	/**
 	 * @param isFavorite the isFavorite to set
 	 */
-	public void setIsFavorite(Boolean isFavorite) {
-		this.isFavorite = isFavorite;
+	public void setFavorite(Boolean isFavorite) {
+		this.favorite = isFavorite;
 	}
 
 	@Override

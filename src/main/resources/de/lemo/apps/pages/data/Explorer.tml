@@ -79,7 +79,7 @@
 								<p><b>${message:courseEnroledParticipants}:</b> ${CurrentCourse.enroledParticipants}<br /> </p> 
 								<label class="checkbox">
 		            			<form t:type="form">
-									Favorite <t:actionlink t:id="favorite" context="CurrentCourse.id"><input t:type="checkbox" value="${CurrentCourse.isFavorite}"/></t:actionlink>
+									Favorite <t:actionlink t:id="favorite" context="CurrentCourse.id"><input t:type="checkbox" value="${CurrentCourse.favorite}"/></t:actionlink>
 								</form>
 								</label>
 								<br />
