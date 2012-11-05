@@ -375,10 +375,10 @@ public class VisualizationFP {
     }
 
     public String getFirstRequestDate() {
-        return getLocalizedDate(this.course.getFirstRequestDate());
+        return getLocalizedDate(this.beginDate);//.course.getFirstRequestDate());
     }
 
     public String getLastRequestDate() {
-        return getLocalizedDate(this.course.getLastRequestDate());
+        return getLocalizedDate(this.endDate);//.course.getLastRequestDate());
     }
 }

@@ -11,6 +11,7 @@ public interface Analysis {
     ResultListLongObject computeQ1(
             List<Long> courses,
             List<Long> roles,
+            List<Long> users,
             Long starttime,
             Long endtime,
             int resolution,

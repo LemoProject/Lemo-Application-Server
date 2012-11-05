@@ -482,7 +482,7 @@ public class Visualization {
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			
 			
-			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution, resourceTypesNames);
+			ResultListLongObject results = analysis.computeQ1(courses, roles, null, beginStamp, endStamp, resolution, resourceTypesNames);
 			
 			
 			

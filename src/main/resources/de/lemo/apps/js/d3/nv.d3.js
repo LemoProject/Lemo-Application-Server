@@ -5279,7 +5279,7 @@ nv.models.multiBarChart = function() {
     , controls = nv.models.legend()
     ;
 
-  var margin = {top: 30, right: 20, bottom: 30, left: 60}
+  var margin = {top: 30, right: 20, bottom: 130, left: 60}
     , width = null
     , height = null
     , color = nv.utils.defaultColor()
@@ -5487,11 +5487,19 @@ nv.models.multiBarChart = function() {
           .selectAll('text, line')
           .style('opacity', 0);
 
+      console.log("Data: "+data[0].values[5].x.length);
+      
+      var  dataXAxis = data[1].values;
+      
       if(rotateLabels)
         xTicks
             .selectAll('text')
-            .attr('transform', function(d,i,j) { return 'rotate('+rotateLabels+' 0,0)' })
+            .attr('transform', function(d,i,j) { 
+            	//dataXAxis[j-1] ? console.log("blub-"+d+"----"+i+" --- "+j+" ---- "+((dataXAxis[j-1].x.length)+50));
+            	return   dataXAxis[j-1] ? 'translate('+(availableWidth / dataXAxis.length)*j +','+(dataXAxis[j-1].x.length*1.9)+'),rotate('+rotateLabels+' 0 0)' : '' })
+           // .attr('transform', function(d,i,j) { return 'translate('+(-10*4.5 - 22)+',-80)' })
             .attr('text-transform', rotateLabels > 0 ? 'start' : 'end');
+      
 
       yAxis
         .scale(y)

@@ -49,7 +49,7 @@ public class AnalysisImpl implements Analysis {
     private static final String QUESTIONS_BASE_URL = "http://localhost:8081/beuth/dms/questions";
 
     @Override
-    public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, Long starttime, Long endtime,
+    public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, List<Long> users,  Long starttime, Long endtime,
             int resolution, List<String> resourceTypes) {
         // Create resource delegate
         // logger.info("Getting Server Starttime");
@@ -69,7 +69,7 @@ public class AnalysisImpl implements Analysis {
                                                                   QUESTIONS_BASE_URL);
             if(qcourseActivity != null) {
 
-                ResultListLongObject result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution,resourceTypes);
+                ResultListLongObject result = qcourseActivity.compute(courses, roles, users, starttime, endtime, resolution,resourceTypes);
                 // if(result!=null && result.getElements()!=null){
                 // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
                 // List<Long> resultList = new ArrayList<Long>();

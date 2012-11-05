@@ -285,7 +285,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = analysis.computeQ1(courses, roles, beginStamp, endStamp, resolution,resourceTypesNames);
+			ResultListLongObject results = analysis.computeQ1(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);

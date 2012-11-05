@@ -3,9 +3,11 @@ package de.lemo.apps.restws.proxies.questions;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.RESOLUTION;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.USER_IDS;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.ROLE_IDS;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.TYPES;
+
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public interface QCourseActivity {
     public ResultListLongObject compute(
             @FormParam(COURSE_IDS) List<Long> courses,
             @FormParam(ROLE_IDS) List<Long> roles,
+            @FormParam(USER_IDS) List<Long> users,
             @FormParam(START_TIME) Long starttime,
             @FormParam(END_TIME) Long endtime,
             @FormParam(RESOLUTION) Integer resolution,
