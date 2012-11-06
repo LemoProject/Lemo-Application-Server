@@ -19,7 +19,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<lemo-system-name>lemo-local</lemo-system-name>
+				<lemo-system-name>lemo</lemo-system-name>
 				<lemo-display-name>LeMo [local]</lemo-display-name>
 				<lemo-dms-url>http://localhost:8081</lemo-dms-url>
 				<!-- intentionally invalid, to avoid accidental upload to local machine -->
