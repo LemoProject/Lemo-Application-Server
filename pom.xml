@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.lemo</groupId>
 	<artifactId>apps</artifactId>
-	<version>PT2S6-SNAPSHOT</version>
+	<version>0.8-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Lemo Application Server</name>
 
