@@ -19,7 +19,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<lemo-system-name>lemo-loca</lemo-system-name>
+				<lemo-system-name>lemo-local</lemo-system-name>
 				<lemo-display-name>LeMo [local]</lemo-display-name>
 				<lemo-dms-url>http://localhost:8081</lemo-dms-url>
 				<!-- intentionally invalid, to avoid accidental upload to local machine -->
@@ -106,37 +106,11 @@
 			<version>3.2.0</version>
 		</dependency>
 
-		<!-- <dependency> -->
-		<!-- <groupId>org.got5</groupId> -->
-		<!-- <artifactId>tapestry5-highcharts</artifactId> -->
-		<!-- <version>1.1.0-SNAPSHOT</version> -->
-		<!-- </dependency> -->
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.got5</groupId> -->
-		<!-- <artifactId>tapestry5-jqplot</artifactId> -->
-		<!-- <version>3.2.0</version> -->
-		<!-- </dependency> -->
-		<!-- -->
-
-		<!-- <dependency> -->
-		<!-- <groupId>se.unbound</groupId> -->
-		<!-- <artifactId>tapestry-breadcrumbs</artifactId> -->
-		<!-- <version>1.8.2</version> -->
-		<!-- </dependency> -->
-
 		<dependency>
 			<groupId>se.unbound</groupId>
 			<artifactId>tapestry-breadcrumbs</artifactId>
-			<version>1.9</version>
+			<version>1.8.2-mod</version>
 		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.oscy</groupId> -->
-		<!-- <artifactId>tapestry-zbreadcrumbs</artifactId> -->
-		<!-- <version>0.0.1-SNAPSHOT</version> -->
-		<!-- </dependency> -->
-		<!-- -->
 
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
@@ -383,8 +357,6 @@
 			<url>http://repo1.maven.org/maven2/</url>
 		</repository>
 
-
-
 		<!-- This repository is only needed when the Tapestry version is a preview 
 			release, rather than a final release. -->
 		<repository>
@@ -403,26 +375,16 @@
 			</snapshots>
 		</repository>
 
-
-
 		<!-- Tapestry jquery Highcharts Component http://tapestry5-jquery.com/highcharts/ -->
 		<repository>
 			<id>PullRequest Repository Public</id>
 			<url>http://nexus.pullrequest.org/content/repositories/public/</url>
 		</repository>
 
-
-		<!-- Tapestry zBreadcrumbs https://bitbucket.org/zenios/tapestry-zbreadcrumbs/wiki/Home -->
-		<!-- <repository> -->
-		<!-- <id>sonatype snapshots</id> -->
-		<!-- <url>https://oss.sonatype.org/content/repositories/snapshots/</url> -->
-		<!-- </repository> -->
-
-		<repository>
-			<id>Local Custom Repository 5</id>
-			<url>http://127.0.0.1:8888/Maven/</url>
-		</repository>
-
+    <repository>
+      <id>Lemo Repo</id>
+      <url>http://lemo2.f4.htw-berlin.de/maven/</url>
+    </repository>
 
 	</repositories>
 	<properties>
