@@ -188,12 +188,12 @@
 		    				
 		    				<div class="span1">
 		    				</div>
-			    			<div class="span1" align="center">
-			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationNVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
-			    			<div class="span1" align="center">
-			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} LO</b> </t:pagelink> 
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationLONVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
@@ -205,7 +205,11 @@
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationNVD3" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>NVD3 Testing </b> </t:pagelink>
+			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysis} (OLD) </b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object (OLD)</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 <!--			    			<div class="span2" align="center">-->

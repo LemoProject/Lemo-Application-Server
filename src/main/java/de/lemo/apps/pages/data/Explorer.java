@@ -81,9 +81,14 @@ public class Explorer {
     private JqPlotLine chart1;
 	
 	@Inject
-    @Path("../../images/icons/UsageAnalysis_Icon.png")
+    @Path("../../images/icons/UsageAnalysis2_Icon.png")
     @Property
     private Asset usageAnalysisIcon;
+	
+	@Inject
+    @Path("../../images/icons/UsageAnalysisLO_Icon.png")
+    @Property
+    private Asset usageAnalysisLOIcon;
 	
 	@Inject
     @Path("../../images/icons/PathAnalysis_Icon.png")

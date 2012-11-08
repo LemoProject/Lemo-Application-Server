@@ -29,6 +29,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
@@ -476,6 +477,46 @@ public class VisualizationLO {
 			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, activities);
 			
 			
+			JSONArray graphParentArray = new JSONArray();
+	        JSONObject graphDataObject = new JSONObject();
+	        JSONArray graphDataValues = new JSONArray();
+	       
+	        if(results!= null && results.size() > 0)
+		        for(Integer j=0 ;j<results.size();j++){
+		        	JSONObject graphValue = new JSONObject();
+		
+		        	graphValue.put("x",new JSONLiteral("'"+results.get(j).getTitle()+"'"));
+		        	graphValue.put("y",new JSONLiteral(results.get(j).getRequests().toString()));
+		        	
+		        	graphDataValues.put(graphValue);
+		        }
+	        
+	        graphDataObject.put("values", graphDataValues);
+	        graphDataObject.put("key","Requests");
+			
+	        JSONObject graphDataObject2 = new JSONObject();
+	        JSONArray graphDataValues2 = new JSONArray();
+	       
+	        
+	        if(results!= null && results.size() > 0)
+		        for (Integer i = 0;i<results.size();i++){
+		        	JSONObject graphValue2 = new JSONObject();
+		     
+		        	graphValue2.put("x",new JSONLiteral("'"+results.get(i).getTitle()+"'"));
+		        	graphValue2.put("y",new JSONLiteral(results.get(i).getUsers().toString()));
+		        	
+		        	graphDataValues2.put(graphValue2);
+		        }
+	        
+	        graphDataObject2.put("values", graphDataValues2);
+	        graphDataObject2.put("key","User");
+			
+	        
+	        graphParentArray.put(graphDataObject);
+	        graphParentArray.put(graphDataObject2);
+	        
+	        logger.debug(graphParentArray.toString());
+	        
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);

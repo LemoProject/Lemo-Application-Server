@@ -11,7 +11,7 @@
 	  data = d3custom.data;
 	  
 	  nv.addGraph(function() {
-		  var chart = nv.models.cumulativeLineChart()
+		  var chart = nv.models.lineWithFocusChart()
 		                     .x(function(d) { return d[0] })
 		                     .y(function(d) { return d[1] }) 
 		                     .color(d3.scale.category10().range());
@@ -21,12 +21,17 @@
 		           .tickFormat(function(d) {
 		              return d3.time.format('%x')(new Date(d))
 		            });
+		  
+		  chart.x2Axis
+          .tickFormat(function(d) {
+             return d3.time.format('%x')(new Date(d))
+           });
 
 		  chart.yAxis
 		  		.tickFormat(d3.format(''));
 		  
-// chart.y2Axis
-	//	        .tickFormat(d3.format(',.2f'));
+		  chart.y2Axis
+		        .tickFormat(d3.format(',.2f'));
 
 		 
 		  d3.select('#viz svg')

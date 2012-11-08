@@ -1633,11 +1633,11 @@ nv.models.cumulativeLineChart = function() {
     d.i = Math.round(dx.invert(d.x));
 
     d3.select(this).attr('transform', 'translate(' + dx(d.i) + ',0)');
-    chart.update();
+    //chart.update();
   }
 
   function dragEnd(d,i) {
-    chart.update();
+   // chart.update();
   }
 
   //============================================================
@@ -1808,19 +1808,20 @@ nv.models.cumulativeLineChart = function() {
       //d3.transition(linesWrap).call(lines);
       linesWrap.call(lines);
 
-
-      var indexLine = linesWrap.selectAll('.nv-indexLine')
-          .data([index]);
-      indexLine.enter().append('rect').attr('class', 'nv-indexLine')
-          .attr('width', 3)
-          .attr('x', -2)
-          .attr('fill', 'red')
-          .attr('fill-opacity', .5)
-          .call(indexDrag)
-
-      indexLine
-          .attr('transform', function(d) { return 'translate(' + dx(d.i) + ',0)' })
-          .attr('height', availableHeight)
+// LeMo: commented out because usage is not clear
+      
+//      var indexLine = linesWrap.selectAll('.nv-indexLine')
+//          .data([index]);
+//      indexLine.enter().append('rect').attr('class', 'nv-indexLine')
+//          .attr('width', 3)
+//          .attr('x', -2)
+//          .attr('fill', 'red')
+//          .attr('fill-opacity', .5)
+//          .call(indexDrag)
+//
+//      indexLine
+//          .attr('transform', function(d) { return 'translate(' + dx(d.i) + ',0)' })
+//          .attr('height', availableHeight)
 
       //------------------------------------------------------------
 
@@ -5278,7 +5279,7 @@ nv.models.multiBarChart = function() {
     , controls = nv.models.legend()
     ;
 
-  var margin = {top: 30, right: 20, bottom: 30, left: 60}
+  var margin = {top: 30, right: 20, bottom: 130, left: 60}
     , width = null
     , height = null
     , color = nv.utils.defaultColor()
@@ -5486,11 +5487,19 @@ nv.models.multiBarChart = function() {
           .selectAll('text, line')
           .style('opacity', 0);
 
+      console.log("Data: "+data[0].values[5].x.length);
+      
+      var  dataXAxis = data[1].values;
+      
       if(rotateLabels)
         xTicks
             .selectAll('text')
-            .attr('transform', function(d,i,j) { return 'rotate('+rotateLabels+' 0,0)' })
+            .attr('transform', function(d,i,j) { 
+            	//dataXAxis[j-1] ? console.log("blub-"+d+"----"+i+" --- "+j+" ---- "+((dataXAxis[j-1].x.length)+50));
+            	return   dataXAxis[j-1] ? 'translate('+(availableWidth / dataXAxis.length)*j +','+(dataXAxis[j-1].x.length*1.9)+'),rotate('+rotateLabels+' 0 0)' : '' })
+           // .attr('transform', function(d,i,j) { return 'translate('+(-10*4.5 - 22)+',-80)' })
             .attr('text-transform', rotateLabels > 0 ? 'start' : 'end');
+      
 
       yAxis
         .scale(y)

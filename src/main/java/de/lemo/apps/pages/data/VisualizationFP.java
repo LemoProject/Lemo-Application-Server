@@ -41,7 +41,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_DM_Vis_M2.js" })
+@Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
 public class VisualizationFP {
 
     @Environmental
@@ -367,10 +367,10 @@ public class VisualizationFP {
     }
 
     public String getFirstRequestDate() {
-        return getLocalizedDate(this.course.getFirstRequestDate());
+        return getLocalizedDate(this.beginDate);//.course.getFirstRequestDate());
     }
 
     public String getLastRequestDate() {
-        return getLocalizedDate(this.course.getLastRequestDate());
+        return getLocalizedDate(this.endDate);//.course.getLastRequestDate());
     }
 }
