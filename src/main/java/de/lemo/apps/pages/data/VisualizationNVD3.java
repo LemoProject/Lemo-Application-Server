@@ -263,7 +263,7 @@ public class VisualizationNVD3 {
         }
         
         graphDataObject.put("values", graphDataValues);
-        graphDataObject.put("key","Testchart");
+        graphDataObject.put("key",course.getCourseName());
         
         
         

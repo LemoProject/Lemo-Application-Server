@@ -11,8 +11,8 @@
 	  nv.addGraph(function() {
 		  var chart = nv.models.multiBarChart()
 		  	.showControls(false)
-		  	.reduceXTicks(false)
-		  	.rotateLabels(-35);
+		  	.reduceXTicks(false);
+		  	//.rotateLabels(-35);
 
 		  chart.xAxis
 		           .tickFormat(function(d) {
@@ -25,7 +25,7 @@
 		 
 		  d3.select('#viz svg')
 		      .datum(data)
-		    .transition().duration(500)
+		      .transition().duration(500)
 		      .call(chart);
 
 //		  var 	container = d3.select(this),
@@ -46,6 +46,15 @@
 //		  	});
 //		  
 		  nv.utils.windowResize(chart.update);
+		  
+		  d3.selectAll(".nv-x text")
+	      .attr("transform","rotate(45)")
+	      .attr("dy","0")
+	      .attr("dx",function(d) {
+	      if (d!=null) {
+	        return 2.8*d.length+20;
+	        }
+	      });
 
 		  return chart;
 		});
