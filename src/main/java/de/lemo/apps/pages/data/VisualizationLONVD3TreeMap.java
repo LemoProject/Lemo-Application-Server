@@ -293,12 +293,12 @@ public class VisualizationLONVD3TreeMap {
 				graphLOObject.put("value", learnObject.getRequests());
 				graphLOTypeChildreenArray.put(graphLOObject);
 			}
-			graphLOTypeObject.put("childreen",graphLOTypeChildreenArray);
+			graphLOTypeObject.put("children",graphLOTypeChildreenArray);
 			graphDataRootArray.put(graphLOTypeObject);
 		} 
 		
 		graphRootObject.put("name", "root");
-		graphRootObject.put("childreen", graphDataRootArray);
+		graphRootObject.put("children", graphDataRootArray);
         
         logger.debug(graphRootObject.toString());
         
