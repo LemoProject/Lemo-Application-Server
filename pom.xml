@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>se.unbound</groupId>
 			<artifactId>tapestry-breadcrumbs</artifactId>
-			<version>1.9</version>
+			<version>1.8.2-mod</version>
 		</dependency>
 
 		<dependency>
@@ -286,7 +286,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-					<!-- don't set web.xml here - treat it as a resource to enable filtering -->
+					<!-- don't set web.xml here - treat it as a web resource to enable filtering -->
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<!-- don't put local hibernate configuration in war -->
 					<packagingExcludes>
@@ -296,9 +296,9 @@
 					</packagingExcludes>
 					<webResources>
 						<webResource>
-							<directory>src/main/webapp/WEB-INF</directory>
+							<directory>src/main/webapp</directory>
 							<filtering>true</filtering>
-							<targetPath>WEB-INF</targetPath>
+							<targetPath>/</targetPath>
 						</webResource>
 					</webResources>
 				</configuration>
@@ -313,9 +313,10 @@
 					<!-- remote tomcat manager -->
 					<server>${tomcat-server}</server>
 					<url>${tomcat-url}/manager</url>
-					<!-- can't use slashes the middle part of an url, like '/lemo/apps' 
-						here due to a tapestry bug. Workaround is to avoid slashes: '/lemo-apps'. 
-						Bug got fixed in Tapestry 5.3.7 (not yet released). -->
+					<!-- Using slashes wouldn't work usually due to a tapestry bug caused 
+						by url encoding the .war file name. Workaround is done on the server, where 
+						a symbolic links maps 'lemo-dev%23apps' to 'lemo-dev#apps'. Bug got fixed 
+						in Tapestry 5.3.7 (not yet released). -->
 					<path>/${lemo-system-name}/${project.artifactId}</path>
 					<update>true</update>
 					<!-- local server (tomcat:run) -->
@@ -379,6 +380,11 @@
 		<repository>
 			<id>PullRequest Repository Public</id>
 			<url>http://nexus.pullrequest.org/content/repositories/public/</url>
+		</repository>
+
+		<repository>
+			<id>Lemo Repo</id>
+			<url>http://lemo2.f4.htw-berlin.de/maven/</url>
 		</repository>
 
 	</repositories>
