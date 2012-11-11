@@ -83,12 +83,12 @@
 		</dependency>
 
 		<!-- This adds automatic compression of JavaScript and CSS when in production 
-			mode. -->
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-yuicompressor</artifactId>
-			<version>${tapestry-release-version}</version>
-		</dependency>
+			mode. XXX Dependency removed - Has issues with some NVD3 scripts. -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.tapestry</groupId> -->
+		<!-- <artifactId>tapestry-yuicompressor</artifactId> -->
+		<!-- <version>${tapestry-release-version}</version> -->
+		<!-- </dependency> -->
 
 		<!-- Uncomment this to add support for file uploads: <dependency> <groupId>org.apache.tapestry</groupId> 
 			<artifactId>tapestry-upload</artifactId> <version>${tapestry-release-version}</version> 
@@ -313,11 +313,10 @@
 					<!-- remote tomcat manager -->
 					<server>${tomcat-server}</server>
 					<url>${tomcat-url}/manager</url>
-					<!-- Using slashes wouldn't work usually due to a tapestry bug caused 
-						by url encoding the .war file name. Workaround is done on the server, where 
-						a symbolic links maps 'lemo-dev%23apps' to 'lemo-dev#apps'. Bug got fixed 
-						in Tapestry 5.3.7 (not yet released). -->
-					<path>/${lemo-system-name}/${project.artifactId}</path>
+					<!-- Using additional slashes doesn't work here, due to a tapestry bug 
+						caused by url encoding the .war file name. Bug got fixed in Tapestry 5.3.7 
+						(not yet released). -->
+					<path>/${lemo-system-name}</path>
 					<update>true</update>
 					<!-- local server (tomcat:run) -->
 					<port>8080</port>
