@@ -56,7 +56,6 @@ public class JqPlotLine extends JqPlot {
       //dateAxisRenderer.put("renderer", new JSONLiteral("jQuery.jqplot.DateAxisRenderer"));
       //seriesDefaults.put("shadowAngle", new JSONLiteral("5"));
       //seriesDefaults.put("pointLabels", new JSONObject("{ show:true }"));
-      //seriesDefaults.put("title",new JSONLiteral("'†berschrift'"));
       
       seriesDefaults.put("axes",axisDefaults);
       
