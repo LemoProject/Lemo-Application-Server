@@ -4,8 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
@@ -152,7 +155,7 @@ public class VisualizationNVD3 {
         List<Long> courses = new ArrayList<Long>();
         courses.add(course.getCourseId());
          List<Long> elements = analysis.computeCourseUsers(courses, beginDate.getTime() / 1000, endDate.getTime() / 1000).getElements();
-        logger.info("          ----        "+elements);
+        logger.info(" User Ids:         ----        "+elements);
          return elements;
     }
 
@@ -239,9 +242,9 @@ public class VisualizationNVD3 {
 
         //String tempString = analysis.computeQ1JSON(courseIds, null, beginStamp, endStamp, resolution, types);//(courseIds, selectedUsers, types, considerLogouts, , );
         
-        ResultListLongObject results = analysis.computeQ1(courseIds, null, selectedUsers, beginStamp, endStamp, resolution, types);
+        HashMap<Long, ResultListLongObject> results = analysis.computeQ1(courseIds, null, selectedUsers, beginStamp, endStamp, resolution, types);
         
-        courseIds.remove(0);
+        //courseIds.remove(0);
         //courseIds.add(2100L);
         
         //ResultListLongObject results2 = analysis.computeQ1(courseIds, null, beginStamp, endStamp, resolution, types);
@@ -249,28 +252,42 @@ public class VisualizationNVD3 {
         JSONArray graphParentArray = new JSONArray();
         JSONObject graphDataObject = new JSONObject();
         JSONArray graphDataValues = new JSONArray();
-       
+        
+        if(results!=null)
+		{			
+			Set<Long> courseSet = results.keySet();
+			Iterator<Long> it = courseSet.iterator();
+			while(it.hasNext()){
+				Long courseId = it.next();
+				ResultListLongObject resultObject = results.get(courseId);
         
         
-        for (Integer i = 0;i<results.getElements().size();i++){
-        	JSONArray graphValue = new JSONArray();
-        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
-        	Long currentDateStamp = beginStamp*1000+dateMultiplier;
-        	graphValue.put(0,new JSONLiteral(currentDateStamp.toString()));
-        	graphValue.put(1,new JSONLiteral(results.getElements().get(i).toString()));
-        	
-        	graphDataValues.put(graphValue);
-        }
+			        
+			        graphDataObject = new JSONObject();
+			        graphDataValues = new JSONArray();
+			       
+			        
+			        
+			        for (Integer i = 0;i<resultObject.getElements().size();i++){
+			        	JSONArray graphValue = new JSONArray();
+			        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
+			        	Long currentDateStamp = beginStamp*1000+dateMultiplier;
+			        	graphValue.put(0,new JSONLiteral(currentDateStamp.toString()));
+			        	graphValue.put(1,new JSONLiteral(resultObject.getElements().get(i).toString()));
+			        	
+			        	graphDataValues.put(graphValue);
+			        }
+			        
+			        graphDataObject.put("values", graphDataValues);
+			        graphDataObject.put("key",course.getCourseName());
+			        graphParentArray.put(graphDataObject);
+			        
+			}       
+			        
+		}
         
-        graphDataObject.put("values", graphDataValues);
-        graphDataObject.put("key",course.getCourseName());
-        
-        
-        
-        
-        
-        JSONObject graphDataObject2 = new JSONObject();
-        JSONArray graphDataValues2 = new JSONArray();
+//        JSONObject graphDataObject2 = new JSONObject();
+//        JSONArray graphDataValues2 = new JSONArray();
        
         
         
@@ -287,7 +304,7 @@ public class VisualizationNVD3 {
 //        graphDataObject2.put("values", graphDataValues2);
 //        graphDataObject2.put("key","Testchart 2");
         
-        graphParentArray.put(graphDataObject);
+       
        // graphParentArray.put(graphDataObject2);
         
         

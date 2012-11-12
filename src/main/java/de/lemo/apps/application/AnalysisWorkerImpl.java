@@ -6,6 +6,7 @@ package de.lemo.apps.application;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -285,7 +286,11 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = analysis.computeQ1(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
+			HashMap<Long, ResultListLongObject> results = analysis.computeQ1(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
+			ResultListLongObject result = null;
+			if(results !=null)
+				result = results.get(course);
+			else  result = null;
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
@@ -293,11 +298,11 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			logger.debug("BeginDate: "+beginDate);
 			
 			//checking if result size matches resolution 
-			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
+			if(result!= null && result.getElements()!=null && result.getElements().size() == resolution)
 	        for(int i=0 ;i<resolution;i++){
 	        	
 	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
+	        	list1.add(new XYDateDataItem(beginCal.getTime() , result.getElements().get(i)));
 	        }
     	}
         dataList.add(list1);

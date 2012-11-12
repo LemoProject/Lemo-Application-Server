@@ -9,6 +9,7 @@ import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_T
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.TYPES;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -17,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import de.lemo.apps.restws.entities.ResultListHashMapObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
 public interface QCourseActivity {
@@ -24,7 +26,7 @@ public interface QCourseActivity {
     @POST
     @Path("courseactivity")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResultListLongObject compute(
+    public ResultListHashMapObject compute(
             @FormParam(COURSE_IDS) List<Long> courses,
             @FormParam(ROLE_IDS) List<Long> roles,
             @FormParam(USER_IDS) List<Long> users,

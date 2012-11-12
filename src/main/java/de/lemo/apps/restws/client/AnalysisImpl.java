@@ -4,7 +4,10 @@
 package de.lemo.apps.restws.client;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.QueryParam;
 
@@ -17,6 +20,7 @@ import org.jboss.resteasy.client.ProxyFactory;
 import org.slf4j.Logger;
 
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResultListHashMapObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -49,7 +53,7 @@ public class AnalysisImpl implements Analysis {
     private static final String QUESTIONS_BASE_URL = "http://localhost:8081/beuth/dms/questions";
 
     @Override
-    public ResultListLongObject computeQ1(List<Long> courses, List<Long> roles, List<Long> users,  Long starttime, Long endtime,
+    public HashMap<Long, ResultListLongObject> computeQ1(List<Long> courses, List<Long> roles, List<Long> users,  Long starttime, Long endtime,
             int resolution, List<String> resourceTypes) {
         // Create resource delegate
         // logger.info("Getting Server Starttime");
@@ -69,18 +73,25 @@ public class AnalysisImpl implements Analysis {
                                                                   QUESTIONS_BASE_URL);
             if(qcourseActivity != null) {
 
-                ResultListLongObject result = qcourseActivity.compute(courses, roles, users, starttime, endtime, resolution,resourceTypes);
-                // if(result!=null && result.getElements()!=null){
-                // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
-                // List<Long> resultList = new ArrayList<Long>();
-                // for (int i=0; i<result.getElements().size();i++) {
-                // Long value = mapper.readValue(result.getElements().get(i).toString(), Long.class);
-                // resultList.add(i, value);
-                // }
+            	ResultListHashMapObject resultObject = qcourseActivity.compute(courses, roles, users, starttime, endtime, resolution,resourceTypes);
+     		    if(resultObject!=null && resultObject.getElements()!=null){
+                	Set<Long> keySet =  resultObject.getElements().keySet();
+                	Iterator<Long> it = keySet.iterator();
+                	while(it.hasNext()){
+                		Long learnObjectTypeName = it.next();
+                		logger.debug("Result Course IDs: "+learnObjectTypeName);
+                	}
+            
+                 } else logger.debug("Empty resultset !!!");
+                 // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+                 // List<Long> resultList = new ArrayList<Long>();
+                 // for (int i=0; i<result.getElements().size();i++) {
+                 // Long value = mapper.readValue(result.getElements().get(i).toString(), Long.class);
+                 // resultList.add(i, value);
                 //
                 // return new ResultList(resultList);
                 // }
-                return result;
+                return resultObject.getElements();
             }
 
         } catch (ClientProtocolException e) {
@@ -96,60 +107,60 @@ public class AnalysisImpl implements Analysis {
             e.printStackTrace();
         }
         System.out.println("Gebe leere Resultlist zur√ºck");
-        return new ResultListLongObject();
+        return new HashMap<Long, ResultListLongObject>();
     }
     
     
-    @Override
-    public String computeQ1JSON(List<Long> courses, List<Long> roles, Long starttime, Long endtime,
-            int resolution, List<String> resourceTypes) {
-        // Create resource delegate
-        // logger.info("Getting Server Starttime");
-        try {
-            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
-
-            ClientResponse<ServiceStartTime> response;
-
-            response = request.get(ServiceStartTime.class);
-
-            if(response.getStatus() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatus());
-            }
-
-            QCourseActivityString qcourseActivity = ProxyFactory.create(QCourseActivityString.class,
-                                                                  QUESTIONS_BASE_URL);
-            if(qcourseActivity != null) {
-
-                String result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution,resourceTypes);
-                // if(result!=null && result.getElements()!=null){
-                // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
-                // List<Long> resultList = new ArrayList<Long>();
-                // for (int i=0; i<result.getElements().size();i++) {
-                // Long value = mapper.readValue(result.getElements().get(i).toString(), Long.class);
-                // resultList.add(i, value);
-                // }
-                //
-                // return new ResultList(resultList);
-                // }
-                return result;
-            }
-
-        } catch (ClientProtocolException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Gebe leere Resultlist zur√ºck");
-        return "";
-    }
+//    @Override
+//    public String computeQ1JSON(List<Long> courses, List<Long> roles, Long starttime, Long endtime,
+//            int resolution, List<String> resourceTypes) {
+//        // Create resource delegate
+//        // logger.info("Getting Server Starttime");
+//        try {
+//            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+//
+//            ClientResponse<ServiceStartTime> response;
+//
+//            response = request.get(ServiceStartTime.class);
+//
+//            if(response.getStatus() != 200) {
+//                throw new RuntimeException("Failed : HTTP error code : "
+//                        + response.getStatus());
+//            }
+//
+//            QCourseActivityString qcourseActivity = ProxyFactory.create(QCourseActivityString.class,
+//                                                                  QUESTIONS_BASE_URL);
+//            if(qcourseActivity != null) {
+//
+//                String result = qcourseActivity.compute(courses, roles, starttime, endtime, resolution,resourceTypes);
+//                // if(result!=null && result.getElements()!=null){
+//                // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+//                // List<Long> resultList = new ArrayList<Long>();
+//                // for (int i=0; i<result.getElements().size();i++) {
+//                // Long value = mapper.readValue(result.getElements().get(i).toString(), Long.class);
+//                // resultList.add(i, value);
+//                // }
+//                //
+//                // return new ResultList(resultList);
+//                // }
+//                return result;
+//            }
+//
+//        } catch (ClientProtocolException e) {
+//
+//            e.printStackTrace();
+//
+//        } catch (IOException e) {
+//
+//            e.printStackTrace();
+//
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        System.out.println("Gebe leere Resultlist zur√ºck");
+//        return "";
+//    }
     
     
     
@@ -197,47 +208,47 @@ public class AnalysisImpl implements Analysis {
     }
 
     
-    @Override
-    public String computeQ1ExtendedJSON(List<Long> courses, Long startTime, Long endTime,
-            List<String> resourceTypes) {
-
-        try {
-            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
-
-            ClientResponse<ServiceStartTime> response;
-
-            response = request.get(ServiceStartTime.class);
-
-            if(response.getStatus() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatus());
-            }
-
-            QActivityResourceTypeString qActivityResourceType = ProxyFactory.create(QActivityResourceTypeString.class,
-                                                                              QUESTIONS_BASE_URL);
-            if(qActivityResourceType != null) {
-
-                String result = qActivityResourceType.compute(courses, startTime, endTime,resourceTypes);
-
-                return result;
-            }
-
-        } catch (ClientProtocolException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Gebe leere Resultlist zurück");
-        return "";
-    }
-    
+//    @Override
+//    public String computeQ1ExtendedJSON(List<Long> courses, Long startTime, Long endTime,
+//            List<String> resourceTypes) {
+//
+//        try {
+//            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+//
+//            ClientResponse<ServiceStartTime> response;
+//
+//            response = request.get(ServiceStartTime.class);
+//
+//            if(response.getStatus() != 200) {
+//                throw new RuntimeException("Failed : HTTP error code : "
+//                        + response.getStatus());
+//            }
+//
+//            QActivityResourceTypeString qActivityResourceType = ProxyFactory.create(QActivityResourceTypeString.class,
+//                                                                              QUESTIONS_BASE_URL);
+//            if(qActivityResourceType != null) {
+//
+//                String result = qActivityResourceType.compute(courses, startTime, endTime,resourceTypes);
+//
+//                return result;
+//            }
+//
+//        } catch (ClientProtocolException e) {
+//
+//            e.printStackTrace();
+//
+//        } catch (IOException e) {
+//
+//            e.printStackTrace();
+//
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        System.out.println("Gebe leere Resultlist zurück");
+//        return "";
+//    }
+//    
     
     
     @Override
