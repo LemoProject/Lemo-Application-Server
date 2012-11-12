@@ -103,7 +103,8 @@ public class AppModule
         // (a random hexadecimal number), but may be further overriden by DevelopmentModule or
         // QaModule.
         configuration.override(SymbolConstants.APPLICATION_VERSION, "0.0.1-SNAPSHOT");
-        configuration.override(SymbolConstants.HMAC_PASSPHRASE, "Ck8Z4iIBLYJGg7BfDgsV1wyC2AFienDLqgl0OTYc82y5O6UsbfAIBDojWszvfEqf");
+        configuration.override(SymbolConstants.HMAC_PASSPHRASE,
+            "Ck8Z4iIBLYJGg7BfDgsV1wyC2AFienDLqgl0OTYc82y5O6UsbfAIBDojWszvfEqf");
     }
 
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration)
@@ -135,9 +136,9 @@ public class AppModule
         // the first locale name is the default when there's no reasonable match).
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,de");
 
-        // Disable call to hibernateConfig.configure() to call it manually 
+        // Disable call to hibernateConfig.configure() to call it manually
         configuration.add(HibernateSymbols.DEFAULT_CONFIGURATION, "false");
-        
+
         // Disable Prototype Support in Tap5
         configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "true");
 
@@ -206,9 +207,9 @@ public class AppModule
         configurer.add("hibernate-session-source", new HibernateConfigurer() {
             public void configure(org.hibernate.cfg.Configuration configuration) {
                 try {
-                    configuration.configure();
-                } catch (HibernateException e) {
                     configuration.configure(ApplicationInfo.getSystemName() + ".apps.hibernate.cfg.xml");
+                } catch (HibernateException e) {
+                    configuration.configure();
                 }
             }
         });
