@@ -129,3 +129,17 @@ text.shadow {
 label#slider-label{
 	display:inline;
 }
+
+/**
+ *  tapestry-breadcrumbs separator
+ *  styling based on bootstrap breadcrumbs
+ */
+
+.breadcrumb li:after {
+    content: " / ";
+    white-space: pre-wrap; /* preserve space */
+    color: #999;
+}
+.breadcrumb li:last-child:after {
+    content: ""; /* remove trailing slash */
+}

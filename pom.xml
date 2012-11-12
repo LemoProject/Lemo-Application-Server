@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>se.unbound</groupId>
 			<artifactId>tapestry-breadcrumbs</artifactId>
-			<version>1.8.2-mod</version>
+			<version>1.9</version>
 		</dependency>
 
 		<dependency>
@@ -379,11 +379,6 @@
 		<repository>
 			<id>PullRequest Repository Public</id>
 			<url>http://nexus.pullrequest.org/content/repositories/public/</url>
-		</repository>
-
-		<repository>
-			<id>Lemo Repo</id>
-			<url>http://lemo2.f4.htw-berlin.de/maven/</url>
 		</repository>
 
 	</repositories>
