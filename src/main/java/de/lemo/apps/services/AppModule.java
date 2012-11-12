@@ -103,6 +103,7 @@ public class AppModule
         // (a random hexadecimal number), but may be further overriden by DevelopmentModule or
         // QaModule.
         configuration.override(SymbolConstants.APPLICATION_VERSION, "0.0.1-SNAPSHOT");
+        configuration.override(SymbolConstants.HMAC_PASSPHRASE, "Ck8Z4iIBLYJGg7BfDgsV1wyC2AFienDLqgl0OTYc82y5O6UsbfAIBDojWszvfEqf");
     }
 
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration)
