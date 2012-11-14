@@ -87,7 +87,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	}
 	
 	
-public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes){
+public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<Long> selectedUsers, List<EResourceType> resourceTypes){
         
     	if(course!=null && course.getId()!=null){
         	Long endStamp=0L;
@@ -123,7 +123,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis");
-			ResultListResourceRequestInfo results = analysis.computeLearningObjectUsage(courses, null, resourceTypesNames, beginStamp, endStamp);
+			ResultListResourceRequestInfo results = analysis.computeLearningObjectUsage(courses, selectedUsers, resourceTypesNames, beginStamp, endStamp);
 			logger.debug("Extended Analysis: "+ results);
 			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
 		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
@@ -299,11 +299,17 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			
 			//checking if result size matches resolution 
 			if(result!= null && result.getElements()!=null && result.getElements().size() == resolution)
-	        for(int i=0 ;i<resolution;i++){
+	        {
+					for(int i=0 ;i<resolution;i++){
+	        
 	        	
-	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	list1.add(new XYDateDataItem(beginCal.getTime() , result.getElements().get(i)));
-	        }
+						beginCal.add(Calendar.DAY_OF_MONTH, 1);
+						list1.add(new XYDateDataItem(beginCal.getTime() , result.getElements().get(i)));
+	        
+					}
+	        } // if there was an error while retrieving result data from dms ... one single null result is added 
+			  // because jqplot cant handle resultlist without an entry	
+				else list1.add(new XYDateDataItem(beginCal.getTime() , 0));
     	}
         dataList.add(list1);
         return dataList;

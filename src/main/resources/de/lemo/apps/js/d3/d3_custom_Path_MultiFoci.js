@@ -14,8 +14,27 @@
   
 	  var startDistance = 200;
 	  
+	  function color(name) {
+		  if (name=="Resource")
+		  return "#ff8f1e ";
+		  else if (name=="Course")
+		  return "#1f77b4";
+		  else if (name=="Forum")
+		  return "#2ca02c";
+		  else if (name=="Question")
+		  return "#9467bd";
+		  else if (name=="Quiz")
+		  return "#d62728";
+		  else if (name=="Assignment")
+		  return "#8c564b";
+		  else if (name=="Scorm")
+		  return "#7f7f7f";
+		  else if (name=="Wiki")
+		  return "#17becf";
+		  return "#e377c2";
+		}
 	  
-    var color = d3.scale.category20();
+   // var color = d3.scale.category20();
 
     vis = d3.select("#viz").append("svg:svg")
       .attr("width", w)
@@ -216,7 +235,7 @@ function update2() {
 		 	return (c > 100 ? 100 : c);
 		 })
 	 //.style("fill", function(d) { return color(1); })
-	 .style("fill", function(d) { return fill(d.type); })
+	 .style("fill", function(d) { return color(d.type); })
 		 //.call(force.drag)
 	 
 	.on("click", function(d){
@@ -284,7 +303,7 @@ function update2() {
 			 	if(d.value>5 && d.value<=20) c = d.value;
 			 	if(d.value>20) c = 20 + Math.sqrt(d.value);
 			 	return (c > 100 ? 100 : c);} )
-		 .style("fill", function(d) { return fill(d.type); })
+		 //.style("fill", function(d) { return color(d.type); })
 		 .style("stroke", "#333");
 		 
 	 })

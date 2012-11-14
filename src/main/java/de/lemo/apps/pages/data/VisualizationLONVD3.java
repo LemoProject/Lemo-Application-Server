@@ -248,7 +248,7 @@ public class VisualizationLONVD3 {
 			
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 		
-			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedActivities);
+			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedUsers, selectedActivities);
         
         
         

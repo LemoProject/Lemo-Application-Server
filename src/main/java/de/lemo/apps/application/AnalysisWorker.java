@@ -12,7 +12,7 @@ public interface AnalysisWorker {
 	
 	public List usageAnalysisExtended(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes);
 	
-	public List learningObjectUsage(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes);
+	public List learningObjectUsage(Course course, Date beginDate, Date endDate, List<Long> selectedUsers, List<EResourceType> resourceTypes);
 	
 	public ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate, Integer resolution, List<EResourceType> resourceTypes);
 	

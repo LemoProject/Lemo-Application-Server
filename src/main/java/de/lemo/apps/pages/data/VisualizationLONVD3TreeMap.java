@@ -55,7 +55,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_LO_Bar_Chart.js" })
+@Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
 public class VisualizationLONVD3TreeMap {
 
     @Environmental
@@ -252,7 +252,7 @@ public class VisualizationLONVD3TreeMap {
 			
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 		
-			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedActivities);
+			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedUsers, selectedActivities);
         
 		HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
 		if (results!=null && results.size() > 0) 	

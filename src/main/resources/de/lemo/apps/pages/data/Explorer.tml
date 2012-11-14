@@ -196,6 +196,11 @@
 			    				<t:pagelink page="data/visualizationLONVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
+			    			
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationLONVD3TreeMap" context="${CurrentCourse.id}"><img src="${usageAnalysisLOTreeMapIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object Treemap</b> </t:pagelink> 
+			    				<br /><br />
+			    			</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="data/visualizationD3" context="${CurrentCourse.id}"><img src="${navAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:navAnalysis}</b> </t:pagelink>
 			    				<br /><br />

@@ -112,6 +112,48 @@ text.shadow {
   .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
   .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
 
+/**
+* D3.js  css
+*/
+
+//TreeMap 
+
+.cell {
+  border: solid 1px white;
+  font: 10px sans-serif;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+text {
+    pointer-events: none;
+}
+.grandparent text {
+    font-weight: bold;
+}
+rect {
+    fill: none;
+    stroke: #FFFFFF;
+}
+rect.parent, .grandparent rect {
+    stroke-width: 2px;
+}
+.grandparent rect {
+    fill: #FFFFFF;
+}
+.children rect.parent, .grandparent rect {
+    cursor: pointer;
+}
+rect.parent {
+    pointer-events: all;
+}
+.children:hover rect.child, .grandparent:hover rect {
+    fill: #AAAAAA;
+}
+
+
 
 /**
 * jQuery UI Slider Custom css
