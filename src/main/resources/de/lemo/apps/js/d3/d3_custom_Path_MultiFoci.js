@@ -79,12 +79,15 @@
    	var optCharge = maxCharge/k;
    
    	//Calculation of the optimal value for d3 LinkDistance between nodes 
-   	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/_nodes.length;
+   	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/(_nodes.length/3);
 	
+   	if (optDistance > maxDistance) optDistance = maxDistance;
+   	if (optDistance < minDistance) optDistance = minDistance;
+   	
    	var foci = [{x:10, y:10},{x:10+300,y:10},{x:800,y:600}];  
 
    	
-   	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" = "+optDistance+" with k:"+k);
+   	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" and Intermediate Result: "+ (maxDistance/(1/Math.sqrt(_links.length)))+" = "+optDistance+" with k:"+k);
    	
     var force = d3.layout.force()
     .on("tick",function (e) {tick(e)})
