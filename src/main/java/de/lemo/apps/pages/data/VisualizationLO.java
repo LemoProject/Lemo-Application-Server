@@ -457,11 +457,11 @@ public class VisualizationLO {
         	Long beginStamp=0L;
         	if(endDate!=null){
         		endStamp = new Long(endDate.getTime()/1000);
-        	} //else endtime= 1334447632L;
+        	}
 	        
         	if(beginDate!=null){
         		beginStamp = new Long(beginDate.getTime()/1000);
-        	} //else starttime = 1308968800L;
+        	}
         	
 			if (this.resolution == null || this.resolution < 10 )
 				this.resolution = 30;
@@ -485,8 +485,8 @@ public class VisualizationLO {
 		        for(Integer j=0 ;j<results.size();j++){
 		        	JSONObject graphValue = new JSONObject();
 		
-		        	graphValue.put("x",new JSONLiteral("'"+results.get(j).getTitle()+"'"));
-		        	graphValue.put("y",new JSONLiteral(results.get(j).getRequests().toString()));
+		        	graphValue.put("x",results.get(j).getTitle());
+		        	graphValue.put("y",results.get(j).getRequests().toString());
 		        	
 		        	graphDataValues.put(graphValue);
 		        }
@@ -502,8 +502,8 @@ public class VisualizationLO {
 		        for (Integer i = 0;i<results.size();i++){
 		        	JSONObject graphValue2 = new JSONObject();
 		     
-		        	graphValue2.put("x",new JSONLiteral("'"+results.get(i).getTitle()+"'"));
-		        	graphValue2.put("y",new JSONLiteral(results.get(i).getUsers().toString()));
+		        	graphValue2.put("x",results.get(i).getTitle());
+		        	graphValue2.put("y",results.get(i).getUsers().toString());
 		        	
 		        	graphDataValues2.put(graphValue2);
 		        }
@@ -521,28 +521,6 @@ public class VisualizationLO {
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
 			logger.debug("BeginDate: "+beginDate);
-			//checking if result size matches resolution 
-//			ResultListRRITypes rri = getResourceDetails();
-//			List<ResourceRequestInfo> resInfoList = rri.getResourcesRRI();
-//			int i = 0;
-//			int k= 0;
-//			Long[] resLongList2 = new Long[resolution];
-//			while (k < resLongList2.length) {
-//				resLongList2[k] = 0L;
-//				k++;
-//			}
-//			//List<Long> resLongList = new ArrayList<Long>();
-//			while (i < resInfoList.size()) {
-//				logger.debug("Looking for Ressource 46267 ---- Resolution: "+resolution+" Index:" +i);
-//				if(resInfoList.get(i).getId() == 46267){
-//					logger.debug("Ressource 46267 found ---- Resolution: "+resolution+" Index: "+i+" ResSlot: "+resInfoList.get(i).getResolutionSlot().intValue()+" Value: "+resInfoList.get(i).getRequests());
-//					resLongList2[resInfoList.get(i).getResolutionSlot().intValue()] = resInfoList.get(i).getRequests();
-//					
-//				}
-//					//else resLongList.add(resInfoList.get(i).getResolutionSlot().intValue(), 0L);
-//				i++;
-//			}
-//			
 			
 			if(results!= null && results.size() > 0)
 	        for(int j=0 ;j<results.size();j++){
