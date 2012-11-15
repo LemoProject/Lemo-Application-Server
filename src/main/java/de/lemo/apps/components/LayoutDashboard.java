@@ -5,7 +5,14 @@ import java.util.Locale;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.InjectPage;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Path;
+import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.ActionLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
@@ -19,13 +26,12 @@ import de.lemo.apps.annotation.Exclude;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
-import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
 
 @Exclude(stylesheet={"core"})  //remove the Tapestry css
-@ImportJQueryUI({"jquery.ui.core", "jquery.ui.slider", "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable"})
+@ImportJQueryUI({"jquery.ui.mouse", "jquery.ui.slider", "jquery.ui.draggable", "jquery.ui.sortable"})
 @Import(library={"../js/bootstrap-alert.js",
 				"../js/excanvas.js",
 				"../js/apps.js",
