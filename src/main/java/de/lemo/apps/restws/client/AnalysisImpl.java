@@ -96,19 +96,21 @@ public class AnalysisImpl implements Analysis {
                 			Long keyValue = Long.parseLong(kit.next().getValueAsText());
                 			JsonNode entryNodes = eit.next();
                 			JsonNode entryNodesArray = entryNodes.get("elements");
-                			logger.debug("EntryNodes :"+entryNodesArray);
+                			logger.debug("EntryNodes Complete:"+entryNodesArray);
                 			if (entryNodesArray.isArray()){
                 				logger.debug("Entries is Array ....");
+                				entryList = new ArrayList<Long>();
                 				Iterator<JsonNode> enit = entryNodesArray.getElements();
                 				while (enit.hasNext()) {
-                					logger.debug("Entry Values: "+enit.next().getValueAsText());
-                					entryList.add(enit.next().getValueAsLong(0L));
+                					Long enitValue = enit.next().getValueAsLong(0L);
+                					//logger.debug("Entry Values: "+enitValue);
+                					entryList.add(enitValue);
                 				}
                 			} else logger.debug("Entries is NO Array ....");
                 			ResultListLongObject entryValues = new ResultListLongObject(entryList);
                 			resultList.put(keyValue, entryValues);
                 			
-                			logger.debug("Result Keys: "+keyValue);
+                			logger.debug("Course Key: "+keyValue);
                 		}
                 		// if only one course result is returned
                 	 } else {
@@ -121,14 +123,15 @@ public class AnalysisImpl implements Analysis {
             				logger.debug("Entries is Array ....");
             				Iterator<JsonNode> enit = entryNodesArray.getElements();
             				while (enit.hasNext()) {
-            					logger.debug("Entry Values: "+enit.next().getValueAsText());
-            					entryList.add(enit.next().getValueAsLong(0L));
+            					Long enitValue = enit.next().getValueAsLong(0L);
+            					logger.debug("Entry Values: "+enitValue);
+            					entryList.add(enitValue);
             				}
             			} else logger.debug("Entries is NO Array ....");
             			ResultListLongObject entryValues = new ResultListLongObject(entryList);
             			resultList.put(keyValue, entryValues);
             			
-            			logger.debug("Result Keys: "+keyValue);
+            			logger.debug("Course Key: "+keyValue);
                 		 
                 	 }
                  } else logger.debug("Entries not found!");

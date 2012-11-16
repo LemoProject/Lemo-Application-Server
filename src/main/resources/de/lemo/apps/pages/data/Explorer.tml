@@ -17,18 +17,18 @@
 		<div class="span3">
 			<div class="thumbnail">
     		
-				<t:grid class="table" source="courses" model="coursesGridModel" row="course" rowsPerPage="5" t:inPlace="true">
+				<t:grid class="table" source="courses" model="coursesGridModel" row="course" rowsPerPage="8" t:inPlace="true">
 		            <p:courseNameCell>
 		            	<t:actionlink t:id="show" context="course.id" zone="coursezone">${course.courseDescription}</t:actionlink>		                
 		            </p:courseNameCell>
-		            <p:compareCell>
-		            	<label class="checkbox">
-		            	<form t:type="form">
-						<!--	<t:actionlink t:id="compare" context="course.id"><input t:type="checkbox" value="false"/></t:actionlink>-->
-							<input t:type="checkbox" value="false"/>
-						</form>
-						</label>
-		            </p:compareCell>
+<!--		            <p:compareCell>-->
+<!--		            	<label class="checkbox">-->
+<!--		            	<form t:type="form">-->
+							<t:actionlink t:id="compare" context="course.id"><input t:type="checkbox" value="false"/></t:actionlink>
+<!--							<input t:type="checkbox" value="false"/>-->
+<!--						</form>-->
+<!--						</label>-->
+<!--		            </p:compareCell>-->
 		            <p:empty>
 		              <p>${message:noCourses}</p>
 		            </p:empty>
@@ -209,7 +209,19 @@
 			    				<t:pagelink page="data/visualizationFP" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:freqPathAnalysis} </b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
-			    			<div class="span2" align="center">
+			    			
+<!--			    			<div class="span2" align="center">-->
+<!--			    				<t:pagelink page="data/visualizationD3_2" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Frequent ${message:pathAnalysis} 2</b> </t:pagelink>-->
+<!--			    				<br /><br />-->
+<!--			    			</div>-->
+			    			<div class="span1">
+			    			</div>	
+			    		</div>
+			    		<div class="row-fluid">
+		    				
+		    				<div class="span1">
+		    				</div>
+		    				<div class="span2" align="center">
 			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysis} (OLD) </b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
@@ -217,15 +229,9 @@
 			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object (OLD)</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
-<!--			    			<div class="span2" align="center">-->
-<!--			    				<t:pagelink page="data/visualizationD3_2" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Frequent ${message:pathAnalysis} 2</b> </t:pagelink>-->
-<!--			    				<br /><br />-->
-<!--			    			</div>-->
-			    			<div class="span1">
-			    			</div>
-			    			<div class="span5">
-			    			</div>
-			    		</div>
+		    				<div class="span6">
+		    				</div>
+		    			</div>
 		    		</t:zone> <!-- analysisSelectZone  -->		
     			</div>
     		</div>

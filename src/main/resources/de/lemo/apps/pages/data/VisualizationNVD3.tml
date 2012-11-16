@@ -117,36 +117,56 @@
 			      </div>
 			       
 			       
-			      <!-- Advanced-->
+			     <!-- Courses -->
                   <div class="accordion-group">
                     <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                       Advanced <b class="caret"></b>
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
+                       Courses <b class="caret"></b>
                       </a>
                     </div>   
-			        <div id="collapseFour" class="accordion-body collapse">  
-			        	<div class="accordion-inner">  
-			        	
-			        			
-			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
-  			                	<div class="slider" id="supportSlider"></div><br />
-  			                	<br />
-  			                	
-             
+			        <div id="collapseFive" class="accordion-body collapse">  
+			        	<div class="accordion-inner">               
                         
-	                            <label class="control-label" id="chargeslider-label"></label>
-  			                	<div class="slider" id="chargesupportSlider"></div><br />
-  			                	<br/>
-  			                	
-  			                	<label class="control-label" id="distanceslider-label"></label>
-  			                	<div class="slider" id="distancesupportSlider"></div><br />
-  			                	<br/>
-  			                	
-  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   
+	                            <t:jquery.palette
+	                              t:id="courses"
+	                              encoder="courseIdEncoder"
+	                              selected="selectedCourses"
+	                              model="courseIds"/>
                        
                      	 </div>
 			        </div>
 			      </div>  
+			       
+<!--			       Advanced-->
+<!--                  <div class="accordion-group">-->
+<!--                    <div class="accordion-heading">-->
+<!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">-->
+<!--                       Advanced <b class="caret"></b>-->
+<!--                      </a>-->
+<!--                    </div>   -->
+<!--			        <div id="collapseFour" class="accordion-body collapse">  -->
+<!--			        	<div class="accordion-inner">  -->
+<!--			        	-->
+<!--			        			-->
+<!--			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>-->
+<!--  			                	<div class="slider" id="supportSlider"></div><br />-->
+<!--  			                	<br />-->
+<!--  			                	-->
+<!--             -->
+<!--                        -->
+<!--	                            <label class="control-label" id="chargeslider-label"></label>-->
+<!--  			                	<div class="slider" id="chargesupportSlider"></div><br />-->
+<!--  			                	<br/>-->
+<!--  			                	-->
+<!--  			                	<label class="control-label" id="distanceslider-label"></label>-->
+<!--  			                	<div class="slider" id="distancesupportSlider"></div><br />-->
+<!--  			                	<br/>-->
+<!--  			                	-->
+<!--  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   -->
+<!--                       -->
+<!--                     	 </div>-->
+<!--			        </div>-->
+<!--			      </div>  -->
 			            
 			 </div><!-- accordion -->
   			   		

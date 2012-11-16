@@ -95,6 +95,7 @@ public class VisualizationNVD3 {
     @Property
     @SuppressWarnings("unused")
     private SelectModel courseModel;
+    
 
     @Property
     @Persist
@@ -141,15 +142,15 @@ public class VisualizationNVD3 {
 
     @Inject
     @Property
-    private LongValueEncoder userIdEncoder;
+    private LongValueEncoder userIdEncoder, courseIdEncoder;
 
     @Property
     @Persist
-    private List<Long> userIds;
+    private List<Long> userIds, courseIds;
 
     @Property
     @Persist
-    private List<Long> selectedUsers;
+    private List<Long> selectedUsers, selectedCourses;
 
     public List<Long> getUsers() {
         List<Long> courses = new ArrayList<Long>();
@@ -166,6 +167,10 @@ public class VisualizationNVD3 {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
+            if(this.selectedCourses == null){
+            	this.selectedCourses= new ArrayList<Long>();
+            	this.selectedCourses.add(courseId);
+            }
             
             return true;
         } else
@@ -189,6 +194,7 @@ public class VisualizationNVD3 {
         this.courseId = null;
         this.course = null;
         this.selectedUsers = null;
+        this.selectedCourses = null;
         this.selectedActivities = null;
     }
 
@@ -201,6 +207,7 @@ public class VisualizationNVD3 {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
         userIds = getUsers();
+        courseIds = userWorker.getCurrentUser().getMyCourses();
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -215,9 +222,15 @@ public class VisualizationNVD3 {
     }
 
     public String getQuestionResult() {
-        ArrayList<Long> courseIds = new ArrayList<Long>();
-        courseIds.add(courseId);
-        //courseIds.add(2100L);
+        
+    	List<Long> courseList = new ArrayList<Long>();
+    	if(selectedCourses!= null && !selectedCourses.isEmpty()){
+    		if (!selectedCourses.contains(courseId))
+    			selectedCourses.add(courseId);
+    		courseList = selectedCourses;
+    	}	
+    		else courseList.add(courseId);
+   
 
         boolean considerLogouts = true;
 
@@ -238,13 +251,16 @@ public class VisualizationNVD3 {
             endStamp = new Long(endDate.getTime() / 1000);
         }
         
+        
+        
+        
         this.resolution=(dateWorker.daysBetween(beginDate, endDate)+1);
 
         //String tempString = analysis.computeQ1JSON(courseIds, null, beginStamp, endStamp, resolution, types);//(courseIds, selectedUsers, types, considerLogouts, , );
         
         //courseIds.add(2100L);
         
-        HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courseIds, null, selectedUsers, beginStamp, endStamp, resolution, types);
+        HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courseList, null, selectedUsers, beginStamp, endStamp, resolution, types);
         
         
         //ResultListLongObject results2 = analysis.computeQ1(courseIds, null, beginStamp, endStamp, resolution, types);
@@ -258,29 +274,28 @@ public class VisualizationNVD3 {
 			Set<Long> courseSet = results.keySet();
 			Iterator<Long> it = courseSet.iterator();
 			while(it.hasNext()){
+				
 				Long courseId = it.next();
 				ResultListLongObject resultObject = results.get(courseId);
         
-        
-			        
-			        graphDataObject = new JSONObject();
-			        graphDataValues = new JSONArray();
-			       
-			        
-			        
-			        for (Integer i = 0;i<resultObject.getElements().size();i++){
+			    graphDataObject = new JSONObject();
+			    graphDataValues = new JSONArray();
+			    Long currentDateStamp = 0L;
+			    
+			    for (Integer i = 0;i<resultObject.getElements().size();i++){
 			        	JSONArray graphValue = new JSONArray();
 			        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
-			        	Long currentDateStamp = beginStamp*1000+dateMultiplier;
+			        	currentDateStamp = beginStamp*1000+dateMultiplier;
 			        	graphValue.put(0,new JSONLiteral(currentDateStamp.toString()));
 			        	graphValue.put(1,new JSONLiteral(resultObject.getElements().get(i).toString()));
 			        	
 			        	graphDataValues.put(graphValue);
-			        }
-			        
-			        graphDataObject.put("values", graphDataValues);
-			        graphDataObject.put("key",course.getCourseName());
-			        graphParentArray.put(graphDataObject);
+			    }
+			     
+			    Course course = courseDAO.getCourseByDMSId(courseId);
+			    graphDataObject.put("values", graphDataValues);
+			    graphDataObject.put("key",course.getCourseName());
+			    graphParentArray.put(graphDataObject);
 			        
 			}       
 			        

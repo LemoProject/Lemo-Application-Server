@@ -287,24 +287,24 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
-			ResultListLongObject result = null;
-			if(results !=null)
-				result = results.get(course);
-			else  result = null;
+			ResultListLongObject uniqueResult = null;
+			
+			if(results !=null){
+				uniqueResult = results.get(course.getCourseId());
+			} else  uniqueResult = null;
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
 			
-			logger.debug("BeginDate: "+beginDate);
 			
 			//checking if result size matches resolution 
-			if(result!= null && result.getElements()!=null && result.getElements().size() == resolution)
+			if(uniqueResult!= null && uniqueResult.getElements()!=null && uniqueResult.getElements().size() == resolution)
 	        {
 					for(int i=0 ;i<resolution;i++){
 	        
 	        	
 						beginCal.add(Calendar.DAY_OF_MONTH, 1);
-						list1.add(new XYDateDataItem(beginCal.getTime() , result.getElements().get(i)));
+						list1.add(new XYDateDataItem(beginCal.getTime() , uniqueResult.getElements().get(i)));
 	        
 					}
 	        } // if there was an error while retrieving result data from dms ... one single null result is added 

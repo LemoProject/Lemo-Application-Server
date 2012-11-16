@@ -157,7 +157,7 @@ public class Explorer {
     {
     	coursesGridModel = beanModelSource.createDisplayModel(Course.class, componentResources.getMessages());
     	coursesGridModel.include("coursename","lastRequestDate");
-    	coursesGridModel.add("compare",null);
+    	//coursesGridModel.add("compare",null);
     	    	
     }
     
