@@ -4,6 +4,7 @@
 package de.lemo.apps.restws.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,8 @@ import javax.ws.rs.QueryParam;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
@@ -53,7 +56,7 @@ public class AnalysisImpl implements Analysis {
     private static final String QUESTIONS_BASE_URL = "http://localhost:8081/beuth/dms/questions";
 
     @Override
-    public HashMap<Long, ResultListLongObject> computeQ1(List<Long> courses, List<Long> roles, List<Long> users,  Long starttime, Long endtime,
+    public HashMap<Long, ResultListLongObject> computeCourseActivity(List<Long> courses, List<Long> roles, List<Long> users,  Long starttime, Long endtime,
             int resolution, List<String> resourceTypes) {
         // Create resource delegate
         // logger.info("Getting Server Starttime");
@@ -69,21 +72,80 @@ public class AnalysisImpl implements Analysis {
                         + response.getStatus());
             }
 
-            QCourseActivity qcourseActivity = ProxyFactory.create(QCourseActivity.class,
+            QCourseActivityString qcourseActivity = ProxyFactory.create(QCourseActivityString.class,
                                                                   QUESTIONS_BASE_URL);
             if(qcourseActivity != null) {
 
-            	ResultListHashMapObject resultObject = qcourseActivity.compute(courses, roles, users, starttime, endtime, resolution,resourceTypes);
-     		    if(resultObject!=null && resultObject.getElements()!=null){
-                	Set<Long> keySet =  resultObject.getElements().keySet();
-                	Iterator<Long> it = keySet.iterator();
-                	while(it.hasNext()){
-                		Long learnObjectTypeName = it.next();
-                		logger.debug("Result Course IDs: "+learnObjectTypeName);
-                	}
-            
-                 } else logger.debug("Empty resultset !!!");
-                 // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+            	String resultString = qcourseActivity.compute(courses, roles, users, starttime, endtime, resolution,resourceTypes);
+            	ResultListHashMapObject resultObject = new ResultListHashMapObject();
+            	logger.debug("CourseActivity ResultList: "+resultString);
+            	
+            	 ObjectMapper mapper = new ObjectMapper();
+                 JsonNode jsonObj = mapper.readTree(resultString);
+                 JsonNode entries = jsonObj.get("entries");
+                 JsonNode keys = jsonObj.get("keys");
+                 HashMap<Long, ResultListLongObject> resultList = new HashMap<Long, ResultListLongObject>();
+                 if (entries != null && keys !=null) {
+                	 logger.debug("Entries: "+jsonObj.get("entries").toString());
+                	 // if more than one course result is returned
+                	 if (entries.isArray() && keys.isArray()){
+                		Iterator<JsonNode> kit = keys.getElements();
+                		Iterator<JsonNode> eit = entries.getElements();
+                		List<Long> entryList = new ArrayList<Long>();
+                		while (kit.hasNext()) {
+                			Long keyValue = Long.parseLong(kit.next().getValueAsText());
+                			JsonNode entryNodes = eit.next();
+                			JsonNode entryNodesArray = entryNodes.get("elements");
+                			logger.debug("EntryNodes :"+entryNodesArray);
+                			if (entryNodesArray.isArray()){
+                				logger.debug("Entries is Array ....");
+                				Iterator<JsonNode> enit = entryNodesArray.getElements();
+                				while (enit.hasNext()) {
+                					logger.debug("Entry Values: "+enit.next().getValueAsText());
+                					entryList.add(enit.next().getValueAsLong(0L));
+                				}
+                			} else logger.debug("Entries is NO Array ....");
+                			ResultListLongObject entryValues = new ResultListLongObject(entryList);
+                			resultList.put(keyValue, entryValues);
+                			
+                			logger.debug("Result Keys: "+keyValue);
+                		}
+                		// if only one course result is returned
+                	 } else {
+                		Long keyValue = Long.parseLong(keys.getValueAsText()); 
+                		JsonNode entryNodesArray = entries.get("elements");
+                		List<Long> entryList = new ArrayList<Long>();
+             			logger.debug("EntryNodes :"+entryNodesArray);
+             			
+             			if (entryNodesArray.isArray()){
+            				logger.debug("Entries is Array ....");
+            				Iterator<JsonNode> enit = entryNodesArray.getElements();
+            				while (enit.hasNext()) {
+            					logger.debug("Entry Values: "+enit.next().getValueAsText());
+            					entryList.add(enit.next().getValueAsLong(0L));
+            				}
+            			} else logger.debug("Entries is NO Array ....");
+            			ResultListLongObject entryValues = new ResultListLongObject(entryList);
+            			resultList.put(keyValue, entryValues);
+            			
+            			logger.debug("Result Keys: "+keyValue);
+                		 
+                	 }
+                 } else logger.debug("Entries not found!");
+            	
+            	
+//            	if(resultObject!=null && resultObject.getElements()!=null){
+//                	Set<Long> keySet =  resultObject.getElements().keySet();
+//                	Iterator<Long> it = keySet.iterator();
+//                	while(it.hasNext()){
+//                		Long learnObjectTypeName = it.next();
+//                		logger.debug("Result Course IDs: "+learnObjectTypeName);
+//                	}
+//            
+//                 } else logger.debug("Empty resultset !!!");
+                 
+     		    
+     		    // ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
                  // List<Long> resultList = new ArrayList<Long>();
                  // for (int i=0; i<result.getElements().size();i++) {
                  // Long value = mapper.readValue(result.getElements().get(i).toString(), Long.class);
@@ -91,7 +153,9 @@ public class AnalysisImpl implements Analysis {
                 //
                 // return new ResultList(resultList);
                 // }
-                return resultObject.getElements();
+                
+     		    
+     		    return resultList;//resultObject.getElements();
             }
 
         } catch (ClientProtocolException e) {
@@ -166,7 +230,7 @@ public class AnalysisImpl implements Analysis {
     
 
     @Override
-    public ResultListResourceRequestInfo computeQ1Extended(List<Long> courses, Long startTime, Long endTime,
+    public ResultListResourceRequestInfo computeCourseActivityExtended(List<Long> courses, Long startTime, Long endTime,
             List<String> resourceTypes) {
 
         try {
@@ -252,7 +316,7 @@ public class AnalysisImpl implements Analysis {
     
     
     @Override
-    public ResultListRRITypes computeQ1ExtendedDetails(List<Long> courses, Long startTime, Long endTime,
+    public ResultListRRITypes computeCourseActivityExtendedDetails(List<Long> courses, Long startTime, Long endTime,
             Long resolution, List<String> resourceTypes) {
 
         try {

@@ -486,7 +486,7 @@ public class Visualization {
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			
 			
-			HashMap<Long, ResultListLongObject> results = analysis.computeQ1(courses, roles, null, beginStamp, endStamp, resolution, resourceTypesNames);
+			HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courses, roles, null, beginStamp, endStamp, resolution, resourceTypesNames);
 			
 			
 			

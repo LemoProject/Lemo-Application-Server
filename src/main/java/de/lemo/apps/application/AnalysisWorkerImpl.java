@@ -73,7 +73,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis");
-			ResultListResourceRequestInfo results = analysis.computeQ1Extended(courses, beginStamp, endStamp, resourceTypesNames);
+			ResultListResourceRequestInfo results = analysis.computeCourseActivityExtended(courses, beginStamp, endStamp, resourceTypesNames);
 			logger.debug("Extended Analysis: "+ results);
 			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
 		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
@@ -173,7 +173,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis Details");
-			ResultListRRITypes results = analysis.computeQ1ExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
+			ResultListRRITypes results = analysis.computeCourseActivityExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
 			logger.debug("Extended Analysls Details: "+ results);
 			if(results!= null ){
 				if(results.getAssignmentRRI()!=null){
@@ -286,7 +286,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			HashMap<Long, ResultListLongObject> results = analysis.computeQ1(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
+			HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
 			ResultListLongObject result = null;
 			if(results !=null)
 				result = results.get(course);

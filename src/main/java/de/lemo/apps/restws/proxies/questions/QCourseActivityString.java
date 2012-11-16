@@ -6,6 +6,7 @@ import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.RESOLUT
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.ROLE_IDS;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.TYPES;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.USER_IDS;
 
 import java.util.List;
 
@@ -23,8 +24,9 @@ public interface QCourseActivityString {
     @Path("courseactivity")
     @Produces(MediaType.APPLICATION_JSON)
     public String compute(
-            @FormParam(COURSE_IDS) List<Long> courses,
+    		@FormParam(COURSE_IDS) List<Long> courses,
             @FormParam(ROLE_IDS) List<Long> roles,
+            @FormParam(USER_IDS) List<Long> users,
             @FormParam(START_TIME) Long starttime,
             @FormParam(END_TIME) Long endtime,
             @FormParam(RESOLUTION) Integer resolution,

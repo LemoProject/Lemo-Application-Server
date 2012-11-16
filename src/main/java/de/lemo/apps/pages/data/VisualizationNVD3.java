@@ -242,10 +242,10 @@ public class VisualizationNVD3 {
 
         //String tempString = analysis.computeQ1JSON(courseIds, null, beginStamp, endStamp, resolution, types);//(courseIds, selectedUsers, types, considerLogouts, , );
         
-        HashMap<Long, ResultListLongObject> results = analysis.computeQ1(courseIds, null, selectedUsers, beginStamp, endStamp, resolution, types);
-        
-        //courseIds.remove(0);
         //courseIds.add(2100L);
+        
+        HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courseIds, null, selectedUsers, beginStamp, endStamp, resolution, types);
+        
         
         //ResultListLongObject results2 = analysis.computeQ1(courseIds, null, beginStamp, endStamp, resolution, types);
         

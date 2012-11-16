@@ -38,7 +38,11 @@
 		  return "#e377c2";
 		}
 
-	
+	//check if we have values to work with
+	 if(!_nodes || !_links) {
+	    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
+	    	return;
+	 }
 
 	function calculate() {
         var amtPaths = _nodes[_nodes.length-1].pathId;
@@ -57,11 +61,7 @@
     if (page==1) $("#prev").hide();
     if (page==pages) $("#next").hide();
 
-	//check if we have values to work with
-    if(!_nodes || !_links) {
-    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
-    	return;
-    }
+	
 
 
 	function init(){
