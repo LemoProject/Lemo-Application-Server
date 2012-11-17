@@ -330,7 +330,7 @@ function update2() {
 	});
 	
 	nodeEnter.append("nodetitle")
-	   .text(function(d) { return "<b>Lernobjekt:</b> "+ d.name+"<br /><br /><b>Lernobjekttyp:</b> "+ d.type+"<br /><br /> <b>Besuche</b>: "+d.value;});
+	   .text(function(d) { return "<b>Learning object:</b> "+ d.name+"<br /><br /><b>Lerning object type:</b> "+ d.type+"<br /><br /> <b>Activities</b>: "+d.value;});
 
 
 
@@ -401,7 +401,7 @@ function focus(d) {
     		vis.append("svg:text")
     		   .attr("x", 30 + (w/4)*3)
     		   .attr("y", 55)
-    		   .text("1 to 10 requests");
+    		   .text("1 to 10 interactionsinteractions");
 
     		vis.append("svg:rect")
     		   .attr("x", (w/4)*3 - 20)
@@ -414,7 +414,7 @@ function focus(d) {
     		vis.append("svg:text")
     		   .attr("x", 30 + (w/4)*3)
     		   .attr("y", 85)
-    		   .text("11 to 50 requests")
+    		   .text("11 to 50 interactions")
     		   
     		   vis.append("svg:rect")
     		   .attr("x", (w/4)*3 - 20)
@@ -427,7 +427,7 @@ function focus(d) {
     		vis.append("svg:text")
 	 		   .attr("x", 30 + (w/4)*3)
 	 		   .attr("y", 115)
-	 		   .text("More than 50 requests")
+	 		   .text("More than 50 interactions")
     		
     	}
 

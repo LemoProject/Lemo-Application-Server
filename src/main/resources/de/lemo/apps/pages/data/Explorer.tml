@@ -75,14 +75,15 @@
 								</header>
 								<p><b>${message:firstRequest}:</b> ${firstRequestDate} <br /> </p>
 								<p><b>${message:lastRequest}:</b> ${lastRequestDate} <br /> </p>
-								<p><b>${message:courseMaxParticipants}:</b> ${CurrentCourse.maxParticipants}<br />  </p>
 								<p><b>${message:courseEnroledParticipants}:</b> ${CurrentCourse.enroledParticipants}<br /> </p> 
+								
 								<label class="checkbox">
 		            			<form t:type="form">
-									Favorite <t:actionlink t:id="favorite" context="CurrentCourse.id"><input t:type="checkbox" value="${CurrentCourse.isFavorite}"/></t:actionlink>
+									${message:favoriteOption} <t:actionlink t:id="favorite" context="CurrentCourse.id"><input t:type="checkbox" value="${CurrentCourse.isFavorite}"/></t:actionlink>
 								</form>
 								</label>
-								<br />
+								<p><br /><br /><br /></p>
+								
 								<t:pagelink page="data/visualization" id="${message:viewdetails}" context="${CurrentCourse.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
 								
 							</section>	
@@ -189,16 +190,16 @@
 		    				<div class="span1">
 		    				</div>
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationNVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis}</b> </t:pagelink> 
+			    				<t:pagelink page="data/visualizationNVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisTime}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationLONVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object</b> </t:pagelink> 
+			    				<t:pagelink page="data/visualizationLONVD3" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLO}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationLONVD3TreeMap" context="${CurrentCourse.id}"><img src="${usageAnalysisLOTreeMapIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object Treemap</b> </t:pagelink> 
+			    				<t:pagelink page="data/visualizationLONVD3TreeMap" context="${CurrentCourse.id}"><img src="${usageAnalysisLOTreeMapIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLOTreemap}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
@@ -222,11 +223,11 @@
 		    				<div class="span1">
 		    				</div>
 		    				<div class="span2" align="center">
-			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysis} (OLD) </b> </t:pagelink>
+			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysisTime} (OLD) </b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysis} / Learning Object (OLD)</b> </t:pagelink> 
+			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLO} (OLD)</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 		    				<div class="span6">

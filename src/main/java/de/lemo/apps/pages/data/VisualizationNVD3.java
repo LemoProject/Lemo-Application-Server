@@ -11,15 +11,19 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -29,6 +33,7 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -36,6 +41,7 @@ import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
@@ -43,6 +49,7 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
@@ -64,12 +71,21 @@ public class VisualizationNVD3 {
 
     @Inject
     private CourseIdValueEncoder courseValueEncoder;
+    
+    @Inject
+	private ComponentResources componentResources;
+	
+    @Inject 
+	private BeanModelSource beanModelSource;
 
     @Inject
     private Analysis analysis;
 
     @Inject
     private UserWorker userWorker;
+    
+    @Inject
+	private AnalysisWorker analysisWorker;
 
     @Inject
     private CourseDAO courseDAO;
@@ -126,11 +142,27 @@ public class VisualizationNVD3 {
     @Property
     @Persist
     private List<Course> courses;
+    
+    @Property
+    private ResourceRequestInfo resourceItem;
+	
+	@Persist
+	private List<ResourceRequestInfo> showDetailsList;
 
     // Value Encoder for activity multi-select component
     @Property(write = false)
     private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
             EResourceType.class);
+    
+    @Property(write=false)
+	@Retain
+	private BeanModel resourceGridModel;
+    {
+    	resourceGridModel = beanModelSource.createDisplayModel(ResourceRequestInfo.class, componentResources.getMessages());
+    	resourceGridModel.include("resourcetype","title","requests");
+    	//resourceGridModel.add("show",null);
+    	    	
+    }
 
     // Select Model for activity multi-select component
     @Property(write = false)
@@ -158,6 +190,25 @@ public class VisualizationNVD3 {
          List<Long> elements = analysis.computeCourseUsers(courses, beginDate.getTime() / 1000, endDate.getTime() / 1000).getElements();
         logger.info(" User Ids:         ----        "+elements);
          return elements;
+    }
+    
+    
+    @Cached
+    public List<ResourceRequestInfo> getResourceList(){
+    	this.course = courseDAO.getCourseByDMSId(courseId);
+		
+		List<ResourceRequestInfo> resultList;
+		
+		if(selectedActivities!=null && selectedActivities.size()>=1){
+			logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
+			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, selectedActivities);
+		}else {
+			logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
+			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, null);
+		}
+		logger.debug("ExtendedAnalysisWorker Results: "+resultList);
+		
+    	return resultList;
     }
 
     public Object onActivate(Course course) {
@@ -397,5 +448,11 @@ public class VisualizationNVD3 {
 
     public String getLastRequestDate() {
         return getLocalizedDate(this.endDate);//course.getLastRequestDate());
+    }
+    
+    public String getResourceTypeName(){
+    	if(this.resourceItem!=null && this.resourceItem.getResourcetype() != "")
+    		return messages.get("EResourceType."+this.resourceItem.getResourcetype());
+    	else return messages.get("EResourceType.UNKNOWN");
     }
 }

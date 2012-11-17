@@ -50,7 +50,7 @@ public class JqPlotLine extends JqPlot {
       seriesDefaults.put("highlighter",new JSONObject("{show: true, showLabel: true, tooltipAxes: 'y',sizeAdjust: 10.5 , tooltipLocation : 'ne'}"));
       seriesDefaults.put("cursor", new JSONObject("{ show:true, zoom: true, constrainZoomTo: x, showTooltip:true }"));
       seriesDefaults.put("grid", new JSONObject("{background: '#FFF', drawGridlines: false, gridLineColor: '#222', borderColor: '#222', shadow: false, drawBorder: false}"));
-      axisDefaults.put("yaxis", new JSONLiteral("{padMin: 0, label: 'Clicks', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
+      axisDefaults.put("yaxis", new JSONLiteral("{padMin: 0, label: 'Activities', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
       axisDefaults.put("xaxis", new JSONLiteral("{padMin: 0, renderer:jQuery.jqplot.DateAxisRenderer}"));
       
       //dateAxisRenderer.put("renderer", new JSONLiteral("jQuery.jqplot.DateAxisRenderer"));

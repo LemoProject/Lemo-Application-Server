@@ -81,7 +81,7 @@
     	  	.style("fill", function(d) { return color(d.parent.name); });
     	  
     	  cell.append("squaretitle")
-			.text(function(d) { return "<b>"+d.name+"</b>: <br /> Requests: "+d.requests+"<br /> User: "+d.user;});
+			.text(function(d) { return "<b>"+d.name+"</b>: <br /> Activities: "+d.requests+"<br /> User: "+d.user;});
 
       
     	  var textEnter = cell.append("svg:text")

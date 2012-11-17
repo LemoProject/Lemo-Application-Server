@@ -267,7 +267,7 @@ public class VisualizationLONVD3 {
 	        }
         
         graphDataObject.put("values", graphDataValues);
-        graphDataObject.put("key","Requests");
+        graphDataObject.put("key","Activities");
 		
         JSONObject graphDataObject2 = new JSONObject();
         JSONArray graphDataValues2 = new JSONArray();
