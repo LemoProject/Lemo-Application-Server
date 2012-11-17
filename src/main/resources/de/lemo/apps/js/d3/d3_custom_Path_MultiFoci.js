@@ -14,7 +14,7 @@
   
 	  var startDistance = 200;
 	  
-	  function color(name) {
+	  function customColor(name) {
 		  if (name=="Resource")
 		  return "#ff8f1e ";
 		  else if (name=="Course")
@@ -34,7 +34,7 @@
 		  return "#e377c2";
 		}
 	  
-   // var color = d3.scale.category20();
+   var color = d3.scale.category20();
 
     vis = d3.select("#viz").append("svg:svg")
       .attr("width", w)
@@ -58,7 +58,7 @@
     	
   //check if we have values to work with
     if(!_nodes || !_links) {
-    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
+    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
     	return;
     }
     
@@ -142,8 +142,9 @@
     	 currentCharge = -optCharge;
     	 currentDistance = optDistance;
     	 
-    	 printLegend();
+    	 
     	 update2();
+    	 printLegend();
     	 
     }
 
@@ -238,7 +239,7 @@ function update2() {
 		 	return (c > 100 ? 100 : c);
 		 })
 	 //.style("fill", function(d) { return color(1); })
-	 .style("fill", function(d) { return color(d.type); })
+	 .style("fill", function(d) { return customColor(d.type); })
 		 //.call(force.drag)
 	 
 	.on("click", function(d){
@@ -392,40 +393,40 @@ function focus(d) {
 
 	function printLegend() {
     		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
+    		   .attr("x", (w/4)*3.5 - 20)
     		   .attr("y", 50)
     		   .attr("stroke", "lightgrey")
-    		   .attr("height", 1)
-    		   .attr("width", 40);
+    		   .attr("height", 2)
+    		   .attr("width", 30);
 
     		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3)
+    		   .attr("x", 30 + (w/4)*3.5)
     		   .attr("y", 55)
-    		   .text("1 to 10 interactionsinteractions");
+    		   .text("1 to 10 interactions");
 
     		vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
+    		   .attr("x", (w/4)*3.5 - 20)
     		   .attr("y", 80)
     		   .attr("stroke", "green")
     		    .attr("fill", "green")
-    		   .attr("height", 1)
-    		   .attr("width", 40);
+    		   .attr("height", 2)
+    		   .attr("width", 30);
 
     		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3)
+    		   .attr("x", 30 + (w/4)*3.5)
     		   .attr("y", 85)
     		   .text("11 to 50 interactions")
     		   
     		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
+    		   .attr("x", (w/4)*3.5 - 20)
     		   .attr("y", 110)
     		   .attr("stroke", "darkgreen")
     		   .attr("fill", "darkgreen")
     		   .attr("height", 2)
-    		   .attr("width", 40);
+    		   .attr("width", 30);
     		
     		vis.append("svg:text")
-	 		   .attr("x", 30 + (w/4)*3)
+	 		   .attr("x", 30 + (w/4)*3.5)
 	 		   .attr("y", 115)
 	 		   .text("More than 50 interactions")
     		

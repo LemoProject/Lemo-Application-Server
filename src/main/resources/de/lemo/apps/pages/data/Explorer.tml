@@ -84,7 +84,7 @@
 								</label>
 								<p><br /><br /><br /></p>
 								
-								<t:pagelink page="data/visualization" id="${message:viewdetails}" context="${CurrentCourse.courseid}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
+								<t:pagelink page="data/visualizationNVD3" id="${message:viewdetails}" context="${CurrentCourse.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
 								
 							</section>	
 							</t:zone> <!-- courseZone  -->

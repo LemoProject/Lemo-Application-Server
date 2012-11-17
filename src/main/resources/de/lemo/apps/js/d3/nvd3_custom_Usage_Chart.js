@@ -10,6 +10,12 @@
 	  
 	  data = d3custom.data;
 	  
+	  //check if we have values to work with
+	    if(!data) {
+	    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
+	    	return;
+	    }
+	  
 	  nv.addGraph(function() {
 		  var chart = nv.models.cumulativeLineChart()
 		                     .x(function(d) { return d[0] })
