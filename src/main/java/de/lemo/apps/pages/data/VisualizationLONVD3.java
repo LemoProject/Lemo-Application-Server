@@ -220,80 +220,7 @@ public class VisualizationLONVD3 {
 
     public String getQuestionResult() {
     	List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-        List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-        List<TextValueDataItem> list1 = CollectionFactory.newList();
-        List<TextValueDataItem> list2 = CollectionFactory.newList();
-        if(courseId!=null){
-        	Long endStamp=0L;
-        	Long beginStamp=0L;
-        	if(endDate!=null){
-        		endStamp = new Long(endDate.getTime()/1000);
-        	} //else endtime= 1334447632L;
-	        
-        	if(beginDate!=null){
-        		beginStamp = new Long(beginDate.getTime()/1000);
-        	} //else starttime = 1308968800L;
-        	
-			if (this.resolution == null || this.resolution < 10 )
-				this.resolution = 30;
-			List<Long> roles = new ArrayList<Long>();
-			List<Long> courses = new ArrayList<Long>();
-			courses.add(courseId);
-			
-			//calling dm-server
-			for (int i=0;i<courses.size();i++){
-				logger.debug("Courses: "+courses.get(i));
-			}
-        	
-		
-			
-			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-		
-			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedActivities);
-        
-        
-        
-        JSONArray graphParentArray = new JSONArray();
-        JSONObject graphDataObject = new JSONObject();
-        JSONArray graphDataValues = new JSONArray();
-       
-        if(results!= null && results.size() > 0)
-	        for(Integer j=0 ;j<results.size();j++){
-	        	JSONObject graphValue = new JSONObject();
-	
-	        	graphValue.put("x",new JSONLiteral("'"+results.get(j).getTitle()+"'"));
-	        	graphValue.put("y",new JSONLiteral(results.get(j).getRequests().toString()));
-	        	
-	        	graphDataValues.put(graphValue);
-	        }
-        
-        graphDataObject.put("values", graphDataValues);
-        graphDataObject.put("key","Requests");
-		
-        JSONObject graphDataObject2 = new JSONObject();
-        JSONArray graphDataValues2 = new JSONArray();
-       
-        
-        if(results!= null && results.size() > 0)
-	        for (Integer i = 0;i<results.size();i++){
-	        	JSONObject graphValue2 = new JSONObject();
-	     
-	        	graphValue2.put("x",new JSONLiteral("'"+results.get(i).getTitle()+"'"));
-	        	graphValue2.put("y",new JSONLiteral(results.get(i).getUsers().toString()));
-	        	
-	        	graphDataValues2.put(graphValue2);
-	        }
-        
-        graphDataObject2.put("values", graphDataValues2);
-        graphDataObject2.put("key","User");
-		
-        
-        graphParentArray.put(graphDataObject);
-        graphParentArray.put(graphDataObject2);
-        
-        logger.debug(graphParentArray.toString());
-        
-        return graphParentArray.toString(); 
+ 
         if(courseId != null) {
             Long endStamp = 0L;
             Long beginStamp = 0L;
@@ -318,8 +245,9 @@ public class VisualizationLONVD3 {
 
             logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
 
+            @SuppressWarnings("unchecked")
             List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate,
-                selectedActivities);
+                selectedUsers, selectedActivities);
 
             JSONArray graphParentArray = new JSONArray();
             JSONObject graphDataObject = new JSONObject();

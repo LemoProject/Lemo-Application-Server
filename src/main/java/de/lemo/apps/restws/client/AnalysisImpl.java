@@ -309,46 +309,6 @@ public class AnalysisImpl implements Analysis {
 //        return "";
 //    }
 //    
-    @Override
-    public String computeQ1ExtendedJSON(List<Long> courses, Long startTime, Long endTime,
-            List<String> resourceTypes) {
-
-        try {
-            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
-
-            ClientResponse<ServiceStartTime> response;
-
-            response = request.get(ServiceStartTime.class);
-
-            if(response.getStatus() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatus());
-            }
-
-            QActivityResourceTypeString qActivityResourceType = ProxyFactory.create(QActivityResourceTypeString.class,
-                                                                              QUESTIONS_BASE_URL);
-            if(qActivityResourceType != null) {
-
-                String result = qActivityResourceType.compute(courses, startTime, endTime,resourceTypes);
-
-                return result;
-            }
-
-        } catch (ClientProtocolException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Gebe leere Resultlist zurück");
-        return "";
-    }
     
     
     @Override
