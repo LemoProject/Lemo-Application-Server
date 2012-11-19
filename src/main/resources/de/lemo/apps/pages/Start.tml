@@ -91,32 +91,32 @@
     		<br />
     </div>
   </div>  
-  <div class="row">	
-    <div class="span12">
-	    <ul class="thumbnails">
-	    	<li class="span4">
-	    	<div class="thumbnail">
-				<img src="http://placehold.it/150x100" alt="" />
-				<h5>USP One</h5>
-			</div>
-	   		</li>
-	   		
-	   		<li class="span4">
-	    	<div class="thumbnail">
-				<img src="http://placehold.it/150x100" alt="" />
-				<h5>USP Two</h5>
-			</div>
-	   		</li>
-	   		
-	   		<li class="span4">
-	    	<div class="thumbnail">
-				<img src="http://placehold.it/150x100" alt="" />
-				<h5>USP Three</h5>
-			</div>
-	   		</li>
-	   	</ul>
-	</div>
-  </div>
+<!--  <div class="row">	-->
+<!--    <div class="span12">-->
+<!--	    <ul class="thumbnails">-->
+<!--	    	<li class="span4">-->
+<!--	    	<div class="thumbnail">-->
+<!--				<img src="http://placehold.it/150x100" alt="" />-->
+<!--				<h5>USP One</h5>-->
+<!--			</div>-->
+<!--	   		</li>-->
+<!--	   		-->
+<!--	   		<li class="span4">-->
+<!--	    	<div class="thumbnail">-->
+<!--				<img src="http://placehold.it/150x100" alt="" />-->
+<!--				<h5>USP Two</h5>-->
+<!--			</div>-->
+<!--	   		</li>-->
+<!--	   		-->
+<!--	   		<li class="span4">-->
+<!--	    	<div class="thumbnail">-->
+<!--				<img src="http://placehold.it/150x100" alt="" />-->
+<!--				<h5>USP Three</h5>-->
+<!--			</div>-->
+<!--	   		</li>-->
+<!--	   	</ul>-->
+<!--	</div>-->
+<!--  </div>-->
   <div class="row">	  
 	<div class="span12">
 	<section id="learnMore">

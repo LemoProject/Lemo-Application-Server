@@ -129,6 +129,10 @@ public class VisualizationLO {
 	private List<EResourceType> activities;
 	
 	@Property
+    @Persist
+    private List<Long> selectedUsers;
+	
+	@Property
 	//@Persist
     private Course course;
 	
@@ -368,6 +372,7 @@ public class VisualizationLO {
 		this.courseId = null;
 		this.course = null;
 		this.activities = null;
+		this.selectedUsers = null;
 		
 	}
     
@@ -474,7 +479,7 @@ public class VisualizationLO {
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, activities);
+			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedUsers, activities);
 			
 			
 			JSONArray graphParentArray = new JSONArray();

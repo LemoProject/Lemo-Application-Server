@@ -91,6 +91,11 @@ public class Explorer {
     private Asset usageAnalysisLOIcon;
 	
 	@Inject
+    @Path("../../images/icons/UsageAnalysisLO_TreeMap_Icon.png")
+    @Property
+    private Asset usageAnalysisLOTreeMapIcon;
+	
+	@Inject
     @Path("../../images/icons/PathAnalysis_Icon.png")
     @Property
     private Asset navAnalysisIcon;
@@ -152,7 +157,7 @@ public class Explorer {
     {
     	coursesGridModel = beanModelSource.createDisplayModel(Course.class, componentResources.getMessages());
     	coursesGridModel.include("coursename","lastRequestDate");
-    	coursesGridModel.add("compare",null);
+    	//coursesGridModel.add("compare",null);
     	    	
     }
     

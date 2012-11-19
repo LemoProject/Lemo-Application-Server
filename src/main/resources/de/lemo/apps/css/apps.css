@@ -87,7 +87,7 @@ text.shadow {
 */
 
 .tipsy { font-size: 13px; position: absolute; padding: 5px; z-index: 100000; }
-  .tipsy-inner { opacity: 0.7; background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
+  .tipsy-inner { opacity: 0.85; background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
 
   /* Rounded corners */
   .tipsy-inner { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
@@ -95,7 +95,7 @@ text.shadow {
   /* Uncomment for shadow */
   /*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
   
-  .tipsy-arrow { opacity: 0.7; position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
+  .tipsy-arrow { opacity: 0.85; position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
   
   /* Rules to colour arrows */
   .tipsy-arrow-n { border-bottom-color: #000; }
@@ -111,6 +111,48 @@ text.shadow {
     .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
   .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
   .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
+
+/**
+* D3.js  css
+*/
+
+//TreeMap 
+
+.cell {
+  border: solid 1px white;
+  font: 10px sans-serif;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+text {
+    pointer-events: none;
+}
+.grandparent text {
+    font-weight: bold;
+}
+rect {
+    fill: none;
+    stroke: #FFFFFF;
+}
+rect.parent, .grandparent rect {
+    stroke-width: 2px;
+}
+.grandparent rect {
+    fill: #FFFFFF;
+}
+.children rect.parent, .grandparent rect {
+    cursor: pointer;
+}
+rect.parent {
+    pointer-events: all;
+}
+.children:hover rect.child, .grandparent:hover rect {
+    fill: #AAAAAA;
+}
+
 
 
 /**

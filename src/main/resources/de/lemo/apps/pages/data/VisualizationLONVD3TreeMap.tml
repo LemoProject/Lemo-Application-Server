@@ -1,13 +1,6 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-    
-    <style>
-
-		#viz svg {
-		height: 500px;
-		}
-	</style>
      
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
@@ -24,34 +17,8 @@
 		  
     	<div class="span9">
         	<div id="viz">
-        		<svg><!-- d3js visualization --></svg>
+        		<!-- d3js visualization -->
         	</div>
-        	
-        	<br />
-    			
-    			<div class="accordion2" id="accordion3">
-			            <div class="accordion-group">
-			              <div class="accordion-heading">
-			                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse4">
-				    		  ${message:detailView}<b class="caret"></b>
-			                </a>
-			              </div>
-			              <div style="height: auto;" id="collapse4" class="accordion-body in collapseExt">
-			                <div class="accordion-inner">	
-				    			<t:grid source="resourceList" row="resourceItem" model="resourceGridModel" inPlace="true" width="100%">
-				    				<p:resourcetypeCell>
-				    					${resourceTypeName}
-				    				</p:resourcetypeCell>
-<!--				    				<p:showCell>-->
-<!--				    					<t:actionlink t:id="showDetails" context="[resourceItem.id, resourceItem.resourceType]">details</t:actionlink>-->
-<!--				    				</p:showCell>-->
-				    			</t:grid>
-    					   </div>
-			              </div>
-			            </div>
-			      </div>
-        	
-        	
     	</div>
       
     	<div class="span3">
@@ -143,27 +110,7 @@
 			      </div>
 			       
 			       
-			     <!-- Courses -->
-                  <div class="accordion-group">
-                    <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-                        ${message:courseOption} <b class="caret"></b>
-                      </a>
-                    </div>   
-			        <div id="collapseFive" class="accordion-body collapse">  
-			        	<div class="accordion-inner">               
-                        
-	                            <t:jquery.palette
-	                              t:id="courses"
-	                              encoder="courseIdEncoder"
-	                              selected="selectedCourses"
-	                              model="courseIds"/>
-                       
-                     	 </div>
-			        </div>
-			      </div>  
-			       
-<!--			       Advanced-->
+			      <!-- Advanced-->
 <!--                  <div class="accordion-group">-->
 <!--                    <div class="accordion-heading">-->
 <!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">-->

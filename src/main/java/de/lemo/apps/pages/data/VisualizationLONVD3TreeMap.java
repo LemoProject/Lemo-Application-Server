@@ -3,9 +3,13 @@ package de.lemo.apps.pages.data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
@@ -51,8 +55,8 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_LO_Bar_Chart.js" })
-public class VisualizationLONVD3 {
+@Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
+public class VisualizationLONVD3TreeMap {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -220,7 +224,6 @@ public class VisualizationLONVD3 {
 
     public String getQuestionResult() {
     	List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-        List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
         List<TextValueDataItem> list1 = CollectionFactory.newList();
         List<TextValueDataItem> list2 = CollectionFactory.newList();
         if(courseId!=null){
@@ -249,117 +252,57 @@ public class VisualizationLONVD3 {
 			
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 		
-			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedActivities);
+			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedUsers, selectedActivities);
         
-        
-        
-        JSONArray graphParentArray = new JSONArray();
-        JSONObject graphDataObject = new JSONObject();
-        JSONArray graphDataValues = new JSONArray();
-       
-        if(results!= null && results.size() > 0)
-	        for(Integer j=0 ;j<results.size();j++){
-	        	JSONObject graphValue = new JSONObject();
-	
-	        	graphValue.put("x",new JSONLiteral("'"+results.get(j).getTitle()+"'"));
-	        	graphValue.put("y",new JSONLiteral(results.get(j).getRequests().toString()));
-	        	
-	        	graphDataValues.put(graphValue);
-	        }
-        
-        graphDataObject.put("values", graphDataValues);
-        graphDataObject.put("key","Requests");
+		HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
+		if (results!=null && results.size() > 0) 	
+			for (int i = 0; i< results.size();i++) {
+				String resType  = results.get(i).getResourcetype();
+				List<ResourceRequestInfo> learnObjectList;
+				if (learningObjectTypes.containsKey(resType)){
+					learnObjectList = learningObjectTypes.get(resType);
+					learnObjectList.add(results.get(i));
+				} else {
+					learnObjectList = new ArrayList<ResourceRequestInfo>();
+					learnObjectList.add(results.get(i));
+					
+				}
+				learningObjectTypes.put(resType, learnObjectList);	
+			}
+		else return "";
 		
-        JSONObject graphDataObject2 = new JSONObject();
-        JSONArray graphDataValues2 = new JSONArray();
-       
-        
-        if(results!= null && results.size() > 0)
-	        for (Integer i = 0;i<results.size();i++){
-	        	JSONObject graphValue2 = new JSONObject();
-	     
-	        	graphValue2.put("x",new JSONLiteral("'"+results.get(i).getTitle()+"'"));
-	        	graphValue2.put("y",new JSONLiteral(results.get(i).getUsers().toString()));
-	        	
-	        	graphDataValues2.put(graphValue2);
-	        }
-        
-        graphDataObject2.put("values", graphDataValues2);
-        graphDataObject2.put("key","User");
 		
         
-        graphParentArray.put(graphDataObject);
-        graphParentArray.put(graphDataObject2);
+        JSONObject graphRootObject = new JSONObject();
+        JSONArray graphDataRootArray = new JSONArray();
         
-        logger.debug(graphParentArray.toString());
         
-        return graphParentArray.toString(); 
-        if(courseId != null) {
-            Long endStamp = 0L;
-            Long beginStamp = 0L;
-            if(endDate != null) {
-                endStamp = new Long(endDate.getTime() / 1000);
-            }
-
-            if(beginDate != null) {
-                beginStamp = new Long(beginDate.getTime() / 1000);
-            }
-
-            if(this.resolution == null || this.resolution < 10)
-                this.resolution = 30;
-            List<Long> roles = new ArrayList<Long>();
-            List<Long> courses = new ArrayList<Long>();
-            courses.add(courseId);
-
-            // calling dm-server
-            for(int i = 0; i < courses.size(); i++) {
-                logger.debug("Courses: " + courses.get(i));
-            }
-
-            logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
-
-            List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate,
-                selectedActivities);
-
-            JSONArray graphParentArray = new JSONArray();
-            JSONObject graphDataObject = new JSONObject();
-            JSONArray graphDataValues = new JSONArray();
-
-            if(results != null && results.size() > 0)
-                for(Integer j = 0; j < results.size(); j++) {
-                    JSONObject graphValue = new JSONObject();
-
-                    graphValue.put("x", results.get(j).getTitle());
-                    graphValue.put("y", results.get(j).getRequests().toString());
-
-                    graphDataValues.put(graphValue);
-                }
-
-            graphDataObject.put("values", graphDataValues);
-            graphDataObject.put("key", "Activities");
-
-            JSONObject graphDataObject2 = new JSONObject();
-            JSONArray graphDataValues2 = new JSONArray();
-
-            if(results != null && results.size() > 0) {
-                for(Integer i = 0; i < results.size(); i++) {
-                    JSONObject graphValue2 = new JSONObject();
-
-                    graphValue2.put("x", results.get(i).getTitle());
-                    graphValue2.put("y", results.get(i).getUsers().toString());
-
-                    graphDataValues2.put(graphValue2);
-                }
-            }
-            graphDataObject2.put("values", graphDataValues2);
-            graphDataObject2.put("key", "User");
-
-            graphParentArray.put(graphDataObject);
-            graphParentArray.put(graphDataObject2);
-
-            logger.debug(graphParentArray.toString());
-
-            return graphParentArray.toString();
+        Set<String> keySet  = learningObjectTypes.keySet();
+        Iterator<String> it = keySet.iterator();
+		while(it.hasNext()){
+			String learnObjectTypeName = it.next();
+			JSONObject graphLOTypeObject = new JSONObject();
+			JSONArray graphLOTypeChildreenArray = new JSONArray();
+			graphLOTypeObject.put("name", learnObjectTypeName);
+			for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size();i++){
+				JSONObject graphLOObject = new JSONObject();
+				ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
+				graphLOObject.put("name", learnObject.getTitle());
+				graphLOObject.put("requests", learnObject.getRequests());
+				graphLOObject.put("user", learnObject.getUsers());
+				graphLOObject.put("value", learnObject.getRequests());
+				graphLOTypeChildreenArray.put(graphLOObject);
+			}
+			graphLOTypeObject.put("children",graphLOTypeChildreenArray);
+			graphDataRootArray.put(graphLOTypeObject);
+		} 
+		
+		graphRootObject.put("name", "root");
+		graphRootObject.put("children", graphDataRootArray);
+        
+        logger.debug(graphRootObject.toString());
+        
+        return graphRootObject.toString(); 
         }
         return "";
     }

@@ -14,8 +14,27 @@
   
 	  var startDistance = 200;
 	  
+	  function customColor(name) {
+		  if (name=="Resource")
+		  return "#ff8f1e ";
+		  else if (name=="Course")
+		  return "#1f77b4";
+		  else if (name=="Forum")
+		  return "#2ca02c";
+		  else if (name=="Question")
+		  return "#9467bd";
+		  else if (name=="Quiz")
+		  return "#d62728";
+		  else if (name=="Assignment")
+		  return "#8c564b";
+		  else if (name=="Scorm")
+		  return "#7f7f7f";
+		  else if (name=="Wiki")
+		  return "#17becf";
+		  return "#e377c2";
+		}
 	  
-    var color = d3.scale.category20();
+   var color = d3.scale.category20();
 
     vis = d3.select("#viz").append("svg:svg")
       .attr("width", w)
@@ -39,7 +58,7 @@
     	
   //check if we have values to work with
     if(!_nodes || !_links) {
-    	$("#viz").prepend($('<div class="alert">No matching data.</div>'));
+    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
     	return;
     }
     
@@ -60,12 +79,15 @@
    	var optCharge = maxCharge/k;
    
    	//Calculation of the optimal value for d3 LinkDistance between nodes 
-   	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/_nodes.length;
+   	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/(_nodes.length/3);
 	
+   	if (optDistance > maxDistance) optDistance = maxDistance;
+   	if (optDistance < minDistance) optDistance = minDistance;
+   	
    	var foci = [{x:10, y:10},{x:10+300,y:10},{x:800,y:600}];  
 
    	
-   	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" = "+optDistance+" with k:"+k);
+   	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" and Intermediate Result: "+ (maxDistance/(1/Math.sqrt(_links.length)))+" = "+optDistance+" with k:"+k);
    	
     var force = d3.layout.force()
     .on("tick",function (e) {tick(e)})
@@ -120,8 +142,9 @@
     	 currentCharge = -optCharge;
     	 currentDistance = optDistance;
     	 
-    	 printLegend();
+    	 
     	 update2();
+    	 printLegend();
     	 
     }
 
@@ -216,7 +239,7 @@ function update2() {
 		 	return (c > 100 ? 100 : c);
 		 })
 	 //.style("fill", function(d) { return color(1); })
-	 .style("fill", function(d) { return fill(d.type); })
+	 .style("fill", function(d) { return customColor(d.type); })
 		 //.call(force.drag)
 	 
 	.on("click", function(d){
@@ -284,7 +307,7 @@ function update2() {
 			 	if(d.value>5 && d.value<=20) c = d.value;
 			 	if(d.value>20) c = 20 + Math.sqrt(d.value);
 			 	return (c > 100 ? 100 : c);} )
-		 .style("fill", function(d) { return fill(d.type); })
+		 //.style("fill", function(d) { return color(d.type); })
 		 .style("stroke", "#333");
 		 
 	 })
@@ -308,7 +331,7 @@ function update2() {
 	});
 	
 	nodeEnter.append("nodetitle")
-	   .text(function(d) { return "<b>Lernobjekt:</b> "+ d.name+"<br /><br /><b>Lernobjekttyp:</b> "+ d.type+"<br /><br /> <b>Besuche</b>: "+d.value;});
+	   .text(function(d) { return "<b>Learning object:</b> "+ d.name+"<br /><br /><b>Lerning object type:</b> "+ d.type+"<br /><br /> <b>Activities</b>: "+d.value;});
 
 
 
@@ -370,42 +393,42 @@ function focus(d) {
 
 	function printLegend() {
     		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
+    		   .attr("x", (w/4)*3.5 - 20)
     		   .attr("y", 50)
     		   .attr("stroke", "lightgrey")
-    		   .attr("height", 1)
-    		   .attr("width", 40);
+    		   .attr("height", 2)
+    		   .attr("width", 30);
 
     		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3)
+    		   .attr("x", 30 + (w/4)*3.5)
     		   .attr("y", 55)
-    		   .text("1 to 10 requests");
+    		   .text("1 to 10 interactions");
 
     		vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
+    		   .attr("x", (w/4)*3.5 - 20)
     		   .attr("y", 80)
     		   .attr("stroke", "green")
     		    .attr("fill", "green")
-    		   .attr("height", 1)
-    		   .attr("width", 40);
+    		   .attr("height", 2)
+    		   .attr("width", 30);
 
     		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3)
+    		   .attr("x", 30 + (w/4)*3.5)
     		   .attr("y", 85)
-    		   .text("11 to 50 requests")
+    		   .text("11 to 50 interactions")
     		   
     		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3 - 20)
+    		   .attr("x", (w/4)*3.5 - 20)
     		   .attr("y", 110)
     		   .attr("stroke", "darkgreen")
     		   .attr("fill", "darkgreen")
     		   .attr("height", 2)
-    		   .attr("width", 40);
+    		   .attr("width", 30);
     		
     		vis.append("svg:text")
-	 		   .attr("x", 30 + (w/4)*3)
+	 		   .attr("x", 30 + (w/4)*3.5)
 	 		   .attr("y", 115)
-	 		   .text("More than 50 requests")
+	 		   .text("More than 50 interactions")
     		
     	}
 

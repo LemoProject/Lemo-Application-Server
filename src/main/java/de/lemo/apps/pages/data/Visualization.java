@@ -4,8 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.Block;
@@ -447,7 +450,8 @@ public class Visualization {
    
     public List getFirstQuestionDataItems(){
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
-        List<XYDateDataItem> list1 = CollectionFactory.newList();
+        //List<XYDateDataItem> list1 = CollectionFactory.newList();
+        List<XYDateDataItem> courseDataList = CollectionFactory.newList();
         List<XYDateDataItem> list2 = CollectionFactory.newList();
         if(courseId!=null){
         	Long endStamp=0L;
@@ -482,7 +486,7 @@ public class Visualization {
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 			
 			
-			ResultListLongObject results = analysis.computeQ1(courses, roles, null, beginStamp, endStamp, resolution, resourceTypesNames);
+			HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courses, roles, null, beginStamp, endStamp, resolution, resourceTypesNames);
 			
 			
 			
@@ -511,22 +515,35 @@ public class Visualization {
 //				i++;
 //			}
 //			
+			if(results!=null)
+			{			
+				Set<Long> courseSet = results.keySet();
+				Iterator<Long> it = courseSet.iterator();
+				while(it.hasNext()){
+					Long courseId = it.next();
+					ResultListLongObject resultObject = results.get(courseId);
 			
-			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-	        for(int j=0 ;j<resolution;j++){
-	        	//logger.debug("Building Chart JSON ---- Index:" +j);
-	        	if(this.twentyFourhMode)
-	        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
-	        		else beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(j)));
-	        	//logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
-	        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
-	        		logger.debug("Bin drin CourseID: "+this.courseId);
-	        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
-	        	}
-	        }
+					if(resultObject!= null && resultObject.getElements()!=null && resultObject.getElements().size() == resolution){
+						courseDataList = CollectionFactory.newList();
+						beginCal.setTime(beginDate);
+						for(int j=0 ;j<resolution;j++){
+				        	//logger.debug("Building Chart JSON ---- Index:" +j);
+				        	if(this.twentyFourhMode){
+				        		beginCal.add(Calendar.HOUR_OF_DAY, 1);
+				        	}else beginCal.add(Calendar.DAY_OF_MONTH, 1);
+				        	courseDataList.add(new XYDateDataItem(beginCal.getTime() , resultObject.getElements().get(j)));
+				        	//logger.debug("CourseID: "+this.courseId+" ResArrayID: "+resLongList3[0]+" Resolution: "+this.resolution+" ArrayLength: "+resLongList3.length);
+				        	if(resLongList3!=null && resolution.equals(resLongList3.length-1) && (this.courseId.compareTo(resLongList3[0]) == 0)){
+				        		logger.debug("Bin drin CourseID: "+this.courseId);
+				        		list2.add(new XYDateDataItem(beginCal.getTime() , resLongList3[j+1]));
+				        	}
+						}
+					}
+					dataList.add(courseDataList);
+				}
+			}
     	}
-        dataList.add(list1);
+        //dataList.add(list1);
         dataList.add(list2);
         return dataList;
 	}

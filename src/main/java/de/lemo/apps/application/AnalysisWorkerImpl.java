@@ -6,6 +6,7 @@ package de.lemo.apps.application;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -72,7 +73,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis");
-			ResultListResourceRequestInfo results = analysis.computeQ1Extended(courses, beginStamp, endStamp, resourceTypesNames);
+			ResultListResourceRequestInfo results = analysis.computeCourseActivityExtended(courses, beginStamp, endStamp, resourceTypesNames);
 			logger.debug("Extended Analysis: "+ results);
 			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
 		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
@@ -86,7 +87,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	}
 	
 	
-public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes){
+public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<Long> selectedUsers, List<EResourceType> resourceTypes){
         
     	if(course!=null && course.getId()!=null){
         	Long endStamp=0L;
@@ -122,7 +123,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis");
-			ResultListResourceRequestInfo results = analysis.computeLearningObjectUsage(courses, null, resourceTypesNames, beginStamp, endStamp);
+			ResultListResourceRequestInfo results = analysis.computeLearningObjectUsage(courses, selectedUsers, resourceTypesNames, beginStamp, endStamp);
 			logger.debug("Extended Analysis: "+ results);
 			if(results!= null && results.getResourceRequestInfos()!=null && results.getResourceRequestInfos().size() > 0){
 		        for(int i=0 ;i<results.getResourceRequestInfos().size();i++){
@@ -172,7 +173,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " ");
 			
 			logger.debug("Starting Extended Analysis Details");
-			ResultListRRITypes results = analysis.computeQ1ExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
+			ResultListRRITypes results = analysis.computeCourseActivityExtendedDetails(courses, beginStamp, endStamp, resolution.longValue(), resourceTypesNames);
 			logger.debug("Extended Analysls Details: "+ results);
 			if(results!= null ){
 				if(results.getAssignmentRRI()!=null){
@@ -285,20 +286,30 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 				logger.debug("Courses: "+courses.get(i));
 			}
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
-			ResultListLongObject results = analysis.computeQ1(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
+			HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courses, roles,null, beginStamp, endStamp, resolution,resourceTypesNames);
+			ResultListLongObject uniqueResult = null;
+			
+			if(results !=null){
+				uniqueResult = results.get(course.getCourseId());
+			} else  uniqueResult = null;
 			
 			Calendar beginCal = Calendar.getInstance();
 			beginCal.setTime(beginDate);
 			
-			logger.debug("BeginDate: "+beginDate);
 			
 			//checking if result size matches resolution 
-			if(results!= null && results.getElements()!=null && results.getElements().size() == resolution)
-	        for(int i=0 ;i<resolution;i++){
+			if(uniqueResult!= null && uniqueResult.getElements()!=null && uniqueResult.getElements().size() == resolution)
+	        {
+					for(int i=0 ;i<resolution;i++){
+	        
 	        	
-	        	beginCal.add(Calendar.DAY_OF_MONTH, 1);
-	        	list1.add(new XYDateDataItem(beginCal.getTime() , results.getElements().get(i)));
-	        }
+						beginCal.add(Calendar.DAY_OF_MONTH, 1);
+						list1.add(new XYDateDataItem(beginCal.getTime() , uniqueResult.getElements().get(i)));
+	        
+					}
+	        } // if there was an error while retrieving result data from dms ... one single null result is added 
+			  // because jqplot cant handle resultlist without an entry	
+				else list1.add(new XYDateDataItem(beginCal.getTime() , 0));
     	}
         dataList.add(list1);
         return dataList;

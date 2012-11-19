@@ -6,6 +6,13 @@
 	  var data = [];
 	  
 	  data = d3custom.data;
+	  
+	  if(!data) {
+	    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
+	    	return;
+	  }
+	  
+	  
 	  var  dataXAxis = data[0].values;
 	  
 	  nv.addGraph(function() {

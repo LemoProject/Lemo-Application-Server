@@ -1,5 +1,6 @@
 package de.lemo.apps.restws.client;
 
+import java.util.HashMap;
 import java.util.List;
 
 import de.lemo.apps.restws.entities.ResultListLongObject;
@@ -8,7 +9,7 @@ import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 
 public interface Analysis {
 
-    ResultListLongObject computeQ1(
+	HashMap<Long, ResultListLongObject> computeCourseActivity(
             List<Long> courses,
             List<Long> roles,
             List<Long> users,
@@ -17,27 +18,27 @@ public interface Analysis {
             int resolution,
             List<String> resourceTypes);
     
-    String computeQ1JSON(
-    		List<Long> courses, 
-    		List<Long> roles, 
-    		Long starttime, 
-    		Long endtime,
-            int resolution, 
-            List<String> resourceTypes);
+//    String computeQ1JSON(
+//    		List<Long> courses, 
+//    		List<Long> roles, 
+//    		Long starttime, 
+//    		Long endtime,
+//            int resolution, 
+//            List<String> resourceTypes);
 
-    ResultListResourceRequestInfo computeQ1Extended(
+    ResultListResourceRequestInfo computeCourseActivityExtended(
             List<Long> courses,
             Long startTime,
             Long endTime,
             List<String> resourceTypes);
     
-    String computeQ1ExtendedJSON(
-    		List<Long> courses, 
-    		Long startTime, 
-    		Long endTime,
-            List<String> resourceTypes);
+//    String computeQ1ExtendedJSON(
+//    		List<Long> courses, 
+//    		Long startTime, 
+//    		Long endTime,
+//            List<String> resourceTypes);
 
-    ResultListRRITypes computeQ1ExtendedDetails(
+    ResultListRRITypes computeCourseActivityExtendedDetails(
             List<Long> courses,
             Long startTime,
             Long endTime,

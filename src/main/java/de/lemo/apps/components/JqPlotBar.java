@@ -49,7 +49,7 @@ public class JqPlotBar extends JqPlot {
       renderer.put("fillAndStroke", new JSONLiteral("true"));
       
       seriesDefaults.put("seriesDefaults", renderer);
-      seriesDefaults.put("legend", new JSONLiteral("{  renderer: jQuery.jqplot.EnhancedLegendRenderer, show:true, location: 'ne', rendererOptions: { fontSize: '10pt'}, labels: ['Clicks', 'User']}"));
+      seriesDefaults.put("legend", new JSONLiteral("{  renderer: jQuery.jqplot.EnhancedLegendRenderer, show:true, location: 'ne', rendererOptions: { fontSize: '10pt'}, labels: ['Activities', 'User']}"));
       
       seriesDefaults.put("highlighter",new JSONObject("{show: true, showLabel: true, tooltipAxes: 'y',sizeAdjust: 10.5 , tooltipLocation : 'ne'}"));
       seriesDefaults.put("cursor", new JSONObject("{ show:true, zoom: true, constrainZoomTo: y, showTooltip:true }"));
