@@ -327,15 +327,14 @@ public class VisualizationNVD3 {
 			    graphDataValues = new JSONArray();
 			    Long currentDateStamp = 0L;
 			    
-			    for (Integer i = 0;i<resultObject.getElements().size();i++){
-			        	JSONArray graphValue = new JSONArray();
-			        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
-			        	currentDateStamp = beginStamp*1000+dateMultiplier;
-			        	graphValue.put(0,currentDateStamp.toString());
-			        	graphValue.put(1,resultObject.getElements().get(i).toString());
-			        	
-			        	graphDataValues.put(graphValue);
-			    }
+                for(Integer i = 0; i < resultObject.getElements().size(); i++) {
+                    JSONArray graphValue = new JSONArray();
+                    Long dateMultiplier = 60 * 60 * 24 * i.longValue() * 1000;
+                    currentDateStamp = beginStamp * 1000 + dateMultiplier;
+                    graphValue.put(0, currentDateStamp);
+                    graphValue.put(1, resultObject.getElements().get(i));
+                    graphDataValues.put(graphValue);
+                }
 			     
 			    Course course = courseDAO.getCourseByDMSId(courseId);
 			    graphDataObject.put("values", graphDataValues);

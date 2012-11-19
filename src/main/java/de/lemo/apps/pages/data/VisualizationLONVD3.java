@@ -258,7 +258,7 @@ public class VisualizationLONVD3 {
                     JSONObject graphValue = new JSONObject();
 
                     graphValue.put("x", results.get(j).getTitle());
-                    graphValue.put("y", results.get(j).getRequests().toString());
+                    graphValue.put("y", results.get(j).getRequests());
 
                     graphDataValues.put(graphValue);
                 }
@@ -274,7 +274,7 @@ public class VisualizationLONVD3 {
                     JSONObject graphValue2 = new JSONObject();
 
                     graphValue2.put("x", results.get(i).getTitle());
-                    graphValue2.put("y", results.get(i).getUsers().toString());
+                    graphValue2.put("y", results.get(i).getUsers());
 
                     graphDataValues2.put(graphValue2);
                 }
