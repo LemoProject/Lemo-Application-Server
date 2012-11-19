@@ -4,7 +4,7 @@
   d3custom.run = function() {
 
 	var w = 960,
-    h = 600,
+    h = 500,
     amt = 800,
     maxPos = 11,
     fill = d3.scale.category20(),

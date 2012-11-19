@@ -112,7 +112,7 @@
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                        ${message:advancedyOption} <b class="caret"></b>
+                        ${message:advancedOption} <b class="caret"></b>
                       </a>
                     </div>   
 			        <div id="collapseFour" class="accordion-body collapse">  
