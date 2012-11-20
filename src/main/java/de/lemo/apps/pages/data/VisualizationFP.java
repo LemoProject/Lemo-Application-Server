@@ -211,8 +211,8 @@ public class VisualizationFP {
         this.selectedUsers = null;
         this.selectedActivities = null;
         this.minSup=8;
-        this.pathLengthMin = 1L;
-        this.pathLengthMax = 200L;
+        this.pathLengthMin = null;
+        this.pathLengthMax = null;
     }
 
 //    void pageReset() {
@@ -237,10 +237,7 @@ public class VisualizationFP {
 	Integer val;
 	
 	@Property
-	Integer max;
-	
-	@Property
-	Integer min;
+	Long max, min;
 	
 	@Property
 	@Persist
@@ -274,11 +271,15 @@ public class VisualizationFP {
 		minSupParams.put("value", minSup);
 		
 		pathLengthParams=new JSONObject();
-		max=200;
-		min=1;
+		max=200L;
+		min=1L;
 		
-		pathLengthParams.put("min",min);
-		pathLengthParams.put("max",max);
+		if(pathLengthMax!=null)
+			max = pathLengthMax;
+		if(pathLengthMin!=null)
+			min = pathLengthMin;
+		pathLengthParams.put("min",1);
+		pathLengthParams.put("max",200);
 		pathLengthParams.put("range", true);
 		pathLengthParams.put("values", new JSONArray(min,max));
 	}
