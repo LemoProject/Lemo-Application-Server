@@ -199,7 +199,7 @@
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationLONVD3TreeMap" context="${CurrentCourse.id}"><img src="${usageAnalysisLOTreeMapIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLOTreemap}</b> </t:pagelink> 
+			    				<t:pagelink page="data/visualizationLOTreeMap" context="${CurrentCourse.id}"><img src="${usageAnalysisLOTreeMapIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLOTreemap}</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
@@ -223,6 +223,10 @@
 		    				<div class="span1">
 		    				</div>
 		    				<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationCumulutive" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisTime} Cumulutive</b> </t:pagelink> 
+			    				<br /><br />
+			    			</div>
+		    				<div class="span2" align="center">
 			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysisTime} (OLD) </b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
@@ -230,7 +234,7 @@
 			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLO} (OLD)</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
-		    				<div class="span6">
+		    				<div class="span4">
 		    				</div>
 		    			</div>
 		    		</t:zone> <!-- analysisSelectZone  -->		

@@ -405,8 +405,8 @@ public class AnalysisImpl implements Analysis {
     @Override
     public ResultListLongObject computeCourseUsers(
             List<Long> courseIds,
-            long startTime,
-            long endTime) {
+            Long startTime,
+            Long endTime) {
         ResultListLongObject result = null;
         QCourseUsers analysis = ProxyFactory.create(QCourseUsers.class, QUESTIONS_BASE_URL);
         if(analysis != null) 
@@ -421,7 +421,7 @@ public class AnalysisImpl implements Analysis {
             List<Long> courseIds,
             List<Long> userIds,
             List<String> types,
-            boolean considerLogouts,
+            Boolean considerLogouts,
             Long startTime,
             Long endTime) {
 
@@ -465,11 +465,14 @@ public class AnalysisImpl implements Analysis {
     @Override
     public String computeQFrequentPathBIDE(
 	    		List<Long> courseIds, 
-	    		List<Long> userIds, 
-	    		double minSup, 
-	    		boolean sessionWise,
-	    		long startTime,
-	    		long endTime)  {
+	    		List<Long> userIds,
+	    		List<String> types,
+	    		Long minLength,
+	    		Long maxLength,
+	    		Double minSup, 
+	    		Boolean sessionWise,
+	    		Long startTime,
+	    		Long endTime)  {
     	System.out.println("Starte BIDE Request");
         try {
             ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
@@ -481,7 +484,7 @@ public class AnalysisImpl implements Analysis {
 
             QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class, QUESTIONS_BASE_URL);
             if(qFrequentPath != null) {
-                String result = qFrequentPath.compute(courseIds, userIds, minSup, sessionWise, startTime, endTime);
+                String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength, minSup, sessionWise, startTime, endTime);
                 System.out.println("BIDE result: "+result);
                 return result;
             }

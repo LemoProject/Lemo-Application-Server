@@ -56,7 +56,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
-public class VisualizationLONVD3TreeMap {
+public class VisualizationCumulutive {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;

@@ -3,9 +3,13 @@ package de.lemo.apps.pages.data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
@@ -15,7 +19,6 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
-import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
@@ -23,19 +26,19 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
-import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
@@ -43,14 +46,17 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResourceRequestInfo;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
-public class VisualizationFP {
+@Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
+public class VisualizationLOTreeMap {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -60,6 +66,9 @@ public class VisualizationFP {
 
     @Inject
     private DateWorker dateWorker;
+    
+    @Inject
+	private AnalysisWorker analysisWorker;
 
     @Inject
     private CourseIdValueEncoder courseValueEncoder;
@@ -81,13 +90,12 @@ public class VisualizationFP {
 
     @Inject
     private TypeCoercer coercer;
-    
-	@Inject
-	private Request request;
-
 
     @Property
     private BreadCrumbInfo breadCrumb;
+
+    @InjectComponent
+    private Zone formZone;
 
     @Component(id = "customizeForm")
     private Form customizeForm;
@@ -166,26 +174,6 @@ public class VisualizationFP {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.endDate == null) {
-                this.endDate = course.getLastRequestDate();
-            } else {
-            	 this.selectedUsers = null;
-            	userIds = getUsers();
-            }
-            
-            if(this.beginDate == null){
-                this.beginDate = course.getFirstRequestDate();
-        	} else {
-        		this.selectedUsers = null;
-        		userIds = getUsers();
-        	}
-            Calendar beginCal = Calendar.getInstance();
-            Calendar endCal = Calendar.getInstance();
-            beginCal.setTime(beginDate);
-            endCal.setTime(endDate);
-            this.resolution = dateWorker.daysBetween(beginDate, endDate);
-            logger.debug("MinSup:"+minSup);
-            
             
             return true;
         } else
@@ -210,9 +198,6 @@ public class VisualizationFP {
         this.course = null;
         this.selectedUsers = null;
         this.selectedActivities = null;
-        this.minSup=8;
-        this.pathLengthMin = 1L;
-        this.pathLengthMax = 200L;
     }
 
 //    void pageReset() {
@@ -223,145 +208,139 @@ public class VisualizationFP {
     void onPrepareForRender() {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
-        
         userIds = getUsers();
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
+        // List<Course> courses =
+        // courseDAO.findAllByOwner(userWorker.getCurrentUser());
         return courseValueEncoder.create(Course.class);
     }
-    
-    
-	@Property
-	@Persist
-	Integer val;
-	
-	@Property
-	Integer max;
-	
-	@Property
-	Integer min;
-	
-	@Property
-	@Persist
-	Integer minSup;
-	
-	@Property
-	@Persist
-	Long pathLengthMin;
-	
-	@Property
-	@Persist
-	Long pathLengthMax;
-
-	@Property
-	private JSONObject minSupParams,
-					pathLengthParams,
-					minValue,
-					maxValue;
-		
-	//Seting up paramaters for jquery sliders 
-	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
-	public void initSlider(){
-
-		if(minSup==null)
-				minSup=8;
-		
-		minSupParams=new JSONObject();
-		
-		minSupParams.put("min", 1);
-		minSupParams.put("max", 10);
-		minSupParams.put("value", minSup);
-		
-		pathLengthParams=new JSONObject();
-		max=200;
-		min=1;
-		
-		pathLengthParams.put("min",min);
-		pathLengthParams.put("max",max);
-		pathLengthParams.put("range", true);
-		pathLengthParams.put("values", new JSONArray(min,max));
-	}
-    
-    
-    
 
     // returns datepicker params
     public JSONLiteral getDatePickerParams() {
         return dateWorker.getDatePickerParams();
     }
 
-    @Property
-    private double minSupDouble;
-    
-    private Double minSupValue;
-    
     public String getQuestionResult() {
-        ArrayList<Long> courseIds = new ArrayList<Long>();
-        courseIds.add(courseId);
-
-        boolean considerLogouts = false;
-
-        ArrayList<String> types = null;
-        if(selectedActivities != null && !selectedActivities.isEmpty()) {
-            types = new ArrayList<String>();
-            for(EResourceType resourceType : selectedActivities) {
-                types.add(resourceType.name().toUpperCase());
-            }
-        }
-
-        Long endStamp = 0L;
-        Long beginStamp = 0L;
-        if(beginDate != null) {
-            beginStamp = new Long(beginDate.getTime() / 1000);
-        }
-        if(endDate != null) {
-            endStamp = new Long(endDate.getTime() / 1000);
-        }
-        
-        //Check value for minumim support .. if no value is set it will default to 8 -> 0.8
-        if(minSup==null || minSup.equals(0)) minSup = 8;
-        minSupValue = new Double(minSup);
-        minSupValue = minSupValue / 10;
-        logger.debug("MinSupValue:"+ minSupValue + "  --  "+ minSupValue.doubleValue());
-        minSupDouble = minSupValue.doubleValue(); 
-        
-        logger.debug("PathLength: "+ pathLengthMin + "  --  "+ pathLengthMax);
+    	List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
+        List<TextValueDataItem> list1 = CollectionFactory.newList();
+        List<TextValueDataItem> list2 = CollectionFactory.newList();
+        if(courseId!=null){
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	if(endDate!=null){
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} //else endtime= 1334447632L;
+	        
+        	if(beginDate!=null){
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} //else starttime = 1308968800L;
         	
+			if (this.resolution == null || this.resolution < 10 )
+				this.resolution = 30;
+			List<Long> roles = new ArrayList<Long>();
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(courseId);
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				logger.debug("Courses: "+courses.get(i));
+			}
+        	
+		
+			
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+		
+			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedUsers, selectedActivities);
         
-        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, types, pathLengthMin , pathLengthMax, minSupDouble , considerLogouts, beginStamp, endStamp);
-    }
-    
-    public String getSupportValue(){
-    	Double minSupTemp = new Double(minSup);
-        minSupTemp = minSupTemp / 10;
-    	return minSupTemp.toString();
-    }
-    
-    public String getPathLengthValue(){
-    	if (pathLengthMin == null && pathLengthMax == null)
-    		return "All paths";
-    	if (pathLengthMin == null && pathLengthMax != null)
-    		return "1 - "+pathLengthMax;
-    	if (pathLengthMin != null && pathLengthMax == null)
-    		return pathLengthMin+" - 200";
-    	return pathLengthMin+" - "+pathLengthMax ;
+		HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
+		if (results!=null && results.size() > 0) 	
+			for (int i = 0; i< results.size();i++) {
+				String resType  = results.get(i).getResourcetype();
+				List<ResourceRequestInfo> learnObjectList;
+				if (learningObjectTypes.containsKey(resType)){
+					learnObjectList = learningObjectTypes.get(resType);
+					learnObjectList.add(results.get(i));
+				} else {
+					learnObjectList = new ArrayList<ResourceRequestInfo>();
+					learnObjectList.add(results.get(i));
+					
+				}
+				learningObjectTypes.put(resType, learnObjectList);	
+			}
+		else return "";
+		
+		
+        
+        JSONObject graphRootObject = new JSONObject();
+        JSONArray graphDataRootArray = new JSONArray();
+        
+        
+        Set<String> keySet  = learningObjectTypes.keySet();
+        Iterator<String> it = keySet.iterator();
+		while(it.hasNext()){
+			String learnObjectTypeName = it.next();
+			JSONObject graphLOTypeObject = new JSONObject();
+			JSONArray graphLOTypeChildreenArray = new JSONArray();
+			graphLOTypeObject.put("name", learnObjectTypeName);
+			for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size();i++){
+				JSONObject graphLOObject = new JSONObject();
+				ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
+				graphLOObject.put("name", learnObject.getTitle());
+				graphLOObject.put("requests", learnObject.getRequests());
+				graphLOObject.put("user", learnObject.getUsers());
+				graphLOObject.put("value", learnObject.getRequests());
+				graphLOTypeChildreenArray.put(graphLOObject);
+			}
+			graphLOTypeObject.put("children",graphLOTypeChildreenArray);
+			graphDataRootArray.put(graphLOTypeObject);
+		} 
+		
+		graphRootObject.put("name", "root");
+		graphRootObject.put("children", graphDataRootArray);
+        
+        logger.debug(graphRootObject.toString());
+        
+        return graphRootObject.toString(); 
+        }
+        return "";
     }
 
-    
     void setupRender() {
         logger.debug(" ----- Bin in Setup Render");
 
         ArrayList<Long> courseList = new ArrayList<Long>();
         courseList.add(course.getCourseId());
-
+        
+        
+        if(this.endDate == null){
+            this.endDate = course.getLastRequestDate();
+        } else {
+       	 	this.selectedUsers = null;
+       	 	userIds = getUsers();
+       }
+        if(this.beginDate == null){
+            this.beginDate = course.getFirstRequestDate();
+        } else {
+       	 	this.selectedUsers = null;
+       	 	userIds = getUsers();
+        }
         Calendar beginCal = Calendar.getInstance();
         Calendar endCal = Calendar.getInstance();
         beginCal.setTime(beginDate);
         endCal.setTime(endDate);
         this.resolution = dateWorker.daysBetween(beginDate, endDate);
-        logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
+
         
+        
+//
+//        Calendar beginCal = Calendar.getInstance();
+//        Calendar endCal = Calendar.getInstance();
+//        beginCal.setTime(beginDate);
+//        endCal.setTime(endDate);
+//        this.resolution = dateWorker.daysBetween(beginDate, endDate);
+//        logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
     }
 
     @AfterRender
@@ -375,11 +354,7 @@ public class VisualizationFP {
 
     void onSuccessFromCustomizeForm() {
         logger.debug("   ---  onSuccessFromCustomizeForm ");
-        String input = request.getParameter("minSup-slider");
-		if(input!=null)
-			minSup=Integer.parseInt(input);
-		logger.debug("MinSup Value: "+minSup);
-//      logger.debug("Selected activities: " + selectedActivities);
+        logger.debug("Selected activities: " + selectedActivities);
         logger.debug("Selected users: " + selectedUsers);
     }
 

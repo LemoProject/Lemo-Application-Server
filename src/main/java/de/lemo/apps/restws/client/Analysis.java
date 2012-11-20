@@ -62,21 +62,24 @@ public interface Analysis {
             List<Long> courseIds,
             List<Long> userIds,
             List<String> types,
-            boolean considerLogouts,
+            Boolean considerLogouts,
             Long startTime,
             Long endTime);
 
     ResultListLongObject computeCourseUsers(
             List<Long> courseIds,
-            long startTime,
-            long endTime);
+            Long startTime,
+            Long endTime);
     
     public String computeQFrequentPathBIDE(
     		List<Long> courseIds, 
-    		List<Long> userIds, 
-    		double minSup, 
-    		boolean sessionWise,
-    		long startTime,
-    		long endTime);
+    		List<Long> userIds,
+    		List<String> types,
+    		Long minLength,
+    		Long maxLength,
+    		Double minSup, 
+    		Boolean sessionWise,
+    		Long startTime,
+    		Long endTime);
 
 }

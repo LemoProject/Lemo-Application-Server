@@ -4,12 +4,8 @@
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.USER_IDS;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.MIN_SUP;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.SESSION_WISE;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.*;
+
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -28,8 +24,11 @@ public interface QFrequentPathsBIDE {
     @Path("frequentPaths")
     @Produces(MediaType.APPLICATION_JSON)
 	public String compute(
-    		@FormParam(COURSE_IDS) List<Long> courseIds, 
+			@FormParam(COURSE_IDS) List<Long> courseIds, 
     		@FormParam(USER_IDS) List<Long> userIds, 
+    		@FormParam(TYPES) List<String> types,
+    		@FormParam(MIN_LENGTH) Long minLength,
+    		@FormParam(MAX_LENGTH) Long maxLength,
     		@FormParam(MIN_SUP) double minSup, 
     		@FormParam(SESSION_WISE) boolean sessionWise,
     		@FormParam(START_TIME) long startTime,
