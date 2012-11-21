@@ -43,13 +43,17 @@
 	  
 	  console.log("DaysMin: "+daysMin+" DaysMax: "+daysMax);
 	  
-	  var margin = {top: 10, right: 50, bottom: 20, left: 50},
+	  var margin = {top: 30, right: 50, bottom: 20, left: 50},
 	    w = 120 - margin.left - margin.right,
 	    h = 500 - margin.top - margin.bottom;
 
 	  var min = daysMin,
 	      max = daysMax;
 
+	  if(min == 0 && max == 0) {
+	    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
+	    	return;
+	  }
 	  
       var vis = d3.box()
 	    .whiskers(iqr(1.5))
@@ -59,14 +63,36 @@
 	  vis.domain([min, max]);
 	  
 	  var svg = d3.select("#viz").selectAll("svg")
-    		.data(days, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} )
-    	.enter().append("svg")
+    		.data(days, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} );
+    	
+	  var svgBox = svg.enter().append("svg")
     		.attr("class", "box")
     		.attr("width", w + margin.left + margin.right)
     		.attr("height", h + margin.bottom + margin.top)
-    	.append("g")
-    		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    		.call(vis);
+    		
+	  svgBox.append("text")
+	  	.attr("class","days")
+		.attr("x", 0 )
+		.attr("y", 0)
+		.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")
+		.text(function(d) {return d.name;});
+	  
+	  svgBox.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+		.call(vis);
+	  
+	  
+	  d3.select("button").on("click", function() {
+		    svg.data(hours).call(vis.duration(1000)); // TODO automatic transitions
+		    svg.selectAll(".days")
+		    	.remove();
+		    svgBox.append("text")
+		    .attr("class","hours")
+		    .attr("x", 0 )
+			.attr("y", 0)
+			.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")
+			.text(function(d) {return d.name+":00 h";});
+		  });
 
 	// Returns a function to compute the interquartile range.
       function iqr(k) {

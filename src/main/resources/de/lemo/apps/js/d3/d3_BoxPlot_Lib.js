@@ -49,6 +49,12 @@ d3.box = function() {
 
       // Stash the new scale.
       this.__vis__ = x1;
+      
+//      // Adding Axis description
+//      g.append("svg:text")
+//      .attr("x", 0 )
+//      .attr("y", 0)
+//      .text(function(d) {return d.name;});
 
       // Note: the box, median, and box tick elements are fixed in number,
       // so we only have to handle enter and update. In contrast, the outliers
@@ -301,5 +307,9 @@ function boxQuartiles(d) {
     d3.quantile(d, .75)
   ];
 }
+
+
+
+
 
 })();

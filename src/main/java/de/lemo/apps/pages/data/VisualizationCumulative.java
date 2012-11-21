@@ -56,7 +56,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/d3_custom_BoxPlot.js" })
-public class VisualizationCumulutive {
+public class VisualizationCumulative {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -223,9 +223,6 @@ public class VisualizationCumulutive {
     }
 
     public String getQuestionResult() {
-    	List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-        List<TextValueDataItem> list1 = CollectionFactory.newList();
-        List<TextValueDataItem> list2 = CollectionFactory.newList();
         if(courseId!=null){
         	Long endStamp=0L;
         	Long beginStamp=0L;
@@ -264,55 +261,7 @@ public class VisualizationCumulutive {
 			
 			logger.debug("Cumulative result: "+result);
 			return result;
-//		HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
-//		if (results!=null && results.size() > 0) 	
-//			for (int i = 0; i< results.size();i++) {
-//				String resType  = results.get(i).getResourcetype();
-//				List<ResourceRequestInfo> learnObjectList;
-//				if (learningObjectTypes.containsKey(resType)){
-//					learnObjectList = learningObjectTypes.get(resType);
-//					learnObjectList.add(results.get(i));
-//				} else {
-//					learnObjectList = new ArrayList<ResourceRequestInfo>();
-//					learnObjectList.add(results.get(i));
-//					
-//				}
-//				learningObjectTypes.put(resType, learnObjectList);	
-//			}
-//		else return "";
-//		
-//		
-//        
-//        JSONObject graphRootObject = new JSONObject();
-//        JSONArray graphDataRootArray = new JSONArray();
-//        
-//        
-//        Set<String> keySet  = learningObjectTypes.keySet();
-//        Iterator<String> it = keySet.iterator();
-//		while(it.hasNext()){
-//			String learnObjectTypeName = it.next();
-//			JSONObject graphLOTypeObject = new JSONObject();
-//			JSONArray graphLOTypeChildreenArray = new JSONArray();
-//			graphLOTypeObject.put("name", learnObjectTypeName);
-//			for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size();i++){
-//				JSONObject graphLOObject = new JSONObject();
-//				ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
-//				graphLOObject.put("name", learnObject.getTitle());
-//				graphLOObject.put("requests", learnObject.getRequests());
-//				graphLOObject.put("user", learnObject.getUsers());
-//				graphLOObject.put("value", learnObject.getRequests());
-//				graphLOTypeChildreenArray.put(graphLOObject);
-//			}
-//			graphLOTypeObject.put("children",graphLOTypeChildreenArray);
-//			graphDataRootArray.put(graphLOTypeObject);
-//		} 
-//		
-//		graphRootObject.put("name", "root");
-//		graphRootObject.put("children", graphDataRootArray);
-//        
-//        logger.debug(graphRootObject.toString());
-//        
-//        return graphRootObject.toString(); 
+
         }
         return "";
     }
