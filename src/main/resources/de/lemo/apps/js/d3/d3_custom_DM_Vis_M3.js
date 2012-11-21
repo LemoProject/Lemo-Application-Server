@@ -37,6 +37,17 @@
 		  return "#17becf";
 		  return "#e377c2";
 		}
+	  
+	  
+	//Bind slide event to update minSup Value in front end
+	  $( "#minSup-slider" ).bind( "slide", function(event, ui) {
+	  	$( "#minSupSlider-label" ).html( "Minimum Support (0.1 - 1): " + ui.value/10 );
+	  });
+
+	  //Bind slide event to update pathlength Value in front end
+	  $( "#pathLength-slider" ).bind( "slide", function(event, ui) {
+	  	$( "#pathLengthSlider-label" ).html( "Path Length (1 - 200): " + ui.values[0] +" - "+ui.values[1]  );
+	  });  
 
 	//check if we have values to work with
 	 if(!_nodes || !_links) {
@@ -321,10 +332,7 @@ force.start();
 //
 
 
-//Bind slide event to update minSup Value in front end
-$( "#minSup-slider" ).bind( "slide", function(event, ui) {
-	$( "#minSupSlider-label" ).html( "Minimum Support (0.1 - 1): " + ui.value/10 );
-});
+
 
 $('nodetitle').parent().tipsy({
     gravity: 'sw',

@@ -37,12 +37,12 @@ public interface QCumulativeUserAccess {
 	@POST
 	@Path("cumulative")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListBoxPlot compute(
-			@FormParam(START_TIME) int starttime,
-			@FormParam(END_TIME) int endtime,
-			@FormParam(TYPES) List<EResourceType> types, 
+	public String compute(
+			@FormParam(COURSE_IDS) List<Long> courses,
+			@FormParam(TYPES) List<String> types, 
 			@FormParam(DEPARTMENT) List<Long> departments, 
 			@FormParam(DEGREE) List<Long> degrees, 
-			@FormParam(COURSE_IDS) List<Long> courses) ;
+			@FormParam(START_TIME) long starttime,
+			@FormParam(END_TIME) long endtime) ;
 	
 }

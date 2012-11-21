@@ -9,7 +9,6 @@
 	background: silver;
 }
 
-
 /*!
 * Changes to Bootstrap default css behavior
 */
@@ -157,6 +156,8 @@ rect.parent {
 
 
 /* BoxPlot - START */
+
+svg .box {}
 
 .box {
   font: 10px sans-serif;

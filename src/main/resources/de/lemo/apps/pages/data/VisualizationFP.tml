@@ -171,9 +171,9 @@ text.shadow {
 	  			                	
 	  			                	<br />
 	  			                	
-	  			                	<label class="control-label" id="minSupSlider-label">Path Length (1 - 200): ${pathLengthValue}</label>         
+	  			                	<label class="control-label" id="pathLengthSlider-label">Path Length (1 - 200): ${pathLengthValue}</label>         
 	                        		
-	  			                	<t:jquery.rangeslider t:min="pathLengthMin" t:max="pathLengthMax" t:params="pathLengthParams" />
+	  			                	<t:jquery.rangeslider t:id="pathLength" t:min="pathLengthMin" t:max="pathLengthMax" t:params="pathLengthParams" />
 									
                          	</div>
 			              </div>

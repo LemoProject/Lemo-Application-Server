@@ -3,6 +3,7 @@ package de.lemo.apps.restws.client;
 import java.util.HashMap;
 import java.util.List;
 
+import de.lemo.apps.restws.entities.ResultListBoxPlot;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -80,6 +81,14 @@ public interface Analysis {
     		Double minSup, 
     		Boolean sessionWise,
     		Long startTime,
+    		Long endTime);
+    
+    String computeCumulativeUserAccess(
+    		List<Long> courseIds, 
+    		List<String> types,
+    		List<Long> departments,
+    		List<Long> degrees,
+    		Long startTime, 
     		Long endTime);
 
 }

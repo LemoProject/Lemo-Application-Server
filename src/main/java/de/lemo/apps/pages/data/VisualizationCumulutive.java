@@ -55,7 +55,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
+@Import(library = { "../../js/d3/d3_custom_BoxPlot.js" })
 public class VisualizationCumulutive {
 
     @Environmental
@@ -247,62 +247,72 @@ public class VisualizationCumulutive {
 			for (int i=0;i<courses.size();i++){
 				logger.debug("Courses: "+courses.get(i));
 			}
+			
+			 List<String> types = null;
+		        if(selectedActivities != null && !selectedActivities.isEmpty()) {
+		            types = new ArrayList<String>();
+		            for(EResourceType resourceType : selectedActivities) {
+		                types.add(resourceType.name().toLowerCase());
+		            }
+		        }
         	
 		
 			
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
 		
-			List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate, selectedUsers, selectedActivities);
-        
-		HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
-		if (results!=null && results.size() > 0) 	
-			for (int i = 0; i< results.size();i++) {
-				String resType  = results.get(i).getResourcetype();
-				List<ResourceRequestInfo> learnObjectList;
-				if (learningObjectTypes.containsKey(resType)){
-					learnObjectList = learningObjectTypes.get(resType);
-					learnObjectList.add(results.get(i));
-				} else {
-					learnObjectList = new ArrayList<ResourceRequestInfo>();
-					learnObjectList.add(results.get(i));
-					
-				}
-				learningObjectTypes.put(resType, learnObjectList);	
-			}
-		else return "";
-		
-		
-        
-        JSONObject graphRootObject = new JSONObject();
-        JSONArray graphDataRootArray = new JSONArray();
-        
-        
-        Set<String> keySet  = learningObjectTypes.keySet();
-        Iterator<String> it = keySet.iterator();
-		while(it.hasNext()){
-			String learnObjectTypeName = it.next();
-			JSONObject graphLOTypeObject = new JSONObject();
-			JSONArray graphLOTypeChildreenArray = new JSONArray();
-			graphLOTypeObject.put("name", learnObjectTypeName);
-			for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size();i++){
-				JSONObject graphLOObject = new JSONObject();
-				ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
-				graphLOObject.put("name", learnObject.getTitle());
-				graphLOObject.put("requests", learnObject.getRequests());
-				graphLOObject.put("user", learnObject.getUsers());
-				graphLOObject.put("value", learnObject.getRequests());
-				graphLOTypeChildreenArray.put(graphLOObject);
-			}
-			graphLOTypeObject.put("children",graphLOTypeChildreenArray);
-			graphDataRootArray.put(graphLOTypeObject);
-		} 
-		
-		graphRootObject.put("name", "root");
-		graphRootObject.put("children", graphDataRootArray);
-        
-        logger.debug(graphRootObject.toString());
-        
-        return graphRootObject.toString(); 
+			String result = analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp);
+			
+			logger.debug("Cumulative result: "+result);
+			return result;
+//		HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
+//		if (results!=null && results.size() > 0) 	
+//			for (int i = 0; i< results.size();i++) {
+//				String resType  = results.get(i).getResourcetype();
+//				List<ResourceRequestInfo> learnObjectList;
+//				if (learningObjectTypes.containsKey(resType)){
+//					learnObjectList = learningObjectTypes.get(resType);
+//					learnObjectList.add(results.get(i));
+//				} else {
+//					learnObjectList = new ArrayList<ResourceRequestInfo>();
+//					learnObjectList.add(results.get(i));
+//					
+//				}
+//				learningObjectTypes.put(resType, learnObjectList);	
+//			}
+//		else return "";
+//		
+//		
+//        
+//        JSONObject graphRootObject = new JSONObject();
+//        JSONArray graphDataRootArray = new JSONArray();
+//        
+//        
+//        Set<String> keySet  = learningObjectTypes.keySet();
+//        Iterator<String> it = keySet.iterator();
+//		while(it.hasNext()){
+//			String learnObjectTypeName = it.next();
+//			JSONObject graphLOTypeObject = new JSONObject();
+//			JSONArray graphLOTypeChildreenArray = new JSONArray();
+//			graphLOTypeObject.put("name", learnObjectTypeName);
+//			for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size();i++){
+//				JSONObject graphLOObject = new JSONObject();
+//				ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
+//				graphLOObject.put("name", learnObject.getTitle());
+//				graphLOObject.put("requests", learnObject.getRequests());
+//				graphLOObject.put("user", learnObject.getUsers());
+//				graphLOObject.put("value", learnObject.getRequests());
+//				graphLOTypeChildreenArray.put(graphLOObject);
+//			}
+//			graphLOTypeObject.put("children",graphLOTypeChildreenArray);
+//			graphDataRootArray.put(graphLOTypeObject);
+//		} 
+//		
+//		graphRootObject.put("name", "root");
+//		graphRootObject.put("children", graphDataRootArray);
+//        
+//        logger.debug(graphRootObject.toString());
+//        
+//        return graphRootObject.toString(); 
         }
         return "";
     }
