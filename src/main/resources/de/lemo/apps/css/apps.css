@@ -167,12 +167,13 @@ svg .box {}
 .box rect,
 .box circle {
   fill: #fff;
-  stroke: #000;
+  stroke: #1f77b4;
   stroke-width: 1.5px;
 }
 
 .box .center {
   stroke-dasharray: 3,3;
+  stroke: #1f77b4;
 }
 
 .box .outlier {

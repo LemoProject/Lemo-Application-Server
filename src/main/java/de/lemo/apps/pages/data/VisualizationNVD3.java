@@ -318,7 +318,9 @@ public class VisualizationNVD3 {
         
         JSONArray graphParentArray = new JSONArray();
         JSONObject graphDataObject = new JSONObject();
+        JSONObject graphUserObject = new JSONObject();
         JSONArray graphDataValues = new JSONArray();
+        JSONArray graphUserValues = new JSONArray();
         
         if(results!=null)
 		{			
@@ -327,27 +329,44 @@ public class VisualizationNVD3 {
 			while(it.hasNext()){
 				
 				Long courseId = it.next();
-				ResultListLongObject resultObject = results.get(courseId);
+				ResultListLongObject resultAllObjects = results.get(courseId);
+				logger.debug("ResultList Length: "+resultAllObjects.getElements().size() + " Resolution: "+resolution);
+				ResultListLongObject resultDataObjects = new ResultListLongObject(resultAllObjects.getElements().subList(0, resolution-1)); 
+				ResultListLongObject resultUserObjects = new ResultListLongObject(resultAllObjects.getElements().subList(resolution, resultAllObjects.getElements().size()-1));
+				
         
 			    graphDataObject = new JSONObject();
+			    graphUserObject = new JSONObject();
 			    graphDataValues = new JSONArray();
+			    graphUserValues = new JSONArray();
+			    
 			    Long currentDateStamp = 0L;
 			    
-			    for (Integer i = 0;i<resultObject.getElements().size();i++){
-			        	JSONArray graphValue = new JSONArray();
+			    for (Integer i = 0;i<resultDataObjects.getElements().size()/2;i++){
+			        	JSONArray graphDataValue = new JSONArray();
+			        	JSONArray graphUserValue = new JSONArray();
 			        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
 			        	currentDateStamp = beginStamp*1000+dateMultiplier;
-			        	graphValue.put(0,new JSONLiteral(currentDateStamp.toString()));
-			        	graphValue.put(1,new JSONLiteral(resultObject.getElements().get(i).toString()));
+			        	graphDataValue.put(0,new JSONLiteral(currentDateStamp.toString()));
+			        	graphDataValue.put(1,new JSONLiteral(resultDataObjects.getElements().get(i).toString()));
 			        	
-			        	graphDataValues.put(graphValue);
+			        	graphUserValue.put(0,new JSONLiteral(currentDateStamp.toString()));
+			        	graphUserValue.put(1,new JSONLiteral(resultUserObjects.getElements().get(i).toString()));
+			        	
+			        	graphDataValues.put(graphDataValue);
+			        	graphUserValues.put(graphUserValue);
 			    }
 			     
 			    Course course = courseDAO.getCourseByDMSId(courseId);
 			    graphDataObject.put("values", graphDataValues);
 			    graphDataObject.put("key",course.getCourseName());
+			    
+			    graphUserObject.put("values", graphUserValues);
+			    graphUserObject.put("key",course.getCourseName() + "-User");
+			    
 			    graphParentArray.put(graphDataObject);
-			        
+			    graphParentArray.put(graphUserObject);
+			    
 			}       
 			        
 		}
