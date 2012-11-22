@@ -13,7 +13,23 @@
 	  }
 	  
 	  
-	  var  dataXAxis = data[0].values;
+	  
+	  
+	  var  	dataRequests = data[0].values,
+	  		dataUser = data[1].values;
+	  
+	  console.log("Before Sort:"+dataRequests);
+	  
+	  dataRequests.sort(function sortfunction(a, b){return (b.y - a.y)});
+	  dataUser.sort(function sortfunction(a, b){return (b.y - a.y)});
+	  
+	  console.log("After Sort:"+dataRequests);
+	  
+	  data[0].values = dataRequests;
+	  
+	  function sortfunction(a, b){
+		  return (a.y - b.y) //causes the array to be sorted numerically and ascending
+	  }
 	  
 	  nv.addGraph(function() {
 		  var chart = nv.models.multiBarChart()
