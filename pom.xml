@@ -69,6 +69,25 @@
 			</properties>
 		</profile>
 
+    <profile>
+      <id>bbw</id>
+      <properties>
+        <lemo-system-name>bbw</lemo-system-name>
+        <lemo-display-name>BBW</lemo-display-name>
+        <tomcat-server>lemo3-tomcat-manager</tomcat-server>
+        <tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>clix-im</id>
+      <properties>
+        <lemo-system-name>clix-im</lemo-system-name>
+        <lemo-display-name>Clix Meichsner</lemo-display-name>
+        <tomcat-server>lemo3-tomcat-manager</tomcat-server>
+        <tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+      </properties>
+    </profile>
 
 	</profiles>
 
