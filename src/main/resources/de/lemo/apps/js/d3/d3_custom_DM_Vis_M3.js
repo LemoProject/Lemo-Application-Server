@@ -235,68 +235,70 @@ link.enter().append("svg:line")
        .attr("title",function(d){return d.name;})
        .attr("cx", function(o) {return 0;})
        .attr("cy", function(o) { return 0;})
-       .on("click", function(d) {
-
-
-      if (d.selected == true) {
-      for (var i=0; i<foci.length; i++)
-      foci[i]=({x:20+920/(amt-1)*(i), y:20});
-      d3.selectAll("g.node circle").style("fill", function(o, i) {
-      return  fill(o.name);
-      });
-      
-       d3.selectAll("g.node text").text(function(o, i) {
-        return "";
-       });
-      force.start();
-      d.selected=false;
-      }
-      else {
-      
-      d3.selectAll("g.node circle").style("fill", function(o, i) {
-        return o.pid != d.pid ? greyout(d3.rgb(fill(o.name))) : fill(o.name);
-       });
-
-       
-      d3.selectAll("g.node text").text(function(o, i) {
-        return o.pid != d.pid ? "" : o.name;
-       });
-
-      nodes.forEach(function(o, i) {
-      if (o.pid == d.pid) {
-      o.selected=true;
-      }
-      else {
-      o.selected=false;
-      }
-      });
-
-      for (var i=0; i<amt; i++) {
-	     foci[i]={x:20+920/(amt-1)*(i), y:20};
-      }
-
-
-      var p = amt*(pages-page+1)-d.pid;
-      if (p >= amt/2) {
-      for (var i=0; i<p; i++){
-      foci[i].x=20+660/(amt-1)*i;
-      }
-      for (var i=p; i<amt; i++) {
-      foci[i].x=280+660/(amt-1)*i;
-      }
-      }
-      else {
-      for (var i=0; i<p+1; i++) {
-      foci[i].x=20+660/(amt-1)*i;
-      }
-      for (var i=p+1; i<amt; i++) {
-      foci[i].x=280+660/(amt-1)*i;
-      }
-      }
-      force.start();
-      }
-      })
-       .style("fill", function(d) { return fill(d.name); })
+	   .on("click", function(d) {
+		
+		
+		      if (d.selected == true) {
+		      for (var i=0; i<foci.length; i++)
+		      foci[i]=({x:20+920/(amt-1)*(i), y:20});
+		      d3.selectAll("g.node circle").style("fill", function(o, i) {
+		      return  fill(o.name);
+		      });
+		      
+		       d3.selectAll("g.node text").text(function(o, i) {
+		        return "";
+		       });
+		      force.start();
+		      d.selected=false;
+		      }
+		      else {
+		      
+		      d3.selectAll("g.node circle").style("fill", function(o, i) {
+		        return fill(o.name); 
+		        // Alternative version with greyout of non  focused ressources
+		        // o.pid != d.pid ? greyout(d3.rgb(fill(o.name))) : fill(o.name)
+		       });
+		
+		       
+		      d3.selectAll("g.node text").text(function(o, i) {
+		        return o.pid != d.pid ? "" : o.name;
+		       });
+		
+		      nodes.forEach(function(o, i) {
+		      if (o.pid == d.pid) {
+		      o.selected=true;
+		      }
+		      else {
+		      o.selected=false;
+		      }
+		      });
+		
+		      for (var i=0; i<amt; i++) {
+			     foci[i]={x:20+920/(amt-1)*(i), y:20};
+		      }
+		
+		
+		      var p = amt*(pages-page+1)-d.pid;
+		      if (p >= amt/2) {
+		      for (var i=0; i<p; i++){
+		      foci[i].x=20+660/(amt-1)*i;
+		      }
+		      for (var i=p; i<amt; i++) {
+		      foci[i].x=280+660/(amt-1)*i;
+		      }
+		      }
+		      else {
+		      for (var i=0; i<p+1; i++) {
+		      foci[i].x=20+660/(amt-1)*i;
+		      }
+		      for (var i=p+1; i<amt; i++) {
+		      foci[i].x=280+660/(amt-1)*i;
+		      }
+		      }
+		      force.start();
+		      }
+	   })
+      .style("fill", function(d) { return fill(d.name); })
       .style("stroke", function(d) { return d3.rgb(fill(1)).darker(2); })
       .style("stroke-width", 1.5);
 

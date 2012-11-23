@@ -84,7 +84,7 @@
    	if (optDistance > maxDistance) optDistance = maxDistance;
    	if (optDistance < minDistance) optDistance = minDistance;
    	
-   	var foci = [{x:10, y:10},{x:10+300,y:10},{x:800,y:600}];  
+   	var foci = [{x:10, y:300},{x:10+300,y:300},{x:900,y:300}];  
 
    	
    	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" and Intermediate Result: "+ (maxDistance/(1/Math.sqrt(_links.length)))+" = "+optDistance+" with k:"+k);
@@ -144,7 +144,7 @@
     	 
     	 
     	 update2();
-    	 printLegend();
+    	// printLegend();
     	 
     }
 
@@ -393,19 +393,19 @@ function focus(d) {
 
 	function printLegend() {
     		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3.5 - 20)
+    		   .attr("x", (w/4)*2.5 - 20)
     		   .attr("y", 50)
     		   .attr("stroke", "lightgrey")
     		   .attr("height", 2)
     		   .attr("width", 30);
 
     		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3.5)
+    		   .attr("x", 30 + (w/4)*2.5)
     		   .attr("y", 55)
     		   .text("1 to 10 interactions");
 
     		vis.append("svg:rect")
-    		   .attr("x", (w/4)*3.5 - 20)
+    		   .attr("x", (w/4)*2.5 - 20)
     		   .attr("y", 80)
     		   .attr("stroke", "green")
     		    .attr("fill", "green")
@@ -413,12 +413,12 @@ function focus(d) {
     		   .attr("width", 30);
 
     		vis.append("svg:text")
-    		   .attr("x", 30 + (w/4)*3.5)
+    		   .attr("x", 30 + (w/4)*2.5)
     		   .attr("y", 85)
     		   .text("11 to 50 interactions")
     		   
     		   vis.append("svg:rect")
-    		   .attr("x", (w/4)*3.5 - 20)
+    		   .attr("x", (w/4)*2.5 - 20)
     		   .attr("y", 110)
     		   .attr("stroke", "darkgreen")
     		   .attr("fill", "darkgreen")
@@ -426,7 +426,7 @@ function focus(d) {
     		   .attr("width", 30);
     		
     		vis.append("svg:text")
-	 		   .attr("x", 30 + (w/4)*3.5)
+	 		   .attr("x", 30 + (w/4)*2.5)
 	 		   .attr("y", 115)
 	 		   .text("More than 50 interactions")
     		
