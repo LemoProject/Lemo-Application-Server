@@ -29,13 +29,27 @@
 		  if(counter<7){
 			  console.log("DaysMin: "+daysMin+" DaysMax: "+daysMax+ " UW: "+v.upperWhisker+ " LW: "+v.lowerWhisker);
 			  // "+" Prefix on strings make JS recognize them as numbers  
-			  if(v.lowerWhisker && +v.lowerWhisker < +daysMin) daysMin = v.lowerWhisker;
-			  if(v.upperWhisker && +v.upperWhisker > +daysMax) daysMax = v.upperWhisker;
+			  if(v.lowerWhisker){
+				  if(+v.lowerWhisker < +daysMin) daysMin = v.lowerWhisker;
+			  } else v.lowerWhisker = 0;
+			  if(v.upperWhisker){
+				  if(+v.upperWhisker > +daysMax) daysMax = v.upperWhisker;
+			  } else v.upperWhisker = 0;
+			  if(!v.lowerQuartil) v.lowerQuartil=0;
+			  if(!v.upperQuartil) v.upperQuartil=0;
+			  if(!v.median) v.median=0;
 			  days.push(v);
 		  } else {
 			  // "+" Prefix on strings make JS recognize them as numbers  
-			  if(v.lowerWhisker && +v.lowerWhisker < +hoursMin) hoursMin = v.lowerWhisker;
-			  if(v.upperWhisker && +v.upperWhisker > +hoursMax) hoursMax = v.upperWhisker;
+			  if(v.lowerWhisker){
+				   if(+v.lowerWhisker < +hoursMin) hoursMin = v.lowerWhisker;
+			  } else v.lowerWhisker=0;
+			  if(v.upperWhisker) {
+				  if(+v.upperWhisker > +hoursMax) hoursMax = v.upperWhisker;
+			  } else v.upperWhisker=0;
+			  if(!v.lowerQuartil) v.lowerQuartil=0;
+			  if(!v.upperQuartil) v.upperQuartil=0;
+			  if(!v.median) v.median=0;
 			  hours.push(v);
 		  }
 		  counter++;
@@ -75,24 +89,24 @@
 		.attr("x", 0 )
 		.attr("y", 0)
 		.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")
-		.text(function(d) {return d.name;});
+		.text(function(d) {return d.name.toUpperCase();});
 	  
 	  svgBox.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 		.call(vis);
 	  
 	  
-	  d3.select("button").on("click", function() {
-		    svg.data(hours).call(vis.duration(1000)); // TODO automatic transitions
-		    svg.selectAll(".days")
-		    	.remove();
-		    svgBox.append("text")
-		    .attr("class","hours")
-		    .attr("x", 0 )
-			.attr("y", 0)
-			.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")
-			.text(function(d) {return d.name+":00 h";});
-		  });
+//	  d3.select("button").on("click", function() {
+//		    svg.data(hours).call(vis.duration(1000)); // TODO automatic transitions
+//		    svg.selectAll(".days")
+//		    	.remove();
+//		    svgBox.append("text")
+//		    .attr("class","hours")
+//		    .attr("x", 0 )
+//			.attr("y", 0)
+//			.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")
+//			.text(function(d) {return d.name+":00 h";});
+//		  });
 
 	// Returns a function to compute the interquartile range.
       function iqr(k) {

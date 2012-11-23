@@ -17,7 +17,7 @@
 		  
     	<div class="span9">
         	<div id="viz">
-        		<button>Hour view</button>
+<!--        		<button>Hour view</button>-->
         		<!-- d3js visualization -->
         	</div>
     	</div>
