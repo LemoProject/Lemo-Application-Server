@@ -22,6 +22,7 @@ import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.slf4j.Logger;
 
+import de.lemo.apps.restws.entities.ResultListBoxPlot;
 import de.lemo.apps.restws.entities.ResultListHashMapObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
@@ -33,6 +34,7 @@ import de.lemo.apps.restws.proxies.questions.QCourseActivity;
 import de.lemo.apps.restws.proxies.questions.QCourseActivityString;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;
+import de.lemo.apps.restws.proxies.questions.QCumulativeUserAccess;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
 import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
@@ -398,8 +400,8 @@ public class AnalysisImpl implements Analysis {
     @Override
     public ResultListLongObject computeCourseUsers(
             List<Long> courseIds,
-            long startTime,
-            long endTime) {
+            Long startTime,
+            Long endTime) {
         ResultListLongObject result = null;
         QCourseUsers analysis = ProxyFactory.create(QCourseUsers.class, QUESTIONS_BASE_URL);
         if(analysis != null)
@@ -414,7 +416,7 @@ public class AnalysisImpl implements Analysis {
             List<Long> courseIds,
             List<Long> userIds,
             List<String> types,
-            boolean considerLogouts,
+            Boolean considerLogouts,
             Long startTime,
             Long endTime) {
 
@@ -457,13 +459,16 @@ public class AnalysisImpl implements Analysis {
 
     @Override
     public String computeQFrequentPathBIDE(
-            List<Long> courseIds,
-            List<Long> userIds,
-            double minSup,
-            boolean sessionWise,
-            long startTime,
-            long endTime) {
-        System.out.println("Starte BIDE Request");
+	    		List<Long> courseIds, 
+	    		List<Long> userIds,
+	    		List<String> types,
+	    		Long minLength,
+	    		Long maxLength,
+	    		Double minSup, 
+	    		Boolean sessionWise,
+	    		Long startTime,
+	    		Long endTime)  {
+    	System.out.println("Starte BIDE Request");
         try {
             ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
             ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
@@ -474,7 +479,7 @@ public class AnalysisImpl implements Analysis {
 
             QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class, QUESTIONS_BASE_URL);
             if(qFrequentPath != null) {
-                String result = qFrequentPath.compute(courseIds, userIds, minSup, sessionWise, startTime, endTime);
+                String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength, minSup, sessionWise, startTime, endTime);
                 System.out.println("BIDE result: " + result);
                 return result;
             }
@@ -489,5 +494,41 @@ public class AnalysisImpl implements Analysis {
         System.out.println("Gebe leere Resultlist zurueck");
         return "{}";
     }
+
+
+	@Override
+	public String computeCumulativeUserAccess(
+				List<Long> courseIds,
+				List<String> types, 
+				List<Long> departments, 
+				List<Long> degrees,
+				Long startTime, 
+				Long endTime) {
+		 logger.debug("Starting CumulativeUserAnalysis ... ");
+		 try {
+	            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+	            ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
+
+	            if(response.getStatus() != 200) {
+	                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+	            }
+
+	            QCumulativeUserAccess qCumulativeAnalysis = ProxyFactory.create(QCumulativeUserAccess.class, QUESTIONS_BASE_URL);
+	            if(qCumulativeAnalysis != null) {
+	                String result = qCumulativeAnalysis.compute(courseIds, types, departments, degrees, startTime, endTime);
+	                logger.debug("CumulativeUserAnalysis result: "+result);
+	                return result;
+	            }
+
+	        } catch (ClientProtocolException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        logger.debug("Error while during communication with DMS. Empty resultset returned");
+	        return "{}";
+	}
 
 }

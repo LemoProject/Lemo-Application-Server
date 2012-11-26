@@ -22,10 +22,13 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.apache.tapestry5.util.EnumSelectModel;
+import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
@@ -35,6 +38,7 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
@@ -81,9 +85,6 @@ public class VisualizationFP {
     @Property
     private BreadCrumbInfo breadCrumb;
 
-//    @InjectComponent
-//    private Zone formZone;
-
     @Component(id = "customizeForm")
     private Form customizeForm;
 
@@ -122,17 +123,17 @@ public class VisualizationFP {
     private List<Course> courses;
 
     // Value Encoder for activity multi-select component
-//    @Property(write = false)
-//    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
-//            EResourceType.class);
+    @Property(write = false)
+    private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
+            EResourceType.class);
 
     // Select Model for activity multi-select component
-//    @Property(write = false)
-//    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
+    @Property(write = false)
+    private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, messages);
 
-//    @Property
-//    @Persist
-//    private List<EResourceType> selectedActivities;
+    @Property
+    @Persist
+    private List<EResourceType> selectedActivities;
 
     @Inject
     @Property
@@ -180,6 +181,8 @@ public class VisualizationFP {
             endCal.setTime(endDate);
             this.resolution = dateWorker.daysBetween(beginDate, endDate);
             logger.debug("MinSup:"+minSup);
+            
+            
             return true;
         } else
             return Explorer.class;
@@ -202,7 +205,10 @@ public class VisualizationFP {
         this.courseId = null;
         this.course = null;
         this.selectedUsers = null;
-        this.minSup=8;
+        this.selectedActivities = null;
+        this.minSup=9;
+        this.pathLengthMin = null;
+        this.pathLengthMax = null;
     }
 
 //    void pageReset() {
@@ -218,8 +224,6 @@ public class VisualizationFP {
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
-        // List<Course> courses =
-        // courseDAO.findAllByOwner(userWorker.getCurrentUser());
         return courseValueEncoder.create(Course.class);
     }
     
@@ -229,51 +233,52 @@ public class VisualizationFP {
 	Integer val;
 	
 	@Property
-	//@Persist
-	Integer max;
-	
-	@Property
-	//@Persist
-	Integer min;
+	Long max, min;
 	
 	@Property
 	@Persist
 	Integer minSup;
+	
+	@Property
+	@Persist
+	Long pathLengthMin;
+	
+	@Property
+	@Persist
+	Long pathLengthMax;
 
 	@Property
 	private JSONObject minSupParams,
+					pathLengthParams,
 					minValue,
 					maxValue;
 		
-//	@Component
-//	private Zone myZone;
-	
+	//Seting up paramaters for jquery sliders 
 	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
-	public void initSliderZone(){
-		max=10;
-		min=1;
+	public void initSlider(){
+
 		if(minSup==null)
-				minSup=8;
-		//minSupParams=new JSONArray();
+				minSup=9;
+		
 		minSupParams=new JSONObject();
 		
 		minSupParams.put("min", 1);
 		minSupParams.put("max", 10);
 		minSupParams.put("value", minSup);
-		//JSONLiteral slideFunction = new JSONLiteral("function( event, ui ) {$( '#minSupSlider-label' ).html( 'Minimum Support (0.1 - 1): ' + ui.value ); console.log('MinSup Value: '+ui.value);}");
-		//minSupParams.put("slide", slideFunction);
 		
+		pathLengthParams=new JSONObject();
+		max=200L;
+		min=1L;
+		
+		if(pathLengthMax!=null)
+			max = pathLengthMax;
+		if(pathLengthMin!=null)
+			min = pathLengthMin;
+		pathLengthParams.put("min",1);
+		pathLengthParams.put("max",200);
+		pathLengthParams.put("range", true);
+		pathLengthParams.put("values", new JSONArray(min,max));
 	}
-
-//	@OnEvent(value=org.apache.tapestry5.EventConstants.SUBMIT, component="minSup")
-//	public Object returnZone(){
-//		String input = request.getParameter("jquery.slider");
-//		minSup=Integer.parseInt(input);
-//		System.out.println("MinSup Value: "+minSup);
-//		return this;
-//	}
-//
-//    
     
     
     
@@ -284,11 +289,8 @@ public class VisualizationFP {
     }
 
     @Property
-    //@Persist
     private double minSupDouble;
     
-    //@Property
-    //@Persist
     private Double minSupValue;
     
     public String getQuestionResult() {
@@ -297,13 +299,13 @@ public class VisualizationFP {
 
         boolean considerLogouts = false;
 
-//        ArrayList<String> types = null;
-//        if(selectedActivities != null && !selectedActivities.isEmpty()) {
-//            types = new ArrayList<String>();
-//            for(EResourceType resourceType : selectedActivities) {
-//                types.add(resourceType.name().toLowerCase());
-//            }
-//        }
+        ArrayList<String> types = null;
+        if(selectedActivities != null && !selectedActivities.isEmpty()) {
+            types = new ArrayList<String>();
+            for(EResourceType resourceType : selectedActivities) {
+                types.add(resourceType.name().toUpperCase());
+            }
+        }
 
         Long endStamp = 0L;
         Long beginStamp = 0L;
@@ -313,12 +315,18 @@ public class VisualizationFP {
         if(endDate != null) {
             endStamp = new Long(endDate.getTime() / 1000);
         }
-        if(minSup==null || minSup.equals(0)) minSup = 8;
+        
+        //Check value for minumim support .. if no value is set it will default to 8 -> 0.8
+        if(minSup==null || minSup.equals(0)) minSup = 9;
         minSupValue = new Double(minSup);
         minSupValue = minSupValue / 10;
         logger.debug("MinSupValue:"+ minSupValue + "  --  "+ minSupValue.doubleValue());
         minSupDouble = minSupValue.doubleValue(); 
-        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, minSupDouble , considerLogouts, beginStamp, endStamp);
+        
+        logger.debug("PathLength: "+ pathLengthMin + "  --  "+ pathLengthMax);
+        	
+        
+        return analysis.computeQFrequentPathBIDE(courseIds, selectedUsers, types, pathLengthMin , pathLengthMax, minSupDouble , considerLogouts, beginStamp, endStamp);
     }
     
     public String getSupportValue(){
@@ -326,7 +334,18 @@ public class VisualizationFP {
         minSupTemp = minSupTemp / 10;
     	return minSupTemp.toString();
     }
+    
+    public String getPathLengthValue(){
+    	if (pathLengthMin == null && pathLengthMax == null)
+    		return "All paths";
+    	if (pathLengthMin == null && pathLengthMax != null)
+    		return "1 - "+pathLengthMax;
+    	if (pathLengthMin != null && pathLengthMax == null)
+    		return pathLengthMin+" - 200";
+    	return pathLengthMin+" - "+pathLengthMax ;
+    }
 
+    
     void setupRender() {
         logger.debug(" ----- Bin in Setup Render");
 
@@ -357,7 +376,7 @@ public class VisualizationFP {
 		if(input!=null)
 			minSup=Integer.parseInt(input);
 		logger.debug("MinSup Value: "+minSup);
-//        logger.debug("Selected activities: " + selectedActivities);
+//      logger.debug("Selected activities: " + selectedActivities);
         logger.debug("Selected users: " + selectedUsers);
     }
 

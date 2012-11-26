@@ -298,7 +298,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 			
 			
 			//checking if result size matches resolution 
-			if(uniqueResult!= null && uniqueResult.getElements()!=null && uniqueResult.getElements().size() == resolution)
+			if(uniqueResult!= null && uniqueResult.getElements()!=null )
 	        {
 					for(int i=0 ;i<resolution;i++){
 	        

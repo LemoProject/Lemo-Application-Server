@@ -3,6 +3,7 @@ package de.lemo.apps.restws.client;
 import java.util.HashMap;
 import java.util.List;
 
+import de.lemo.apps.restws.entities.ResultListBoxPlot;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -62,21 +63,32 @@ public interface Analysis {
             List<Long> courseIds,
             List<Long> userIds,
             List<String> types,
-            boolean considerLogouts,
+            Boolean considerLogouts,
             Long startTime,
             Long endTime);
 
     ResultListLongObject computeCourseUsers(
             List<Long> courseIds,
-            long startTime,
-            long endTime);
+            Long startTime,
+            Long endTime);
     
     public String computeQFrequentPathBIDE(
     		List<Long> courseIds, 
-    		List<Long> userIds, 
-    		double minSup, 
-    		boolean sessionWise,
-    		long startTime,
-    		long endTime);
+    		List<Long> userIds,
+    		List<String> types,
+    		Long minLength,
+    		Long maxLength,
+    		Double minSup, 
+    		Boolean sessionWise,
+    		Long startTime,
+    		Long endTime);
+    
+    String computeCumulativeUserAccess(
+    		List<Long> courseIds, 
+    		List<String> types,
+    		List<Long> departments,
+    		List<Long> degrees,
+    		Long startTime, 
+    		Long endTime);
 
 }

@@ -16,11 +16,10 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        <div id="viz">
-        	
-        	<!-- d3js visualization -->
-        
-        </div>
+        	<div id="viz">
+<!--        		<button>Hour view</button>-->
+        		<!-- d3js visualization -->
+        	</div>
     	</div>
       
     	<div class="span3">
@@ -60,7 +59,6 @@
         							<label class="control-label">${message:begin}:</label>
       						   		<div class="controls">
                             			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
-      						    			
       						    	</div>
         						</div>
         						<div class="control-group">
@@ -92,56 +90,8 @@
 			              </div>
                   </div>
                   
-                  <!-- Member -->
-                  <div class="accordion-group">
-                    <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                        ${message:userOption} <b class="caret"></b>
-                      </a>
-                    </div>   
-			        <div id="collapseThree" class="accordion-body collapse">  
-			        	<div class="accordion-inner">               
-                        
-	                            <t:jquery.palette
-	                              t:id="users"
-	                              encoder="userIdEncoder"
-	                              selected="selectedUsers"
-	                              model="userIds"/>
-                       
-                     	 </div>
-			        </div>
-			      </div>
 			       
-			       
-			      <!-- Advanced-->
-                  <div class="accordion-group">
-                    <div class="accordion-heading">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                        ${message:advancedOption} <b class="caret"></b>
-                      </a>
-                    </div>   
-			        <div id="collapseFour" class="accordion-body collapse">  
-			        	<div class="accordion-inner">  
-			        	
-			        			
-			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
-  			                	<div class="slider" id="supportSlider"></div><br />
-  			                	<br />
-  			                
-                        
-	                            <label class="control-label" id="chargeslider-label"></label>
-  			                	<div class="slider" id="chargesupportSlider"></div><br />
-  			                	<br/>
-  			                	
-  			                	<label class="control-label" id="distanceslider-label"></label>
-  			                	<div class="slider" id="distancesupportSlider"></div><br />
-  			                	<br/>
-  			                	
-  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   
-                       
-                     	 </div>
-			        </div>
-			      </div>  
+
 			            
 			 </div><!-- accordion -->
   			   		
@@ -160,15 +110,11 @@
     
   </div>
   <script type="text/javascript">
-	  
     (function(d3custom, $, undefined) {
-
-        
+    
       var q2result = ${questionResult};
-		
       
-      d3custom.nodes = q2result.nodes;
-      d3custom.links = q2result.links;
+      d3custom.data = q2result;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
   </script>

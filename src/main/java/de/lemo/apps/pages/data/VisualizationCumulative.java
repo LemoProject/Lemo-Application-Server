@@ -3,6 +3,7 @@ package de.lemo.apps.pages.data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,29 +12,25 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
-import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
-import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -54,11 +51,12 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
-public class VisualizationNVD3 {
+@Import(library = { "../../js/d3/d3_custom_BoxPlot.js" })
+public class VisualizationCumulative {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -68,24 +66,18 @@ public class VisualizationNVD3 {
 
     @Inject
     private DateWorker dateWorker;
+    
+    @Inject
+	private AnalysisWorker analysisWorker;
 
     @Inject
     private CourseIdValueEncoder courseValueEncoder;
-    
-    @Inject
-	private ComponentResources componentResources;
-	
-    @Inject 
-	private BeanModelSource beanModelSource;
 
     @Inject
     private Analysis analysis;
 
     @Inject
     private UserWorker userWorker;
-    
-    @Inject
-	private AnalysisWorker analysisWorker;
 
     @Inject
     private CourseDAO courseDAO;
@@ -111,7 +103,6 @@ public class VisualizationNVD3 {
     @Property
     @SuppressWarnings("unused")
     private SelectModel courseModel;
-    
 
     @Property
     @Persist
@@ -142,27 +133,11 @@ public class VisualizationNVD3 {
     @Property
     @Persist
     private List<Course> courses;
-    
-    @Property
-    private ResourceRequestInfo resourceItem;
-	
-	@Persist
-	private List<ResourceRequestInfo> showDetailsList;
 
     // Value Encoder for activity multi-select component
     @Property(write = false)
     private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(coercer,
             EResourceType.class);
-    
-    @Property(write=false)
-	@Retain
-	private BeanModel resourceGridModel;
-    {
-    	resourceGridModel = beanModelSource.createDisplayModel(ResourceRequestInfo.class, componentResources.getMessages());
-    	resourceGridModel.include("resourcetype","title","requests");
-    	//resourceGridModel.add("show",null);
-    	    	
-    }
 
     // Select Model for activity multi-select component
     @Property(write = false)
@@ -174,41 +149,22 @@ public class VisualizationNVD3 {
 
     @Inject
     @Property
-    private LongValueEncoder userIdEncoder, courseIdEncoder;
+    private LongValueEncoder userIdEncoder;
 
     @Property
     @Persist
-    private List<Long> userIds, courseIds;
+    private List<Long> userIds;
 
     @Property
     @Persist
-    private List<Long> selectedUsers, selectedCourses;
+    private List<Long> selectedUsers;
 
     public List<Long> getUsers() {
         List<Long> courses = new ArrayList<Long>();
         courses.add(course.getCourseId());
          List<Long> elements = analysis.computeCourseUsers(courses, beginDate.getTime() / 1000, endDate.getTime() / 1000).getElements();
-        logger.info(" User Ids:         ----        "+elements);
+        logger.info("          ----        "+elements);
          return elements;
-    }
-    
-    
-    @Cached
-    public List<ResourceRequestInfo> getResourceList(){
-    	this.course = courseDAO.getCourseByDMSId(courseId);
-		
-		List<ResourceRequestInfo> resultList;
-		
-		if(selectedActivities!=null && selectedActivities.size()>=1){
-			logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, selectedActivities);
-		}else {
-			logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
-			resultList =  analysisWorker.usageAnalysisExtended(this.course, beginDate, endDate, null);
-		}
-		logger.debug("ExtendedAnalysisWorker Results: "+resultList);
-		
-    	return resultList;
     }
 
     public Object onActivate(Course course) {
@@ -218,10 +174,6 @@ public class VisualizationNVD3 {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            if(this.selectedCourses == null){
-            	this.selectedCourses= new ArrayList<Long>();
-            	this.selectedCourses.add(courseId);
-            }
             
             return true;
         } else
@@ -245,7 +197,6 @@ public class VisualizationNVD3 {
         this.courseId = null;
         this.course = null;
         this.selectedUsers = null;
-        this.selectedCourses = null;
         this.selectedActivities = null;
     }
 
@@ -258,7 +209,6 @@ public class VisualizationNVD3 {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
         userIds = getUsers();
-        courseIds = userWorker.getCurrentUser().getMyCourses();
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -273,104 +223,47 @@ public class VisualizationNVD3 {
     }
 
     public String getQuestionResult() {
-        
-    	List<Long> courseList = new ArrayList<Long>();
-    	if(selectedCourses!= null && !selectedCourses.isEmpty()){
-    		if (!selectedCourses.contains(courseId))
-    			selectedCourses.add(courseId);
-    		courseList = selectedCourses;
-    	}	
-    		else courseList.add(courseId);
-   
+        if(courseId!=null){
+        	Long endStamp=0L;
+        	Long beginStamp=0L;
+        	if(endDate!=null){
+        		endStamp = new Long(endDate.getTime()/1000);
+        	} //else endtime= 1334447632L;
+	        
+        	if(beginDate!=null){
+        		beginStamp = new Long(beginDate.getTime()/1000);
+        	} //else starttime = 1308968800L;
+        	
+			if (this.resolution == null || this.resolution < 10 )
+				this.resolution = 30;
+			List<Long> roles = new ArrayList<Long>();
+			List<Long> courses = new ArrayList<Long>();
+			courses.add(courseId);
+			
+			//calling dm-server
+			for (int i=0;i<courses.size();i++){
+				logger.debug("Courses: "+courses.get(i));
+			}
+			
+			 List<String> types = null;
+		        if(selectedActivities != null && !selectedActivities.isEmpty()) {
+		            types = new ArrayList<String>();
+		            for(EResourceType resourceType : selectedActivities) {
+		                types.add(resourceType.name().toLowerCase());
+		            }
+		        }
+        	
+		
+			
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+		
+			String result = analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp);
+			
+			logger.debug("Cumulative result: "+result);
+			return result;
 
-        boolean considerLogouts = true;
-
-        ArrayList<String> types = null;
-        if(selectedActivities != null && !selectedActivities.isEmpty()) {
-            types = new ArrayList<String>();
-            for(EResourceType resourceType : selectedActivities) {
-                types.add(resourceType.name().toUpperCase());
-            }
         }
-
-        Long endStamp = 0L;
-        Long beginStamp = 0L;
-        if(beginDate != null) {
-            beginStamp = new Long(beginDate.getTime() / 1000);
-        }
-        if(endDate != null) {
-            endStamp = new Long(endDate.getTime() / 1000);
-        }
-        
-        
-        
-        
-        this.resolution=(dateWorker.daysBetween(beginDate, endDate)+1);
-
-  
-        HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courseList, null, selectedUsers, beginStamp, endStamp, resolution, types);
-    
-        JSONArray graphParentArray = new JSONArray();
-        JSONObject graphDataObject = new JSONObject();
-        JSONObject graphUserObject = new JSONObject();
-        JSONArray graphDataValues = new JSONArray();
-        JSONArray graphUserValues = new JSONArray();
-        
-        if(results!=null)
-		{			
-			Set<Long> courseSet = results.keySet();
-			Iterator<Long> it = courseSet.iterator();
-			while(it.hasNext()){
-				
-				Long courseId = it.next();
-				ResultListLongObject resultAllObjects = results.get(courseId);
-				logger.debug("ResultList Length: "+resultAllObjects.getElements().size() + " Resolution: "+resolution);
-				ResultListLongObject resultDataObjects = new ResultListLongObject(resultAllObjects.getElements().subList(0, resolution-1)); 
-				ResultListLongObject resultUserObjects = new ResultListLongObject(resultAllObjects.getElements().subList(resolution, resultAllObjects.getElements().size()-1));
-				
-        
-			    graphDataObject = new JSONObject();
-			    graphUserObject = new JSONObject();
-			    graphDataValues = new JSONArray();
-			    graphUserValues = new JSONArray();
-			    
-			    Long currentDateStamp = 0L;
-			    
-			    for (Integer i = 0;i<resultDataObjects.getElements().size()/2;i++){
-			        	JSONArray graphDataValue = new JSONArray();
-			        	JSONArray graphUserValue = new JSONArray();
-			        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
-			        	currentDateStamp = beginStamp*1000+dateMultiplier;
-			        	graphDataValue.put(0, currentDateStamp);
-			        	graphDataValue.put(1, resultDataObjects.getElements().get(i));
-			        	
-			        	graphUserValue.put(0, currentDateStamp);
-			        	graphUserValue.put(1, resultUserObjects.getElements().get(i));
-			        	
-			        	graphDataValues.put(graphDataValue);
-			        	graphUserValues.put(graphUserValue);
-			    }
-			     
-			    Course course = courseDAO.getCourseByDMSId(courseId);
-			    graphDataObject.put("values", graphDataValues);
-			    graphDataObject.put("key",course.getCourseName());
-			    
-			    graphUserObject.put("values", graphUserValues);
-			    graphUserObject.put("key",course.getCourseName() + "-User");
-			    
-			    graphParentArray.put(graphDataObject);
-			    graphParentArray.put(graphUserObject);
-			    
-			}       
-			        
-		}
-        
-
-       
-
-        logger.debug(graphParentArray.toString());
-        
-        return graphParentArray.toString();       
+        return "";
     }
 
     void setupRender() {
@@ -434,12 +327,6 @@ public class VisualizationNVD3 {
     }
 
     public String getLastRequestDate() {
-        return getLocalizedDate(this.endDate);//course.getLastRequestDate());
-    }
-    
-    public String getResourceTypeName(){
-    	if(this.resourceItem!=null && this.resourceItem.getResourcetype() != "")
-    		return messages.get("EResourceType."+this.resourceItem.getResourcetype());
-    	else return messages.get("EResourceType.UNKNOWN");
+        return getLocalizedDate(this.endDate);//.course.getLastRequestDate());
     }
 }
