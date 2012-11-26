@@ -9,7 +9,6 @@
 	background: silver;
 }
 
-
 /*!
 * Changes to Bootstrap default css behavior
 */
@@ -113,10 +112,10 @@ text.shadow {
   .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
 
 /**
-* D3.js  css
+* D3.js  CSS -  START
 */
 
-//TreeMap 
+/* TreeMap - START */
 
 .cell {
   border: solid 1px white;
@@ -152,6 +151,43 @@ rect.parent {
 .children:hover rect.child, .grandparent:hover rect {
     fill: #AAAAAA;
 }
+
+/* TreeMap - END */
+
+
+/* BoxPlot - START */
+
+svg .box {}
+
+.box {
+  display: inline;
+  height: auto;
+  width: auto;
+  font: 10px sans-serif;
+}
+
+.box line,
+.box rect,
+.box circle {
+  fill: #fff;
+  stroke: #1f77b4;
+  stroke-width: 1.5px;
+}
+
+.box .center {
+  stroke-dasharray: 3,3;
+  stroke: #1f77b4;
+}
+
+.box .outlier {
+  fill: none;
+  stroke: #ccc;
+}
+
+
+/* BoxPlot - END */
+
+/* D3 - END */
 
 
 
