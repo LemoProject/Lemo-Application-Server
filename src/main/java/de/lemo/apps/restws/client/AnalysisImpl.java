@@ -54,8 +54,8 @@ public class AnalysisImpl implements Analysis {
 	@Inject
     private Logger logger;
     
-    private static final String SERVICE_STARTTIME_URL = "http://localhost:8081/clix/dms/services/starttime";
-    private static final String QUESTIONS_BASE_URL = "http://localhost:8081/clix/dms/questions";
+    private static final String SERVICE_STARTTIME_URL = "http://localhost:8081/beuth/dms/services/starttime";
+    private static final String QUESTIONS_BASE_URL = "http://localhost:8081/beuth/dms/questions";
 
     @Override
     public HashMap<Long, ResultListLongObject> computeCourseActivity(List<Long> courses, List<Long> roles, List<Long> users,  Long starttime, Long endtime,

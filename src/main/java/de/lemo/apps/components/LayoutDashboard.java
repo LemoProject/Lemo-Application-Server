@@ -29,6 +29,7 @@ import de.lemo.apps.pages.data.Dashboard;
 @Import(library={"../js/bootstrap-alert.js",
 				"../js/excanvas.js",
 				"../js/apps.js",
+				"../js/spin.js",
 				"../js/d3/d3.v2.js",
 				"../js/d3/d3_BoxPlot_Lib.js",
 				"../js/d3/nv.d3.js",

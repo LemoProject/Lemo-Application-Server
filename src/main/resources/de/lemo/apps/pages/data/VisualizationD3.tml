@@ -16,7 +16,11 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        <div id="viz"><!-- d3js visualization --></div>
+        <div id="viz">
+        	
+        	<!-- d3js visualization -->
+        
+        </div>
     	</div>
       
     	<div class="span3">
@@ -55,14 +59,15 @@
   			              		
         							<label class="control-label">${message:begin}:</label>
       						   		<div class="controls">
-                            			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                            			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="M dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+      						    			
       						    	</div>
         						</div>
         						<div class="control-group">
         							
         							<label class="control-label">${message:end}:</label>
         						    <div class="controls">
-                            			<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                            			<input t:id="endDate" class="input-small" t:value="endDate" t:format="M dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
   			                  		</div>
   			                	</div>
   			              	</div>
@@ -155,9 +160,12 @@
     
   </div>
   <script type="text/javascript">
+	  
     (function(d3custom, $, undefined) {
-    
+
+        
       var q2result = ${questionResult};
+		
       
       d3custom.nodes = q2result.nodes;
       d3custom.links = q2result.links;

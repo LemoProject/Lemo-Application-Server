@@ -55,7 +55,12 @@ text.shadow {
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        	<div id="viz"><!-- d3js visualization --></div>
+        	<div id="viz">
+	        	<div id="loading">  
+	        		<!-- spin.js loading animation -->
+	        	</div>
+	        	<!-- d3js visualization -->
+	        </div>
     		<p>page: </p>
 		    <p  id="pages"></p>
 		    <button id="prev" onclick="next(false);" class="btn btn-primary">prev page</button>
@@ -181,7 +186,7 @@ text.shadow {
 			            
 			        </div><!-- accordion -->
   			   		
-  			   		<input t:type="submit" value="Update" class="btn btn-primary" />
+  			   		<input t:type="submit" value="Update" onClick="spin_start();" class="btn btn-primary" />
 
             </t:form>	
 <!--          </t:zone> -->
@@ -196,10 +201,41 @@ text.shadow {
     
   </div>
   <script type="text/javascript">
+  var opts = {
+		  lines: 13, // The number of lines to draw
+		  length: 7, // The length of each line
+		  width: 4, // The line thickness
+		  radius: 10, // The radius of the inner circle
+		  corners: 1, // Corner roundness (0..1)
+		  rotate: 0, // The rotation offset
+		  color: '#000', // #rgb or #rrggbb
+		  speed: 1, // Rounds per second
+		  trail: 60, // Afterglow percentage
+		  shadow: false, // Whether to render a shadow
+		  hwaccel: false, // Whether to use hardware acceleration
+		  className: 'spinner', // The CSS class to assign to the spinner
+		  zIndex: 2e9, // The z-index (defaults to 2000000000)
+		  top: '200', // Top position relative to parent in px
+		  left: 'auto' // Left position relative to parent in px
+		};
+	var target = document.getElementById('loading');
+	var spinner = new Spinner(opts).spin(target);
+
+	function spin_stop()  
+	  {  
+	    spinner.stop();  
+	  } 
+
+	function spin_start()  
+	  {  
+	    spinner.spin(target);  
+	  }  
     (function(d3custom, $, undefined) {
-    
+
+      spin_start();     
       var q2result = ${questionResult};
-      
+      spin_stop();     
+
       d3custom.nodes = q2result.nodes;
       d3custom.links = q2result.links;
       

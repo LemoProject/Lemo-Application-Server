@@ -210,7 +210,7 @@ public class VisualizationFP {
         this.course = null;
         this.selectedUsers = null;
         this.selectedActivities = null;
-        this.minSup=8;
+        this.minSup=9;
         this.pathLengthMin = null;
         this.pathLengthMax = null;
     }
@@ -262,7 +262,7 @@ public class VisualizationFP {
 	public void initSlider(){
 
 		if(minSup==null)
-				minSup=8;
+				minSup=9;
 		
 		minSupParams=new JSONObject();
 		
@@ -321,7 +321,7 @@ public class VisualizationFP {
         }
         
         //Check value for minumim support .. if no value is set it will default to 8 -> 0.8
-        if(minSup==null || minSup.equals(0)) minSup = 8;
+        if(minSup==null || minSup.equals(0)) minSup = 9;
         minSupValue = new Double(minSup);
         minSupValue = minSupValue / 10;
         logger.debug("MinSupValue:"+ minSupValue + "  --  "+ minSupValue.doubleValue());
