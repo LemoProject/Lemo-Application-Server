@@ -63,6 +63,7 @@
             i = amtPaths/++pages;
         }
         amt=i;
+        console.log("AMT SIZE: "+amt)
     }
     
     calculate();
@@ -110,7 +111,12 @@
 	}
 
 for (var i=0; i<amt; i++) {
-	foci.push({x:20+920/(amt+1)*(i), y:20});
+	var res1 = (920/(+amt+1)),
+		res2 = (res1*(+i));
+	
+	var result = (20+res2);
+	console.log("X Value for x"+i+" and AMT: "+amt+ " and Res1: "+res1+" and Res2: "+res2+" is :"+result);
+	foci.push({x:20+result, y:20});
 }
 
 
