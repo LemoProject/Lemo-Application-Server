@@ -84,7 +84,7 @@ public class DateWorkerImpl implements DateWorker {
         return assetSource.getContextAsset("layout/images/glyphicons_045_calendar.png", null).toString();
     }
 
-    public JSONLiteral getDatePickerParams() {
+    public JSONLiteral getDatePickerParams(Locale locale) {
         String monthNamesShort = "";
         try {
             /*
@@ -92,7 +92,7 @@ public class DateWorkerImpl implements DateWorker {
              * new ones, though on the backend it's depending on the Java version. The short name for march in german
              * changed from 'mrz' to 'mär' in Java 8 for example.
              */
-            monthNamesShort = new JSONArray(new java.text.DateFormatSymbols().getShortMonths()).toString();
+            monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

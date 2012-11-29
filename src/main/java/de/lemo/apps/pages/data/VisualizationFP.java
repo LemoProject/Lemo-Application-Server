@@ -285,7 +285,7 @@ public class VisualizationFP {
 
     // returns datepicker params
     public JSONLiteral getDatePickerParams() {
-        return dateWorker.getDatePickerParams();
+        return dateWorker.getDatePickerParams(currentlocale);
     }
 
     @Property

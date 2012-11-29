@@ -205,7 +205,7 @@ public class VisualizationD3 {
 
     // returns datepicker params
     public JSONLiteral getDatePickerParams() {
-        return dateWorker.getDatePickerParams();
+        return dateWorker.getDatePickerParams(currentlocale);
     }
 
     public String getQuestionResult() {

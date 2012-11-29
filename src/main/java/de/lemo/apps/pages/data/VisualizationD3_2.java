@@ -186,7 +186,7 @@ public class VisualizationD3_2 {
 	 * @return Returns a JSON Option Array with all parameters for the datepicker component
 	 */
 	public JSONLiteral getDatePickerParams(){
-		return dateWorker.getDatePickerParams();
+		return dateWorker.getDatePickerParams(currentlocale);
 	}
 
     

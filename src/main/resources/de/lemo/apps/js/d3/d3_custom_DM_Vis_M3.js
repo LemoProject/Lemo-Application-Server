@@ -63,6 +63,7 @@
             i = amtPaths/++pages;
         }
         amt=i;        
+        console.log("AMT SIZE: "+amt)
     }
     
     calculate();
