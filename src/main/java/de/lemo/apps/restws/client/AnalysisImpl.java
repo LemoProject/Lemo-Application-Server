@@ -73,7 +73,7 @@ public class AnalysisImpl implements Analysis {
 
             	String resultString = qcourseActivity.compute(courses, roles, users, starttime, endtime, resolution,resourceTypes);
             	ResultListHashMapObject resultObject = new ResultListHashMapObject();
-            	logger.debug("CourseActivity ResultList: "+resultString);
+            	//logger.debug("CourseActivity ResultList: "+resultString);
             	
             	 ObjectMapper mapper = new ObjectMapper();
                  JsonNode jsonObj = mapper.readTree(resultString);
@@ -91,7 +91,7 @@ public class AnalysisImpl implements Analysis {
                 			Long keyValue = Long.parseLong(kit.next().getValueAsText());
                 			JsonNode entryNodes = eit.next();
                 			JsonNode entryNodesArray = entryNodes.get("elements");
-                			logger.debug("EntryNodes Complete:"+entryNodesArray);
+                			//logger.debug("EntryNodes Complete:"+entryNodesArray);
                 			if (entryNodesArray.isArray()){
                 				logger.debug("Entries is Array ....");
                 				entryList = new ArrayList<Long>();
@@ -112,14 +112,14 @@ public class AnalysisImpl implements Analysis {
                 		Long keyValue = Long.parseLong(keys.getValueAsText()); 
                 		JsonNode entryNodesArray = entries.get("elements");
                 		List<Long> entryList = new ArrayList<Long>();
-             			logger.debug("EntryNodes :"+entryNodesArray);
+             			//logger.debug("EntryNodes :"+entryNodesArray);
              			
              			if (entryNodesArray.isArray()){
             				logger.debug("Entries is Array ....");
             				Iterator<JsonNode> enit = entryNodesArray.getElements();
             				while (enit.hasNext()) {
             					Long enitValue = enit.next().getValueAsLong(0L);
-            					logger.debug("Entry Values: "+enitValue);
+            					//logger.debug("Entry Values: "+enitValue);
             					entryList.add(enitValue);
             				}
             			} else logger.debug("Entries is NO Array ....");

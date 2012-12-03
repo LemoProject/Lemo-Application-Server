@@ -378,7 +378,7 @@ public class VisualizationNVD3 {
 
        
 
-        logger.debug(graphParentArray.toString());
+       // logger.debug(graphParentArray.toString());
         
         return graphParentArray.toString();       
     }
