@@ -83,6 +83,21 @@ public interface Analysis {
     		Long startTime,
     		Long endTime);
     
+    public String computeQFrequentPathViger(
+    		List<Long> courseIds, 
+    		List<Long> userIds,
+    		List<String> types,
+    		Long minLength,
+    		Long maxLength,
+    		Long minInterval,
+    		Long maxInterval,
+    		Long minWholeInterval,
+    		Long maxWholeInterval,
+    		Double minSup, 
+    		Boolean sessionWise,
+    		Long startTime,
+    		Long endTime) ;
+    
     String computeCumulativeUserAccess(
     		List<Long> courseIds, 
     		List<String> types,

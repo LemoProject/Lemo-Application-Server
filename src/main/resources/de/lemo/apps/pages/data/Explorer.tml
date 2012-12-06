@@ -226,6 +226,10 @@
 			    				<t:pagelink page="data/visualizationCumulative" context="${CurrentCourse.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisTime} Cumulative</b> </t:pagelink> 
 			    				<br /><br />
 			    			</div>
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationFPViger" context="${CurrentCourse.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:freqPathAnalysis} Viger </b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
 <!--		    				<div class="span2" align="center">-->
 <!--			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysisTime} (OLD) </b> </t:pagelink>-->
 <!--			    				<br /><br />-->
@@ -234,7 +238,7 @@
 <!--			    				<t:pagelink page="data/visualizationLO" context="${CurrentCourse.courseid}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:usageAnalysisLO} (OLD)</b> </t:pagelink> -->
 <!--			    				<br /><br />-->
 <!--			    			</div>-->
-		    				<div class="span8">
+		    				<div class="span6">
 		    				</div>
 		    			</div>
 		    		</t:zone> <!-- analysisSelectZone  -->		

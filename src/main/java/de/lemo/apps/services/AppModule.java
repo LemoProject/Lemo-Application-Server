@@ -1,7 +1,6 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -35,8 +34,8 @@ import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.StatisticWorkerImpl;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.UserWorkerImpl;
-import de.lemo.apps.entities.Course;
-import de.lemo.apps.entities.User;
+import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
 import de.lemo.apps.integration.QuestionDAO;
@@ -81,6 +80,7 @@ public class AppModule
         binder.bind(DateWorker.class, DateWorkerImpl.class);
         binder.bind(StatisticWorker.class, StatisticWorkerImpl.class);
         binder.bind(AnalysisWorker.class, AnalysisWorkerImpl.class);
+        binder.bind(VisualisationHelperWorker.class, VisualisationHelperWorkerImpl.class);
 
         // Rest Services
         binder.bind(Initialisation.class, InitialisationImpl.class);

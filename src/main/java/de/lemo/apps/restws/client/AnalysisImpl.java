@@ -36,6 +36,7 @@ import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;
 import de.lemo.apps.restws.proxies.questions.QCumulativeUserAccess;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
+import de.lemo.apps.restws.proxies.questions.QFrequentPathsViger;
 import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
@@ -480,6 +481,50 @@ public class AnalysisImpl implements Analysis {
             QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class, QUESTIONS_BASE_URL);
             if(qFrequentPath != null) {
                 String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength, minSup, sessionWise, startTime, endTime);
+                System.out.println("BIDE result: " + result);
+                return result;
+            }
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Gebe leere Resultlist zurueck");
+        return "{}";
+    }
+    
+    
+    
+    @Override
+    public String computeQFrequentPathViger(
+	    		List<Long> courseIds, 
+	    		List<Long> userIds,
+	    		List<String> types,
+	    		Long minLength,
+	    		Long maxLength,
+	    		Long minInterval,
+	    		Long maxInterval,
+	    		Long minWholeInterval,
+	    		Long maxWholeInterval,
+	    		Double minSup, 
+	    		Boolean sessionWise,
+	    		Long startTime,
+	    		Long endTime)  {
+    	System.out.println("Starte BIDE Request");
+        try {
+            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+            ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
+
+            if(response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+            }
+
+            QFrequentPathsViger qFrequentPath = ProxyFactory.create(QFrequentPathsViger.class, QUESTIONS_BASE_URL);
+            if(qFrequentPath != null) {
+                String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength, minInterval, maxInterval, minWholeInterval, maxWholeInterval, minSup, sessionWise, startTime, endTime);
                 System.out.println("BIDE result: " + result);
                 return result;
             }
