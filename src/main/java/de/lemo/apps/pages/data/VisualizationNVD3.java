@@ -137,7 +137,7 @@ public class VisualizationNVD3 {
 
     @Property
     @Persist
-    Integer resolution;
+    Integer resolution, resolutionMultiplier;
 
     @Property
     @Persist
@@ -303,10 +303,20 @@ public class VisualizationNVD3 {
         }
         
         
-        
+        final int RESOLUTION_MAX = 500;
+        final int RESOLUTION_BASIC_MULTIPLIER = 4;
         
         this.resolution=(dateWorker.daysBetween(beginDate, endDate)+1);
-
+        if(resolution*RESOLUTION_BASIC_MULTIPLIER < RESOLUTION_MAX){
+        	this.resolution=resolution*RESOLUTION_BASIC_MULTIPLIER;
+        	logger.debug("Multiply resolution with BASIC MULTIPLIER");
+        }else if(this.resolution <= RESOLUTION_MAX) {
+        		logger.debug("Multiply resolution with ADAPTIVE MULTIPLIER");
+	        	this.resolutionMultiplier = RESOLUTION_MAX/resolution;
+	        	this.resolution=  this.resolution*resolutionMultiplier;
+	        }
+        logger.debug("Resolution: "+this.resolution+ " ResolutionMultiplier: "+this.resolutionMultiplier);
+      
   
         HashMap<Long, ResultListLongObject> results = analysis.computeCourseActivity(courseList, null, selectedUsers, beginStamp, endStamp, resolution, types);
     
@@ -336,7 +346,7 @@ public class VisualizationNVD3 {
 			    
 			    Long currentDateStamp = 0L;
 			    
-			    for (Integer i = 0;i<resultDataObjects.getElements().size()/2;i++){
+			    for (Integer i = 0;i<resultDataObjects.getElements().size();i++){
 			        	JSONArray graphDataValue = new JSONArray();
 			        	JSONArray graphUserValue = new JSONArray();
 			        	Long dateMultiplier = 60*60*24*i.longValue()*1000;
@@ -368,7 +378,7 @@ public class VisualizationNVD3 {
 
        
 
-        logger.debug(graphParentArray.toString());
+       // logger.debug(graphParentArray.toString());
         
         return graphParentArray.toString();       
     }

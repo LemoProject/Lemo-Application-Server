@@ -244,7 +244,7 @@ public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDa
 	}
 		
 	
-	public List usageAnalysis(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes ){
+	public List<List<XYDateDataItem>> usageAnalysis(Course course, Date beginDate, Date endDate, List<EResourceType> resourceTypes ){
 		
 		List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
         List<XYDateDataItem> list1 = CollectionFactory.newList();
