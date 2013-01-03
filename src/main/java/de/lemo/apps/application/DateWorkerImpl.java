@@ -90,27 +90,27 @@ public class DateWorkerImpl implements DateWorker {
             /*
              * Force jquery ui datepicker to use short month names of the current Java version. Datepicker uses the correct
              * new ones, though on the backend it's depending on the Java version. The short name for march in german
-             * changed from 'mrz' to 'mär' in Java 8 for example.
+             * changed from 'Mrz' to 'Mär' in Java 8 for example. Don't mind the 13th month, datepicker ignores it anyway.
              */
             monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        JSONLiteral datePickerConfig = new JSONLiteral("{	nextText: 'Next Month', " +
-                "								prevText: 'Previous Month'," +
-                "								changeMonth: true," +
-                "								changeYear: true," +
-                "								buttonText: '" + messages.get("chooseDate") + "'," +
-                // "								minDate: '01.07.2012'," +
-                // "								maxDate: '"+this.course.getLastRequestDate()+
-                "								buttonImage: '" + getCalendarIconPath() + "'," +
-                "								buttonImageOnly: false," +
-                "								showButtonPanel: true," +
-                "								dateFormat: 'M dd, yy'," +
-                "                               monthNamesShort: " + monthNamesShort + "," +
-                "								showOn: 'both'}");
-        log.info(datePickerConfig.toString());
+        JSONLiteral datePickerConfig = new JSONLiteral("{" +
+                "  nextText: 'Next Month'" +
+                ", prevText: 'Previous Month'" +
+                ", changeMonth: true" +
+                ", changeYear: true" +
+                ", buttonText: '" + messages.get("chooseDate") + "'" +
+                // ", minDate: '01.07.2012'" +
+                // ", maxDate: '"+this.course.getLastRequestDate()+
+                ", buttonImage: '" + getCalendarIconPath() + "'" +
+                ", buttonImageOnly: false" +
+                ", showButtonPanel: true" +
+                ", dateFormat: 'M dd, yy'" +
+                ", monthNamesShort: " + monthNamesShort +
+                ", showOn: 'both'" +
+                "}");
         return datePickerConfig;
     }
 
