@@ -29,12 +29,10 @@ public interface QFrequentPathsViger {
     		@FormParam(TYPES) List<String> types,
     		@FormParam(MIN_LENGTH) Long minLength,
     		@FormParam(MAX_LENGTH) Long maxLength,
-    		@FormParam(MIN_INTERVAL) Long minInterval,
-    		@FormParam(MAX_INTERVAL) Long maxInterval,
-    		@FormParam(MIN_WHOLE_INTERVAL) Long minWholeInterval,
-    		@FormParam(MAX_WHOLE_INTERVAL) Long maxWholeInterval,
-    		@FormParam(MIN_SUP) double minSup, 
-    		@FormParam(SESSION_WISE) boolean sessionWise,
-    		@FormParam(START_TIME) long startTime,
-    		@FormParam(END_TIME) long endTime);
+    		@FormParam(MIN_SUP) Double minSup, 
+    		@FormParam(SESSION_WISE) Boolean sessionWise,
+    		@FormParam(START_TIME) Long startTime,
+    		@FormParam(END_TIME) Long endTime);
+	
+	
 }

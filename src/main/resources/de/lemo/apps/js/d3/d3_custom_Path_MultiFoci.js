@@ -144,6 +144,7 @@
     	 
     	 
     	 update2();
+    	
     	// printLegend();
     	 
     }

@@ -505,10 +505,6 @@ public class AnalysisImpl implements Analysis {
 	    		List<String> types,
 	    		Long minLength,
 	    		Long maxLength,
-	    		Long minInterval,
-	    		Long maxInterval,
-	    		Long minWholeInterval,
-	    		Long maxWholeInterval,
 	    		Double minSup, 
 	    		Boolean sessionWise,
 	    		Long startTime,
@@ -524,7 +520,7 @@ public class AnalysisImpl implements Analysis {
 
             QFrequentPathsViger qFrequentPath = ProxyFactory.create(QFrequentPathsViger.class, QUESTIONS_BASE_URL);
             if(qFrequentPath != null) {
-                String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength, minInterval, maxInterval, minWholeInterval, maxWholeInterval, minSup, sessionWise, startTime, endTime);
+                String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength, minSup, sessionWise, startTime, endTime);
                 System.out.println("BIDE result: " + result);
                 return result;
             }
