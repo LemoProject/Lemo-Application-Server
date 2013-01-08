@@ -11,6 +11,7 @@ import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
@@ -18,7 +19,7 @@ import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
 public class InitialisationImpl implements Initialisation {
      
-    public static final String DMS_BASE_URL = ClientInfo.getDMSBaseUrl();
+    public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
     public static final String SERVICE_STARTTIME_URL = DMS_BASE_URL + "/services/starttime";
     private static final String SERVICE_COURSE_URL = DMS_BASE_URL + "/services/courses";
 
@@ -49,13 +50,9 @@ public class InitialisationImpl implements Initialisation {
             }
 
         } catch (ClientProtocolException e) {
-
             e.printStackTrace();
-
         } catch (IOException e) {
-
             e.printStackTrace();
-
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
