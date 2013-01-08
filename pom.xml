@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.lemo</groupId>
 	<artifactId>apps</artifactId>
-	<version>0.8-SNAPSHOT</version>
+	<version>PT2S8_Final-1-g715cee4</version><!-- FLAG 1 identifier DONT DELETE -->
 	<packaging>war</packaging>
 	<name>Lemo Application Server</name>
 
@@ -255,6 +255,24 @@
 			<version>${tapestry-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- <dependency>
+			<groupId>org.apache</groupId>
+			<artifactId>maven-model</artifactId>
+			<version>3.0.2</version>
+		</dependency> -->
+		
+		<dependency>
+      		<groupId>org.apache.maven</groupId>
+      		<artifactId>maven-core</artifactId>
+      		<version>3.0.1</version>
+    	</dependency>
+    	
+    	<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+			<version>2.0.4</version>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -351,8 +369,33 @@
 					<port>8080</port>
 				</configuration>
 			</plugin>
-
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+                	<execution>
+	                    <id>versionnumber</id>
+						<configuration>
+							<target>
+								<exec executable="git" outputproperty="BUILD_NUMBER">
+									<arg value="describe"/>
+								</exec>
+								<echo message="Build Number: ${BUILD_NUMBER}"/>
+								<copy file="pom.xml" tofile="pom.xml.old"/>
+								<replaceregexp file="pom.xml"
+									match="(&lt;version&gt;).*(&lt;/version&gt;&lt;!-- FLAG 1 identifier DONT DELETE --&gt;)"
+									replace="\1${BUILD_NUMBER}\2"
+									byline="true"/>
+							</target>
+						</configuration>
+					    <phase>package</phase>
+	                    <goals>
+	                        <goal>run</goal>
+	                    </goals>
+                	</execution>
+                </executions>
+			</plugin>
 		</plugins>
 
 		<resources>
