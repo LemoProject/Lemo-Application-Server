@@ -16,6 +16,9 @@
 	    	return;
 	  }
 	  
+	  $("#viz").prepend($('<div class="alert alert-info">Please be aware that only <b>seven</b> quizzes can be shown at the same time.</div>'));
+  	
+	  
 	  var quizzes = [],
 	  	  counter = 0,
 	  	  quizMin = 0,
@@ -69,7 +72,7 @@
     		.attr("height", h + margin.bottom + margin.top)
     		
 	  svgBox.append("text")
-	  	.attr("class","days")
+	  	.attr("class","quizzes")
 		.attr("x", 0 )
 		.attr("y", 0)
 		.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")

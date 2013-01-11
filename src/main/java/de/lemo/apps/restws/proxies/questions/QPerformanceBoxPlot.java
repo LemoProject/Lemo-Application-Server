@@ -23,6 +23,7 @@ public interface QPerformanceBoxPlot {
     		@FormParam(COURSE_IDS) List<Long> courses, 
     		@FormParam(USER_IDS) List<Long> users, 
     		@FormParam(QUIZ_IDS) List<Long> quizzes,
+    		//@FormParam(RESOLUTION) Long resolution,
     		@FormParam(START_TIME) Long startTime,
     		@FormParam(END_TIME) Long endTime); 
 

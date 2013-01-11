@@ -1,17 +1,13 @@
 package de.lemo.apps.pages.data;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
@@ -36,12 +32,6 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
@@ -54,7 +44,6 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
@@ -66,8 +55,8 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_PerformanceBoxPlot.js" })
-public class VisualizationPerformanceCumulative {
+@Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })
+public class VisualizationPerformanceHistogramAvg {
 
     @Environmental
     private JavaScriptSupport javaScriptSupport;
@@ -171,7 +160,7 @@ public class VisualizationPerformanceCumulative {
 
     @Property
     @Persist
-    private List<Long> selectedUsers, selectedQuizzes;
+    private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
 
     public List<Long> getUsers() {
         List<Long> courses = new ArrayList<Long>();
@@ -188,7 +177,10 @@ public class VisualizationPerformanceCumulative {
                 && allowedCourses.contains(course.getCourseId())) {
             this.courseId = course.getCourseId();
             this.course = course;
-            
+            if(this.selectedCourses == null){
+            	this.selectedCourses= new ArrayList<Long>();
+            	this.selectedCourses.add(courseId);
+            }
             return true;
         } else
             return Explorer.class;
@@ -212,6 +204,7 @@ public class VisualizationPerformanceCumulative {
         this.course = null;
         this.selectedUsers = null;
         this.selectedQuizzes = null;
+        this.selectedCourses = null;
         this.selectedActivities = null;
     }
 
@@ -224,6 +217,7 @@ public class VisualizationPerformanceCumulative {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
         userIds = getUsers();
+        
         quizIds = new ArrayList<Long>();
         
         List<Long> courseList = new ArrayList<Long>();
@@ -259,138 +253,160 @@ public class VisualizationPerformanceCumulative {
     }
 
     public String getQuestionResult() {
-        if(courseId!=null){
-        	Long endStamp=0L;
-        	Long beginStamp=0L;
-        	if(endDate!=null){
-        		endStamp = new Long(endDate.getTime()/1000);
-        	} //else endtime= 1334447632L;
-	        
-        	if(beginDate!=null){
-        		beginStamp = new Long(beginDate.getTime()/1000);
-        	} //else starttime = 1308968800L;
-        	
-			if (this.resolution == null || this.resolution < 10 )
-				this.resolution = 30;
-			List<Long> roles = new ArrayList<Long>();
-			List<Long> courseList = new ArrayList<Long>();
-			courseList.add(courseId);
-			
-			//calling dm-server
-			for (int i=0;i<courseList.size();i++){
-				logger.debug("Courses: "+courseList.get(i));
-			}
-			
-//			 List<String> types = null;
-//		        if(selectedActivities != null && !selectedActivities.isEmpty()) {
-//		            types = new ArrayList<String>();
-//		            for(EResourceType resourceType : selectedActivities) {
-//		                types.add(resourceType.name().toLowerCase());
-//		            }
-//		        }
-//        	
-		        
-		        List<Long> quizzesList = new ArrayList<Long>();
-				//quizzesList.add(11114282L);
-				//quizzesList.add(11114861L);
-		    	
-		    	ResultListStringObject quizList = init.getRatedObjects(courseList);
-				
-				Map<Long,String> quizzesMap = CollectionFactory.newMap();
-				List<String> quizzesTitles = new ArrayList<String>();
-				
-				if(quizList!=null && quizList.getElements()!=null)
-				{
-					logger.debug(quizList.getElements().toString());
-					List<String> quizStringList = quizList.getElements();
-					 for(Integer x = 0; x < quizStringList.size(); x=x+3) {
-						 Long combinedQuizId = Long.parseLong((quizStringList.get(x)+quizStringList.get(x+1)));
-						 quizzesMap.put(combinedQuizId, quizStringList.get(x+2));
-						 quizzesTitles.add(quizStringList.get(x+2));
-					 }
-				
-				} else logger.debug("No rated Objetcs found");
-					
-				if(selectedQuizzes != null){
-					quizzesList = selectedQuizzes;
-				} else if(quizzesMap!=null && quizzesMap.keySet()!=null){
-					quizzesList = new ArrayList<Long>();
-					quizzesList.addAll(quizzesMap.keySet());
-				}    
-		        
-			
-			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution+" QuizzesAmount:"+quizzesList.size());
-		 
-			
-			
-			
-			String result = analysis.computePerformanceBoxplot(courseList, selectedUsers, quizzesList, beginStamp, endStamp);
-			
-			JSONArray graphParentArray = new JSONArray();
-			
-			
-			ObjectMapper mapper = new ObjectMapper();
-			List<BoxPlot> resultList;
-			BoxPlot singleResult;
-			String resultListString = "";
-			JsonNode jsonObj;
-			try {
-				jsonObj = mapper.readTree(result);
-				JsonNode elementArray = jsonObj.get("elements");
-	            if (elementArray != null ) {
-		            	if(elementArray.isArray()) {
-		            
-		           	 	
-		            	resultList = mapper.readValue(elementArray.toString(), new TypeReference<List<BoxPlot>>() { });
-		            	
-		            	logger.debug("Entries Size:"+jsonObj.get("elements").size()+" Values:"+jsonObj.get("elements").toString());
-		            	
-		            	logger.debug("Entries parsed Size: "+resultList.size()+" Values:"+resultList.toString());
-		            	
-		            	for(Integer w = 0; w < resultList.size(); w++) {
-		            		Long quizID = Long.parseLong(resultList.get(w).getName());
-		            		resultList.get(w).setName(quizzesMap.get(quizID));
-		            		//resultList.get(w).setName(quizzesTitles.get(w));
-		            	}
-		            	
-		            	resultListString = mapper.writeValueAsString(resultList);
-		            	
-		            	logger.debug("Entries JSON Output: "+resultListString);
-		            } else {
-		            	singleResult = mapper.readValue(elementArray.toString(), new TypeReference<BoxPlot>() { });
-		            	
-		            	logger.debug("Entries: "+jsonObj.get("elements").toString());
-		            	
-		            	logger.debug("Entries parsed: "+singleResult.toString());
-		            	
-		            	
-		            	Long quizID = Long.parseLong(singleResult.getName());
-		            	singleResult.setName(quizzesMap.get(quizID));
-		            	//resultList.get(w).setName(quizzesTitles.get(w));
-		            	
-		            	List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
-		            	tmpResultList.add(singleResult);
-		            	
-		            	resultListString = mapper.writeValueAsString(tmpResultList);
-		            	
-		            }
-	            }
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			logger.debug("Cumulative result: "+result);
-			return resultListString;
+    	List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
+ 
+        if(courseId != null) {
+            Long endStamp = 0L;
+            Long beginStamp = 0L;
+            if(endDate != null) {
+                endStamp = new Long(endDate.getTime() / 1000);
+            }
 
+            if(beginDate != null) {
+                beginStamp = new Long(beginDate.getTime() / 1000);
+            }
+
+            //if(this.resolution == null || this.resolution < 10)
+            this.resolution = 100;
+            List<Long> roles = new ArrayList<Long>();
+            List<Long> courses = new ArrayList<Long>();
+            courses.add(courseId);
+
+            // calling dm-server
+            for(int i = 0; i < courses.size(); i++) {
+                logger.debug("Courses: " + courses.get(i));
+            }
+
+            logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
+
+//            @SuppressWarnings("unchecked")
+//            List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate,
+//                selectedUsers, selectedActivities);
+            
+            List<Long> courseList = new ArrayList<Long>();
+	    	if(selectedCourses!= null && !selectedCourses.isEmpty()){
+	    		if (!selectedCourses.contains(courseId))
+	    			selectedCourses.add(courseId);
+	    		courseList = selectedCourses;
+	    	}	
+	    		else courseList.add(courseId);
+            
+	    	List<Long> quizzesList = new ArrayList<Long>();
+	    	
+	    	ResultListStringObject quizList = init.getRatedObjects(courseList);
+			
+			Map<Long,String> quizzesMap = CollectionFactory.newMap();
+			List<String> quizzesTitles = new ArrayList<String>();
+			
+			if(quizList!=null && quizList.getElements()!=null)
+			{
+				logger.debug(quizList.getElements().toString());
+				List<String> quizStringList = quizList.getElements();
+				 for(Integer x = 0; x < quizStringList.size(); x=x+3) {
+					 Long combinedQuizId = Long.parseLong((quizStringList.get(x)+quizStringList.get(x+1)));
+					 quizzesMap.put(combinedQuizId, quizStringList.get(x+2));
+					 quizzesTitles.add(quizStringList.get(x+2));
+				 }
+			
+			} else logger.debug("No rated Objetcs found");
+			
+			if(selectedQuizzes != null){
+				quizzesList = selectedQuizzes;
+			} else if(quizzesMap!=null && quizzesMap.keySet()!=null){
+				quizzesList = new ArrayList<Long>();
+				quizzesList.addAll(quizzesMap.keySet());
+			}    
+			
+			
+			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
+		
+			List<Long> results = analysis.computePerformanceHistogram(courseList, selectedUsers, quizzesList, resolution, beginStamp, endStamp);
+			logger.debug("results for performance histogram:"+ results);	
+			
+			List<Long> preparedResults = CollectionFactory.newList();
+			
+			if (results!= null)
+			{	
+				Integer splitCounter = 0;
+				Integer quizCounter = 0;
+				Long avgCounter = 0L;
+				Long avgAmount = 0L;
+				//preparedResults.add(new ArrayList<Long>());
+				List<Long> currentList = new ArrayList<Long>();
+				 for(Integer i = 0; i < results.size(); i++) 
+				 {
+					 currentList.add(results.get(i));
+					 avgAmount = avgAmount+results.get(i)*splitCounter;
+					 if(results.get(i) != null && results.get(i) > 0) avgCounter++;
+						
+					 splitCounter++;
+					 if(splitCounter==resolution) {
+						 quizCounter++; 
+						 splitCounter=0;
+						 List<Long> avgResult = new ArrayList<Long>();
+						 if (avgCounter != 0)
+							 preparedResults.add(avgAmount/ resolution);
+						 else preparedResults.add(0L);
+						 //preparedResults.add(avgResult);
+						 avgAmount=0L;
+						 avgCounter = 0L;
+						 currentList=new ArrayList<Long>();
+					 }
+					 
+				 }
+			}
+
+            JSONArray graphParentArray = new JSONArray();
+            
+            //for(Integer z = 0; z < preparedResults.size(); z++) {
+	            JSONObject graphDataObject = new JSONObject();
+	            JSONArray graphDataValues = new JSONArray();
+	            List<Long> tmpResults = preparedResults; 
+	            
+	            if(tmpResults != null && tmpResults.size() > 0)
+	                for(Integer j = 0; j < tmpResults.size(); j++) {
+	                    JSONObject graphValue = new JSONObject();
+	                    
+	                    
+	                    
+	                    graphValue.put("x", quizzesMap.get(quizzesList.get(j)));
+	                    graphValue.put("y", tmpResults.get(j));
+	
+	                    graphDataValues.put(graphValue);
+	                }
+	
+	            graphDataObject.put("values", graphDataValues);
+	            graphDataObject.put("key", "Quiz-Overview");
+	            
+	            graphParentArray.put(graphDataObject);
+             //}
+//            JSONObject graphDataObject2 = new JSONObject();
+//            JSONArray graphDataValues2 = new JSONArray();
+//
+//            if(results != null && results.size() > 0) {
+//                for(Integer i = 0; i < results.size(); i++) {
+//                    JSONObject graphValue2 = new JSONObject();
+//
+//                    graphValue2.put("x", results.get(i).getTitle());
+//                    graphValue2.put("y", results.get(i).getUsers());
+//
+//                    graphDataValues2.put(graphValue2);
+//                }
+//            }
+//            graphDataObject2.put("values", graphDataValues2);
+//            graphDataObject2.put("key", "User");
+
+           
+           // graphParentArray.put(graphDataObject2);
+
+            logger.debug(graphParentArray.toString());
+
+            return graphParentArray.toString();
         }
         return "";
     }
 
+    
     void setupRender() {
         logger.debug(" ----- Bin in Setup Render");
 

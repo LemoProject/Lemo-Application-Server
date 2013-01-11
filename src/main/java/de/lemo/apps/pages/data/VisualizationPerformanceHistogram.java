@@ -152,15 +152,15 @@ public class VisualizationPerformanceHistogram {
 
     @Inject
     @Property
-    private LongValueEncoder userIdEncoder;
+    private LongValueEncoder userIdEncoder, quizEncoder;
 
     @Property
     @Persist
-    private List<Long> userIds;
+    private List<Long> userIds, quizIds;
 
     @Property
     @Persist
-    private List<Long> selectedUsers, selectedCourses;
+    private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
 
     public List<Long> getUsers() {
         List<Long> courses = new ArrayList<Long>();
@@ -203,6 +203,7 @@ public class VisualizationPerformanceHistogram {
         this.courseId = null;
         this.course = null;
         this.selectedUsers = null;
+        this.selectedQuizzes = null;
         this.selectedCourses = null;
         this.selectedActivities = null;
     }
@@ -216,6 +217,28 @@ public class VisualizationPerformanceHistogram {
         List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
         courseModel = new CourseIdSelectModel(courses);
         userIds = getUsers();
+        
+        quizIds = new ArrayList<Long>();
+        
+        List<Long> courseList = new ArrayList<Long>();
+		courseList.add(courseId);
+        ResultListStringObject quizList = init.getRatedObjects(courseList);
+		
+		Map<Long,String> quizzesMap = CollectionFactory.newMap();
+		List<String> quizzesTitles = new ArrayList<String>();
+		
+		if(quizList!=null && quizList.getElements()!=null)
+		{
+			logger.debug(quizList.getElements().toString());
+			List<String> quizStringList = quizList.getElements();
+			 for(Integer x = 0; x < quizStringList.size(); x=x+3) {
+				 Long combinedQuizId = Long.parseLong((quizStringList.get(x)+quizStringList.get(x+1)));
+				 quizzesMap.put(combinedQuizId, quizStringList.get(x+2));
+				 quizzesTitles.add(quizStringList.get(x+2));
+				 quizIds.add(combinedQuizId);
+			 }
+		
+		} else logger.debug("No rated Objetcs found");
     }
 
     public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -269,8 +292,8 @@ public class VisualizationPerformanceHistogram {
 	    		else courseList.add(courseId);
             
 	    	List<Long> quizzesList = new ArrayList<Long>();
-			quizzesList.add(11114282L);
-			quizzesList.add(11114861L);
+			//quizzesList.add(11114282L);
+			//quizzesList.add(11114861L);
 	    	
 	    	ResultListStringObject quizList = init.getRatedObjects(courseList);
 			
@@ -289,10 +312,12 @@ public class VisualizationPerformanceHistogram {
 			
 			} else logger.debug("No rated Objetcs found");
 			
-			if(quizzesMap!=null && quizzesMap.keySet()!=null){
+			if(selectedQuizzes != null){
+				quizzesList = selectedQuizzes;
+			} else if(quizzesMap!=null && quizzesMap.keySet()!=null){
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
-			}
+			}    
 			
 			
 			logger.debug("Starttime: "+beginStamp+ " Endtime: "+endStamp+ " Resolution: "+resolution);
@@ -340,7 +365,9 @@ public class VisualizationPerformanceHistogram {
 	                }
 	
 	            graphDataObject.put("values", graphDataValues);
-	            graphDataObject.put("key", quizzesTitles.get(z));
+	            graphDataObject.put("key", quizzesMap.get(quizzesList.get(z)));
+	            
+	           // quizzesTitles.get(z)
 	            
 	            graphParentArray.put(graphDataObject);
              }
