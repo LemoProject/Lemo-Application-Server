@@ -5,6 +5,11 @@ package de.lemo.apps.restws.client;
 
 import static de.lemo.apps.restws.client.InitialisationImpl.DMS_BASE_URL;
 import static de.lemo.apps.restws.client.InitialisationImpl.SERVICE_STARTTIME_URL;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.QUIZ_IDS;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.RESOLUTION;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.USER_IDS;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +17,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.ws.rs.FormParam;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -38,6 +45,8 @@ import de.lemo.apps.restws.proxies.questions.QCumulativeUserAccess;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsViger;
 import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
+import de.lemo.apps.restws.proxies.questions.QPerformanceBoxPlot;
+import de.lemo.apps.restws.proxies.questions.QPerformanceHistogram;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
@@ -558,6 +567,78 @@ public class AnalysisImpl implements Analysis {
 	            if(qCumulativeAnalysis != null) {
 	                String result = qCumulativeAnalysis.compute(courseIds, types, departments, degrees, startTime, endTime);
 	                logger.debug("CumulativeUserAnalysis result: "+result);
+	                return result;
+	            }
+
+	        } catch (ClientProtocolException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        logger.debug("Error while during communication with DMS. Empty resultset returned");
+	        return "{}";
+	}
+	
+	@Override
+	public List<Long> computePerformanceHistogram(
+			List<Long> courses, 
+    		List<Long> users, 
+    		List<Long> quizzes,
+    		Integer resolution,
+    		Long startTime,
+    		Long endTime) {
+		 logger.debug("Starting Performance histogram Analysis ... ");
+		 try {
+	            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+	            ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
+
+	            if(response.getStatus() != 200) {
+	                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+	            }
+
+	            QPerformanceHistogram qPerformanceHistogram = ProxyFactory.create(QPerformanceHistogram.class, QUESTIONS_BASE_URL);
+	            if(qPerformanceHistogram != null) {
+	            	List<Long> result;
+	                ResultListLongObject tmpresult = qPerformanceHistogram.compute(courses, users, quizzes, resolution, startTime, endTime);
+	                if(tmpresult == null)
+	                    result = new ArrayList<Long>();
+	                else result = tmpresult.getElements();
+	                return result;
+	            }
+
+	        } catch (ClientProtocolException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        logger.debug("Error while during communication with DMS. Empty resultset returned");
+	        return new ArrayList<Long>();
+	}
+	
+	@Override
+	 public String computePerformanceBoxplot(
+	    		List<Long> courses, 
+	    		List<Long> users, 
+	    		List<Long> quizzes,
+	    		Long startTime,
+	    		Long endTime){
+		 logger.debug("Starting Performance Cumulative Analysis ... ");
+		 try {
+	            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+	            ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
+
+	            if(response.getStatus() != 200) {
+	                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+	            }
+
+	            QPerformanceBoxPlot qPerformanceBoxPlot = ProxyFactory.create(QPerformanceBoxPlot.class, QUESTIONS_BASE_URL);
+	            if(qPerformanceBoxPlot != null) {
+	                String result = qPerformanceBoxPlot.compute(courses, users, quizzes, startTime, endTime);
+	                logger.debug("Performance Cumulative result: "+result);
 	                return result;
 	            }
 

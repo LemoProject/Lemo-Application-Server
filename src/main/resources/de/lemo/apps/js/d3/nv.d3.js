@@ -5487,7 +5487,7 @@ nv.models.multiBarChart = function() {
           .selectAll('text, line')
           .style('opacity', 0);
 
-      console.log("Data: "+data[0].values[5].x.length);
+      //console.log("Data: "+data[0].values[5].x.length);
       
       var  dataXAxis = data[1].values;
       

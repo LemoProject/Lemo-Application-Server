@@ -3,6 +3,7 @@ package de.lemo.apps.restws.proxies.questions.parameters;
 public interface MetaParam {
     
     public static final String COURSE_IDS = "cid";
+    public static final String QUIZ_IDS = "quiz_ids";
     public static final String DEGREE = "degree";
     public static final String DEPARTMENT = "dep";
     public static final String END_TIME = "end";

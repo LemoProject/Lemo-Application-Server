@@ -7,7 +7,7 @@
 	  
 	  data = d3custom.data;
 	  
-	  if(!data) {
+	  if(!data || !data[0]) {
 	    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
 	    	return;
 	  }
@@ -16,14 +16,7 @@
 	  
 	  
 	  var  	dataRequests = data[0].values;
-	  		dataUser = data[1].values;
-	  
-	  console.log("Before Sort:"+dataRequests);
-	  
-	  dataRequests.sort(function sortfunction(a, b){return (b.y - a.y)});
-	  dataUser.sort(function sortfunction(a, b){return (b.y - a.y)});
-	  
-	  console.log("After Sort:"+dataRequests);
+
 	  
 	  data[0].values = dataRequests;
 	  
