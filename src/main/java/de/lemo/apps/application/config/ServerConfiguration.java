@@ -2,6 +2,7 @@ package de.lemo.apps.application.config;
 
 import java.io.InputStream;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,7 +12,10 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import de.lemo.apps.entities.User;
 
 /**
  * 
@@ -27,10 +31,14 @@ public enum ServerConfiguration {
         // TODO the DMS initializes the logger here - is there a better way in tapestry?
     }
 
+    private static String USER_FILE = "users.xml";
+
     private Logger logger = Logger.getLogger(getClass());
     private String serverName;
     private Map<String, String> dbConfig;
     private String dmsUrl;
+
+    private List<User> userImports;
 
     public static ServerConfiguration getInstance() {
         return INSTANCE;
@@ -64,6 +72,41 @@ public enum ServerConfiguration {
         dbConfig = Maps.newHashMap();
         for(PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
             dbConfig.put(property.key, property.value);
+        }
+        LemoUserConfig userConfigurations = readUserFile();
+        if(userConfigurations != null) {
+            userImports = createUsers(userConfigurations);
+        } else {
+            userImports = Lists.newArrayList();
+        }
+    }
+
+    private List<User> createUsers(LemoUserConfig userConfigurations) {
+        List<User> users = Lists.newArrayList();
+        if(userConfigurations.users == null || userConfigurations.users.isEmpty()) {
+            logger.warn(USER_FILE + " loaded but no users elements were found.");
+        } else {
+            for(UserConfig userConfig : userConfigurations.users) {
+                User user = new User(userConfig.fullName, userConfig.username, userConfig.email, userConfig.password);
+                user.setMyCourses(userConfig.courses);
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    private LemoUserConfig readUserFile() {
+        try {
+            Unmarshaller jaxbUnmarshaller = JAXBContext.newInstance(LemoUserConfig.class).createUnmarshaller();
+            InputStream in = getClass().getResourceAsStream("/" + USER_FILE);
+            if(in == null) {
+                return null;
+            }
+            logger.info("Loading user file: " + USER_FILE);
+            return (LemoUserConfig) jaxbUnmarshaller.unmarshal(in);
+        } catch (JAXBException e) {
+            // no way to recover, re-throw at runtime
+            throw new RuntimeException(e);
         }
     }
 
@@ -126,6 +169,10 @@ public enum ServerConfiguration {
 
     public Map<String, String> getDbConfig() {
         return dbConfig;
+    }
+
+    public List<User> getUserImports() {
+        return userImports;
     }
 
 }
