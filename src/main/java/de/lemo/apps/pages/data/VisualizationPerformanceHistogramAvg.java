@@ -337,17 +337,22 @@ public class VisualizationPerformanceHistogramAvg {
 				 {
 					 currentList.add(results.get(i));
 					 avgAmount = avgAmount+results.get(i)*splitCounter;
-					 if(results.get(i) != null && results.get(i) > 0) avgCounter++;
+					 //logger.debug("Percent: "+splitCounter+" persons:"+results.get(i)+" Result:"+results.get(i)*splitCounter);
+					 if(results.get(i) != null && results.get(i) > 0) avgCounter = avgCounter+results.get(i);
 						
 					 splitCounter++;
 					 if(splitCounter==resolution) {
+						 
+						 
+						 
+						 List<Long> avgResult = new ArrayList<Long>();
+						 if (avgCounter != 0){
+							 preparedResults.add(avgAmount/ avgCounter);
+							 logger.debug("Result for "+ quizzesMap.get(quizzesList.get(quizCounter))+" : "+avgAmount/ avgCounter);
+						 }else preparedResults.add(0L);
+						 //preparedResults.add(avgResult);
 						 quizCounter++; 
 						 splitCounter=0;
-						 List<Long> avgResult = new ArrayList<Long>();
-						 if (avgCounter != 0)
-							 preparedResults.add(avgAmount/ resolution);
-						 else preparedResults.add(0L);
-						 //preparedResults.add(avgResult);
 						 avgAmount=0L;
 						 avgCounter = 0L;
 						 currentList=new ArrayList<Long>();
@@ -368,7 +373,6 @@ public class VisualizationPerformanceHistogramAvg {
 	                    JSONObject graphValue = new JSONObject();
 	                    
 	                    
-	                    
 	                    graphValue.put("x", quizzesMap.get(quizzesList.get(j)));
 	                    graphValue.put("y", tmpResults.get(j));
 	
@@ -376,7 +380,7 @@ public class VisualizationPerformanceHistogramAvg {
 	                }
 	
 	            graphDataObject.put("values", graphDataValues);
-	            graphDataObject.put("key", "Quiz-Overview");
+	            graphDataObject.put("key", "Performance");
 	            
 	            graphParentArray.put(graphDataObject);
              //}
