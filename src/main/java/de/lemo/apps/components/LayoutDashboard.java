@@ -36,7 +36,7 @@ import de.lemo.apps.pages.data.Dashboard;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/spin.js",
-				"../js/d3/d3.v2.js",
+				"../js/d3/d3.v2.min.js",
 				"../js/d3/d3_BoxPlot_Lib.js",
 				"../js/d3/nv.d3.js",
 				"../js/d3/jquery.tipsy.js",

@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package de.lemo.apps.application;
 
 import java.text.SimpleDateFormat;
@@ -17,7 +15,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 
 /**
- * @author johndoe
+ * @author Andreas Pursian
  * 
  */
 public class DateWorkerImpl implements DateWorker {
@@ -30,6 +28,14 @@ public class DateWorkerImpl implements DateWorker {
 
     private AssetSource assetSource;
 
+    
+    /**
+     * Defining all constants used within this class
+     */
+    public static final String DATE_FORMAT = "MMM dd, yyyy";
+    public static final String CALENDAR_ICON_PATH = "layout/images/glyphicons_045_calendar.png";
+    
+    
     public DateWorkerImpl(Logger logger, AssetSource assetSource) {
         this.assetSource = assetSource;
     }
@@ -62,26 +68,26 @@ public class DateWorkerImpl implements DateWorker {
      * Gibt das Datum in der aktuell vom Nutzer gewaehlten Locale Einstellung aus.
      * 
      * @param inputDate
-     * @return Ein Objekt vom Typ String
+     * @return A String object in date notation
      */
     public String getLocalizedDate(Date date, Locale currentLocale) {
-        SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", currentLocale);
+        SimpleDateFormat df_date = new SimpleDateFormat(DATE_FORMAT, currentLocale);
         return df_date.format(date);
     }
 
     /**
      * Gibt das Datum und die Uhrzeit in der aktuell vom Nutzer gewaehlten Locale Einstellung aus.
      * 
-     * @param inputDate
-     * @return Ein Objekt vom Typ String
+     * @param the Date which should be localized, the current locale 
+     * @return A String object in Date + Time notation
      */
     public String getLocalizedDateTime(Date date, Locale currentLocale) {
-        SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy (hh:mm)", currentLocale);
+        SimpleDateFormat df_date = new SimpleDateFormat(DATE_FORMAT, currentLocale);
         return df_date.format(date);
     }
 
     public String getCalendarIconPath() {
-        return assetSource.getContextAsset("layout/images/glyphicons_045_calendar.png", null).toString();
+        return assetSource.getContextAsset(CALENDAR_ICON_PATH, null).toString();
     }
 
     public JSONLiteral getDatePickerParams(Locale locale) {

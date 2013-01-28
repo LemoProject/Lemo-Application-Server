@@ -62,7 +62,7 @@
         while (i>24) {
             i = amtPaths/++pages;
         }
-        amt=Math.round(i+0.5);        
+        amt=i;        
         console.log("AMT SIZE: "+amt)
     }
     
@@ -81,10 +81,10 @@
    	var posCounter = 1;
    	var skippedCounter = 0;
 		$.each(_nodes, function(i,v) {
-        if (v.pathId < amt*(page-1)+1) {
+        if (v.pathId <=amt*(pages-page)) {
           skippedCounter++;
         }
-  			if(v.pathId < (page-1)*amt+amt+1 && v.pathId >= (page-1)*amt+1) {
+  			if(v.pathId <= amt*(pages-page+1) && v.pathId > amt*(pages-page)) {
   				if (i >=1 && _nodes[i-1].pathId==_nodes[i].pathId) {
   					posCounter++;
   				} else {
@@ -102,12 +102,12 @@
 	   	if(_links.length){
 	   		console.log("Handle Links as Array");
   			$.each(_links, function(i,v) {
-  			if(v.pathId < (page-1)*amt+amt+1 && v.pathId >= (page-1)*amt+1) {
-	            links.push({
-	              "source" : nodes[v.source - skippedCounter],
-	              "target" : nodes[v.target - skippedCounter],
-	              "value" : v.value
-	            });
+          				if (v.pathId <= amt * (pages - page + 1) && v.pathId > amt * (pages - page)) {
+            links.push({
+              "source" : nodes[v.source - skippedCounter],
+              "target" : nodes[v.target - skippedCounter],
+              "value" : v.value
+            });
             // console.log("Schreibe Link: PathId
             // "+nodes[v.source-skippedCounter].pid+"("+v.source+"--"+v.target+")"+"
             // Source: "+nodes[v.source-skippedCounter].name+" Target:
@@ -146,9 +146,10 @@ var force = d3.layout.force()
 	  // Push nodes toward their designated focus.
 	  var k = .1 * e.alpha;
 	  nodes.forEach(function(o, i) {
-	    //console.log("foci: "+(+amt*((+pages)-(+page)+1)-o.pid)+" PID:"+o.pid+" AMT:"+amt);  
-	    o.y += (foci[o.pid-(page-1)*amt-1].y - o.y + (o.pos-1)*350/maxPos + 20) * k;
-	    o.x += (foci[o.pid-(page-1)*amt-1].x - o.x) * k;
+		console.log("node.y : "+o.y);
+		console.log("foci.y : "+(foci[amt*(pages-page+1)-o.pid].y));
+	    o.y += (foci[amt*(pages-page+1)-o.pid].y - o.y + (o.pos-1)*350/maxPos + 20) * k;
+	    o.x += (foci[amt*(pages-page+1)-o.pid].x - o.x) * k;
 	  });
 
 
@@ -171,7 +172,23 @@ var force = d3.layout.force()
  	nodes = force.nodes(),
 	links = force.links();
 
+ 	
+      
+
+ 	
+ 	
+ 	
  	init();
+ 	
+ 	  // Enable key left + right events 
+	  window.focus();
+ 	  d3.select(window).on("keydown", function() {
+ 	    switch (d3.event.keyCode) {
+ 	      case 37: year = Math.max(year0, year - 10); break;
+ 	      case 39: year = Math.min(year1, year + 10); break;
+ 	    }
+ 	    restart();
+ 	  });
 
  	var pathAmount = [];
 
@@ -292,7 +309,7 @@ var force = d3.layout.force()
     		      }
         		
         		
-    		      var p = d.pid-(amt*(page-1));
+    		      var p = amt*(pages-page+1)-d.pid;
     		      if (p >= amt/2) {
       		      for (var i=0; i<p; i++){
       		        foci[i].x=20+660/(amt-1)*i;
@@ -318,7 +335,7 @@ var force = d3.layout.force()
     
       nodeEnter.append("svg:text")
           .attr("class", "nodetext")
-          .attr("dx", function(d) {return d.pid-(amt*(page-1)) >= amt/2 ? -d.name.length*4.5 - 22 : "1.5em";})
+          .attr("dx", function(d) {return amt*(pages-page+1)-d.pid >= amt/2 ? -d.name.length*4.5 - 22 : "1.5em";})
           .attr("dy", ".3em")
           .text(function(d) { return ""});
           
@@ -357,25 +374,25 @@ var force = d3.layout.force()
     });
     
     next = function(bool) {
-    if (bool) {page++;}
-    else {page--;}
-    if (page==1) $("#prev").hide();
-    else $("#prev").show();
-    if (page==pages) $("#next").hide();
-    else $("#next").show();
-    $("#pages").html(''+page+"/"+pages);
-    nodes = [];
-    links = [];
-    init();
-    force.nodes(nodes);
-    force.links(links);
-    for (var i=0; i<amt; i++) {
-  	     foci[i]={x:20+(w-40)/(amt-1)*(i), y:20};
-    }
-    restart();
-    d3.selectAll("g.node text").text(function(o, i) {
-          return "";
-         });
+	    if (bool) {page++;}
+	    else {page--;}
+	    if (page==1) $("#prev").hide();
+	    else $("#prev").show();
+	    if (page==pages) $("#next").hide();
+	    else $("#next").show();
+	    $("#pages").html(''+page+"/"+pages);
+	    nodes = [];
+	    links = [];
+	    init();
+	    force.nodes(nodes);
+	    force.links(links);
+	    for (var i=0; i<amt; i++) {
+	  	     foci[i]={x:20+(w-40)/(amt-1)*(i), y:20};
+	    }
+	    restart();
+	    d3.selectAll("g.node text").text(function(o, i) {
+	          return "";
+	         });
     }
   
     restart();

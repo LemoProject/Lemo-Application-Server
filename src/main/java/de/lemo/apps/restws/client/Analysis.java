@@ -1,7 +1,15 @@
 package de.lemo.apps.restws.client;
 
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.QUIZ_IDS;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.USER_IDS;
+
 import java.util.HashMap;
 import java.util.List;
+
+import javax.ws.rs.FormParam;
 
 import de.lemo.apps.restws.entities.ResultListBoxPlot;
 import de.lemo.apps.restws.entities.ResultListLongObject;
@@ -83,12 +91,38 @@ public interface Analysis {
     		Long startTime,
     		Long endTime);
     
-    String computeCumulativeUserAccess(
+    public String computeQFrequentPathViger(
+    		List<Long> courseIds, 
+    		List<Long> userIds,
+    		List<String> types,
+    		Long minLength,
+    		Long maxLength,
+    		Double minSup, 
+    		Boolean sessionWise,
+    		Long startTime,
+    		Long endTime) ;
+    
+   public String computeCumulativeUserAccess(
     		List<Long> courseIds, 
     		List<String> types,
     		List<Long> departments,
     		List<Long> degrees,
     		Long startTime, 
     		Long endTime);
+    
+    public List<Long> computePerformanceHistogram(
+			List<Long> courses, 
+    		List<Long> users, 
+    		List<Long> quizzes,
+    		Integer resolution,
+    		Long startTime,
+    		Long endTime);
+    
+    public String computePerformanceBoxplot(
+    		List<Long> courses, 
+    		List<Long> users, 
+    		List<Long> quizzes,
+    		Long startTime,
+    		Long endTime); 
 
 }
