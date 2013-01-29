@@ -1,7 +1,13 @@
+/**
+ * File ./de/lemo/apps/pages/Start.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.pages;
 
 import java.util.Date;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -14,7 +20,6 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SymbolConstants;
-
 import org.slf4j.Logger;
 import org.tynamo.security.services.PageService;
 import org.tynamo.security.services.SecurityService;
@@ -24,94 +29,94 @@ import org.tynamo.security.services.SecurityService;
  */
 public class Start
 {
-    @Property
-    @Inject
-    @Symbol(SymbolConstants.TAPESTRY_VERSION)
-    private String tapestryVersion;
- 
-    @Inject
-    @Path("../images/Nutzungsanalyse.png")
-    @Property
-    private Asset carussel_one;
-    
-    @Inject
-    @Path("../images/Pfadvisualisierung.png")
-    @Property
-    private Asset carussel_two;
-    
-    @Environmental
-    private JavaScriptSupport javaScriptSupport;
-    
-    @Inject
-    private Logger logger;
-    
-    @Inject
-    private Messages messages;
-    
-    @Inject
-    private SecurityService securityService;
-    
-    @SuppressWarnings("deprecation")
+
+	@Property
 	@Inject
-    private PageService pageService;
-    
-    @Property
-    @Persist(PersistenceConstants.FLASH)
-    private String username;
+	@Symbol(SymbolConstants.TAPESTRY_VERSION)
+	private String tapestryVersion;
 
-    @Property
-    private String password;
-    
-    @AfterRender
-    public void afterRender() {
-            javaScriptSupport.addScript(
-            		"$('.carousel').carousel({ "+
-            		"interval: 8000"+
-            		"})"
-            );
-    }
-      
-    @Component
-    private Form loginForm;
-    
+	@Inject
+	@Path("../images/Nutzungsanalyse.png")
+	@Property
+	private Asset carussel_one;
 
-    @Persist
-    @Property
-    private int clickCount;
+	@Inject
+	@Path("../images/Pfadvisualisierung.png")
+	@Property
+	private Asset carussel_two;
 
-    @Inject
-    private AlertManager alertManager;
+	@Environmental
+	private JavaScriptSupport javaScriptSupport;
 
-    public Date getCurrentTime()
-    {
-        return new Date();
-    }
-    
-    public Object onSubmitFromLoginForm()
-    {
-		
-        try
-        {
-            Subject currentUser = securityService.getSubject();
+	@Inject
+	private Logger logger;
 
-            if (currentUser == null) { throw new IllegalStateException("Subject can't be null"); }
+	@Inject
+	private Messages messages;
 
-            UsernamePasswordToken token = new UsernamePasswordToken(this.username, this.password);
-            logger.info("Prepare Logintoken. Username: "+username);
+	@Inject
+	private SecurityService securityService;
 
-            currentUser.login(token);
+	@SuppressWarnings("deprecation")
+	@Inject
+	private PageService pageService;
 
-        }
-        catch (AuthenticationException ex)
-        {
-        	logger.info("Login unsuccessful.");
-            loginForm.recordError(messages.get("error.login"));
-            alertManager.info("Login or password not correct.");
-            return null;
-        }
+	@Property
+	@Persist(PersistenceConstants.FLASH)
+	private String username;
 
-        return pageService.getSuccessPage();
-    }
- 
-    
+	@Property
+	private String password;
+
+	@AfterRender
+	public void afterRender() {
+		this.javaScriptSupport.addScript(
+				"$('.carousel').carousel({ " +
+						"interval: 8000" +
+						"})"
+				);
+	}
+
+	@Component
+	private Form loginForm;
+
+	@Persist
+	@Property
+	private int clickCount;
+
+	@Inject
+	private AlertManager alertManager;
+
+	public Date getCurrentTime()
+	{
+		return new Date();
+	}
+
+	public Object onSubmitFromLoginForm()
+	{
+
+		try
+		{
+			final Subject currentUser = this.securityService.getSubject();
+
+			if (currentUser == null) {
+				throw new IllegalStateException("Subject can't be null");
+			}
+
+			final UsernamePasswordToken token = new UsernamePasswordToken(this.username, this.password);
+			this.logger.info("Prepare Logintoken. Username: " + this.username);
+
+			currentUser.login(token);
+
+		} catch (final AuthenticationException ex)
+		{
+			this.logger.info("Login unsuccessful.");
+			this.loginForm.recordError(this.messages.get("error.login"));
+			this.alertManager.info("Login or password not correct.");
+			return null;
+		}
+
+		return this.pageService.getSuccessPage();
+	}
+
 }

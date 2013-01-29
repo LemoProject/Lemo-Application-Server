@@ -1,142 +1,156 @@
+/**
+ * File ./de/lemo/apps/integration/CourseDAOImpl.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.integration;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
-
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.restws.entities.CourseObject;
 
-public class CourseDAOImpl implements CourseDAO{
-	
+public class CourseDAOImpl implements CourseDAO {
+
 	@Inject
-    private Session session;
-    
-    @Inject
-    private Logger logger;
-    
-    
-    
+	private Session session;
+
+	@Inject
+	private Logger logger;
+
+	@Override
 	public List<Course> findAll() {
-		Criteria criteria = session.createCriteria(Course.class);
-        List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return new ArrayList<Course>();
-        }
-        return results;
+		final Criteria criteria = this.session.createCriteria(Course.class);
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return new ArrayList<Course>();
+		}
+		return results;
 	}
 
-	
-	public List<Course> findAllByOwner(User user) {
-	    if(user.getMyCourses().isEmpty()){
-	        return new ArrayList<Course>();
-	    }
-		Criteria criteria = session.createCriteria(Course.class);
+	@Override
+	public List<Course> findAllByOwner(final User user) {
+		if (user.getMyCourses().isEmpty()) {
+			return new ArrayList<Course>();
+		}
+		final Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
-		List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return new ArrayList<Course>();
-        }
-        return results;
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return new ArrayList<Course>();
+		}
+		return results;
 	}
-	
-	public List<Course> findFavoritesByOwner(User user) {
-	    if(user.getMyCourses().isEmpty()){
-            return new ArrayList<Course>();
-        }
-		Criteria criteria = session.createCriteria(Course.class);
+
+	@Override
+	public List<Course> findFavoritesByOwner(final User user) {
+		if (user.getMyCourses().isEmpty()) {
+			return new ArrayList<Course>();
+		}
+		final Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
 		criteria.add(Restrictions.eq("favorite", true));
-		List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return new ArrayList<Course>();
-        }
-        return results;
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return new ArrayList<Course>();
+		}
+		return results;
 	}
-	
-	public boolean doExist(Course course){
-        Criteria criteria = session.createCriteria(Course.class);
-        criteria.add(Restrictions.eq("id", course.getId()));
-        List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return false;
-        }
-        return true;
-    }
-	
-	public boolean doExistByForeignCourseId(Long courseId){
-        Criteria criteria = session.createCriteria(Course.class);
-        criteria.add(Restrictions.eq("courseId", courseId));
-        List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return false;
-        }
-        return true;
-    }
-    
-    public Course getCourse(String coursename){
-        Criteria criteria = session.createCriteria(Course.class);
-        criteria.add(Restrictions.eq("coursename", coursename));
-        List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return null;
-        }
-        return results.get(0);
-    }
-    
-    public Course getCourse(Long id){
-        Criteria criteria = session.createCriteria(Course.class);
-        criteria.add(Restrictions.eq("id", id));
-        List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return null;
-        }
-        return results.get(0);
-    }
-    
-    public Course getCourseByDMSId(Long id){
-        Criteria criteria = session.createCriteria(Course.class);
-        criteria.add(Restrictions.eq("courseId", id));
-        List<Course> results = criteria.list();
-        if (results.size() == 0) {
-                return null;
-        }
-        return results.get(0);
-    }
-    
-    public void toggleFavorite(Long id){
-    	System.out.println("CourseId:" +id);
-        Course favCourse = this.getCourse(id);
-        Boolean favStatus = favCourse.getFavorite();
-        System.out.println("FavStatus:" +favStatus);
-        if(favStatus==null) {
-        	favStatus=true;
-        } else favStatus =!favStatus;
-        System.out.println("FavStatus2:" +favStatus);
-        favCourse.setFavorite(favStatus);
-        System.out.println("FavStatus3:" +favCourse.getFavorite());
-        session.update(favCourse);
-    }
-    
-    public void save(Course course) {
-        session.persist(course);
-    }
-    
-    public void save(CourseObject courseObject) {
-    	Course course = new Course(courseObject);
-        session.persist(course);
-    }
-    
-    public void update(Course course) {
-        session.update(course);
-    }
 
-	
+	@Override
+	public boolean doExist(final Course course) {
+		final Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.eq("id", course.getId()));
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean doExistByForeignCourseId(final Long courseId) {
+		final Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.eq("courseId", courseId));
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Course getCourse(final String coursename) {
+		final Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.eq("coursename", coursename));
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return null;
+		}
+		return results.get(0);
+	}
+
+	@Override
+	public Course getCourse(final Long id) {
+		final Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.eq("id", id));
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return null;
+		}
+		return results.get(0);
+	}
+
+	@Override
+	public Course getCourseByDMSId(final Long id) {
+		final Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.eq("courseId", id));
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return null;
+		}
+		return results.get(0);
+	}
+
+	@Override
+	public void toggleFavorite(final Long id) {
+		System.out.println("CourseId:" + id);
+		final Course favCourse = this.getCourse(id);
+		Boolean favStatus = favCourse.getFavorite();
+		System.out.println("FavStatus:" + favStatus);
+		if (favStatus == null) {
+			favStatus = true;
+		} else {
+			favStatus = !favStatus;
+		}
+		System.out.println("FavStatus2:" + favStatus);
+		favCourse.setFavorite(favStatus);
+		System.out.println("FavStatus3:" + favCourse.getFavorite());
+		this.session.update(favCourse);
+	}
+
+	@Override
+	public void save(final Course course) {
+		this.session.persist(course);
+	}
+
+	@Override
+	public void save(final CourseObject courseObject) {
+		final Course course = new Course(courseObject);
+		this.session.persist(course);
+	}
+
+	@Override
+	public void update(final Course course) {
+		this.session.update(course);
+	}
 
 }

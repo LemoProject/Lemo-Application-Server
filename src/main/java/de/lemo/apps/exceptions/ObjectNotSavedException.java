@@ -1,4 +1,11 @@
 /**
+ * File ./de/lemo/apps/exceptions/ObjectNotSavedException.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
+/**
  * 
  */
 package de.lemo.apps.exceptions;
@@ -7,10 +14,10 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Andreas Pursian
- * 
  */
 public class ObjectNotSavedException extends Exception {
-	private Logger logger = Logger.getLogger(ObjectNotSavedException.class.getName());
+
+	private final Logger logger = Logger.getLogger(ObjectNotSavedException.class.getName());
 
 	/**
 	 * 
@@ -21,7 +28,7 @@ public class ObjectNotSavedException extends Exception {
 
 	}
 
-	public ObjectNotSavedException(String objectId) {
-		logger.error("Object with id: " + objectId + " could not be saved.");
+	public ObjectNotSavedException(final String objectId) {
+		this.logger.error("Object with id: " + objectId + " could not be saved.");
 	}
 }

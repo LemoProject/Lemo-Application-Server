@@ -1,3 +1,10 @@
+/**
+ * File ./de/lemo/apps/pages/data/Dashboard.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.pages.data;
 
 import java.util.ArrayList;
@@ -5,10 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-
-
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
@@ -18,7 +22,6 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.slf4j.Logger;
 import org.tynamo.security.services.SecurityService;
@@ -30,7 +33,6 @@ import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
-import de.lemo.apps.components.JqPlotPie;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
@@ -39,291 +41,297 @@ import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
-import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey="dashboardTitle")
+@BreadCrumb(titleKey = "dashboardTitle")
 @BreadCrumbReset
 public class Dashboard {
-	
-	@Component(parameters = {"dataItems=usageAnalysisWidget1"})
-    private JqPlotLine chart1;
-	
-	@Component(parameters = {"dataItems=usageAnalysisWidget2"})
-    private JqPlotLine chart2;
-	
-	@Component(parameters = {"dataItems=usageAnalysisWidget3"})
-    private JqPlotLine chart3;
-	
-//	@Component(parameters = {"dataItems=testPieData"})
-//    private JqPlotPie chart4 ;
-	
+
+	@Component(parameters = { "dataItems=usageAnalysisWidget1" })
+	private JqPlotLine chart1;
+
+	@Component(parameters = { "dataItems=usageAnalysisWidget2" })
+	private JqPlotLine chart2;
+
+	@Component(parameters = { "dataItems=usageAnalysisWidget3" })
+	private JqPlotLine chart3;
+
+	// @Component(parameters = {"dataItems=testPieData"})
+	// private JqPlotPie chart4 ;
+
 	@Inject
-    private Logger logger;
-	
+	private Logger logger;
+
 	@Inject
 	private Locale currentLocale;
-	
-	@Inject 
+
+	@Inject
 	private DateWorker dateWorker;
-	
+
 	@Inject
 	private StatisticWorker statisticWorker;
-	
+
 	@Inject
 	private AnalysisWorker analysisWorker;
-	
+
 	@Inject
-    @Path("../../images/icons/glyphicons_019_cogwheel.png")
-    @Property
-    private Asset wheel;
-	
+	@Path("../../images/icons/glyphicons_019_cogwheel.png")
+	@Property
+	private Asset wheel;
+
 	@Inject
 	private CourseDAO courseDAO;
-	
-	@Inject 
+
+	@Inject
 	private UserDAO userDAO;
-	
+
 	@Inject
 	private UserWorker userWorker;
-	
+
 	@Property
 	private BreadCrumbInfo breadCrumb;
-	
+
 	@Inject
 	private SecurityService securityService;
-	
+
 	@Inject
 	private ApplicationStateManager applicationStateManager;
-	
+
 	@Inject
 	private Initialisation init;
-	
+
 	@Inject
 	private Analysis analysis;
-	
+
 	@Component(id = "courseForm1")
 	private Form courseForm1;
-	
+
 	@Component(id = "courseForm2")
 	private Form courseForm2;
-	
+
 	@Component(id = "courseForm3")
 	private Form courseForm3;
-	
+
 	@Property
 	@SuppressWarnings("unused")
 	private SelectModel courseModel1;
-	
+
 	@Property
 	@SuppressWarnings("unused")
 	private SelectModel courseModel2;
-	
+
 	@Property
 	@SuppressWarnings("unused")
 	private SelectModel courseModel3;
-	
+
 	@Property
 	private Long widgetCourse1Id;
-	
+
 	@Property
 	private Long widgetCourse2Id;
-	
+
 	@Property
 	private Long widgetCourse3Id;
-	
+
 	@Persist("Flash")
 	private UsageStatisticsContainer usageStatistics;
-	
+
 	private Course widgetCourse1;
 
 	private Course widgetCourse2;
-	
+
 	private Course widgetCourse3;
 
-//	@SuppressWarnings("unused")
-//	@SessionState(create = false)
-//	@Property
-//	private CurrentUser currentUser;
-//	
-//
-//	void onActivate() {
-//		if (securityService.getSubject().isAuthenticated() && !applicationStateManager.exists(CurrentUser.class)) {
-//			CurrentUser currentUser = applicationStateManager.get(CurrentUser.class);
-//			currentUser.merge(securityService.getSubject().getPrincipal());
-//		}
-//
-//	}
-	
-	
-	void onPrepareForRender() {
-		List<Course> courses = courseDAO.findAllByOwner(userWorker.getCurrentUser());
-		courseModel1 = new CourseIdSelectModel(courses);
-		courseModel2 = new CourseIdSelectModel(courses);
-		courseModel3 = new CourseIdSelectModel(courses);
-		
-		widgetCourse1 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget1());
-		widgetCourse2 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget2());
-		widgetCourse3 = courseDAO.getCourse(userWorker.getCurrentUser().getWidget3());
-		if(widgetCourse1!=null)
-		widgetCourse1Id = widgetCourse1.getId();
-		if(widgetCourse2!=null)
-		widgetCourse2Id = widgetCourse2.getId();
-		if(widgetCourse3!=null)
-		widgetCourse3Id = widgetCourse3.getId();
-	}
-	
+	// @SuppressWarnings("unused")
+	// @SessionState(create = false)
+	// @Property
+	// private CurrentUser currentUser;
+	//
+	//
+	// void onActivate() {
+	// if (securityService.getSubject().isAuthenticated() && !applicationStateManager.exists(CurrentUser.class)) {
+	// CurrentUser currentUser = applicationStateManager.get(CurrentUser.class);
+	// currentUser.merge(securityService.getSubject().getPrincipal());
+	// }
+	//
+	// }
 
-	
-//	@Cached
-//    public List getTestPieData()
-//    {
-//        List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-//        List<TextValueDataItem> list1 = CollectionFactory.newList();
-//      
-//        list1.add(new TextValueDataItem("Mozilla Firefox",12));
-//        list1.add(new TextValueDataItem("Google Chrome", 9));
-//        list1.add(new TextValueDataItem("Safari (Webkit)",14));
-//        list1.add(new TextValueDataItem("Internet Explorer", 16));
-//        list1.add(new TextValueDataItem("Opera", 2));
-//
-//      
-//        dataList.add(list1);
-//      
-//        return dataList;
-//    }
-	
+	void onPrepareForRender() {
+		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		this.courseModel1 = new CourseIdSelectModel(courses);
+		this.courseModel2 = new CourseIdSelectModel(courses);
+		this.courseModel3 = new CourseIdSelectModel(courses);
+
+		this.widgetCourse1 = this.courseDAO.getCourse(this.userWorker.getCurrentUser().getWidget1());
+		this.widgetCourse2 = this.courseDAO.getCourse(this.userWorker.getCurrentUser().getWidget2());
+		this.widgetCourse3 = this.courseDAO.getCourse(this.userWorker.getCurrentUser().getWidget3());
+		if (this.widgetCourse1 != null) {
+			this.widgetCourse1Id = this.widgetCourse1.getId();
+		}
+		if (this.widgetCourse2 != null) {
+			this.widgetCourse2Id = this.widgetCourse2.getId();
+		}
+		if (this.widgetCourse3 != null) {
+			this.widgetCourse3Id = this.widgetCourse3.getId();
+		}
+	}
+
+	// @Cached
+	// public List getTestPieData()
+	// {
+	// List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
+	// List<TextValueDataItem> list1 = CollectionFactory.newList();
+	//
+	// list1.add(new TextValueDataItem("Mozilla Firefox",12));
+	// list1.add(new TextValueDataItem("Google Chrome", 9));
+	// list1.add(new TextValueDataItem("Safari (Webkit)",14));
+	// list1.add(new TextValueDataItem("Internet Explorer", 16));
+	// list1.add(new TextValueDataItem("Opera", 2));
+	//
+	//
+	// dataList.add(list1);
+	//
+	// return dataList;
+	// }
+
 	@Property
 	@Persist
 	private Integer count;
-	
-	public List<Course> getMyCourses(){
-		return courseDAO.findAllByOwner(userWorker.getCurrentUser());
-	}
-	
-	void onSuccessFromCourseForm1(){
-		logger.debug("Course ID:"+ widgetCourse1 );
-		User user = userWorker.getCurrentUser();
-		user.setWidget1(widgetCourse1Id);
-		userDAO.update(user);
-	}
-	
-	void onSuccessFromCourseForm2(){
-		logger.debug("Course ID:"+ widgetCourse2 );
-		User user = userWorker.getCurrentUser();
-		user.setWidget2(widgetCourse2Id);
-		userDAO.update(user);
-	}
-	
-	
-	void onSuccessFromCourseForm3(){
-		logger.debug("Course ID:"+ widgetCourse2 );
-		User user = userWorker.getCurrentUser();
-		user.setWidget3(widgetCourse3Id);
-		userDAO.update(user);
+
+	public List<Course> getMyCourses() {
+		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
 	}
 
-	
-	@Cached
-	public List getUsageAnalysisWidget3(){
-		Long id = userWorker.getCurrentUser().getWidget3();
-		return getUsageAnalysis(id);
+	void onSuccessFromCourseForm1() {
+		this.logger.debug("Course ID:" + this.widgetCourse1);
+		final User user = this.userWorker.getCurrentUser();
+		user.setWidget1(this.widgetCourse1Id);
+		this.userDAO.update(user);
 	}
-	
-	@Cached
-	public List getUsageAnalysisWidget2(){
-		Long id = userWorker.getCurrentUser().getWidget2();
-		return getUsageAnalysis(id);
+
+	void onSuccessFromCourseForm2() {
+		this.logger.debug("Course ID:" + this.widgetCourse2);
+		final User user = this.userWorker.getCurrentUser();
+		user.setWidget2(this.widgetCourse2Id);
+		this.userDAO.update(user);
 	}
-	
-	
-	@Cached
-	public List getUsageAnalysisWidget1(){
-		Long id = userWorker.getCurrentUser().getWidget1();
-		return getUsageAnalysis(id);
+
+	void onSuccessFromCourseForm3() {
+		this.logger.debug("Course ID:" + this.widgetCourse2);
+		final User user = this.userWorker.getCurrentUser();
+		user.setWidget3(this.widgetCourse3Id);
+		this.userDAO.update(user);
 	}
-	
-	public List getUsageAnalysis(Long courseId){
-		Course course = courseDAO.getCourse(courseId);
-		if(course !=null){
-			Date endDate = course.getLastRequestDate();
-			return analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1,null);
-		} 
+
+	@Cached
+	public List getUsageAnalysisWidget3() {
+		final Long id = this.userWorker.getCurrentUser().getWidget3();
+		return this.getUsageAnalysis(id);
+	}
+
+	@Cached
+	public List getUsageAnalysisWidget2() {
+		final Long id = this.userWorker.getCurrentUser().getWidget2();
+		return this.getUsageAnalysis(id);
+	}
+
+	@Cached
+	public List getUsageAnalysisWidget1() {
+		final Long id = this.userWorker.getCurrentUser().getWidget1();
+		return this.getUsageAnalysis(id);
+	}
+
+	public List getUsageAnalysis(final Long courseId) {
+		final Course course = this.courseDAO.getCourse(courseId);
+		if (course != null) {
+			final Date endDate = course.getLastRequestDate();
+			return this.analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1, null);
+		}
 		return new ArrayList();
 	}
-	
-	//TODO reduce recomputation of analysis results per widget - method should provide a container class for all necessary stats data
-	public UsageStatisticsContainer getUsageStatistics(Long courseId){
-		logger.debug("######### Getting stats info for course Id: "+courseId);
-		if (this.usageStatistics != null && this.usageStatistics.getCourseId() == courseId)
-			return usageStatistics;
-		List<List<XYDateDataItem>> dataItemList = getUsageAnalysis(courseId);
+
+	// TODO reduce recomputation of analysis results per widget - method should provide a container class for all
+	// necessary stats data
+	public UsageStatisticsContainer getUsageStatistics(final Long courseId) {
+		this.logger.debug("######### Getting stats info for course Id: " + courseId);
+		if ((this.usageStatistics != null) && (this.usageStatistics.getCourseId() == courseId)) {
+			return this.usageStatistics;
+		}
+		final List<List<XYDateDataItem>> dataItemList = this.getUsageAnalysis(courseId);
 		this.usageStatistics = new UsageStatisticsContainer(courseId);
-		this.usageStatistics.setAverageRequest(statisticWorker.getAverageRequest(dataItemList));
-		this.usageStatistics.setMaxRequest(statisticWorker.getMaxRequest(dataItemList));
-		this.usageStatistics.setMaxRequestDate(statisticWorker.getMaxRequestDate(dataItemList));
-		this.usageStatistics.setOverallRequest(statisticWorker.getOverallRequest(dataItemList));
+		this.usageStatistics.setAverageRequest(this.statisticWorker.getAverageRequest(dataItemList));
+		this.usageStatistics.setMaxRequest(this.statisticWorker.getMaxRequest(dataItemList));
+		this.usageStatistics.setMaxRequestDate(this.statisticWorker.getMaxRequestDate(dataItemList));
+		this.usageStatistics.setOverallRequest(this.statisticWorker.getOverallRequest(dataItemList));
 		return this.usageStatistics;
 	}
-	
-	public Long getAverageRequest(List<List<XYDateDataItem>> dataItemList){
-		return statisticWorker.getAverageRequest(dataItemList);
+
+	public Long getAverageRequest(final List<List<XYDateDataItem>> dataItemList) {
+		return this.statisticWorker.getAverageRequest(dataItemList);
 	}
-	
-	public Long getOverallRequest(List<List<XYDateDataItem>> dataItemList){
-		return statisticWorker.getOverallRequest(dataItemList);
+
+	public Long getOverallRequest(final List<List<XYDateDataItem>> dataItemList) {
+		return this.statisticWorker.getOverallRequest(dataItemList);
 	}
-	
-	public Long getMaxRequest(List<List<XYDateDataItem>> dataItemList){
-		return statisticWorker.getMaxRequest(dataItemList);
+
+	public Long getMaxRequest(final List<List<XYDateDataItem>> dataItemList) {
+		return this.statisticWorker.getMaxRequest(dataItemList);
 	}
-	
-	public Date getMaxRequestDate(List<List<XYDateDataItem>> dataItemList){
-		return statisticWorker.getMaxRequestDate(dataItemList);
+
+	public Date getMaxRequestDate(final List<List<XYDateDataItem>> dataItemList) {
+		return this.statisticWorker.getMaxRequestDate(dataItemList);
 	}
-	
-	
-	public String getWidgetName(int widget){
-		switch(widget){
-		case 1:
-			Long id1 = userWorker.getCurrentUser().getWidget1(); 
-			if(id1!=null && getWidgetCourse1()!= null) return getWidgetCourse1().getCourseDescription(); //courseDAO.getCourse(id1).getCourseDescription();
-		case 2:
-			Long id2 = userWorker.getCurrentUser().getWidget2(); 
-			if(id2!=null && getWidgetCourse2()!= null) return getWidgetCourse2().getCourseDescription(); //courseDAO.getCourse(id2).getCourseDescription();
-		case 3:
-			Long id3 = userWorker.getCurrentUser().getWidget3(); 
-			if(id3!=null && getWidgetCourse3()!= null) return getWidgetCourse3().getCourseDescription(); //courseDAO.getCourse(id3).getCourseDescription();
-		default: return "Widget unused";	
+
+	public String getWidgetName(final int widget) {
+		switch (widget) {
+			case 1:
+				final Long id1 = this.userWorker.getCurrentUser().getWidget1();
+				if ((id1 != null) && (this.getWidgetCourse1() != null))
+				{
+					return this.getWidgetCourse1().getCourseDescription(); // courseDAO.getCourse(id1).getCourseDescription();
+				}
+			case 2:
+				final Long id2 = this.userWorker.getCurrentUser().getWidget2();
+				if ((id2 != null) && (this.getWidgetCourse2() != null))
+				{
+					return this.getWidgetCourse2().getCourseDescription(); // courseDAO.getCourse(id2).getCourseDescription();
+				}
+			case 3:
+				final Long id3 = this.userWorker.getCurrentUser().getWidget3();
+				if ((id3 != null) && (this.getWidgetCourse3() != null))
+				{
+					return this.getWidgetCourse3().getCourseDescription(); // courseDAO.getCourse(id3).getCourseDescription();
+				}
+			default:
+				return "Widget unused";
 		}
 	}
-	
+
 	@Cached
-	public Course getWidgetCourse1(){
-		Long id1 = userWorker.getCurrentUser().getWidget1(); 
-		return courseDAO.getCourse(id1);
+	public Course getWidgetCourse1() {
+		final Long id1 = this.userWorker.getCurrentUser().getWidget1();
+		return this.courseDAO.getCourse(id1);
 	}
-	
+
 	@Cached
-	public Course getWidgetCourse2(){
-		Long id2 = userWorker.getCurrentUser().getWidget2(); 
-		return courseDAO.getCourse(id2);
+	public Course getWidgetCourse2() {
+		final Long id2 = this.userWorker.getCurrentUser().getWidget2();
+		return this.courseDAO.getCourse(id2);
 	}
-	
+
 	@Cached
-	public Course getWidgetCourse3(){
-		Long id3 = userWorker.getCurrentUser().getWidget3(); 
-		return courseDAO.getCourse(id3);
+	public Course getWidgetCourse3() {
+		final Long id3 = this.userWorker.getCurrentUser().getWidget3();
+		return this.courseDAO.getCourse(id3);
 	}
-	
-	public String getLocalizedDate(Date date){
-		return dateWorker.getLocalizedDate(date,currentLocale);
+
+	public String getLocalizedDate(final Date date) {
+		return this.dateWorker.getLocalizedDate(date, this.currentLocale);
 	}
-	
-	
-	public String getLocalizedDateTime(Date date){
-		return dateWorker.getLocalizedDateTime(date,currentLocale);
+
+	public String getLocalizedDateTime(final Date date) {
+		return this.dateWorker.getLocalizedDateTime(date, this.currentLocale);
 	}
 
 }

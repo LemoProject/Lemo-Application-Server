@@ -1,57 +1,61 @@
+/**
+ * File ./de/lemo/apps/pages/account/MyAccount.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.pages.account;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.tynamo.security.services.SecurityService;
-
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
-
-import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 
 @RequiresAuthentication
 @BreadCrumbReset
 public class MyAccount {
-	
+
 	@Property
 	private BreadCrumbInfo breadCrumb;
-	
+
 	@Component(id = "accountform")
 	private Form form;
-	
+
 	@Inject
 	private HttpServletRequest request;
-	
+
 	@Inject
 	UserDAO ud;
-	
+
 	@Persist("Flash")
 	private User myAccount;
-	
-	public String getUserName(){
-		return request.getRemoteUser();
-		
+
+	public String getUserName() {
+		return this.request.getRemoteUser();
+
 	}
-	
-	public User getMyAccount(){
-		User user = ud.getUser(getUserName());
-		if (user !=null)  {
-			myAccount = user;
-			return myAccount;
+
+	public User getMyAccount() {
+		final User user = this.ud.getUser(this.getUserName());
+		if (user != null) {
+			this.myAccount = user;
+			return this.myAccount;
 		}
-			else return new User(); //TODO valid null check
+		else {
+			return new User(); // TODO valid null check
+		}
 	}
-	
-	Object onSuccess(){
-		ud.update(myAccount);
+
+	Object onSuccess() {
+		this.ud.update(this.myAccount);
 		return this;
 	}
 

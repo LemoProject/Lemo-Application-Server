@@ -1,3 +1,10 @@
+/**
+ * File ./de/lemo/apps/pages/Index_Old.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.pages;
 
 import java.util.Date;
@@ -12,39 +19,40 @@ import org.apache.tapestry5.alerts.AlertManager;
  */
 public class Index_Old
 {
-    @Property
-    @Inject
-    @Symbol(SymbolConstants.TAPESTRY_VERSION)
-    private String tapestryVersion;
 
-    @InjectComponent
-    private Zone zone;
+	@Property
+	@Inject
+	@Symbol(SymbolConstants.TAPESTRY_VERSION)
+	private String tapestryVersion;
 
-    @Persist
-    @Property
-    private int clickCount;
+	@InjectComponent
+	private Zone zone;
 
-    @Inject
-    private AlertManager alertManager;
+	@Persist
+	@Property
+	private int clickCount;
 
-    public Date getCurrentTime()
-    {
-        return new Date();
-    }
+	@Inject
+	private AlertManager alertManager;
 
-    void onActionFromIncrement()
-    {
-        alertManager.info("Increment clicked");
+	public Date getCurrentTime()
+	{
+		return new Date();
+	}
 
-        clickCount++;
-    }
+	void onActionFromIncrement()
+	{
+		this.alertManager.info("Increment clicked");
 
-    Object onActionFromIncrementAjax()
-    {
-        clickCount++;
+		this.clickCount++;
+	}
 
-        alertManager.info("Increment (via Ajax) clicked");
+	Object onActionFromIncrementAjax()
+	{
+		this.clickCount++;
 
-        return zone;
-    }
+		this.alertManager.info("Increment (via Ajax) clicked");
+
+		return this.zone;
+	}
 }
