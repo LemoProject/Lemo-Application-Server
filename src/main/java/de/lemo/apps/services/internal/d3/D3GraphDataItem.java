@@ -1,36 +1,42 @@
+/**
+ * File ./de/lemo/apps/services/internal/d3/D3GraphDataItem.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.services.internal.d3;
 
 import java.io.Serializable;
-
 import org.apache.tapestry5.json.JSONArray;
 
-public class D3GraphDataItem implements Comparable, Serializable{
-	
+public class D3GraphDataItem implements Comparable, Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6743372426916686477L;
 
-	
 	private JSONArray nodes;
-	
+
 	private JSONArray links;
-	
-	public D3GraphDataItem(){
-		
+
+	public D3GraphDataItem() {
+
 	}
 
 	/**
 	 * @return the nodes
 	 */
 	public JSONArray getNodes() {
-		return nodes;
+		return this.nodes;
 	}
 
 	/**
-	 * @param nodes the nodes to set
+	 * @param nodes
+	 *            the nodes to set
 	 */
-	public void setNodes(JSONArray nodes) {
+	public void setNodes(final JSONArray nodes) {
 		this.nodes = nodes;
 	}
 
@@ -38,18 +44,19 @@ public class D3GraphDataItem implements Comparable, Serializable{
 	 * @return the links
 	 */
 	public JSONArray getLinks() {
-		return links;
+		return this.links;
 	}
 
 	/**
-	 * @param links the links to set
+	 * @param links
+	 *            the links to set
 	 */
-	public void setLinks(JSONArray links) {
+	public void setLinks(final JSONArray links) {
 		this.links = links;
 	}
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(final Object arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
