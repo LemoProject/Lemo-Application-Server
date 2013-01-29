@@ -249,7 +249,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 	}
 
 	@Override
-	public List usageAnalysis(final Course course, final Date endDate, final int dateRange,
+	public List<List<XYDateDataItem>> usageAnalysis(final Course course, final Date endDate, final int dateRange,
 			final Integer dateMultiplier, final List<EResourceType> resourceTypes) {
 
 		Date beginDate = endDate;

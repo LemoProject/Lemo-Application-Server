@@ -116,11 +116,13 @@ public class VisualizationLOTreeMap {
 	Integer resolution;
 
 	// Value Encoder for activity multi-select component
+	@SuppressWarnings("unused")
 	@Property(write = false)
 	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
 			EResourceType.class);
 
 	// Select Model for activity multi-select component
+	@SuppressWarnings("unused")
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
@@ -128,6 +130,7 @@ public class VisualizationLOTreeMap {
 	@Persist
 	private List<EResourceType> selectedActivities;
 
+	@SuppressWarnings("unused")
 	@Property
 	@Persist
 	private List<Long> userIds;

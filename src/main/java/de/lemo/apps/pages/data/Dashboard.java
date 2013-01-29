@@ -173,30 +173,30 @@ public class Dashboard {
 	}
 
 	@Cached
-	public List getUsageAnalysisWidget3() {
+	public List<List<XYDateDataItem>> getUsageAnalysisWidget3() {
 		final Long id = this.userWorker.getCurrentUser().getWidget3();
 		return this.getUsageAnalysis(id);
 	}
 
 	@Cached
-	public List getUsageAnalysisWidget2() {
+	public List<List<XYDateDataItem>> getUsageAnalysisWidget2() {
 		final Long id = this.userWorker.getCurrentUser().getWidget2();
 		return this.getUsageAnalysis(id);
 	}
 
 	@Cached
-	public List getUsageAnalysisWidget1() {
+	public List<List<XYDateDataItem>> getUsageAnalysisWidget1() {
 		final Long id = this.userWorker.getCurrentUser().getWidget1();
 		return this.getUsageAnalysis(id);
 	}
 
-	public List getUsageAnalysis(final Long courseId) {
+	public List<List<XYDateDataItem>> getUsageAnalysis(final Long courseId) {
 		final Course course = this.courseDAO.getCourse(courseId);
 		if (course != null) {
 			final Date endDate = course.getLastRequestDate();
 			return this.analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1, null);
 		}
-		return new ArrayList();
+		return new ArrayList<List<XYDateDataItem>>();
 	}
 
 	// TODO reduce recomputation of analysis results per widget - method should provide a container class for all

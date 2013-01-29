@@ -130,10 +130,12 @@ public class VisualizationNVD3 {
 	private ResourceRequestInfo resourceItem;
 
 	// Value Encoder for activity multi-select component
+	@SuppressWarnings("unused")
 	@Property(write = false)
 	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
 			EResourceType.class);
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Property(write = false)
 	@Retain
 	private BeanModel resourceGridModel;
@@ -146,6 +148,7 @@ public class VisualizationNVD3 {
 	}
 
 	// Select Model for activity multi-select component
+	@SuppressWarnings("unused")
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
@@ -153,6 +156,7 @@ public class VisualizationNVD3 {
 	@Persist
 	private List<EResourceType> selectedActivities;
 
+	@SuppressWarnings("unused")
 	@Property
 	@Persist
 	private List<Long> userIds, courseIds;

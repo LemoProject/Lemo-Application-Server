@@ -15,6 +15,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "question")
 public class Question extends AbstractEntity {
 
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1402869189061923941L;
+
 	private String name;
 
 	private String question;
