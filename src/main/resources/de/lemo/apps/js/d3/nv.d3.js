@@ -5487,9 +5487,10 @@ nv.models.multiBarChart = function() {
           .selectAll('text, line')
           .style('opacity', 0);
 
-      console.log("Data: "+data[0].values[5].x.length);
+      //console.log("Data: "+data[0].values[5].x.length);
       
-      var  dataXAxis = data[1].values;
+      // Changed data array entry from 1 to 0 .... in cases with only one data item values won't be found otherwise
+      var  dataXAxis = data[0].values;
       
       if(rotateLabels)
         xTicks

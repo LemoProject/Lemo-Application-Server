@@ -11,16 +11,20 @@ import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
+import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
+import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
 public class InitialisationImpl implements Initialisation {
      
-    public static final String DMS_BASE_URL = ClientInfo.getDMSBaseUrl();
+    public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
     public static final String SERVICE_STARTTIME_URL = DMS_BASE_URL + "/services/starttime";
     private static final String SERVICE_COURSE_URL = DMS_BASE_URL + "/services/courses";
+    private static final String SERVICE_RATED_OBJECTS_URL = DMS_BASE_URL + "/services/ratedobjects";
 
     public InitialisationImpl() {
         // Initialise the Rest session
@@ -49,13 +53,9 @@ public class InitialisationImpl implements Initialisation {
             }
 
         } catch (ClientProtocolException e) {
-
             e.printStackTrace();
-
         } catch (IOException e) {
-
             e.printStackTrace();
-
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,6 +134,43 @@ public class InitialisationImpl implements Initialisation {
         }
         System.out.println("Gebe leere Resultlist zurueck");
         return new CourseObject();
+    }
+    
+    
+    public ResultListStringObject getRatedObjects(List<Long> courseIds) {
+        try {
+            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+
+            ClientResponse<ServiceStartTime> response;
+
+            response = request.get(ServiceStartTime.class);
+
+            if(response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatus());
+            }
+
+            ServiceRatedObjects ratedObjects = ProxyFactory.create(ServiceRatedObjects.class, SERVICE_RATED_OBJECTS_URL);
+            if(ratedObjects != null) {
+
+            	ResultListStringObject result = ratedObjects.getRatedObjects(courseIds);
+                return result;
+            }
+
+        } catch (ClientProtocolException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("Gebe leere Resultlist zurueck");
+        return new ResultListStringObject();
     }
 
 }

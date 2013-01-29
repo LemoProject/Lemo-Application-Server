@@ -1,7 +1,11 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
-import java.util.Date;
+
+import java.util.List;
+import java.util.Map.Entry;
+
+
 
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -22,21 +26,24 @@ import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.got5.tapestry5.jquery.JQuerySymbolConstants;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
-import de.lemo.apps.application.ApplicationInfo;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.DateWorkerImpl;
 import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.StatisticWorkerImpl;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.UserWorkerImpl;
-import de.lemo.apps.entities.Course;
+
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.User;
+
+import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.VisualisationHelperWorkerImpl;
+
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
 import de.lemo.apps.integration.QuestionDAO;
@@ -81,6 +88,7 @@ public class AppModule
         binder.bind(DateWorker.class, DateWorkerImpl.class);
         binder.bind(StatisticWorker.class, StatisticWorkerImpl.class);
         binder.bind(AnalysisWorker.class, AnalysisWorkerImpl.class);
+        binder.bind(VisualisationHelperWorker.class, VisualisationHelperWorkerImpl.class);
 
         // Rest Services
         binder.bind(Initialisation.class, InitialisationImpl.class);
@@ -171,6 +179,10 @@ public class AppModule
 
     public static void contributeSeedEntity(OrderedConfiguration<Object> configuration)
     {
+        List<User> userImports = ServerConfiguration.getInstance().getUserImports();
+        for(User user : userImports) {
+            configuration.add(user.getUsername(), user);
+        }
     }
 
     /**
@@ -183,13 +195,11 @@ public class AppModule
         configuration.add("de.lemo.apps.entities");
     }
 
-    public void contributeHibernateSessionSource(OrderedConfiguration<HibernateConfigurer> configurer) {
+    public static void contributeHibernateSessionSource(OrderedConfiguration<HibernateConfigurer> configurer) {
         configurer.add("hibernate-session-source", new HibernateConfigurer() {
             public void configure(org.hibernate.cfg.Configuration configuration) {
-                try {
-                    configuration.configure(ApplicationInfo.getSystemName() + ".apps.hibernate.cfg.xml");
-                } catch (HibernateException e) {
-                    configuration.configure();
+                for(Entry<String, String> entry : ServerConfiguration.getInstance().getDbConfig().entrySet()) {
+                    configuration.setProperty(entry.getKey(), entry.getValue());
                 }
             }
         });

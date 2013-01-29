@@ -1,0 +1,159 @@
+<html t:type="layoutdashboard" title="LeMo | Visualization"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+  <!-- Breadcrumb component-->
+	<div class="row-fluid">
+        <div class="span12">
+    	<ul class="breadcrumb">
+  			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
+    			<a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb" />
+  			</li>
+		</ul>
+		</div>
+	</div>
+	
+	<div class="row-fluid">
+		  
+    	<div class="span9">
+        	<div id="viz">
+<!--        		<button>Hour view</button>-->
+        		<!-- d3js visualization -->
+        	</div>
+    	</div>
+      
+    	<div class="span3">
+    		<div class="row-fluid">
+      		<div class="span12">
+      			<div class="well">
+      				<h4>${course.courseDescription}</h4>
+      				<br />
+      				${message:available}: ${FirstRequestDate} - ${LastRequestDate}
+      				<br />
+      				<br />
+      				${message:range}: ${resolution} ${message:days}
+      			</div>
+      		</div>
+      		</div>
+			<div class="row-fluid">
+    		<div class="span12">
+        			
+    			<t:zone t:id="formZone" id="formZone">
+    			</t:zone> 
+      			<t:form t:type="form" t:id="customizeForm" class="pull-left">
+      				<t:errors/>
+        			<div class="accordion" id="accordion2">
+			            
+			            <!-- Dates -->
+			            <div class="accordion-group">
+			              <div class="accordion-heading">
+			                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+			                  ${message:dateTimeOption} <b class="caret"></b>
+			                </a>
+			              </div>
+			              <div id="collapseOne" class="accordion-body collapse in">
+			                <div class="accordion-inner">
+	
+  			                	<div class="control-group">
+  			              		
+        							<label class="control-label">${message:begin}:</label>
+      						   		<div class="controls">
+                            			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+      						    	</div>
+        						</div>
+        						<div class="control-group">
+        							
+        							<label class="control-label">${message:end}:</label>
+        						    <div class="controls">
+                            			<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+  			                  		</div>
+  			                	</div>
+  			              	</div>
+			              </div>
+			            </div>
+			            
+			            <!-- Learn Object Types -->
+<!--                  <div class="accordion-group">-->
+<!--                    <div class="accordion-heading">-->
+<!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">-->
+<!--                        ${message:activityOption} <b class="caret"></b>-->
+<!--                      </a>-->
+<!--                    </div>-->
+<!--			              <div id="collapseTwo" class="accordion-body collapse">-->
+<!--			                <div class="accordion-inner">    -->
+<!--		            			 <t:jquery.palette -->
+<!--		            			   t:id="activities" -->
+<!--		            			   encoder="activityEncoder"-->
+<!--		            			   model="activityModel"-->
+<!--		            			   selected="selectedActivities"/>-->
+<!--		            		  </div>-->
+<!--			              </div>-->
+<!--                  </div>-->
+                
+                <!-- Quizzes -->  
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                        ${message:quizOption} <b class="caret"></b>
+                      </a>
+                    </div>
+			              <div id="collapseTwo" class="accordion-body collapse">
+			                <div class="accordion-inner">    
+		            			 <t:jquery.palette 
+		            			   t:id="quizzes" 
+		            			   encoder="quizEncoder"
+		            			   model="quizIds"
+		            			   selected="selectedQuizzes"/>
+		            		  </div>
+			              </div>
+                  </div>
+                  
+                  <!-- Member -->
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                       ${message:userOption} <b class="caret"></b>
+                      </a>
+                    </div>   
+			        <div id="collapseThree" class="accordion-body collapse">  
+			        	<div class="accordion-inner">               
+                        
+	                            <t:jquery.palette
+	                              t:id="users"
+	                              encoder="userIdEncoder"
+	                              selected="selectedUsers"
+	                              model="userIds"/>
+                       
+                     	 </div>
+			        </div>
+			      </div>
+			      
+			       
+
+			            
+			 </div><!-- accordion -->
+  			   		
+  			   		<input t:type="submit" value="Update" class="btn btn-primary" />
+
+            </t:form>	
+       
+        			
+<!--    				<input type="text" class="input-large search-query"/>-->
+<!--    				<button type="submit" class="btn pull-right">${message:search}</button>-->
+<!--    		</div> THUMBNAIL-->
+    		</div> <!--span12-->
+    		</div> <!--row fluid-->
+    	</div>
+    	
+    
+  </div>
+  <script type="text/javascript">
+    (function(d3custom, $, undefined) {
+    
+      var q2result = ${questionResult};
+      
+      d3custom.data = q2result;
+      
+    })(window.d3custom = window.d3custom || {}, jQuery);
+  </script>
+</html>

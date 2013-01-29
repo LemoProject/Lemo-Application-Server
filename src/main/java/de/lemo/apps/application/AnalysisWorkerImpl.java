@@ -87,7 +87,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker{
 	}
 	
 	
-public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<Long> selectedUsers, List<EResourceType> resourceTypes){
+	public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate, List<Long> selectedUsers, List<EResourceType> resourceTypes){
         
     	if(course!=null && course.getId()!=null){
         	Long endStamp=0L;
