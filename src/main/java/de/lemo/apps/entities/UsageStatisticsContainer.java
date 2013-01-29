@@ -1,42 +1,35 @@
-/**
- * File ./de/lemo/apps/entities/UsageStatisticsContainer.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.entities;
 
 import java.util.Date;
 
 public class UsageStatisticsContainer {
-
+	
 	private Long courseId;
-
+	
 	private Long averageRequest;
-
+	
 	private Long OverallRequest;
-
+	
 	private Long MaxRequest;
-
+	
 	private Date MaxRequestDate;
-
-	public UsageStatisticsContainer(final Long courseId) {
+	
+	public UsageStatisticsContainer(Long courseId){
 		this.courseId = courseId;
 	}
+	
 
 	/**
 	 * @return the courseId
 	 */
 	public Long getCourseId() {
-		return this.courseId;
+		return courseId;
 	}
 
 	/**
-	 * @param courseId
-	 *            the courseId to set
+	 * @param courseId the courseId to set
 	 */
-	public void setCourseId(final Long courseId) {
+	public void setCourseId(Long courseId) {
 		this.courseId = courseId;
 	}
 
@@ -44,14 +37,13 @@ public class UsageStatisticsContainer {
 	 * @return the averageRequest
 	 */
 	public Long getAverageRequest() {
-		return this.averageRequest;
+		return averageRequest;
 	}
 
 	/**
-	 * @param averageRequest
-	 *            the averageRequest to set
+	 * @param averageRequest the averageRequest to set
 	 */
-	public void setAverageRequest(final Long averageRequest) {
+	public void setAverageRequest(Long averageRequest) {
 		this.averageRequest = averageRequest;
 	}
 
@@ -59,45 +51,43 @@ public class UsageStatisticsContainer {
 	 * @return the overallRequest
 	 */
 	public Long getOverallRequest() {
-		return this.OverallRequest;
+		return OverallRequest;
 	}
 
 	/**
-	 * @param overallRequest
-	 *            the overallRequest to set
+	 * @param overallRequest the overallRequest to set
 	 */
-	public void setOverallRequest(final Long overallRequest) {
-		this.OverallRequest = overallRequest;
+	public void setOverallRequest(Long overallRequest) {
+		OverallRequest = overallRequest;
 	}
 
 	/**
 	 * @return the maxRequest
 	 */
 	public Long getMaxRequest() {
-		return this.MaxRequest;
+		return MaxRequest;
 	}
 
 	/**
-	 * @param maxRequest
-	 *            the maxRequest to set
+	 * @param maxRequest the maxRequest to set
 	 */
-	public void setMaxRequest(final Long maxRequest) {
-		this.MaxRequest = maxRequest;
+	public void setMaxRequest(Long maxRequest) {
+		MaxRequest = maxRequest;
 	}
 
 	/**
 	 * @return the maxRequestDate
 	 */
 	public Date getMaxRequestDate() {
-		return this.MaxRequestDate;
+		return MaxRequestDate;
 	}
 
 	/**
-	 * @param maxRequestDate
-	 *            the maxRequestDate to set
+	 * @param maxRequestDate the maxRequestDate to set
 	 */
-	public void setMaxRequestDate(final Date maxRequestDate) {
-		this.MaxRequestDate = maxRequestDate;
+	public void setMaxRequestDate(Date maxRequestDate) {
+		MaxRequestDate = maxRequestDate;
 	}
+	
 
 }

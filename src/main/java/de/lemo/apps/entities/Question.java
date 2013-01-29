@@ -1,31 +1,27 @@
-/**
- * File ./de/lemo/apps/entities/Question.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement(name = "question")
-public class Question extends AbstractEntity {
+public class Question extends AbstractEntity{
 
 	private String name;
-
+	
 	private String question;
 
 	@NotNull(message = "name can't be null")
 	public String getName()
 	{
-		return this.name;
+		return name;
 	}
 
-	public void setName(final String name)
+	public void setName(String name)
 	{
 		this.name = name;
 	}
@@ -34,41 +30,33 @@ public class Question extends AbstractEntity {
 	 * @return the question
 	 */
 	public String getQuestion() {
-		return this.question;
+		return question;
 	}
 
 	/**
-	 * @param question
-	 *            the question to set
+	 * @param question the question to set
 	 */
-	public void setQuestion(final String question) {
+	public void setQuestion(String question) {
 		this.question = question;
 	}
 
-	@Override
-	public boolean equals(final Object o)
+	public boolean equals(Object o)
 	{
-		if (this == o) {
-			return true;
-		}
-		if ((o == null) || (this.getClass() != o.getClass())) {
-			return false;
-		}
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-		final Question that = (Question) o;
+		Question that = (Question) o;
 
-		return this.getId() != null ? this.getId().equals(that.getId()) : that.getId() == null;
+		return getId() != null ? getId().equals(that.getId()) : that.getId() == null;
 	}
 
-	@Override
 	public int hashCode()
 	{
-		return (this.getId() != null ? this.getId().hashCode() : 0);
+		return (getId() != null ? getId().hashCode() : 0);
 	}
 
-	@Override
 	public String toString()
 	{
-		return this.getName();
+		return getName();
 	}
 }

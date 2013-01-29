@@ -1,20 +1,14 @@
-/**
- * File ./de/lemo/apps/restws/entities/CourseObject.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.restws.entities;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 @XmlRootElement
 public class CourseObject {
 
 	@XmlElement
-	private Long id;
+	private Long id;	
 	@XmlElement
 	private String title;
 	@XmlElement
@@ -25,13 +19,11 @@ public class CourseObject {
 	private Long lastRequest;
 	@XmlElement
 	private Long firstRequest;
-
+	
 	public CourseObject()
-	{
-	}
-
-	public CourseObject(final Long id, final String title, final String description, final Long participants,
-			final Long lastRequest, final Long firstRequest)
+	{}
+	
+	public CourseObject(Long id, String title, String description, Long participants, Long lastRequest, Long firstRequest)
 	{
 		this.id = id;
 		this.title = title;
@@ -40,76 +32,66 @@ public class CourseObject {
 		this.lastRequest = lastRequest;
 		this.firstRequest = lastRequest;
 	}
-
+	
 	public Long getId() {
-		return this.id;
+		return id;
 	}
-
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
-
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
-
 	public Long getParticipants() {
-		return this.participants;
+		return participants;
 	}
-
 	public Long getLastRequest() {
-		return this.lastRequest;
+		return lastRequest;
 	}
-
+	
 	public Long getFirstRequest() {
-		return this.firstRequest;
+		return firstRequest;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
-	public void setId(final Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 	/**
-	 * @param title
-	 *            the title to set
+	 * @param title the title to set
 	 */
-	public void setTitle(final String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
 	/**
-	 * @param description
-	 *            the description to set
+	 * @param description the description to set
 	 */
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	/**
-	 * @param participants
-	 *            the participants to set
+	 * @param participants the participants to set
 	 */
-	public void setParticipants(final Long participants) {
+	public void setParticipants(Long participants) {
 		this.participants = participants;
 	}
 
 	/**
-	 * @param lastRequest
-	 *            the lastRequest to set
+	 * @param lastRequest the lastRequest to set
 	 */
-	public void setLastRequest(final Long lastRequest) {
+	public void setLastRequest(Long lastRequest) {
 		this.lastRequest = lastRequest;
 	}
-
+	
 	/**
-	 * @param lastRequest
-	 *            the lastRequest to set
+	 * @param lastRequest the lastRequest to set
 	 */
-	public void setFirstRequest(final Long firstRequest) {
+	public void setFirstRequest(Long firstRequest) {
 		this.firstRequest = firstRequest;
 	}
 }

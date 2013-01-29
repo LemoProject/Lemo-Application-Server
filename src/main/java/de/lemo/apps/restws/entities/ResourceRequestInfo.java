@@ -1,88 +1,80 @@
-/**
- * File ./de/lemo/apps/restws/entities/ResourceRequestInfo.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.restws.entities;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ResourceRequestInfo { // implements Comparable<ResourceRequestInfo>{
+public class ResourceRequestInfo { //implements Comparable<ResourceRequestInfo>{
 
 	private Long id;
-	// private EResourceType resourcetype;
+	//private EResourceType resourcetype;
 	private String resourcetype;
 	private Long requests;
 	private Long users;
 	private String title;
 	private Long resolutionSlot;
-
+	
 	public Long getUsers() {
-		return this.users;
+		return users;
 	}
 
-	public void setUsers(final Long users) {
+	public void setUsers(Long users) {
 		this.users = users;
 	}
-
+	
 	public Long getResolutionSlot() {
-		return this.resolutionSlot;
+		return resolutionSlot;
 	}
 
-	public void setResolutionSlot(final Long resolutionSlot) {
+	public void setResolutionSlot(Long resolutionSlot) {
 		this.resolutionSlot = resolutionSlot;
 	}
-
+	
 	public Long getId() {
-		return this.id;
+		return id;
 	}
 
-	public void setId(final Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 	public String getResourcetype() {
-		return this.resourcetype;
+		return resourcetype;
 	}
 
-	// public void setResourcetype(EResourceType resourcetype) {
-	// this.resourcetype = resourcetype.toString();
-	// }
-
-	public void setResourcetype(final String resourcetype) {
+//	public void setResourcetype(EResourceType resourcetype) {
+//		this.resourcetype = resourcetype.toString();
+//	}
+	
+	public void setResourcetype(String resourcetype) {
 		this.resourcetype = resourcetype;
 	}
 
 	public Long getRequests() {
-		return this.requests;
+		return requests;
 	}
 
-	public void setRequests(final Long requests) {
+	public void setRequests(Long requests) {
 		this.requests = requests;
 	}
 
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
 
-	public void setTitle(final String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
 	public ResourceRequestInfo()
 	{
 	}
-
+	
 	public void incRequests()
 	{
 		this.requests++;
 	}
-
-	public ResourceRequestInfo(final Long id, final String resourceType, final Long requests, final String title,
-			final Long resolutionSlot)
+		
+	public ResourceRequestInfo(Long id, String resourceType, Long requests, String title, Long resolutionSlot)
 	{
 		this.id = id;
 		this.resourcetype = resourceType;
@@ -91,15 +83,15 @@ public class ResourceRequestInfo { // implements Comparable<ResourceRequestInfo>
 		this.resolutionSlot = resolutionSlot;
 	}
 
-	// // Compare method for comparison of object within lists ....
-	// public int compareTo(ResourceRequestInfo compareObject)
-	// {
-	// if (getNumber() < compareObject.getNumber())
-	// return -1;
-	// else if (getNumber() == compareObject.getNumber())
-	// return 0;
-	// else
-	// return 1;
-	// }
-
+//	// Compare method for comparison of object within lists ....
+//	public int compareTo(ResourceRequestInfo compareObject)
+//    {
+//        if (getNumber() < compareObject.getNumber())
+//            return -1;
+//        else if (getNumber() == compareObject.getNumber())
+//            return 0;
+//        else
+//            return 1;
+//    }
+	
 }

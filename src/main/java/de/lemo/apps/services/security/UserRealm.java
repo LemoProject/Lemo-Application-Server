@@ -1,11 +1,6 @@
-/**
- * File ./de/lemo/apps/services/security/UserRealm.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.services.security;
+
+import java.util.HashSet;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -23,79 +18,66 @@ import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.crypto.hash.Sha1Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.SimpleByteSource;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
 import de.lemo.apps.entities.User;
 
 public class UserRealm extends AuthorizingRealm {
-
 	protected final Session session;
-
-	public UserRealm(final Session session) {
+	
+	public UserRealm(Session session) {
 		super(new MemoryConstrainedCacheManager());
 		this.session = session;
-		// setName("localaccounts");
-		this.setAuthenticationTokenClass(UsernamePasswordToken.class);
-		this.setCredentialsMatcher(new HashedCredentialsMatcher(Sha1Hash.ALGORITHM_NAME));
+		//setName("localaccounts");
+		setAuthenticationTokenClass(UsernamePasswordToken.class);
+		setCredentialsMatcher(new HashedCredentialsMatcher(Sha1Hash.ALGORITHM_NAME));
 	}
-
-	private User findByUsername(final String username) {
-
-		return (User) this.session.createCriteria(User.class).add(Restrictions.eq("username", username)).uniqueResult();
+	
+	private User findByUsername(String username) {
+		
+		return (User) session.createCriteria(User.class).add(Restrictions.eq("username", username)).uniqueResult();
 	}
-
+	
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
-		if (principals == null) {
-			throw new AuthorizationException("PrincipalCollection was null .... ");
-		}
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		if (principals == null) throw new AuthorizationException("PrincipalCollection was null .... ");
 
-		if (principals.isEmpty()) {
-			return null;
-		}
+		if (principals.isEmpty()) return null;
 
-		if (principals.fromRealm(this.getName()).size() <= 0) {
-			return null;
-		}
+		if (principals.fromRealm(getName()).size() <= 0) return null;
 
-		final String username = (String) principals.fromRealm(this.getName()).iterator().next();
-		if (username == null) {
-			return null;
-		}
-		final User user = this.findByUsername(username);
-		if (user == null)
-		{
-			return null;
-			// TODO Role logic not yet implemented
-		}
-
-		// Set<String> roles = new HashSet<String>(user.getRoles().size());
-		// for (Role role : user.getRoles())
-		// roles.add(role.name());
-		// return new SimpleAuthorizationInfo(roles);
-
+		String username = (String) principals.fromRealm(getName()).iterator().next();
+		if (username == null) return null;
+		User user = findByUsername(username);
+		if (user == null) return null;
+		//TODO Role logic not yet implemented
+		
+		//Set<String> roles = new HashSet<String>(user.getRoles().size());
+		//for (Role role : user.getRoles())
+		//	roles.add(role.name());
+		//return new SimpleAuthorizationInfo(roles);
+		
 		return new SimpleAuthorizationInfo();
 	}
 
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token)
-			throws AuthenticationException {
-		final UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+	
 
-		final String username = upToken.getUsername();
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+		UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+
+		String username = upToken.getUsername();
 
 		// Null username is invalid
-		if (username == null) {
-			throw new AccountException("Null usernames are not allowed by this realm.");
-		}
+		if (username == null) { throw new AccountException("Null usernames are not allowed by this realm."); }
 
-		final User user = this.findByUsername(username);
+		User user = findByUsername(username);
 
-		if (user.isAccountLocked()) {
-			throw new LockedAccountException("Account [" + username + "] is locked.");
-		}
+		if (user.isAccountLocked()) { throw new LockedAccountException("Account [" + username + "] is locked."); }
 		if (user.isCredentialsExpired()) {
-			final String msg = "The credentials for account [" + username + "] are expired";
+			String msg = "The credentials for account [" + username + "] are expired";
 			throw new ExpiredCredentialsException(msg);
 		}
 		return new SimpleAuthenticationInfo(username, user.getPassword(), "basic");

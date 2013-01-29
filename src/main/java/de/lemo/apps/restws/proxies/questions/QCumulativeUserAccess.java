@@ -1,11 +1,5 @@
-/**
- * File ./de/lemo/apps/restws/proxies/questions/QCumulativeUserAccess.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.restws.proxies.questions;
+
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,7 +8,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
+
+import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResultListBoxPlot;
+
+import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.*;
+
 
 public interface QCumulativeUserAccess {
 
@@ -39,11 +38,11 @@ public interface QCumulativeUserAccess {
 	@Path("cumulative")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String compute(
-			@FormParam(MetaParam.COURSE_IDS) List<Long> courses,
-			@FormParam(MetaParam.TYPES) List<String> types,
-			@FormParam(MetaParam.DEPARTMENT) List<Long> departments,
-			@FormParam(MetaParam.DEGREE) List<Long> degrees,
-			@FormParam(MetaParam.START_TIME) long starttime,
-			@FormParam(MetaParam.END_TIME) long endtime);
-
+			@FormParam(COURSE_IDS) List<Long> courses,
+			@FormParam(TYPES) List<String> types, 
+			@FormParam(DEPARTMENT) List<Long> departments, 
+			@FormParam(DEGREE) List<Long> degrees, 
+			@FormParam(START_TIME) long starttime,
+			@FormParam(END_TIME) long endtime) ;
+	
 }

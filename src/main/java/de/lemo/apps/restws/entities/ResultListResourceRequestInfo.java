@@ -1,47 +1,43 @@
-/**
- * File ./de/lemo/apps/restws/entities/ResultListResourceRequestInfo.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.restws.entities;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ResultListResourceRequestInfo {
 
+	
 	private List<ResourceRequestInfo> rri;
 
 	public ResultListResourceRequestInfo() {
 		this.rri = new ArrayList<ResourceRequestInfo>();
 	}
-
-	public ResultListResourceRequestInfo(final List<ResourceRequestInfo> resourceRequestInfos) {
+	
+	public ResultListResourceRequestInfo(List<ResourceRequestInfo> resourceRequestInfos) {
 		this.rri = resourceRequestInfos;
 	}
-
+	
 	@XmlElement
 	public List<ResourceRequestInfo> getResourceRequestInfos() {
-		return this.rri;
+		return rri;
 	}
 
-	public void setRoles(final List<ResourceRequestInfo> resourceRequestInfos) {
+	public void setRoles(List<ResourceRequestInfo> resourceRequestInfos) {
 		this.rri = resourceRequestInfos;
 	}
-
-	public void add(final ResourceRequestInfo rri)
+	
+	public void add(ResourceRequestInfo rri)
 	{
 		this.rri.add(rri);
 	}
-
-	public void addAll(final Collection<ResourceRequestInfo> rri)
+	
+	public void addAll(Collection<ResourceRequestInfo> rri)
 	{
 		this.rri.addAll(rri);
 	}
 }
+

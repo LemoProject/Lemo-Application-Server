@@ -1,55 +1,47 @@
-/**
- * File ./de/lemo/apps/restws/entities/Course.java
- * Date 2013-01-29
- * Project Lemo Learning Analytics
- * Copyright TODO (INSERT COPYRIGHT)
- */
-
 package de.lemo.apps.restws.entities;
 
 import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Course {
-
+	
 	private Long Id;
-
+	
 	private String title;
-
+	
 	private String description;
-
+	
 	private Integer participantAmount;
-
+	
 	private Date lastAction;
 
 	/**
 	 * @return the id
 	 */
 	public Long getId() {
-		return this.Id;
+		return Id;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
-	public void setId(final Long id) {
-		this.Id = id;
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
 
 	/**
-	 * @param title
-	 *            the title to set
+	 * @param title the title to set
 	 */
-	public void setTitle(final String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
@@ -57,14 +49,13 @@ public class Course {
 	 * @return the description
 	 */
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
 	/**
-	 * @param description
-	 *            the description to set
+	 * @param description the description to set
 	 */
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -72,14 +63,13 @@ public class Course {
 	 * @return the participantAmount
 	 */
 	public Integer getParticipantAmount() {
-		return this.participantAmount;
+		return participantAmount;
 	}
 
 	/**
-	 * @param participantAmount
-	 *            the participantAmount to set
+	 * @param participantAmount the participantAmount to set
 	 */
-	public void setParticipantAmount(final Integer participantAmount) {
+	public void setParticipantAmount(Integer participantAmount) {
 		this.participantAmount = participantAmount;
 	}
 
@@ -87,15 +77,16 @@ public class Course {
 	 * @return the lastAction
 	 */
 	public Date getLastAction() {
-		return this.lastAction;
+		return lastAction;
 	}
 
 	/**
-	 * @param lastAction
-	 *            the lastAction to set
+	 * @param lastAction the lastAction to set
 	 */
-	public void setLastAction(final Date lastAction) {
+	public void setLastAction(Date lastAction) {
 		this.lastAction = lastAction;
-	}
-
+	}	
+	
+	
+	
 }
