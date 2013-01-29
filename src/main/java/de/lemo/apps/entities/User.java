@@ -1,16 +1,18 @@
+/**
+ * File ./de/lemo/apps/entities/User.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.entities;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.hibernate.annotations.CollectionOfElements;
@@ -19,195 +21,191 @@ import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Table(name = "user")
-public class User extends AbstractEntity{
-
+public class User extends AbstractEntity {
 
 	private static final long serialVersionUID = -2284587022138077470L;
-	
+
 	public static enum Role {
-		enduser(1), admin(5);
+		enduser(1),
+		admin(5);
+
 		private int weight;
 
-		Role(int weight) {
+		Role(final int weight) {
 			this.weight = weight;
 		}
 
 		public int weight() {
-			return weight;
+			return this.weight;
 		}
 	}
 
-    @NaturalId
-    @Column(nullable = false, unique = true)
-//    @NotNull
-//    @Size(min = 3, max = 15)
-    private String username;
+	@NaturalId
+	@Column(nullable = false, unique = true)
+	// @NotNull
+	// @Size(min = 3, max = 15)
+	private String username;
 
-    @Column(nullable = false)
-//    @NotNull
-//    @Size(min = 3, max = 50)
-    private String fullname;
+	@Column(nullable = false)
+	// @NotNull
+	// @Size(min = 3, max = 50)
+	private String fullname;
 
-    @Column(nullable = false)
-//    @NotNull
-//    @Email
-    private String email;
+	@Column(nullable = false)
+	// @NotNull
+	// @Email
+	private String email;
 
-    @Column(nullable = false)
-//    @Size(min = 3, max = 12)
-//    @NotNull
-    private String password;
-    
-    private boolean accountLocked;
+	@Column(nullable = false)
+	// @Size(min = 3, max = 12)
+	// @NotNull
+	private String password;
+
+	private boolean accountLocked;
 
 	private boolean credentialsExpired;
 
 	private Set<Role> roles = new HashSet<Role>();
 
-	private byte[] passwordSalt;
-	
 	private List<Long> myCourses;
-	
+
 	private Long widget1;
-	
+
 	private Long widget2;
-	
+
 	private Long widget3;
-	
 
-    public User()
-    {
-    }
-
-    public User(final String fullname, final String username, final String email)
-    {
-        this.fullname = fullname;
-        this.username = username;
-        this.email = email;
-    }
-
-    public User(final String fullname, final String username, final String email,
-            final String password)
-    {
-        this(fullname, username, email);
-        this.password = password;
-    }
-
-    public User(Long id, String username, String fullname, String email, String password)
-    {
-        super();
-        this.id = id;
-        this.username = username;
-        this.fullname = fullname;
-        this.email = email;
-        this.password = password;
-    }
-
-    @Override
-    public String toString()
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.append("id ");
-        builder.append(id);
-        builder.append(",");
-        builder.append("username ");
-        builder.append(username);
-        return builder.toString();
-    }
-
-    @Validate("required,regexp=^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z]+[\\.]{1}[0-9a-zA-Z]+[\\.]?[0-9a-zA-Z]+$")
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    @NaturalId
-	@Column(unique = true)
-	@Index(name = "User_username")
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public void setFullname(String fullname)
-    {
-        this.fullname = fullname;
-    }
-
-    public String getFullname()
-    {
-        return fullname;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-    
-    public boolean isAccountLocked() {
-		return accountLocked;
+	public User()
+	{
 	}
 
-	public void setAccountLocked(boolean accountLocked) {
+	public User(final String fullname, final String username, final String email)
+	{
+		this.fullname = fullname;
+		this.username = username;
+		this.email = email;
+	}
+
+	public User(final String fullname, final String username, final String email,
+			final String password)
+	{
+		this(fullname, username, email);
+		this.password = password;
+	}
+
+	public User(final Long id, final String username, final String fullname, final String email, final String password)
+	{
+		super();
+		this.id = id;
+		this.username = username;
+		this.fullname = fullname;
+		this.email = email;
+		this.password = password;
+	}
+
+	@Override
+	public String toString()
+	{
+		final StringBuilder builder = new StringBuilder();
+		builder.append("id ");
+		builder.append(this.id);
+		builder.append(",");
+		builder.append("username ");
+		builder.append(this.username);
+		return builder.toString();
+	}
+
+	@Validate("required,regexp=^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z]+[\\.]{1}[0-9a-zA-Z]+[\\.]?[0-9a-zA-Z]+$")
+	public String getEmail()
+	{
+		return this.email;
+	}
+
+	public void setEmail(final String email)
+	{
+		this.email = email;
+	}
+
+	@NaturalId
+	@Column(unique = true)
+	@Index(name = "User_username")
+	public String getUsername()
+	{
+		return this.username;
+	}
+
+	public void setUsername(final String username)
+	{
+		this.username = username;
+	}
+
+	public void setFullname(final String fullname)
+	{
+		this.fullname = fullname;
+	}
+
+	public String getFullname()
+	{
+		return this.fullname;
+	}
+
+	public String getPassword()
+	{
+		return this.password;
+	}
+
+	public void setPassword(final String password)
+	{
+		this.password = password;
+	}
+
+	public boolean isAccountLocked() {
+		return this.accountLocked;
+	}
+
+	public void setAccountLocked(final boolean accountLocked) {
 		this.accountLocked = accountLocked;
 	}
 
 	public boolean isCredentialsExpired() {
-		return credentialsExpired;
+		return this.credentialsExpired;
 	}
 
-	public void setCredentialsExpired(boolean credentialsExpired) {
+	public void setCredentialsExpired(final boolean credentialsExpired) {
 		this.credentialsExpired = credentialsExpired;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(final Set<Role> roles) {
 		this.roles = roles;
 	}
 
 	@CollectionOfElements(targetElement = Role.class)
 	public Set<Role> getRoles() {
-		return roles;
+		return this.roles;
 	}
-	
-	
-	public void setMyCourses(List<Long> myCourses) {
+
+	public void setMyCourses(final List<Long> myCourses) {
 		this.myCourses = myCourses;
 	}
-	
+
 	@CollectionOfElements(targetElement = Long.class)
 	public List<Long> getMyCourses() {
-		return myCourses;
-	}
-
-
-    
-    /**
-	 * @return the widget1
-	 */
-	public Long getWidget1() {
-		return widget1;
+		return this.myCourses;
 	}
 
 	/**
-	 * @param widget1 the widget1 to set
+	 * @return the widget1
+	 */
+	public Long getWidget1() {
+		return this.widget1;
+	}
+
+	/**
+	 * @param widget1
+	 *            the widget1 to set
 	 */
 	@NonVisual
-	public void setWidget1(Long widget1) {
+	public void setWidget1(final Long widget1) {
 		this.widget1 = widget1;
 	}
 
@@ -215,14 +213,15 @@ public class User extends AbstractEntity{
 	 * @return the widget2
 	 */
 	public Long getWidget2() {
-		return widget2;
+		return this.widget2;
 	}
 
 	/**
-	 * @param widget2 the widget2 to set
+	 * @param widget2
+	 *            the widget2 to set
 	 */
 	@NonVisual
-	public void setWidget2(Long widget2) {
+	public void setWidget2(final Long widget2) {
 		this.widget2 = widget2;
 	}
 
@@ -230,31 +229,30 @@ public class User extends AbstractEntity{
 	 * @return the widget3
 	 */
 	public Long getWidget3() {
-		return widget3;
+		return this.widget3;
 	}
 
 	/**
-	 * @param widget3 the widget3 to set
+	 * @param widget3
+	 *            the widget3 to set
 	 */
 	@NonVisual
-	public void setWidget3(Long widget3) {
+	public void setWidget3(final Long widget3) {
 		this.widget3 = widget3;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		try {
-			return (obj instanceof User && ((User) obj).getUsername().equals(username));
-		} catch (NullPointerException e) {
+			return ((obj instanceof User) && ((User) obj).getUsername().equals(this.username));
+		} catch (final NullPointerException e) {
 			return false;
 		}
 	}
 
 	@Override
 	public int hashCode() {
-		return username == null ? 0 : username.hashCode();
+		return this.username == null ? 0 : this.username.hashCode();
 	}
 
-	
-    
 }
