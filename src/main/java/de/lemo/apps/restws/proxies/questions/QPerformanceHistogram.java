@@ -1,6 +1,5 @@
 package de.lemo.apps.restws.proxies.questions;
 
-
 import java.sql.SQLException;
 import java.util.List;
 import javax.ws.rs.FormParam;
@@ -8,13 +7,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import de.lemo.apps.restws.entities.ResultListLongObject;
-
-
-
+import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.*;
-
 
 public interface QPerformanceHistogram {
 
@@ -38,12 +33,12 @@ public interface QPerformanceHistogram {
 	@POST
 	@Path("performanceHistogram")
 	@Produces(MediaType.APPLICATION_JSON)
-    public ResultListLongObject compute(
-    		@FormParam(COURSE_IDS) List<Long> courses, 
-    		@FormParam(USER_IDS) List<Long> users, 
-    		@FormParam(QUIZ_IDS) List<Long> quizzes,
-    		@FormParam(RESOLUTION) Integer resolution,
-    		@FormParam(START_TIME) Long startTime,
-    		@FormParam(END_TIME) Long endTime) ;
-	
+	public ResultListLongObject compute(
+			@FormParam(MetaParam.COURSE_IDS) List<Long> courses,
+			@FormParam(MetaParam.USER_IDS) List<Long> users,
+			@FormParam(MetaParam.QUIZ_IDS) List<Long> quizzes,
+			@FormParam(MetaParam.RESOLUTION) Integer resolution,
+			@FormParam(MetaParam.START_TIME) Long startTime,
+			@FormParam(MetaParam.END_TIME) Long endTime);
+
 }

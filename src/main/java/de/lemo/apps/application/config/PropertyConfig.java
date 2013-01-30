@@ -7,10 +7,10 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType
 class PropertyConfig {
 
-    @XmlAttribute(name = "name", required = true)
-    public String key;
+	@XmlAttribute(name = "name", required = true)
+	public String key;
 
-    @XmlValue
-    public String value;
+	@XmlValue
+	public String value;
 
 }

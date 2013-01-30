@@ -1,47 +1,48 @@
 package de.lemo.apps.restws.entities;
 
 import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Course {
-	
+
 	private Long Id;
-	
+
 	private String title;
-	
+
 	private String description;
-	
+
 	private Integer participantAmount;
-	
+
 	private Date lastAction;
 
 	/**
 	 * @return the id
 	 */
 	public Long getId() {
-		return Id;
+		return this.Id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
-	public void setId(Long id) {
-		Id = id;
+	public void setId(final Long id) {
+		this.Id = id;
 	}
 
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
 	/**
-	 * @param title the title to set
+	 * @param title
+	 *            the title to set
 	 */
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -49,13 +50,14 @@ public class Course {
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -63,13 +65,14 @@ public class Course {
 	 * @return the participantAmount
 	 */
 	public Integer getParticipantAmount() {
-		return participantAmount;
+		return this.participantAmount;
 	}
 
 	/**
-	 * @param participantAmount the participantAmount to set
+	 * @param participantAmount
+	 *            the participantAmount to set
 	 */
-	public void setParticipantAmount(Integer participantAmount) {
+	public void setParticipantAmount(final Integer participantAmount) {
 		this.participantAmount = participantAmount;
 	}
 
@@ -77,16 +80,15 @@ public class Course {
 	 * @return the lastAction
 	 */
 	public Date getLastAction() {
-		return lastAction;
+		return this.lastAction;
 	}
 
 	/**
-	 * @param lastAction the lastAction to set
+	 * @param lastAction
+	 *            the lastAction to set
 	 */
-	public void setLastAction(Date lastAction) {
+	public void setLastAction(final Date lastAction) {
 		this.lastAction = lastAction;
-	}	
-	
-	
-	
+	}
+
 }

@@ -2,7 +2,6 @@ package de.lemo.apps.application.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -10,28 +9,27 @@ import org.apache.log4j.Logger;
  * tapestry way
  * 
  * @author Leonard Kappe
- * 
  */
 public class ServletContextListener implements javax.servlet.ServletContextListener {
 
-    private Logger logger;
+	private Logger logger;
 
-    @Override
-    public void contextInitialized(ServletContextEvent sce) {
-        ServletContext servletContext = sce.getServletContext();
-        ServerConfiguration config = ServerConfiguration.getInstance();
+	@Override
+	public void contextInitialized(final ServletContextEvent sce) {
+		final ServletContext servletContext = sce.getServletContext();
+		final ServerConfiguration config = ServerConfiguration.getInstance();
 
-        logger = Logger.getLogger(getClass());
-        logger.info("Context initialized");
-        logger.info("ServerInfo:  " + servletContext.getServerInfo());
-        logger.info("ContextPath: " + servletContext.getContextPath());
+		this.logger = Logger.getLogger(this.getClass());
+		this.logger.info("Context initialized");
+		this.logger.info("ServerInfo:  " + servletContext.getServerInfo());
+		this.logger.info("ContextPath: " + servletContext.getContextPath());
 
-        config.loadConfig(servletContext.getContextPath());
-    }
+		config.loadConfig(servletContext.getContextPath());
+	}
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        logger.info("Context destroyed");
-    }
+	@Override
+	public void contextDestroyed(final ServletContextEvent sce) {
+		this.logger.info("Context destroyed");
+	}
 
 }

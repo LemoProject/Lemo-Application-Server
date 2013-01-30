@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Exclude {
 
-public String mode() default "ALL";
-public String[] stylesheet();
+	public String mode() default "ALL";
+
+	public String[] stylesheet();
 }
