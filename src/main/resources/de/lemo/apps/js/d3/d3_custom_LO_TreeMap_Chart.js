@@ -104,7 +104,7 @@
     	    .text(function(d) { if(!(node==root)) {d.w = d.name.length*textLengthMulti; return d.dx > d.w ? "" : d.name.slice(d.name.length/2,d.name.length)}; })
     	    .style("opacity", function(d) {return getOpacity(d);});
                 
-    	  objTypes=[];
+    	 // objTypes=[];
       
     	  d3.select(window).on("click", function() { zoom(root); });
 
@@ -139,9 +139,12 @@
     			  }
     		  }
     		  if (!alreadyIn) {
-    			  objTypes.push(d.parent.name);
-    			  console.log(objTypes);
-    			  return d.parent.name;
+    			  if(getOpacity(d)!=0){
+    				  objTypes.push(d.parent.name);
+        			  console.log(objTypes);
+        			  return d.parent.name;
+        			} else return "";
+    			  
     		  }
     	  }
     	  else

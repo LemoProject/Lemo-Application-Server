@@ -5,20 +5,20 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "course")
-public class Widget extends AbstractEntity{
+public class Widget extends AbstractEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6978813940322609187L;
-	
-	public Widget(String name,User user,Long courseId, Long position){
-		this.name= name;
+
+	public Widget(final String name, final User user, final Long courseId, final Long position) {
+		this.name = name;
 		this.user = user;
 		this.courseId = courseId;
 		this.position = position;
 	}
-	
+
 	private String name;
 	private Long courseId;
 	private Long position;
@@ -28,52 +28,60 @@ public class Widget extends AbstractEntity{
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
+
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
+
 	/**
 	 * @return the courseId
 	 */
 	public Long getCourseId() {
-		return courseId;
+		return this.courseId;
 	}
+
 	/**
-	 * @param courseId the courseId to set
+	 * @param courseId
+	 *            the courseId to set
 	 */
-	public void setCourseId(Long courseId) {
+	public void setCourseId(final Long courseId) {
 		this.courseId = courseId;
 	}
+
 	/**
 	 * @return the position
 	 */
 	public Long getPosition() {
-		return position;
+		return this.position;
 	}
+
 	/**
-	 * @param position the position to set
+	 * @param position
+	 *            the position to set
 	 */
-	public void setPosition(Long position) {
+	public void setPosition(final Long position) {
 		this.position = position;
 	}
+
 	/**
 	 * @return the user
 	 */
 	public User getUser() {
-		return user;
+		return this.user;
 	}
+
 	/**
-	 * @param user the user to set
+	 * @param user
+	 *            the user to set
 	 */
-	public void setUser(User user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
-	
-	
-	
 
 }

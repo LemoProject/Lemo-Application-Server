@@ -1,7 +1,6 @@
 package de.lemo.apps.restws.entities;
 
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -13,11 +12,11 @@ public class ResultListBoxPlot {
 
 	}
 
-	public ResultListBoxPlot(List<BoxPlot> elements) {
+	public ResultListBoxPlot(final List<BoxPlot> elements) {
 		this.elements = elements;
 	}
 
-	//@XmlElement
+	// @XmlElement
 	public List<BoxPlot> getElements() {
 		return this.elements;
 	}

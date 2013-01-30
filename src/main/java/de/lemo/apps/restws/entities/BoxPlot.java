@@ -5,62 +5,63 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class BoxPlot {
+
 	private String name = "";
-	private double median = 0, upperWhisker = 0, lowerWhisker = 0;
-	//absolute zugriffe und einzigartige zugriffe
-	private long upperQuartil = 0, lowerQuartil = 0;
+	private Double median = 0.0, upperWhisker = 0.0, lowerWhisker = 0.0;
+	// absolute zugriffe und einzigartige zugriffe
+	private Double upperQuartil = 0.0, lowerQuartil = 0.0;
 
 	@XmlElement
-	public double getMedian() {
-		return median;
+	public Double getMedian() {
+		return this.median;
 	}
 
-	public void setMedian(double median) {
+	public void setMedian(final Double median) {
 		this.median = median;
 	}
 
 	@XmlElement
-	public double getUpperQuartil() {
-		return upperQuartil;
+	public Double getUpperQuartil() {
+		return this.upperQuartil;
 	}
 
-	public void setUpperQuartil(long upperQuartil) {
+	public void setUpperQuartil(final Double upperQuartil) {
 		this.upperQuartil = upperQuartil;
 	}
 
 	@XmlElement
-	public double getLowerQuartil() {
-		return lowerQuartil;
+	public Double getLowerQuartil() {
+		return this.lowerQuartil;
 	}
 
-	public void setLowerQuartil(long lowerQuartil) {
+	public void setLowerQuartil(final Double lowerQuartil) {
 		this.lowerQuartil = lowerQuartil;
 	}
 
 	@XmlElement
-	public double getUpperWhisker() {
-		return upperWhisker;
+	public Double getUpperWhisker() {
+		return this.upperWhisker;
 	}
 
-	public void setUpperWhisker(double upperWhisker) {
+	public void setUpperWhisker(final Double upperWhisker) {
 		this.upperWhisker = upperWhisker;
 	}
 
 	@XmlElement
-	public double getLowerWhisker() {
-		return lowerWhisker;
+	public Double getLowerWhisker() {
+		return this.lowerWhisker;
 	}
 
-	public void setLowerWhisker(double lowerWhisker) {
+	public void setLowerWhisker(final Double lowerWhisker) {
 		this.lowerWhisker = lowerWhisker;
 	}
 
 	@XmlElement
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 }

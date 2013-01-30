@@ -3,134 +3,172 @@ package de.lemo.apps.restws.client;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.http.client.ClientProtocolException;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
+import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
+import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
 
 public class InitialisationImpl implements Initialisation {
-     
-    public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
-    public static final String SERVICE_STARTTIME_URL = DMS_BASE_URL + "/services/starttime";
-    private static final String SERVICE_COURSE_URL = DMS_BASE_URL + "/services/courses";
 
-    public InitialisationImpl() {
-        // Initialise the Rest session
-        // logger.info("Register Rest Service");
-        RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
-    }
+	public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
+	public static final String SERVICE_STARTTIME_URL = InitialisationImpl.DMS_BASE_URL + "/services/starttime";
+	private static final String SERVICE_COURSE_URL = InitialisationImpl.DMS_BASE_URL + "/services/courses";
+	private static final String SERVICE_RATED_OBJECTS_URL = InitialisationImpl.DMS_BASE_URL + "/services/ratedobjects";
 
-    public Date getStartTime() {
-        // Create resource delegate
-        // logger.info("Getting Server Starttime");
-        try {
-            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+	public InitialisationImpl() {
+		// Initialise the Rest session
+		// logger.info("Register Rest Service");
+		RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
+	}
 
-            ClientResponse<ServiceStartTime> response;
+	public Date getStartTime() {
+		// Create resource delegate
+		// logger.info("Getting Server Starttime");
+		try {
+			final ClientRequest request = new ClientRequest(InitialisationImpl.SERVICE_STARTTIME_URL);
 
-            response = request.get(ServiceStartTime.class);
+			ClientResponse<ServiceStartTime> response;
 
-            if(response.getStatus() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatus());
-            }
+			response = request.get(ServiceStartTime.class);
 
-            ServiceStartTime starttime = ProxyFactory.create(ServiceStartTime.class, SERVICE_STARTTIME_URL);
-            if(starttime != null) {
-                return new Date(starttime.startTimeJson().getTime());
-            }
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ response.getStatus());
+			}
 
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			final ServiceStartTime starttime = ProxyFactory.create(ServiceStartTime.class, InitialisationImpl.SERVICE_STARTTIME_URL);
+			if (starttime != null) {
+				return new Date(starttime.startTimeJson().getTime());
+			}
 
-        return null;
-    }
+		} catch (final ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    public ResultListCourseObject getCoursesDetails(List<Long> ids) {
-        try {
-            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+		return null;
+	}
 
-            ClientResponse<ServiceStartTime> response;
+	public ResultListCourseObject getCoursesDetails(final List<Long> ids) {
+		try {
+			final ClientRequest request = new ClientRequest(InitialisationImpl.SERVICE_STARTTIME_URL);
 
-            response = request.get(ServiceStartTime.class);
+			ClientResponse<ServiceStartTime> response;
 
-            if(response.getStatus() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatus());
-            }
+			response = request.get(ServiceStartTime.class);
 
-            ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class, SERVICE_COURSE_URL);
-            if(courseDetails != null) {
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ response.getStatus());
+			}
 
-                ResultListCourseObject result = courseDetails.getCoursesDetails(ids);
-                return result;
-            }
+			final ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
+			if (courseDetails != null) {
 
-        } catch (ClientProtocolException e) {
+				final ResultListCourseObject result = courseDetails.getCoursesDetails(ids);
+				return result;
+			}
 
-            e.printStackTrace();
+		} catch (final ClientProtocolException e) {
 
-        } catch (IOException e) {
+			e.printStackTrace();
 
-            e.printStackTrace();
+		} catch (final IOException e) {
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Gebe leere Resultlist zurueck");
-        return new ResultListCourseObject();
-    }
+			e.printStackTrace();
 
-    public CourseObject getCourseDetails(Long id) {
-        try {
-            ClientRequest request = new ClientRequest(SERVICE_STARTTIME_URL);
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Gebe leere Resultlist zurueck");
+		return new ResultListCourseObject();
+	}
 
-            ClientResponse<ServiceStartTime> response;
+	public CourseObject getCourseDetails(final Long id) {
+		try {
+			final ClientRequest request = new ClientRequest(InitialisationImpl.SERVICE_STARTTIME_URL);
 
-            response = request.get(ServiceStartTime.class);
+			ClientResponse<ServiceStartTime> response;
 
-            if(response.getStatus() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatus());
-            }
+			response = request.get(ServiceStartTime.class);
 
-            ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class, SERVICE_COURSE_URL);
-            if(courseDetails != null) {
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ response.getStatus());
+			}
 
-                CourseObject result = courseDetails.getCourseDetails(id);
-                return result;
-            }
+			final ServiceCourseDetails courseDetails = ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
+			if (courseDetails != null) {
 
-        } catch (ClientProtocolException e) {
+				final CourseObject result = courseDetails.getCourseDetails(id);
+				return result;
+			}
 
-            e.printStackTrace();
+		} catch (final ClientProtocolException e) {
 
-        } catch (IOException e) {
+			e.printStackTrace();
 
-            e.printStackTrace();
+		} catch (final IOException e) {
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Gebe leere Resultlist zurueck");
-        return new CourseObject();
-    }
+			e.printStackTrace();
+
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Gebe leere Resultlist zurueck");
+		return new CourseObject();
+	}
+
+	public ResultListStringObject getRatedObjects(final List<Long> courseIds) {
+		try {
+			final ClientRequest request = new ClientRequest(InitialisationImpl.SERVICE_STARTTIME_URL);
+
+			ClientResponse<ServiceStartTime> response;
+
+			response = request.get(ServiceStartTime.class);
+
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ response.getStatus());
+			}
+
+			final ServiceRatedObjects ratedObjects = ProxyFactory
+					.create(ServiceRatedObjects.class, InitialisationImpl.SERVICE_RATED_OBJECTS_URL);
+			if (ratedObjects != null) {
+
+				final ResultListStringObject result = ratedObjects.getRatedObjects(courseIds);
+				return result;
+			}
+
+		} catch (final ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (final IOException e) {
+
+			e.printStackTrace();
+
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Gebe leere Resultlist zurueck");
+		return new ResultListStringObject();
+	}
 
 }

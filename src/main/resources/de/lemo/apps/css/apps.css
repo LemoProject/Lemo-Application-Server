@@ -71,7 +71,12 @@ text {
   font: 15px sans-serif;
   pointer-events: none;
   z-index: 100000; 
-  opacity: 1.0; background-color: #FFF; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center;
+  opacity: 1.0; 
+  background-color: #FFF; 
+  color: #FFF; 
+  max-width: 200px; 
+  padding: 5px 8px 4px 8px; 
+  text-align: center;
 }
 
 text.shadow {
@@ -186,6 +191,27 @@ svg .box {}
 
 
 /* BoxPlot - END */
+
+
+
+/* Histogram - BEGIN */
+
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/* Histogram - END */
 
 /* D3 - END */
 

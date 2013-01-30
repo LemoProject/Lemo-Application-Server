@@ -33,7 +33,7 @@
       <property name="connection.autoReconnectForPools">true</property>
       <property name="connection.autoReconnect">true</property>
     </database>
-    <dms-url>http://localhost:8080/lemo/dms</dms-url>
+    <dms-url>${lemo-dms-url}</dms-url>
   </apps>
   <dms name="Lemo DMS">
     <!--

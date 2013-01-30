@@ -15,7 +15,7 @@
 	  
 	  
 	  
-	  var  	dataRequests = data[0].values,
+	  var  	dataRequests = data[0].values;
 	  		dataUser = data[1].values;
 	  
 	  console.log("Before Sort:"+dataRequests);

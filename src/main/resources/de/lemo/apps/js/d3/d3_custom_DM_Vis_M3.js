@@ -62,7 +62,7 @@
         while (i>24) {
             i = amtPaths/++pages;
         }
-        amt=i;        
+        amt=Math.round(i+0.5);        
         console.log("AMT SIZE: "+amt)
     }
     
@@ -81,10 +81,10 @@
    	var posCounter = 1;
    	var skippedCounter = 0;
 		$.each(_nodes, function(i,v) {
-        if (v.pathId <=amt*(pages-page)) {
+        if (v.pathId < amt*(page-1)+1) {
           skippedCounter++;
         }
-  			if(v.pathId <= amt*(pages-page+1) && v.pathId > amt*(pages-page)) {
+  			if(v.pathId < (page-1)*amt+amt+1 && v.pathId >= (page-1)*amt+1) {
   				if (i >=1 && _nodes[i-1].pathId==_nodes[i].pathId) {
   					posCounter++;
   				} else {
@@ -102,12 +102,12 @@
 	   	if(_links.length){
 	   		console.log("Handle Links as Array");
   			$.each(_links, function(i,v) {
-          				if (v.pathId <= amt * (pages - page + 1) && v.pathId > amt * (pages - page)) {
-            links.push({
-              "source" : nodes[v.source - skippedCounter],
-              "target" : nodes[v.target - skippedCounter],
-              "value" : v.value
-            });
+  			if(v.pathId < (page-1)*amt+amt+1 && v.pathId >= (page-1)*amt+1) {
+	            links.push({
+	              "source" : nodes[v.source - skippedCounter],
+	              "target" : nodes[v.target - skippedCounter],
+	              "value" : v.value
+	            });
             // console.log("Schreibe Link: PathId
             // "+nodes[v.source-skippedCounter].pid+"("+v.source+"--"+v.target+")"+"
             // Source: "+nodes[v.source-skippedCounter].name+" Target:
@@ -146,8 +146,9 @@ var force = d3.layout.force()
 	  // Push nodes toward their designated focus.
 	  var k = .1 * e.alpha;
 	  nodes.forEach(function(o, i) {
-	    o.y += (foci[amt*(pages-page+1)-o.pid].y - o.y + (o.pos-1)*350/maxPos + 20) * k;
-	    o.x += (foci[amt*(pages-page+1)-o.pid].x - o.x) * k;
+	    //console.log("foci: "+(+amt*((+pages)-(+page)+1)-o.pid)+" PID:"+o.pid+" AMT:"+amt);  
+	    o.y += (foci[o.pid-(page-1)*amt-1].y - o.y + (o.pos-1)*350/maxPos + 20) * k;
+	    o.x += (foci[o.pid-(page-1)*amt-1].x - o.x) * k;
 	  });
 
 
@@ -291,7 +292,7 @@ var force = d3.layout.force()
     		      }
         		
         		
-    		      var p = amt*(pages-page+1)-d.pid;
+    		      var p = d.pid-(amt*(page-1));
     		      if (p >= amt/2) {
       		      for (var i=0; i<p; i++){
       		        foci[i].x=20+660/(amt-1)*i;
@@ -317,7 +318,7 @@ var force = d3.layout.force()
     
       nodeEnter.append("svg:text")
           .attr("class", "nodetext")
-          .attr("dx", function(d) {return amt*(pages-page+1)-d.pid >= amt/2 ? -d.name.length*4.5 - 22 : "1.5em";})
+          .attr("dx", function(d) {return d.pid-(amt*(page-1)) >= amt/2 ? -d.name.length*4.5 - 22 : "1.5em";})
           .attr("dy", ".3em")
           .text(function(d) { return ""});
           
