@@ -26,6 +26,7 @@
         	<div id="viz">
         		<svg><!-- d3js visualization --></svg>
         	</div>
+          <div class="btn export-button">Export to CSV</div>
     	</div>
       
     	<div class="span3">

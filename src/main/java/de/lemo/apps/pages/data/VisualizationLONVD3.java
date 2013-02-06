@@ -48,7 +48,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_LO_Bar_Chart.js" })
+@Import(library = { "../../js/csvExport.js", "../../js/d3/nvd3_custom_LO_Bar_Chart.js" })
 public class VisualizationLONVD3 {
 
 	@Environmental

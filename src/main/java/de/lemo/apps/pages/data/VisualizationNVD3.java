@@ -44,7 +44,6 @@ import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
-import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
@@ -55,7 +54,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
+@Import(library = { "../../js/csvExport.js", "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
 
 	@Environmental
@@ -155,8 +154,9 @@ public class VisualizationNVD3 {
 	@Retain
 	private BeanModel resourceGridModel;
 	{
-		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
-				.getMessages());
+		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class,
+				this.componentResources
+						.getMessages());
 		this.resourceGridModel.include("resourcetype", "title", "requests");
 		// resourceGridModel.add("show",null);
 
@@ -186,7 +186,8 @@ public class VisualizationNVD3 {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000)
+				.getElements();
 		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
 	}
@@ -199,7 +200,8 @@ public class VisualizationNVD3 {
 
 		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
 			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate,
+					this.selectedActivities);
 		} else {
 			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
 			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
@@ -316,7 +318,8 @@ public class VisualizationNVD3 {
 		}
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionMultiplier);
 
-		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
+		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null,
+				this.selectedUsers,
 				beginStamp, endStamp, this.resolution, types);
 
 		final JSONArray graphParentArray = new JSONArray();
