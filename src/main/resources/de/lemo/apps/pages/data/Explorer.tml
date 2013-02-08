@@ -246,6 +246,11 @@
 			    				<t:pagelink page="data/visualizationPerformanceHistogramAvg" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>Performance Histogram Avg</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
+			    			
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationCircleGraph" context="${CurrentCourse.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>Circle Graph</b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
 <!--		    				<div class="span2" align="center">-->
 <!--			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysisTime} (OLD) </b> </t:pagelink>-->
 <!--			    				<br /><br />-->
