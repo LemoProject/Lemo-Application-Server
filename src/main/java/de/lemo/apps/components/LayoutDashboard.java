@@ -48,7 +48,8 @@ import de.lemo.apps.pages.data.Dashboard;
 					"../js/bootstrap-button.js",
 					"../js/bootstrap-collapse.js",
 					"../js/bootstrap-carousel.js",
-					"../js/bootstrap-typeahead.js" },
+					"../js/bootstrap-typeahead.js",
+					"../js/csvExport.js"},
 
 stylesheet = { "../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",

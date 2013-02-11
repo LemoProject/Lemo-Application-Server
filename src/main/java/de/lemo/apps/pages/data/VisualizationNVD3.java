@@ -54,7 +54,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/csvExport.js", "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
+@Import(library = {"../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
 
 	@Environmental

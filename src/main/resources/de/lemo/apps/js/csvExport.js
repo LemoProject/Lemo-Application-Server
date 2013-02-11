@@ -42,98 +42,142 @@
    */
   dataExport.createCSV = function(data, recordCount, converter, columnNames) {
     var result = '';
-
     // header record
     if (columnNames && columnNames.length) {
       result += createHeader(columnNames);
     }
-
     // data records
     for ( var i = 0; i < recordCount; i++) {
       result += createRecord(data, i, converter);
     }
-
     // remove last newline
     result = result.replace(/\n$/, '');
-
     return result;
   };
 
-  dataExport.barChartButton = function(selector, data, chart, visibleOnly) {
 
-    $(selector).click(function() {
-      var series = data()[0];
-      var header = [];
-      var converter = [];
-
-      header[0] = "Course";
-      converter[0] = function(d, row) {
-        return d[0].values[row].x;
-      };
-
-      if (visibleOnly) {
-        data = data.filter("not:[disabled=true]");
-      }
-
-      for ( var i = 0; i < series.length; i++) {
-        header.push(series[i].key);
-        converter.push(function(d, row, column) {
-          return d[column - 1].values[row].y;
-        });
-      }
-
-      var csvData = dataExport.createCSV(series, series[0].values.length, converter, header);
-      console.log(csvData);
+  function createModalExportOptions(selector, exportFunction, data, chart) {
+    // TODO recreate as reusable tml template
+    // TODO Use better file name, like course name and current date
+    var button = $(selector);
+    var exportModal = $('<div class="modal hide fade">' + '<div class="modal-header"><h3>CSV Export</h3></div>'
+        + '<div class="modal-body">' + '<p>Choose the data to download as CSV file.</p>'
+        + '<a download="data.csv" id="data-export-visible" class="btn">Currently visible data</a><br/>'
+        + '<a download="data.csv" id="data-export-all" class="btn">All loaded data</a>' + '</div>'
+        + '<div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a></div>' + '</div>');
+    exportModal.insertAfter(button);
+    button.click(function() {
+      exportModal.modal();
     });
+
+    exportModal.find('#data-export-visible').click(function() {
+      var csv = exportFunction(data, chart, true);
+      this.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      exportModal.modal('hide');
+    });
+
+    exportModal.find('#data-export-all').click(function() {
+      if (!this.href) {
+        var csv = exportFunction(data, chart, false);
+        this.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      }
+      exportModal.modal('hide');
+    });
+
+    return exportModal;
+  }
+
+  /*
+   * private visualization specific export functions
+   */
+
+  function exportLOBarChart(data, chart, visibleOnly) {
+    var series = data[0];
+    var header = [];
+    var converter = [];
+    var getX = chart.x();
+    var getY = chart.y();
+
+    // filtering
+    if (visibleOnly) {
+      // filter series visibility
+      series = _.filter(series, function(e) {
+        return !e.disabled;
+      });
+    }
+
+    header[0] = "Learning Object";
+    converter[0] = function(d, row) {
+      return getX(d[0].values[row]);
+    };
+
+    // provide y axis values for each series
+    _.each(series, function(element, index) {
+      header.push(series[index].key);
+      converter.push(function(d, i) {
+        return getY(d[index].values[i]);
+      });
+    });
+
+    var csvData = dataExport.createCSV(series, series[0].values.length, converter, header);
+    console.log(csvData);
+  }
+
+
+  function exportUsageLineWithFocusChart(data, chart, visibleOnly) {
+    var series = data[0];
+    var header = [];
+    var converter = [];
+    var getX = chart.lines.x();
+    var getY = chart.lines.y();
+
+    // filtering
+    if (visibleOnly) {
+      // filter series visibility
+      series = _.filter(series, function(e) {
+        return !e.disabled;
+      });
+      // filter range
+      var min = chart.xAxis.domain()[0];
+      var max = chart.xAxis.domain()[1];
+      _.each(series, function(element) {
+        element.values = _.filter(element.values, function(e) {
+          return getX(e) >= min && getX(e) <= max;
+        });
+      });
+    }
+
+    // provide x axis value, it is the same for all series
+    header[0] = "Timestamp";
+    converter[0] = function(d, i) {
+      var timestamp = getX(d[0].values[i]);
+      var format = d3.time.format("%Y-%m-%d %H:%M:%S");
+      return format(new Date(timestamp));
+    }
+
+    // provide y axis values for each series
+    _.each(series, function(element, index) {
+      header.push(series[index].key);
+      converter.push(function(d, i) {
+        return getY(d[index].values[i]);
+      });
+    });
+
+    var csv = dataExport.createCSV(series, series[0].values.length, converter, header);
+    console.log(csv);
+    return csv;
+  }
+
+  /*
+   * public button creation functions
+   */
+
+  dataExport.barChartButton = function(selector, data, chart) {
+    createModalExportOptions(selector, exportLOBarChart, data, chart);
   };
 
-  dataExport.lineWithFocusChartButton = function(selector, data, chart, visibleOnly) {
-    $(selector).click(function() {
-
-      var series = data[0];
-      var header = [];
-      var converter = [];
-
-      var getX = chart.lines.x();
-      var getY = chart.lines.y();
-
-
-      // filtering
-      if (visibleOnly) {
-        // filter visibility
-        series = _.filter(series, function(e) {
-          return !e.disabled;
-        });
-        // filter range
-        var min = chart.xAxis.domain()[0];
-        var max = chart.xAxis.domain()[1];
-        _.each(series, function(element) {
-          element.values = _.filter(element.values, function(e) {
-            return getX(e) >= min && getX(e) <= max;
-          })
-        })
-      }
-
-      // provide x axis value, it is the same for all series
-      header[0] = "Timestamp";
-      converter[0] = function(d, i) {
-        return getX(d[0].values[i]);
-      };
-
-      // provide y axis values for each series
-      function getValue(i) {
-        return 
-      }
-      _.each(series, function(element, index) {
-        header.push(series[i].key);
-        converter.push(function(d, i) {
-          return getY(d[index].values[j]);
-        };);
-      });
-
-      var csvData = dataExport.createCSV(series, series[0].values.length, converter, header);
-      console.log(csvData);
-    });
+  dataExport.lineWithFocusChartButton = function(selector, data, chart) {
+    createModalExportOptions(selector, exportUsageLineWithFocusChart, data, chart);
   };
 
 })(window.dataExport = window.dataExport || {}, window.jQuery, T5._);
