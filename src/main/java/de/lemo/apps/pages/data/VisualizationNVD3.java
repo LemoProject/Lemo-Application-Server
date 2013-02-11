@@ -57,6 +57,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
+	
+	final int RESOLUTION_MAX = 500;
+	final int RESOLUTION_BASIC_MULTIPLIER = 4;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -134,7 +137,7 @@ public class VisualizationNVD3 {
 
 	@Property
 	@Persist
-	Integer resolution, resolutionMultiplier;
+	Integer resolution, resolutionComputed;
 
 	@Property
 	@Persist
@@ -246,6 +249,8 @@ public class VisualizationNVD3 {
 		this.selectedUsers = null;
 		this.selectedCourses = null;
 		this.selectedActivities = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	// void pageReset() {
@@ -302,22 +307,15 @@ public class VisualizationNVD3 {
 			endStamp = new Long(this.endDate.getTime() / 1000);
 		}
 
-		final int RESOLUTION_MAX = 500;
-		final int RESOLUTION_BASIC_MULTIPLIER = 4;
+		
 
 		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
-		if (this.resolution * RESOLUTION_BASIC_MULTIPLIER < RESOLUTION_MAX) {
-			this.resolution = this.resolution * RESOLUTION_BASIC_MULTIPLIER;
-			this.logger.debug("Multiply resolution with BASIC MULTIPLIER");
-		} else if (this.resolution <= RESOLUTION_MAX) {
-			this.logger.debug("Multiply resolution with ADAPTIVE MULTIPLIER");
-			this.resolutionMultiplier = RESOLUTION_MAX / this.resolution;
-			this.resolution = this.resolution * this.resolutionMultiplier;
-		}
-		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionMultiplier);
-
+		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
+		
+		this.resolutionComputed = RESOLUTION_MAX;
+		
 		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
-				beginStamp, endStamp, this.resolution, types);
+				beginStamp, endStamp, this.resolutionComputed, types);
 
 		final JSONArray graphParentArray = new JSONArray();
 		JSONObject graphDataObject = new JSONObject();
@@ -335,9 +333,9 @@ public class VisualizationNVD3 {
 				this.logger.debug("ResultList Length: " + resultAllObjects.getElements().size() + " Resolution: "
 						+ this.resolution);
 				final ResultListLongObject resultDataObjects = new ResultListLongObject(resultAllObjects.getElements()
-						.subList(0, this.resolution - 1));
+						.subList(0, this.resolutionComputed - 1));
 				final ResultListLongObject resultUserObjects = new ResultListLongObject(resultAllObjects.getElements()
-						.subList(this.resolution, resultAllObjects.getElements().size() - 1));
+						.subList(this.resolutionComputed, resultAllObjects.getElements().size() - 1));
 
 				graphDataObject = new JSONObject();
 				graphUserObject = new JSONObject();
@@ -345,12 +343,13 @@ public class VisualizationNVD3 {
 				graphUserValues = new JSONArray();
 
 				Long currentDateStamp = 0L;
-
+				Double dateResolution = this.resolution.doubleValue() / this.resolutionComputed.doubleValue();
+				
 				for (Integer i = 0; i < resultDataObjects.getElements().size(); i++) {
 					final JSONArray graphDataValue = new JSONArray();
 					final JSONArray graphUserValue = new JSONArray();
-					final Long dateMultiplier = 60 * 60 * 24 * i.longValue() * 1000;
-					currentDateStamp = beginStamp * 1000 + dateMultiplier;
+					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * 1000;
+					currentDateStamp = beginStamp * 1000 + dateMultiplier.longValue();
 					graphDataValue.put(0, currentDateStamp);
 					graphDataValue.put(1, resultDataObjects.getElements().get(i));
 

@@ -112,7 +112,7 @@ public class VisualizationD3 {
 
 	@Property
 	@Persist
-	Integer resolution;
+	private Integer resolution;
 
 	@Property
 	@Persist
@@ -184,6 +184,8 @@ public class VisualizationD3 {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedActivities = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	// void pageReset() {
@@ -230,8 +232,12 @@ public class VisualizationD3 {
 		if (this.endDate != null) {
 			endStamp = new Long(this.endDate.getTime() / 1000);
 		}
-
-		return this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp, endStamp);
+		
+		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp, endStamp); 
+		
+		this.logger.debug("ResultString: "+result);
+		
+		return result;
 		// return analysis.computeQFrequentPathBIDE(courseIds, null, 0.9, false, beginStamp, endStamp);
 	}
 
