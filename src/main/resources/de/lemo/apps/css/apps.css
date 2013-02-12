@@ -213,6 +213,72 @@ svg .box {}
 
 /* Histogram - END */
 
+
+
+
+
+
+/* Circle Graph - BEGIN */
+
+
+path.arc {
+  cursor: move;
+  fill: #fff;
+}
+
+.node {
+  font-size: 10px;
+}
+
+.node:hover {
+  fill: #1f77b4;
+}
+
+path.circle {
+  fill: none;
+  stroke: #1f77b4;
+  stroke-opacity: .4;
+  pointer-events: none;
+}
+
+.link.source, .link.target, .link.srctar {
+  stroke-opacity: 1;
+  stroke-width: 2px;
+}
+
+.node.target {
+  fill: #d62728 !important;
+}
+
+.link.source {
+  stroke: #d62728;
+}
+
+.node.source {
+  fill: #2ca02c;
+}
+
+.link.target {
+  stroke: #2ca02c;
+}
+
+.node.srctar {
+fill: #FF6103
+}
+
+.link.srctar {
+stroke: #FF6103
+}
+
+.link.invisible {
+opacity: 0;
+}
+
+
+/* Circle Graph - END */
+
+
+
 /* D3 - END */
 
 
