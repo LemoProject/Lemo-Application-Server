@@ -44,7 +44,7 @@ import de.lemo.apps.pages.data.Dashboard;
 		"../js/d3/d3.v2.min.js",
 		"../js/d3/d3_BoxPlot_Lib.js",
 		"../js/d3/nv.d3.js",
-		"../js/d3/jquery.tipsy.js",
+		"../js/d3/jquery.tipsy.js",	
 		"../js/bootstrap-transition.js",
 		"../js/bootstrap-modal.js",
 		"../js/bootstrap-dropdown.js",
