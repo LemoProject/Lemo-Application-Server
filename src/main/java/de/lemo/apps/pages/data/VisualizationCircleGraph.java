@@ -1,45 +1,41 @@
+/**
+ * File ./de/lemo/apps/pages/data/VisualizationD3.java
+ * Date 2013-01-29
+ * Project Lemo Learning Analytics
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
+
 package de.lemo.apps.pages.data;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
-import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
-import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
-import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
-import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
@@ -47,19 +43,15 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
-import de.lemo.apps.restws.entities.ResourceRequestInfo;
-import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
-public class VisualizationNVD3 {
-	
-	final int RESOLUTION_MAX = 500;
-	final int RESOLUTION_BASIC_MULTIPLIER = 4;
+@Import(library = { "../../js/d3/d3_custom_Circle_graph.js",
+					"../../js/d3/packages.js"})
+public class VisualizationCircleGraph {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -74,19 +66,10 @@ public class VisualizationNVD3 {
 	private CourseIdValueEncoder courseValueEncoder;
 
 	@Inject
-	private ComponentResources componentResources;
-
-	@Inject
-	private BeanModelSource beanModelSource;
-
-	@Inject
 	private Analysis analysis;
 
 	@Inject
 	private UserWorker userWorker;
-
-	@Inject
-	private AnalysisWorker analysisWorker;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -137,33 +120,16 @@ public class VisualizationNVD3 {
 
 	@Property
 	@Persist
-	Integer resolution, resolutionComputed;
+	Integer resolution;
 
 	@Property
 	@Persist
 	private List<Course> courses;
 
-	@Property
-	private ResourceRequestInfo resourceItem;
-
-	@Persist
-	private List<ResourceRequestInfo> showDetailsList;
-
 	// Value Encoder for activity multi-select component
 	@Property(write = false)
 	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
 			EResourceType.class);
-
-	@Property(write = false)
-	@Retain
-	private BeanModel resourceGridModel;
-	{
-		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
-				.getMessages());
-		this.resourceGridModel.include("resourcetype", "title", "requests");
-		// resourceGridModel.add("show",null);
-
-	}
 
 	// Select Model for activity multi-select component
 	@Property(write = false)
@@ -175,41 +141,23 @@ public class VisualizationNVD3 {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, courseIdEncoder;
+	private LongValueEncoder userIdEncoder;
 
 	@Property
 	@Persist
-	private List<Long> userIds, courseIds;
+	private List<Long> userIds;
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses;
+	private List<Long> selectedUsers;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
-		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
-		this.logger.info(" User Ids:         ----        " + elements);
+		final List<Long> elements = this.analysis.computeCourseUsers(courses, this.beginDate.getTime() / 1000,
+				this.endDate.getTime() / 1000).getElements();
+		this.logger.info("          ----        " + elements);
 		return elements;
-	}
-
-	@Cached
-	public List<ResourceRequestInfo> getResourceList() {
-		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
-
-		List<ResourceRequestInfo> resultList;
-
-		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
-			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
-		} else {
-			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
-		}
-		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
-
-		return resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -219,10 +167,6 @@ public class VisualizationNVD3 {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-			if (this.selectedCourses == null) {
-				this.selectedCourses = new ArrayList<Long>();
-				this.selectedCourses.add(this.courseId);
-			}
 
 			return true;
 		} else {
@@ -247,10 +191,7 @@ public class VisualizationNVD3 {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
-		this.selectedCourses = null;
 		this.selectedActivities = null;
-		this.beginDate = null;
-		this.endDate = null;
 	}
 
 	// void pageReset() {
@@ -262,7 +203,6 @@ public class VisualizationNVD3 {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
-		this.courseIds = this.userWorker.getCurrentUser().getMyCourses();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -277,16 +217,8 @@ public class VisualizationNVD3 {
 	}
 
 	public String getQuestionResult() {
-
-		List<Long> courseList = new ArrayList<Long>();
-		if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
-			if (!this.selectedCourses.contains(this.courseId)) {
-				this.selectedCourses.add(this.courseId);
-			}
-			courseList = this.selectedCourses;
-		} else {
-			courseList.add(this.courseId);
-		}
+		final ArrayList<Long> courseIds = new ArrayList<Long>();
+		courseIds.add(this.courseId);
 
 		final boolean considerLogouts = true;
 
@@ -294,7 +226,7 @@ public class VisualizationNVD3 {
 		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
 			types = new ArrayList<String>();
 			for (final EResourceType resourceType : this.selectedActivities) {
-				types.add(resourceType.name().toUpperCase());
+				types.add(resourceType.name().toLowerCase());
 			}
 		}
 
@@ -307,76 +239,9 @@ public class VisualizationNVD3 {
 			endStamp = new Long(this.endDate.getTime() / 1000);
 		}
 
-		
-
-		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
-		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
-		
-		this.resolutionComputed = RESOLUTION_MAX;
-		
-		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
-				beginStamp, endStamp, this.resolutionComputed, types);
-
-		final JSONArray graphParentArray = new JSONArray();
-		JSONObject graphDataObject = new JSONObject();
-		JSONObject graphUserObject = new JSONObject();
-		JSONArray graphDataValues = new JSONArray();
-		JSONArray graphUserValues = new JSONArray();
-
-		if (results != null) {
-			final Set<Long> courseSet = results.keySet();
-			final Iterator<Long> it = courseSet.iterator();
-			while (it.hasNext()) {
-
-				final Long courseId = it.next();
-				final ResultListLongObject resultAllObjects = results.get(courseId);
-				this.logger.debug("ResultList Length: " + resultAllObjects.getElements().size() + " Resolution: "
-						+ this.resolution);
-				final ResultListLongObject resultDataObjects = new ResultListLongObject(resultAllObjects.getElements()
-						.subList(0, this.resolutionComputed - 1));
-				final ResultListLongObject resultUserObjects = new ResultListLongObject(resultAllObjects.getElements()
-						.subList(this.resolutionComputed, resultAllObjects.getElements().size() - 1));
-
-				graphDataObject = new JSONObject();
-				graphUserObject = new JSONObject();
-				graphDataValues = new JSONArray();
-				graphUserValues = new JSONArray();
-
-				Long currentDateStamp = 0L;
-				Double dateResolution = this.resolution.doubleValue() / this.resolutionComputed.doubleValue();
-				
-				for (Integer i = 0; i < resultDataObjects.getElements().size(); i++) {
-					final JSONArray graphDataValue = new JSONArray();
-					final JSONArray graphUserValue = new JSONArray();
-					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * 1000;
-					currentDateStamp = beginStamp * 1000 + dateMultiplier.longValue();
-					graphDataValue.put(0, currentDateStamp);
-					graphDataValue.put(1, resultDataObjects.getElements().get(i));
-
-					graphUserValue.put(0, currentDateStamp);
-					graphUserValue.put(1, resultUserObjects.getElements().get(i));
-
-					graphDataValues.put(graphDataValue);
-					graphUserValues.put(graphUserValue);
-				}
-
-				final Course course = this.courseDAO.getCourseByDMSId(courseId);
-				graphDataObject.put("values", graphDataValues);
-				graphDataObject.put("key", course.getCourseName());
-
-				graphUserObject.put("values", graphUserValues);
-				graphUserObject.put("key", course.getCourseName() + "-User");
-
-				graphParentArray.put(graphDataObject);
-				graphParentArray.put(graphUserObject);
-
-			}
-
-		}
-
-		// logger.debug(graphParentArray.toString());
-
-		return graphParentArray.toString();
+		return this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp,
+				endStamp);
+		// return analysis.computeQFrequentPathBIDE(courseIds, null, 0.9, false, beginStamp, endStamp);
 	}
 
 	void setupRender() {
@@ -437,14 +302,6 @@ public class VisualizationNVD3 {
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// course.getLastRequestDate());
-	}
-
-	public String getResourceTypeName() {
-		if ((this.resourceItem != null) && (this.resourceItem.getResourcetype() != "")) {
-			return this.messages.get("EResourceType." + this.resourceItem.getResourcetype());
-		} else {
-			return this.messages.get("EResourceType.UNKNOWN");
-		}
+		return this.getLocalizedDate(this.endDate);// .course.getLastRequestDate());
 	}
 }

@@ -47,13 +47,13 @@ public class DateWorkerImpl implements DateWorker {
 
 	public Integer daysBetween(final Date startDate, final Date endDate) {
 
-		final Calendar _startDate = Calendar.getInstance();
-		final Calendar _endDate = (Calendar) _startDate.clone();
-		_endDate.setTime(endDate);
-		_startDate.setTime(startDate);
+		final Calendar startDateTemp = Calendar.getInstance();
+		final Calendar endDateTemp = (Calendar) startDateTemp.clone();
+		endDateTemp.setTime(endDate);
+		startDateTemp.setTime(startDate);
 		Integer daysBetween = 0;
-		while (_startDate.before(_endDate)) {
-			_startDate.add(Calendar.DAY_OF_MONTH, 1);
+		while (startDateTemp.before(endDateTemp)) {
+			startDateTemp.add(Calendar.DAY_OF_MONTH, 1);
 			daysBetween++;
 		}
 		return daysBetween;
@@ -93,7 +93,7 @@ public class DateWorkerImpl implements DateWorker {
 			 * Force jquery ui datepicker to use short month names of the current Java version. Datepicker uses the
 			 * correct
 			 * new ones, though on the backend it's depending on the Java version. The short name for march in german
-			 * changed from 'Mrz' to 'MÃ¤r' in Java 8 for example. Don't mind the 13th month, datepicker ignores it
+			 * changed from 'Mrz' to 'MŠr' in Java 8 for example. Don't mind the 13th month, datepicker ignores it
 			 * anyway.
 			 */
 			monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();
