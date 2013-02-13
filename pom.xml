@@ -33,8 +33,8 @@
 			<properties>
 				<lemo-system-name>lemo-dev</lemo-system-name>
 				<lemo-display-name>LeMo [development]</lemo-display-name>
-				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
-				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+				<tomcat-server>lemo2-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo2-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
 
@@ -43,8 +43,8 @@
 			<properties>
 				<lemo-system-name>lemo-stable</lemo-system-name>
 				<lemo-display-name>LeMo [stable]</lemo-display-name>
-				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
-				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+				<tomcat-server>lemo2-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo2-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
 
@@ -454,6 +454,7 @@
 		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.9</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>
+		<lemo2-tomcat-url>http://lemo2.f4.htw-berlin.de:8080</lemo2-tomcat-url>
 		<lemo3-tomcat-url>http://141.45.146.174:8080</lemo3-tomcat-url>
 	</properties>
 </project>
