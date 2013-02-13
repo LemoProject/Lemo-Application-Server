@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import de.lemo.apps.entities.User;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
@@ -45,8 +46,15 @@ public class Initialize {
 			for (int i = 0; i < userCourses.size(); i++) {
 
 				if (!this.courseDAO.doExistByForeignCourseId(userCourses.get(i))) {
-					final CourseObject courseObject = this.init.getCourseDetails(userCourses.get(i));
-					this.courseDAO.save(courseObject);
+					CourseObject courseObject = null;
+					try {
+						courseObject = this.init.getCourseDetails(userCourses.get(i));
+					} catch (RestServiceCommunicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (courseObject != null)
+						this.courseDAO.save(courseObject);
 				}
 			}
 		// ResultListCourseObject courses = init.getCoursesDetails(user.getMyCourses());

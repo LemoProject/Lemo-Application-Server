@@ -44,6 +44,8 @@ import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.integration.UserDAOImpl;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.AnalysisImpl;
+import de.lemo.apps.restws.client.DataHelper;
+import de.lemo.apps.restws.client.DataHelperImpl;
 import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.InformationImpl;
 import de.lemo.apps.restws.client.Initialisation;
@@ -83,6 +85,7 @@ public class AppModule {
 
 		// Rest Services
 		binder.bind(Initialisation.class, InitialisationImpl.class);
+		binder.bind(DataHelper.class, DataHelperImpl.class);
 		binder.bind(Information.class, InformationImpl.class);
 		binder.bind(Analysis.class, AnalysisImpl.class);
 

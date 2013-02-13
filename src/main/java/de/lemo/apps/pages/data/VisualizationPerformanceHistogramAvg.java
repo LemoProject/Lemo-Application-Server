@@ -37,6 +37,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -219,7 +220,13 @@ public class VisualizationPerformanceHistogramAvg {
 
 		final List<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.courseId);
-		final ResultListStringObject quizList = this.init.getRatedObjects(courseList);
+		ResultListStringObject quizList = null;
+		try {
+			quizList = this.init.getRatedObjects(courseList);
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 		final List<String> quizzesTitles = new ArrayList<String>();
@@ -293,7 +300,13 @@ public class VisualizationPerformanceHistogramAvg {
 
 			List<Long> quizzesList = new ArrayList<Long>();
 
-			final ResultListStringObject quizList = this.init.getRatedObjects(courseList);
+			ResultListStringObject quizList = null;
+			try {
+				quizList = this.init.getRatedObjects(courseList);
+			} catch (RestServiceCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 			final List<String> quizzesTitles = new ArrayList<String>();

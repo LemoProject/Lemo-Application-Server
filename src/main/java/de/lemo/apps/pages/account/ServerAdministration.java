@@ -5,6 +5,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.client.Initialisation;
 
 @RequiresAuthentication
@@ -18,17 +19,27 @@ public class ServerAdministration {
 	private Form form;
 
 	public String getStartTime() {
-		if (this.init.getStartTime() != null) {
-			return this.init.getStartTime().toLocaleString();
-		} else {
+		try {
+			if (this.init.getStartTime() != null) {
+				return this.init.getStartTime().toLocaleString();
+			} else {
+				return "Offline";
+			}
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
 			return "Offline";
 		}
 	}
 
 	public Boolean getServerOnline() {
-		if (this.init.getStartTime() != null) {
-			return true;
-		} else {
+		try {
+			if (this.init.getStartTime() != null) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
 			return false;
 		}
 	}
