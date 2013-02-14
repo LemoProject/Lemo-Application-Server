@@ -1,6 +1,10 @@
 /**
- * 
- */
+	 * File ServiceRatedObjects.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.restws.proxies.service;
 
 import java.util.List;
@@ -12,9 +16,6 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.*;
 
-/**
- * @author johndoe
- */
 public interface ServiceRatedObjects {
 
 	@GET

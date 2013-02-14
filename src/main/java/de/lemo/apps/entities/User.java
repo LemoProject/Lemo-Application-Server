@@ -1,3 +1,10 @@
+/**
+	 * File User.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.entities;
 
 import java.util.ArrayList;
@@ -34,8 +41,10 @@ import org.hibernate.validator.constraints.Email;
 @Table(name = "User")
 public class User extends AbstractEntity {
 
-	private static final long serialVersionUID = -2284587022138077470L;
 	
+	
+	private static final long serialVersionUID = -432098998274596203L;
+
 	private Collection<Course> myCourses = new TreeSet<Course>();
 	
 	private Collection<Course> favoriteCourses = new TreeSet<Course>();

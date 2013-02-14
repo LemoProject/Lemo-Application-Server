@@ -1,6 +1,10 @@
 /**
- * 
- */
+	 * File ObjectNotDeletedException.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.exceptions;
 
 import org.apache.log4j.Logger;

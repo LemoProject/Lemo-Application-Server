@@ -1,6 +1,10 @@
 /**
- * 
- */
+	 * File ServiceCourseDetails.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.restws.proxies.service;
 
 import java.util.List;
@@ -10,7 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;

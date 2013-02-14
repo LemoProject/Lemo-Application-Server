@@ -1,7 +1,6 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;

@@ -6,6 +6,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import org.apache.tapestry5.beaneditor.DataType;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import de.lemo.apps.application.DateWorkerImpl;
 import de.lemo.apps.restws.entities.CourseObject;
 
 /**
@@ -65,10 +66,10 @@ public class Course extends AbstractEntity {
 			this.courseName = courseObject.getTitle();
 			this.courseDescription = courseObject.getDescription();
 			if (courseObject.getFirstRequest() != null) {
-				this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * 1000);
+				this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 			if (courseObject.getLastRequest() != null) {
-				this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * 1000);
+				this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 			this.enroledParticipants = courseObject.getParticipants();
 			this.enroledParticipants = 1L;

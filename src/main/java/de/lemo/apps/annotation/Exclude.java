@@ -1,3 +1,4 @@
+
 package de.lemo.apps.annotation;
 
 import java.lang.annotation.Retention;

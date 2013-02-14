@@ -1,3 +1,10 @@
+/**
+	 * File QuestionDAOImplDAO.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.integration;
 
 import java.util.List;
@@ -19,10 +26,10 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 	public Boolean doSave(final Question question) throws ObjectNotSavedException {
 		try {
-			// Transaction t = session.beginTransaction();
+			
 			this.session.save(question);
 			this.session.flush();
-			// t.commit();
+			
 
 		} catch (final Exception e) {
 			this.logger.warn("Could not save Question!");

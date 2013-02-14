@@ -1,26 +1,22 @@
 /**
- * 
- */
+	 * File StatisticWorkerImpl.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application;
 
 import java.util.Date;
 import java.util.List;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.slf4j.Logger;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
-/**
- * @author johndoe
- */
-public class StatisticWorkerImpl implements StatisticWorker {
 
-	@Inject
-	private Logger logger;
+public class StatisticWorkerImpl implements StatisticWorker {
 
 	public Long getAverageRequest(final List<List<XYDateDataItem>> dataItemList) {
 		List<XYDateDataItem> innerList = CollectionFactory.newList();
-		final Long requestCounter = 0L;
 		Long requestAvg = 0L;
 		if ((dataItemList != null) && (dataItemList.size() >= 1)) {
 			innerList = dataItemList.get(0);

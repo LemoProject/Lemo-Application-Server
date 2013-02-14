@@ -1,6 +1,10 @@
 /**
- * 
- */
+	 * File Initialize.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.pages.data;
 
 import java.util.List;
@@ -14,9 +18,7 @@ import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.CourseObject;
 
-/**
- * @author johndoe
- */
+
 @RequiresAuthentication
 public class Initialize {
 

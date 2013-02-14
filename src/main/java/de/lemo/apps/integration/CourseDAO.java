@@ -1,3 +1,10 @@
+/**
+	 * File CourseDAO.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.integration;
 
 import java.util.List;
@@ -8,29 +15,29 @@ import de.lemo.apps.restws.entities.CourseObject;
 
 public interface CourseDAO {
 
-	public List<Course> findAllByOwner(User user);
+	List<Course> findAllByOwner(User user);
 
-	public List<Course> findAll();
+	List<Course> findAll();
 
-	public List<Course> findFavoritesByOwner(User user);
+	List<Course> findFavoritesByOwner(User user);
 
-	public boolean doExist(Course course);
+	boolean doExist(Course course);
 
-	public boolean doExistByForeignCourseId(Long courseId);
+	boolean doExistByForeignCourseId(Long courseId);
 
-	public Course getCourse(String coursename);
+	Course getCourse(String coursename);
 
-	public Course getCourse(Long id);
+	Course getCourse(Long id);
 
-	public Course getCourseByDMSId(Long id);
-
-	@CommitAfter
-	public void save(Course course);
+	Course getCourseByDMSId(Long id);
 
 	@CommitAfter
-	public void save(CourseObject course);
+	void save(Course course);
 
 	@CommitAfter
-	public void update(Course course);
+	void save(CourseObject course);
+
+	@CommitAfter
+	void update(Course course);
 
 }

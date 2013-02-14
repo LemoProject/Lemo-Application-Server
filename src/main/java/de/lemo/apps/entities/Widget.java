@@ -1,3 +1,10 @@
+/**
+	 * File Widget.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.entities;
 
 import javax.persistence.Entity;
@@ -8,11 +15,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Widget")
 public class Widget extends AbstractEntity {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6978813940322609187L;
+	
+	private static final long serialVersionUID = -8473743292482994742L;
 
 	public Widget(final String name, final User user, final Long courseId, final Long position) {
 		this.name = name;

@@ -1,3 +1,10 @@
+/**
+	 * File ServerAdministration.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.pages.account;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;

@@ -1,3 +1,10 @@
+/**
+	 * File ServiceUserInformation.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.restws.proxies.service;
 
 import javax.ws.rs.GET;

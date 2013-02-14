@@ -1,3 +1,10 @@
+/**
+	 * File AnalysisWorker.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application;
 
 import java.util.Date;
@@ -10,19 +17,19 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
 public interface AnalysisWorker {
 
-	public List<ResourceRequestInfo> usageAnalysisExtended(Course course, Date beginDate, Date endDate,
+	List<ResourceRequestInfo> usageAnalysisExtended(Course course, Date beginDate, Date endDate,
 			List<EResourceType> resourceTypes);
 
-	public List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate,
+	List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate,
 			List<Long> selectedUsers, List<EResourceType> resourceTypes);
 
-	public ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate,
+	ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate,
 			Integer resolution, List<EResourceType> resourceTypes);
 
-	public List<List<XYDateDataItem>> usageAnalysis(Course course, Date endDate, final int dateRange,
+	List<List<XYDateDataItem>> usageAnalysis(Course course, Date endDate, final int dateRange,
 			Integer dateMultiplier, List<EResourceType> resourceTypes);
 
-	public List<List<XYDateDataItem>> usageAnalysis(Course course, Date beginDate, Date endDate,
+	List<List<XYDateDataItem>> usageAnalysis(Course course, Date beginDate, Date endDate,
 			List<EResourceType> resourceTypes);
 
 }

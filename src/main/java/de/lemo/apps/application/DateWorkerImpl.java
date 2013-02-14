@@ -1,3 +1,10 @@
+/**
+	 * File DateWorkerImpl.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application;
 
 import java.text.SimpleDateFormat;
@@ -12,16 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.slf4j.Logger;
 
-/**
- * @author Andreas Pursian
- */
 public class DateWorkerImpl implements DateWorker {
 
 	@Inject
 	private Messages messages;
-
-	@Inject
-	private Logger log;
 
 	private final AssetSource assetSource;
 
@@ -30,6 +31,7 @@ public class DateWorkerImpl implements DateWorker {
 	 */
 	public static final String DATE_FORMAT = "MMM dd, yyyy";
 	public static final String CALENDAR_ICON_PATH = "layout/images/glyphicons_045_calendar.png";
+	public static final int MILLISEC_MULTIPLIER = 1000;
 
 	public DateWorkerImpl(final Logger logger, final AssetSource assetSource) {
 		this.assetSource = assetSource;

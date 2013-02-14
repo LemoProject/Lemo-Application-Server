@@ -1,14 +1,16 @@
 /**
- * 
- */
+	 * File LongValueEncoder.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 * 
+	 * adding custom MySQL Dialect with UTF-8 as default charset and InnoDB table engine
+	 */
 package de.lemo.apps.services.internal;
 
 import org.hibernate.dialect.MySQL5InnoDBDialect;
 
-/**
- * @author A. Pursian
- *         adding custom MySQL Dialect with UTF-8 as default charset and InnoDB table engine
- */
 public class MysqlDialectUtf8 extends MySQL5InnoDBDialect {
 
 	@Override
