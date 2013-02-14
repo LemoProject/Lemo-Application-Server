@@ -24,7 +24,12 @@
         				<br />
         				<br />
         				${message:serverStartTime}: ${starttime}
-		            	
+        				<br />
+        				<br />
+        				DMS Version: ${dmsversion} 
+        				<br />
+        				<br />
+		            	DMS DB Version: ${dmsdbversion} 
 				    </form>	
 			 	
 			 	</div>  

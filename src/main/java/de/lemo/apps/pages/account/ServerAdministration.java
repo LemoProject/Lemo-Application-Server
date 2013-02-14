@@ -13,6 +13,7 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
+import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
 
 @RequiresAuthentication
@@ -21,6 +22,9 @@ public class ServerAdministration {
 
 	@Inject
 	private Initialisation init;
+	
+	@Inject
+	private Information info;
 
 	@Component(id = "serverform")
 	private Form form;
@@ -40,7 +44,7 @@ public class ServerAdministration {
 
 	public Boolean getServerOnline() {
 		try {
-			if (this.init.getStartTime() != null) {
+			if (this.init.defaultConnectionCheck() != null) {
 				return true;
 			} else {
 				return false;
@@ -50,5 +54,25 @@ public class ServerAdministration {
 			return false;
 		}
 	}
+	
+	public String getDMSVersion(){
+		try {
+			return info.getDMSVersion();
+		} catch (RestServiceCommunicationException e) {
+			return "Information not available!";
+		}
+	}
+	
+	
+	public String getDMSDBVersion(){
+		try {
+			return info.getDMSDBVersion();
+		} catch (RestServiceCommunicationException e) {
+			return "Information not available!";
+		}
+	}
+	
+	
+	
 
 }

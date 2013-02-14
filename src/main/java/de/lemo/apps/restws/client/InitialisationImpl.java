@@ -28,7 +28,7 @@ public class InitialisationImpl implements Initialisation {
 
 	public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
 	private static final String SERVICE_BASE_URL = "/services";
-	private static final String SERVICE_PREFIX_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL;
+	public static final String SERVICE_PREFIX_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL;
 	private static final String SERVICE_STARTTIME_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/starttime";
 	private static final String SERVICE_COURSE_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/courses";
 	private static final String SERVICE_RATED_OBJECTS_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/ratedobjects";

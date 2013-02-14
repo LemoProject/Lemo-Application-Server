@@ -68,7 +68,7 @@ public class AnalysisImpl implements Analysis {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Gebe leere Resultlist zurück");
+		System.out.println("Gebe leere Resultlist zurueck");
 		return new HashMap<Long, ResultListLongObject>();
 	}
 
@@ -98,7 +98,7 @@ public class AnalysisImpl implements Analysis {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Gebe leere Resultlist zur�ck");
+		System.out.println("Gebe leere Resultlist zurueck");
 		return new ResultListResourceRequestInfo();
 	}
 
@@ -134,7 +134,7 @@ public class AnalysisImpl implements Analysis {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Gebe leere Resultlist zur�ck");
+		System.out.println("Gebe leere Resultlist zurueck");
 		return new ResultListRRITypes();
 	}
 
