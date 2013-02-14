@@ -42,7 +42,7 @@ public class CourseDAOImpl implements CourseDAO {
 			return new ArrayList<Course>();
 		}
 		Criteria criteria = this.session.createCriteria(Course.class);
-		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
+		criteria.add(Restrictions.in("courseId", user.getMyCourseIds()));
 		//criteria.add(Restrictions.eq("needUpdate", false));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
@@ -56,7 +56,7 @@ public class CourseDAOImpl implements CourseDAO {
 			return new ArrayList<Course>();
 		}
 		Criteria criteria = this.session.createCriteria(Course.class);
-		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
+		criteria.add(Restrictions.in("courseId", user.getMyCourseIds()));
 		criteria.add(Restrictions.eq("favorite", true));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
