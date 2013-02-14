@@ -81,7 +81,7 @@ public class Widget extends AbstractEntity {
 	
 	
 	@ManyToOne
-	@JoinColumn(updatable=true, insertable=true, name = "widget_id")
+	@JoinColumn(updatable=true, insertable=true, name = "user_id")
 	public User getUser() {
 		return this.user;
 	}

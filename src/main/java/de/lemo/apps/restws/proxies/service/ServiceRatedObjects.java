@@ -14,7 +14,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.*;
 
 public interface ServiceRatedObjects {
 

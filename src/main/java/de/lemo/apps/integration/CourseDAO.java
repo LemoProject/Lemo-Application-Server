@@ -35,7 +35,7 @@ public interface CourseDAO {
 	void save(Course course);
 
 	@CommitAfter
-	void save(CourseObject course);
+	Course save(CourseObject course);
 
 	@CommitAfter
 	void update(Course course);

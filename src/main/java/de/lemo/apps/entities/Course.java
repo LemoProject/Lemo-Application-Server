@@ -65,9 +65,18 @@ public class Course extends AbstractEntity {
 		if (courseObject != null) {
 			this.courseName = courseObject.getTitle();
 			this.courseDescription = courseObject.getDescription();
+			
+			if(this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1){
+				final int MAX_LENGTH = 35;
+				int length = this.courseDescription.length();
+				if(length>MAX_LENGTH) length = MAX_LENGTH;
+				this.courseName = this.courseDescription.substring(0, length-1);
+			}
+			
 			if (courseObject.getFirstRequest() != null) {
 				this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
+			
 			if (courseObject.getLastRequest() != null) {
 				this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}

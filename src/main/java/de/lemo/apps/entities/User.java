@@ -13,12 +13,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -45,11 +45,11 @@ public class User extends AbstractEntity {
 	
 	private static final long serialVersionUID = -432098998274596203L;
 
-	private Collection<Course> myCourses = new TreeSet<Course>();
+	private List<Course> myCourses = new ArrayList<Course>();
 	
-	private Collection<Course> favoriteCourses = new TreeSet<Course>();
+	private List<Course> favoriteCourses = new ArrayList<Course>();
 	
-	private Collection<Course> myWidgets = new TreeSet<Course>();
+	private List<Widget> myWidgets = new ArrayList<Widget>();
 
 	//@NaturalId
 	//@Column(nullable = false, unique = true)
@@ -100,7 +100,7 @@ public class User extends AbstractEntity {
 	public User(final String fullname, final String username, final String email,
 			final String password) {
 		this(fullname, username, email);
-		this.password = password;
+		this.setPassword(password);
 	}
 
 	public User(final Long id, final String username, final String fullname, final String email, final String password) {
@@ -109,7 +109,7 @@ public class User extends AbstractEntity {
 		this.username = username;
 		this.fullname = fullname;
 		this.email = email;
-		this.password = password;
+		this.setPassword(password);
 	}
 
 	@Override
@@ -216,23 +216,25 @@ public class User extends AbstractEntity {
 		return this.roles;
 	}
 
-	public void setMyCourses(final Collection<Course> myCourses) {
+	public void setMyCourses(final List<Course> myCourses) {
 		this.myCourses = myCourses;
 	}
 
 	@NonVisual
 	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}) 
-	public Collection<Course> getMyCourses() {
+	@JoinTable(name = "User_Course")
+	public List<Course> getMyCourses() {
 		return this.myCourses;
 	}
 	
-	public void setFavoriteCourses(final Collection<Course> favoriteCourses) {
+	public void setFavoriteCourses(final List<Course> favoriteCourses) {
 		this.favoriteCourses = favoriteCourses;
 	}
 
 	@NonVisual
 	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}) 
-	public Collection<Course> getFavoriteCourses() {
+	@JoinTable(name = "User_FavCourse")
+	public List<Course> getFavoriteCourses() {
 		return this.favoriteCourses;
 	}
 	
@@ -242,16 +244,16 @@ public class User extends AbstractEntity {
 	@NonVisual
 	@OneToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
 	@Cascade({org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinColumn(name="widget_id")
+	@JoinColumn(name="user_id")
 	@IndexColumn(name="index_col")
-	public Collection<Course> getMyWidgets() {
+	public List<Widget> getMyWidgets() {
 		return myWidgets;
 	}
 
 	/**
 	 * @param myWidgets the myWidgets to set
 	 */
-	public void setMyWidgets(Collection<Course> myWidgets) {
+	public void setMyWidgets(List<Widget> myWidgets) {
 		this.myWidgets = myWidgets;
 	}
 

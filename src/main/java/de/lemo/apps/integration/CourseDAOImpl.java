@@ -29,8 +29,8 @@ public class CourseDAOImpl implements CourseDAO {
 	private Logger logger;
 
 	public List<Course> findAll() {
-		final Criteria criteria = this.session.createCriteria(Course.class);
-		final List<Course> results = criteria.list();
+		Criteria criteria = this.session.createCriteria(Course.class);
+		List<Course> results = criteria.list();
 		if (results.size() == 0) {
 			return new ArrayList<Course>();
 		}
@@ -41,9 +41,9 @@ public class CourseDAOImpl implements CourseDAO {
 		if (user.getMyCourses().isEmpty()) {
 			return new ArrayList<Course>();
 		}
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
-		criteria.add(Restrictions.eq("needUpdate", false));
+		//criteria.add(Restrictions.eq("needUpdate", false));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
 			return new ArrayList<Course>();
@@ -55,7 +55,7 @@ public class CourseDAOImpl implements CourseDAO {
 		if (user == null || user.getMyCourses() == null || user.getMyCourses().isEmpty()) {
 			return new ArrayList<Course>();
 		}
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
 		criteria.add(Restrictions.eq("favorite", true));
 		final List<Course> results = criteria.list();
@@ -66,7 +66,7 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 
 	public boolean doExist(final Course course) {
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.eq("id", course.getId()));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
@@ -76,7 +76,7 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 
 	public boolean doExistByForeignCourseId(final Long courseId) {
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.eq("courseId", courseId));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
@@ -86,7 +86,7 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 
 	public Course getCourse(final String coursename) {
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.eq("coursename", coursename));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
@@ -96,7 +96,7 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 
 	public Course getCourse(final Long id) {
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.eq("id", id));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
@@ -106,7 +106,7 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 
 	public Course getCourseByDMSId(final Long id) {
-		final Criteria criteria = this.session.createCriteria(Course.class);
+		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.eq("courseId", id));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
@@ -119,9 +119,10 @@ public class CourseDAOImpl implements CourseDAO {
 		this.session.persist(course);
 	}
 
-	public void save(final CourseObject courseObject) {
-		final Course course = new Course(courseObject);
+	public Course save(final CourseObject courseObject) {
+		Course course = new Course(courseObject);
 		this.session.persist(course);
+		return course;
 	}
 
 	public void update(final Course course) {

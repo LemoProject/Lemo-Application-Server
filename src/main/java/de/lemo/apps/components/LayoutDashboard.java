@@ -164,12 +164,12 @@ public class LayoutDashboard {
 
 	@Cached
 	public List<Course> getFavoriteCourses() {
-		return this.courseDAO.findFavoritesByOwner(this.userWorker.getCurrentUser());
+		return this.userWorker.getCurrentUser().getFavoriteCourses();
 	}
 
 	@Cached
 	public List<Course> getAllCourses() {
-		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		return this.userWorker.getCurrentUser().getMyCourses();
 	}
 
 }

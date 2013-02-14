@@ -42,30 +42,22 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 		
 		final User loginUser = userDAO.getUser(userToken.getUsername());
 		
-		/*if (loginUser != null) {
-		
-			//ByteSource saltSource = new SecureRandomNumberGenerator().nextBytes();
-			ByteSource saltSource = ByteSource.Util.bytes(loginUser.getPasswordSalt()); 
-			String tempPassword = new Sha1Hash(userToken.getPassword(), saltSource).toString();
-			String lemoPassword = new Sha1Hash("lemolemo", saltSource).toString();
-			
-			logger.debug("Passcompare: ...."+String.copyValueOf(userToken.getPassword()));
-			logger.debug("NEW: ...."+ tempPassword);
-			logger.debug("OLD: ...."+ loginUser.getEncryptedPassword());
-			logger.debug("LEM: ...."+ lemoPassword);
-		} else logger.debug("Can't find user :"+ userToken.getUsername());*/
 		AuthenticationInfo authInfo = null;
 
 		if (loginUser == null) {
-			throw new AuthenticationException("The user " + username + " doesn't exist.");
+			logger.info("Login: The user " + username + " doesn't exist.");
+			throw new AuthenticationException("The user " + username + " doesn't exist.");	
 		} else if(loginUser.checkPassword(password))
 			{
 				if (loginUser.isAccountLocked()) {
+					logger.info("Login: Account for user: " + username + " is locked.");
 					throw new LockedAccountException("Account for user: " + username + " is locked.");
 				}
 				if (loginUser.isCredentialsExpired()) {
+					logger.info("Login: The credentials for user: " + username + " are expired.");
 					throw new ExpiredCredentialsException("The credentials for user: " + username + " are expired.");
 				}
+				logger.info("Login: User "+ username +" logged in successfully.");
 				authInfo = new SimpleAuthenticationInfo(userToken.getUsername(), userToken.getPassword(), "basic");
 		}
 

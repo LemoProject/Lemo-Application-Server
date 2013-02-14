@@ -69,7 +69,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime);
 
-	public String computeQFrequentPathBIDE(
+	String computeQFrequentPathBIDE(
 			List<Long> courseIds,
 			List<Long> userIds,
 			List<String> types,
@@ -80,7 +80,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime);
 
-	public String computeQFrequentPathViger(
+	String computeQFrequentPathViger(
 			List<Long> courseIds,
 			List<Long> userIds,
 			List<String> types,
@@ -91,7 +91,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime);
 
-	public String computeCumulativeUserAccess(
+	String computeCumulativeUserAccess(
 			List<Long> courseIds,
 			List<String> types,
 			List<Long> departments,
@@ -99,7 +99,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime);
 
-	public List<Long> computePerformanceHistogram(
+	List<Long> computePerformanceHistogram(
 			List<Long> courses,
 			List<Long> users,
 			List<Long> quizzes,
@@ -107,7 +107,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime);
 
-	public String computePerformanceBoxplot(
+	String computePerformanceBoxplot(
 			List<Long> courses,
 			List<Long> users,
 			List<Long> quizzes,

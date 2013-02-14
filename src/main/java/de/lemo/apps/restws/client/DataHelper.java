@@ -7,6 +7,6 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 
 public interface DataHelper {
 	
-	public HashMap<Long, ResultListLongObject> convertJSONStringToResultListHashMap(String jsonString);
+	HashMap<Long, ResultListLongObject> convertJSONStringToResultListHashMap(String jsonString);
 
 }

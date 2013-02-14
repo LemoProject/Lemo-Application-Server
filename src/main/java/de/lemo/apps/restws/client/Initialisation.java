@@ -10,16 +10,20 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 
 public interface Initialisation {
 	
-	public Boolean defaultConnectionCheck() throws RestServiceCommunicationException;
+	Boolean defaultConnectionCheck() throws RestServiceCommunicationException;
 
-	public Date getStartTime() throws RestServiceCommunicationException;
+	Date getStartTime() throws RestServiceCommunicationException;
 
-	public CourseObject getCourseDetails(Long id) throws RestServiceCommunicationException;
+	CourseObject getCourseDetails(Long id) throws RestServiceCommunicationException;
 
-	public ResultListCourseObject getCoursesDetails(List<Long> ids) throws RestServiceCommunicationException;
+	ResultListCourseObject getCoursesDetails(List<Long> ids) throws RestServiceCommunicationException;
 
-	public ResultListStringObject getRatedObjects(List<Long> courseIds) throws RestServiceCommunicationException;
+	ResultListStringObject getRatedObjects(List<Long> courseIds) throws RestServiceCommunicationException;
 	
-	public ResultListLongObject identifyUserName(final String login) throws RestServiceCommunicationException;
+	ResultListLongObject identifyUserName(final String login) throws RestServiceCommunicationException;
+	
+	ResultListLongObject getUserCourses(Long userId) throws RestServiceCommunicationException;
+	
+	ResultListCourseObject getUserCourses(Long userId, Long amount, Long offset) throws RestServiceCommunicationException;
 
 }

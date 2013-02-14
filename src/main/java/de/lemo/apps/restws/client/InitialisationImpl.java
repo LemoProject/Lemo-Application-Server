@@ -21,15 +21,20 @@ import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
 import de.lemo.apps.restws.proxies.service.ServiceLoginAuthentification;
 import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
+import de.lemo.apps.restws.proxies.service.ServiceTeacherCourses;
+import de.lemo.apps.restws.proxies.service.ServiceUserInformation;
 
 public class InitialisationImpl implements Initialisation {
 
 	public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
 	private static final String SERVICE_BASE_URL = "/services";
-	private static final String SERVICE_STARTTIME_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL + "/starttime";
-	private static final String SERVICE_COURSE_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL + "/courses";
-	private static final String SERVICE_RATED_OBJECTS_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL + "/ratedobjects";
-	private static final String SERVICE_AUTH_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL + "/authentification";
+	private static final String SERVICE_PREFIX_URL = InitialisationImpl.DMS_BASE_URL + InitialisationImpl.SERVICE_BASE_URL;
+	private static final String SERVICE_STARTTIME_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/starttime";
+	private static final String SERVICE_COURSE_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/courses";
+	private static final String SERVICE_RATED_OBJECTS_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/ratedobjects";
+	private static final String SERVICE_AUTH_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/authentification";
+	private static final String SERVICE_USER_COURSES_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/teachercourses";
+	
 
 	
 	private Logger logger;
@@ -194,7 +199,57 @@ public class InitialisationImpl implements Initialisation {
 	logger.info("User could not be identified. Returning empty resultset.");
 	return new ResultListLongObject();
 	
-}
+	}
+	
+	
+	public ResultListLongObject getUserCourses(Long userId) throws RestServiceCommunicationException {
+		
+		try {
+
+				if (defaultConnectionCheck()){
+					final ServiceTeacherCourses serviceProxy = ProxyFactory.create(ServiceTeacherCourses.class, InitialisationImpl.SERVICE_USER_COURSES_URL);
+					if (serviceProxy != null) {
+		
+						return serviceProxy.getTeachersCourses(userId);
+					}
+				}
+
+		} catch (final Exception e) {
+				
+				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
+
+		}
+		
+		
+		logger.info("Courses could not be loaded. Returning empty resultset.");
+		return new ResultListLongObject();
+		
+		}
+	
+	
+	public ResultListCourseObject getUserCourses(Long userId, Long amount, Long offset) throws RestServiceCommunicationException {
+		
+		try {
+
+				if (defaultConnectionCheck()){
+					final ServiceUserInformation serviceProxy = ProxyFactory.create(ServiceUserInformation.class, InitialisationImpl.SERVICE_PREFIX_URL);
+					if (serviceProxy != null) {
+						
+						return serviceProxy.getCoursesByUser(userId, amount , offset);
+					}
+				}
+
+		} catch (final Exception e) {
+				
+				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
+
+		}
+		
+		
+		logger.info("Courses could not be loaded. Returning empty resultset.");
+		return new ResultListCourseObject();
+		
+	}
 
 
 }
