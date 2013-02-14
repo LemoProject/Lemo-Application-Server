@@ -1,10 +1,12 @@
 package de.lemo.apps.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "course")
+@Table(name = "Widget")
 public class Widget extends AbstractEntity {
 
 	/**
@@ -72,6 +74,10 @@ public class Widget extends AbstractEntity {
 	/**
 	 * @return the user
 	 */
+	
+	
+	@ManyToOne
+	@JoinColumn(updatable=true, insertable=true, name = "widget_id")
 	public User getUser() {
 		return this.user;
 	}

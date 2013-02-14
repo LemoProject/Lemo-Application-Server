@@ -13,6 +13,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.tapestry5.annotations.Log;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
 
@@ -20,6 +21,9 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 
 	@Inject
 	private UserDAO userDAO;
+	
+	@Inject
+	private Logger logger;
 
 	@Override
 	@Log
@@ -34,21 +38,35 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 
 		final UsernamePasswordToken userToken = (UsernamePasswordToken) token;
 		final String username = userToken.getUsername();
-		final User loginUser = this.userDAO.login(userToken.getUsername(), String.copyValueOf(userToken.getPassword()));
-
+		final String password = String.copyValueOf(userToken.getPassword());
+		
+		final User loginUser = userDAO.getUser(userToken.getUsername());
+		
+		/*if (loginUser != null) {
+		
+			//ByteSource saltSource = new SecureRandomNumberGenerator().nextBytes();
+			ByteSource saltSource = ByteSource.Util.bytes(loginUser.getPasswordSalt()); 
+			String tempPassword = new Sha1Hash(userToken.getPassword(), saltSource).toString();
+			String lemoPassword = new Sha1Hash("lemolemo", saltSource).toString();
+			
+			logger.debug("Passcompare: ...."+String.copyValueOf(userToken.getPassword()));
+			logger.debug("NEW: ...."+ tempPassword);
+			logger.debug("OLD: ...."+ loginUser.getEncryptedPassword());
+			logger.debug("LEM: ...."+ lemoPassword);
+		} else logger.debug("Can't find user :"+ userToken.getUsername());*/
 		AuthenticationInfo authInfo = null;
 
 		if (loginUser == null) {
 			throw new AuthenticationException("The user " + username + " doesn't exist.");
-		} else {
-
-			if (loginUser.isAccountLocked()) {
-				throw new LockedAccountException("Account for user: " + username + " is locked.");
-			}
-			if (loginUser.isCredentialsExpired()) {
-				throw new ExpiredCredentialsException("The credentials for user: " + username + " are expired.");
-			}
-			authInfo = new SimpleAuthenticationInfo(userToken.getUsername(), userToken.getPassword(), "basic");
+		} else if(loginUser.checkPassword(password))
+			{
+				if (loginUser.isAccountLocked()) {
+					throw new LockedAccountException("Account for user: " + username + " is locked.");
+				}
+				if (loginUser.isCredentialsExpired()) {
+					throw new ExpiredCredentialsException("The credentials for user: " + username + " are expired.");
+				}
+				authInfo = new SimpleAuthenticationInfo(userToken.getUsername(), userToken.getPassword(), "basic");
 		}
 
 		return authInfo;

@@ -214,7 +214,7 @@ public class VisualizationNVD3 {
 
 	public Object onActivate(final Course course) {
 		this.logger.debug("--- Bin im ersten onActivate");
-		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourses();
+		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourseIds();
 		if ((allowedCourses != null) && (course != null) && (course.getCourseId() != null)
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
@@ -232,7 +232,7 @@ public class VisualizationNVD3 {
 
 	public Object onActivate() {
 		this.logger.debug("--- Bin im zweiten onActivate");
-		return true;
+		return Explorer.class;
 	}
 
 	public Course onPassivate() {
@@ -262,7 +262,7 @@ public class VisualizationNVD3 {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
-		this.courseIds = this.userWorker.getCurrentUser().getMyCourses();
+		this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {

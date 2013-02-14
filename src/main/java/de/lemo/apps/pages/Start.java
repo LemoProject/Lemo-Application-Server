@@ -16,6 +16,9 @@ import org.apache.tapestry5.SymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.services.PageService;
 import org.tynamo.security.services.SecurityService;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
+import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 
 /**
  * Start page of application test.
@@ -45,6 +48,9 @@ public class Start {
 
 	@Inject
 	private Messages messages;
+	
+	@Inject
+	private Initialisation init;
 
 	@Inject
 	private SecurityService securityService;
@@ -89,18 +95,32 @@ public class Start {
 			final Subject currentUser = this.securityService.getSubject();
 
 			if (currentUser == null) {
-				throw new IllegalStateException("Subject can't be null");
+				throw new IllegalStateException("Error during login. Can't obtain user from security service.");
 			}
 
 			final UsernamePasswordToken token = new UsernamePasswordToken(this.username, this.password);
 			this.logger.info("Prepare Logintoken. Username: " + this.username);
 
+			ResultListLongObject result = init.identifyUserName(this.username);
+			
+			if (result  != null && result.getElements()!=null && result.getElements().size() > 0) {
+				
+				logger.debug("Corresponding LeMo user ID : "+result.getElements().get(result.getElements().size()-1));
+				
+			} else logger.debug("No matching user found");
+				
+			
 			currentUser.login(token);
 
 		} catch (final AuthenticationException ex) {
 			this.logger.info("Login unsuccessful.");
 			this.loginForm.recordError(this.messages.get("error.login"));
 			this.alertManager.info("Login or password not correct.");
+			return null;
+		} catch (RestServiceCommunicationException e) {
+			this.logger.info("Login unsuccessful.");
+			this.loginForm.recordError(this.messages.get("error.login"));
+			this.alertManager.info("Login server not available at the moment. Please try again later.");
 			return null;
 		}
 

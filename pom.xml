@@ -199,11 +199,10 @@
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
-			<version>0.4.3</version>
+			<version>0.4.6</version>
 		</dependency>
 
-
-		<dependency>
+  		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-hibernate-seedentity</artifactId>
 			<version>0.1.0</version>

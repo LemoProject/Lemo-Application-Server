@@ -111,6 +111,7 @@ public interface Analysis {
 			List<Long> courses,
 			List<Long> users,
 			List<Long> quizzes,
+			Long resolution,
 			Long startTime,
 			Long endTime);
 

@@ -34,6 +34,7 @@ public class CourseDAOImpl implements CourseDAO {
 		}
 		final Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.in("courseId", user.getMyCourses()));
+		criteria.add(Restrictions.eq("needUpdate", false));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
 			return new ArrayList<Course>();
@@ -42,7 +43,7 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 
 	public List<Course> findFavoritesByOwner(final User user) {
-		if (user.getMyCourses().isEmpty()) {
+		if (user == null || user.getMyCourses() == null || user.getMyCourses().isEmpty()) {
 			return new ArrayList<Course>();
 		}
 		final Criteria criteria = this.session.createCriteria(Course.class);
@@ -103,22 +104,6 @@ public class CourseDAOImpl implements CourseDAO {
 			return null;
 		}
 		return results.get(0);
-	}
-
-	public void toggleFavorite(final Long id) {
-		System.out.println("CourseId:" + id);
-		final Course favCourse = this.getCourse(id);
-		Boolean favStatus = favCourse.getFavorite();
-		System.out.println("FavStatus:" + favStatus);
-		if (favStatus == null) {
-			favStatus = true;
-		} else {
-			favStatus = !favStatus;
-		}
-		System.out.println("FavStatus2:" + favStatus);
-		favCourse.setFavorite(favStatus);
-		System.out.println("FavStatus3:" + favCourse.getFavorite());
-		this.session.update(favCourse);
 	}
 
 	public void save(final Course course) {

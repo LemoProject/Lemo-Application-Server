@@ -25,9 +25,6 @@ public interface CourseDAO {
 	public Course getCourseByDMSId(Long id);
 
 	@CommitAfter
-	public void toggleFavorite(Long id);
-
-	@CommitAfter
 	public void save(Course course);
 
 	@CommitAfter

@@ -167,10 +167,17 @@ public class AppModule {
 	}
 
 	public static void contributeSeedEntity(final OrderedConfiguration<Object> configuration) {
-		final List<User> userImports = ServerConfiguration.getInstance().getUserImports();
+		/*final List<User> userImports = ServerConfiguration.getInstance().getUserImports();
 		for (final User user : userImports) {
 			configuration.add(user.getUsername(), user);
-		}
+		}*/
+		
+		User admin = new User();
+		admin.setUsername("admin");
+		admin.setPassword("lemolemo");
+		admin.setEmail("admin@localhost.com");
+		admin.setFullname("Administrator");
+		configuration.add("admin", admin);
 	}
 
 	/**

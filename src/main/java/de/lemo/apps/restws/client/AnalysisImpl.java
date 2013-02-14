@@ -358,6 +358,7 @@ public class AnalysisImpl implements Analysis {
 				final List<Long> courses,
 				final List<Long> users,
 				final List<Long> quizzes,
+				final Long resolution,
 				final Long startTime,
 				final Long endTime) {
 		this.logger.debug("Starting Performance Cumulative Analysis ... ");
@@ -368,7 +369,7 @@ public class AnalysisImpl implements Analysis {
 				final QPerformanceBoxPlot qPerformanceBoxPlot = ProxyFactory
 						.create(QPerformanceBoxPlot.class, AnalysisImpl.QUESTIONS_BASE_URL);
 				if (qPerformanceBoxPlot != null) {
-					final String result = qPerformanceBoxPlot.compute(courses, users, quizzes, startTime, endTime);
+					final String result = qPerformanceBoxPlot.compute(courses, users, quizzes, resolution, startTime, endTime);
 					this.logger.debug("Performance Cumulative result: " + result);
 					return result;
 				}

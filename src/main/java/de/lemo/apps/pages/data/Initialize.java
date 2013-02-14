@@ -41,7 +41,7 @@ public class Initialize {
 
 		final User user = this.ud.getUser(this.getUserName());
 
-		final List<Long> userCourses = user.getMyCourses();
+		final List<Long> userCourses = user.getMyCourseIds();
 		if (userCourses != null) {
 			for (int i = 0; i < userCourses.size(); i++) {
 

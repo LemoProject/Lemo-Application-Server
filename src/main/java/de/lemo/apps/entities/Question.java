@@ -1,11 +1,13 @@
 package de.lemo.apps.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement(name = "question")
+@Table(name = "Question")
 public class Question extends AbstractEntity {
 
 	private String name;

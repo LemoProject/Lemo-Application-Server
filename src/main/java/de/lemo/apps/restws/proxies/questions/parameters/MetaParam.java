@@ -14,6 +14,7 @@ public interface MetaParam {
 	public static final String START_TIME = "start";
 	public static final String TYPES = "types";
 	public static final String USER_IDS = "uid";
+	public static final String USER_NAME = "uname";
 	public static final String MIN_SUP = "min_sup";
 	public static final String SESSION_WISE = "session_wise";
 	public static final String MIN_LENGTH = "min_length";
@@ -22,5 +23,6 @@ public interface MetaParam {
 	public static final String MAX_INTERVAL = "max_interval";
 	public static final String MAX_WHOLE_INTERVAL = "max_whole_interval";
 	public static final String MIN_WHOLE_INTERVAL = "min_whole_interval";
+	
 
 }

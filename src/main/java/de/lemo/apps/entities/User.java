@@ -1,68 +1,77 @@
 package de.lemo.apps.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Sha1Hash;
+import org.apache.shiro.util.ByteSource;
 import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Email;
 
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 public class User extends AbstractEntity {
 
 	private static final long serialVersionUID = -2284587022138077470L;
+	
+	private Collection<Course> myCourses = new TreeSet<Course>();
+	
+	private Collection<Course> favoriteCourses = new TreeSet<Course>();
+	
+	private Collection<Course> myWidgets = new TreeSet<Course>();
 
-	public static enum Role {
-		enduser(1),
-		admin(5);
-
-		private int weight;
-
-		Role(final int weight) {
-			this.weight = weight;
-		}
-
-		public int weight() {
-			return this.weight;
-		}
-	}
-
-	@NaturalId
-	@Column(nullable = false, unique = true)
-	// @NotNull
-	// @Size(min = 3, max = 15)
+	//@NaturalId
+	//@Column(nullable = false, unique = true)
+	//@NotNull
+	//@Size(min = 3, max = 15)
 	private String username;
 
-	@Column(nullable = false)
-	// @NotNull
-	// @Size(min = 3, max = 50)
+	//@Column(nullable = false)
+	//@NotNull
+	//@Size(min = 3, max = 50)
 	private String fullname;
 
-	@Column(nullable = false)
-	// @NotNull
-	// @Email
+	//@Column(nullable = false)
+	//@NotNull
+	//@Email
 	private String email;
 
-	@Column(nullable = false)
-	// @Size(min = 3, max = 12)
-	// @NotNull
+	//@Column(nullable = false)
+	//@Size(min = 5, max = 25)
+	//@NotNull
 	private String password;
+	
+	private String encryptedPassword;
 
 	private boolean accountLocked;
 
 	private boolean credentialsExpired;
 
-	private Set<Role> roles = new HashSet<Role>();
+	private Set<RoleEnum> roles = new HashSet<RoleEnum>();
 
 	private byte[] passwordSalt;
-
-	private List<Long> myCourses;
 
 	private Long widget1;
 
@@ -133,12 +142,43 @@ public class User extends AbstractEntity {
 		return this.fullname;
 	}
 
+	@Transient
 	public String getPassword() {
-		return this.password;
+		
+		return "";
 	}
 
-	public void setPassword(final String password) {
-		this.password = password;
+	public void setPassword(final String newPassword) {
+		if (newPassword != null && !newPassword.equals(this.encryptedPassword) && !"".equals(newPassword)) {
+			ByteSource saltSource = new SecureRandomNumberGenerator().nextBytes();
+			this.passwordSalt = saltSource.getBytes();
+			this.encryptedPassword = new Sha1Hash(newPassword, saltSource).toString();
+		}
+	}
+	
+	/**
+	 * @return the encryptedPassword
+	 */
+	@NonVisual
+	public String getEncryptedPassword() {
+		return encryptedPassword;
+	}
+
+	/**
+	 * @param encryptedPassword the encryptedPassword to set
+	 */
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
+	}
+
+	@NonVisual
+	@Column(length = 128)
+	public byte[] getPasswordSalt() {
+		return passwordSalt;
+	}
+	
+	public void setPasswordSalt(byte[] passwordSalt) {
+		this.passwordSalt = passwordSalt;
 	}
 
 	public boolean isAccountLocked() {
@@ -157,27 +197,70 @@ public class User extends AbstractEntity {
 		this.credentialsExpired = credentialsExpired;
 	}
 
-	public void setRoles(final Set<Role> roles) {
+	public void setRoles(final Set<RoleEnum> roles) {
 		this.roles = roles;
 	}
 
-	@CollectionOfElements(targetElement = Role.class)
-	public Set<Role> getRoles() {
+	//@Enumerated(EnumType.STRING)
+	@CollectionOfElements(targetElement = RoleEnum.class)
+	public Set<RoleEnum> getRoles() {
 		return this.roles;
 	}
 
-	public void setMyCourses(final List<Long> myCourses) {
+	public void setMyCourses(final Collection<Course> myCourses) {
 		this.myCourses = myCourses;
 	}
 
-	@CollectionOfElements(targetElement = Long.class)
-	public List<Long> getMyCourses() {
+	@NonVisual
+	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}) 
+	public Collection<Course> getMyCourses() {
 		return this.myCourses;
+	}
+	
+	public void setFavoriteCourses(final Collection<Course> favoriteCourses) {
+		this.favoriteCourses = favoriteCourses;
+	}
+
+	@NonVisual
+	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}) 
+	public Collection<Course> getFavoriteCourses() {
+		return this.favoriteCourses;
+	}
+	
+	/**
+	 * @return the myWidgets
+	 */
+	@NonVisual
+	@OneToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
+	@Cascade({org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+	@JoinColumn(name="widget_id")
+	@IndexColumn(name="index_col")
+	public Collection<Course> getMyWidgets() {
+		return myWidgets;
+	}
+
+	/**
+	 * @param myWidgets the myWidgets to set
+	 */
+	public void setMyWidgets(Collection<Course> myWidgets) {
+		this.myWidgets = myWidgets;
+	}
+
+	@Transient
+	@NonVisual
+	public List<Long> getMyCourseIds() {
+		List<Long> courseIds = new ArrayList<Long>();
+		Iterator<Course> it = this.myCourses.iterator();
+		while (it.hasNext()){
+			courseIds.add(it.next().getCourseId());
+		}
+		return courseIds;
 	}
 
 	/**
 	 * @return the widget1
 	 */
+	@NonVisual
 	public Long getWidget1() {
 		return this.widget1;
 	}
@@ -186,7 +269,6 @@ public class User extends AbstractEntity {
 	 * @param widget1
 	 *            the widget1 to set
 	 */
-	@NonVisual
 	public void setWidget1(final Long widget1) {
 		this.widget1 = widget1;
 	}
@@ -194,6 +276,7 @@ public class User extends AbstractEntity {
 	/**
 	 * @return the widget2
 	 */
+	@NonVisual
 	public Long getWidget2() {
 		return this.widget2;
 	}
@@ -202,7 +285,6 @@ public class User extends AbstractEntity {
 	 * @param widget2
 	 *            the widget2 to set
 	 */
-	@NonVisual
 	public void setWidget2(final Long widget2) {
 		this.widget2 = widget2;
 	}
@@ -210,6 +292,7 @@ public class User extends AbstractEntity {
 	/**
 	 * @return the widget3
 	 */
+	@NonVisual
 	public Long getWidget3() {
 		return this.widget3;
 	}
@@ -218,7 +301,6 @@ public class User extends AbstractEntity {
 	 * @param widget3
 	 *            the widget3 to set
 	 */
-	@NonVisual
 	public void setWidget3(final Long widget3) {
 		this.widget3 = widget3;
 	}
@@ -235,6 +317,15 @@ public class User extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return this.username == null ? 0 : this.username.hashCode();
+	}
+	
+	@Transient
+	public Boolean checkPassword(String password){
+		ByteSource saltSource = ByteSource.Util.bytes(this.getPasswordSalt()); 
+		String givenPassword = new Sha1Hash(password, saltSource).toString();
+		if(givenPassword != null && givenPassword.equals(this.encryptedPassword))
+			return true;
+	    return false;
 	}
 
 }

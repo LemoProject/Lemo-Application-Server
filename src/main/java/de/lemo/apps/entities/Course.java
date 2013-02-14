@@ -2,7 +2,9 @@ package de.lemo.apps.entities;
 
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.DataType;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import de.lemo.apps.restws.entities.CourseObject;
 
@@ -32,7 +34,7 @@ import de.lemo.apps.restws.entities.CourseObject;
  */
 
 @Entity
-@Table(name = "course")
+@Table(name = "Course")
 public class Course extends AbstractEntity {
 
 	private static final long serialVersionUID = -5156611987477622933L;
@@ -44,10 +46,18 @@ public class Course extends AbstractEntity {
 	private Date firstRequestDate;
 	private Long maxParticipants;
 	private Long enroledParticipants;
-	private Boolean favorite;
+	private Boolean needUpdate;
+	//private Boolean favorite;
 
 	@Inject
 	public Course() {
+	}
+	
+	public Course(final Long courseId){
+		if(courseId != null){
+			this.courseId = courseId;
+			this.needUpdate = true;
+		}
 	}
 
 	public Course(final CourseObject courseObject) {
@@ -63,6 +73,7 @@ public class Course extends AbstractEntity {
 			this.enroledParticipants = courseObject.getParticipants();
 			this.enroledParticipants = 1L;
 			this.courseId = courseObject.getId();
+			this.needUpdate = false;
 		}
 	}
 
@@ -74,6 +85,7 @@ public class Course extends AbstractEntity {
 		this.firstRequestDate = begin;
 		this.maxParticipants = maxParticipants;
 		this.enroledParticipants = enroledParticipants;
+		this.needUpdate = false;
 	}
 
 	/**
@@ -117,6 +129,8 @@ public class Course extends AbstractEntity {
 	 * @param courseDescription
 	 *            the courseDescription to set
 	 */
+	@DataType(value="longtext")
+	@Lob
 	public void setCourseDescription(final String courseDescription) {
 		this.courseDescription = courseDescription;
 	}
@@ -183,17 +197,31 @@ public class Course extends AbstractEntity {
 
 	/**
 	 * @return the isFavorite
-	 */
+	 *//*
 	public Boolean getFavorite() {
 		return this.favorite;
 	}
 
-	/**
+	*//**
 	 * @param isFavorite
 	 *            the isFavorite to set
-	 */
+	 *//*
 	public void setFavorite(final Boolean isFavorite) {
 		this.favorite = isFavorite;
+	}*/
+
+	/**
+	 * @return the needUpdate
+	 */
+	public Boolean getNeedUpdate() {
+		return needUpdate;
+	}
+
+	/**
+	 * @param needUpdate the needUpdate to set
+	 */
+	public void setNeedUpdate(Boolean needUpdate) {
+		this.needUpdate = needUpdate;
 	}
 
 	@Override

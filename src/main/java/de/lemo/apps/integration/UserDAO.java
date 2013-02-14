@@ -8,6 +8,9 @@ public interface UserDAO {
 	public boolean doExist(User user);
 
 	public User getUser(String username);
+	
+	@CommitAfter
+	public void toggleFavoriteCourse(final Long courseId, final Long userId);
 
 	@CommitAfter
 	public void update(User user);
