@@ -41,7 +41,7 @@
    *          array of column names used as header record
    */
   dataExport.createCSV = function(data, recordCount, converter, columnNames) {
-    var result = '';
+    var result = '\uFEFF'; // Excel needs a BOM
     // header record
     if (columnNames && columnNames.length) {
       result += createHeader(columnNames);
@@ -57,8 +57,8 @@
 
 
   function createModalExportOptions(selector, exportFunction, data, chart) {
-    // TODO recreate as reusable tml template
-    // TODO Use better file name, like course name and current date
+    // TODO recreate as reusable tml template?
+    // TODO Use better file name, like course + current date
     var button = $(selector);
     var exportModal = $('<div class="modal hide fade">' + '<div class="modal-header"><h3>CSV Export</h3></div>'
         + '<div class="modal-body">' + '<p>Choose the data to download as CSV file.</p>'
@@ -148,10 +148,10 @@
     }
 
     // provide x axis value, it is the same for all series
-    header[0] = "Timestamp";
+    header[0] = "Date";
     converter[0] = function(d, i) {
       var timestamp = getX(d[0].values[i]);
-      var format = d3.time.format("%Y-%m-%d %H:%M:%S");
+      var format = d3.time.format("%Y-%m-%d");
       return format(new Date(timestamp));
     }
 
