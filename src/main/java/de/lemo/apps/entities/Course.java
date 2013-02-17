@@ -48,6 +48,7 @@ public class Course extends AbstractEntity {
 	private Long maxParticipants;
 	private Long enroledParticipants;
 	private Boolean needUpdate;
+	private Long dataVersion;
 	//private Boolean favorite;
 
 	@Inject
@@ -63,27 +64,7 @@ public class Course extends AbstractEntity {
 
 	public Course(final CourseObject courseObject) {
 		if (courseObject != null) {
-			this.courseName = courseObject.getTitle();
-			this.courseDescription = courseObject.getDescription();
-			
-			if(this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1){
-				final int MAX_LENGTH = 35;
-				int length = this.courseDescription.length();
-				if(length>MAX_LENGTH) length = MAX_LENGTH;
-				this.courseName = this.courseDescription.substring(0, length-1);
-			}
-			
-			if (courseObject.getFirstRequest() != null) {
-				this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
-			}
-			
-			if (courseObject.getLastRequest() != null) {
-				this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
-			}
-			this.enroledParticipants = courseObject.getParticipants();
-			this.enroledParticipants = 1L;
-			this.courseId = courseObject.getId();
-			this.needUpdate = false;
+			updateCourse(courseObject);
 		}
 	}
 
@@ -234,6 +215,22 @@ public class Course extends AbstractEntity {
 		this.needUpdate = needUpdate;
 	}
 
+	
+	/**
+	 * @return the version
+	 */
+	public Long getDataVersion() {
+		return dataVersion;
+	}
+
+	
+	/**
+	 * @param version the version to set
+	 */
+	public void setDataVersion(Long dataVersion) {
+		this.dataVersion = dataVersion;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		try {
@@ -246,5 +243,29 @@ public class Course extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return this.courseName == null ? 0 : this.courseName.hashCode();
+	}
+	
+	public void updateCourse(CourseObject courseObject) {
+		this.courseName = courseObject.getTitle();
+		this.courseDescription = courseObject.getDescription();
+		
+		if(this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1){
+			final int MAX_LENGTH = 35;
+			int length = this.courseDescription.length();
+			if(length>MAX_LENGTH) length = MAX_LENGTH;
+			this.courseName = this.courseDescription.substring(0, length-1);
+		}
+		
+		if (courseObject.getFirstRequest() != null) {
+			this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
+		}
+		
+		if (courseObject.getLastRequest() != null) {
+			this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
+		}
+		this.enroledParticipants = courseObject.getParticipants();
+		this.enroledParticipants = 1L;
+		this.courseId = courseObject.getId();
+		this.needUpdate = false;
 	}
 }

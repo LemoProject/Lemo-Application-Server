@@ -84,6 +84,19 @@ public class CourseDAOImpl implements CourseDAO {
 		}
 		return true;
 	}
+	
+	public boolean courseNeedsUpdate(final Long courseId) {
+		Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.conjunction()
+				.add(Restrictions.eq("courseId", courseId))
+				.add(Restrictions.eq("needUpdate", true))
+		);
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return false;
+		}
+		return true;
+	}
 
 	public Course getCourse(final String coursename) {
 		Criteria criteria = this.session.createCriteria(Course.class);
@@ -125,6 +138,17 @@ public class CourseDAOImpl implements CourseDAO {
 		return course;
 	}
 
+	public void update(final CourseObject newCourse) {
+		if(newCourse!=null){
+			logger.debug("New Course:"+newCourse.getId());
+			Course oldCourse = this.getCourseByDMSId(newCourse.getId());
+			if (oldCourse != null){
+				oldCourse.updateCourse(newCourse);
+				this.session.update(oldCourse);
+			}
+		}
+	}
+	
 	public void update(final Course course) {
 		this.session.update(course);
 	}

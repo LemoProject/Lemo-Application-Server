@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
@@ -33,6 +34,9 @@ public class Initialize {
 
 	@Inject
 	UserDAO ud;
+	
+	@Inject
+	Logger logger;
 
 	public String getUserName() {
 		return this.request.getRemoteUser();
@@ -46,17 +50,31 @@ public class Initialize {
 		final List<Long> userCourses = user.getMyCourseIds();
 		if (userCourses != null) {
 			for (int i = 0; i < userCourses.size(); i++) {
+				
+				logger.debug("Looking if course ID:"+userCourses.get(i)+" needs update.");
 
-				if (!this.courseDAO.doExistByForeignCourseId(userCourses.get(i))) {
-					CourseObject courseObject = null;
+//				if (!this.courseDAO.doExistByForeignCourseId(userCourses.get(i))) {
+//					CourseObject courseObject = null;
+//					try {
+//						courseObject = this.init.getCourseDetails(userCourses.get(i));
+//					} catch (RestServiceCommunicationException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					if (courseObject != null)
+//						this.courseDAO.save(courseObject);
+//				} else
+				if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
+					CourseObject updateObject = null;
 					try {
-						courseObject = this.init.getCourseDetails(userCourses.get(i));
+						updateObject = this.init.getCourseDetails(userCourses.get(i));
 					} catch (RestServiceCommunicationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (courseObject != null)
-						this.courseDAO.save(courseObject);
+					if (updateObject != null)
+						logger.debug("ID of updated object is: "+ updateObject.getId()+ "  ----  "+updateObject.getTitle()+ "  ----  "+ updateObject.getDescription() );
+						this.courseDAO.update(updateObject);
 				}
 			}
 		// ResultListCourseObject courses = init.getCoursesDetails(user.getMyCourses());

@@ -24,6 +24,8 @@ public interface CourseDAO {
 	boolean doExist(Course course);
 
 	boolean doExistByForeignCourseId(Long courseId);
+	
+	boolean courseNeedsUpdate(final Long courseId);
 
 	Course getCourse(String coursename);
 
@@ -36,6 +38,9 @@ public interface CourseDAO {
 
 	@CommitAfter
 	Course save(CourseObject course);
+	
+	@CommitAfter
+	void update(CourseObject newCourse);
 
 	@CommitAfter
 	void update(Course course);

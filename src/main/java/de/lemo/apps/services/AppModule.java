@@ -1,6 +1,8 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -32,6 +34,7 @@ import de.lemo.apps.application.StatisticWorkerImpl;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.UserWorkerImpl;
 import de.lemo.apps.application.config.ServerConfiguration;
+import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.application.VisualisationHelperWorkerImpl;
@@ -171,11 +174,32 @@ public class AppModule {
 			configuration.add(user.getUsername(), user);
 		}*/
 		
+		Course course0 = new Course();
+		course0.setCourseId(112100L);
+		course0.setNeedUpdate(true);
+		//configuration.add("course0", course0);
+		
+		Course course1 = new Course();
+		course1.setCourseId(11476L);
+		course1.setNeedUpdate(true);
+		configuration.add("course1", course1);
+		
+		Course course2 = new Course();
+		course2.setCourseId(112200L);
+		course2.setNeedUpdate(true);
+		configuration.add("course2", course2);
+		
+		List<Course> courseList = new ArrayList<Course>(); 
+		//courseList.add(course0);
+		courseList.add(course1);
+		courseList.add(course2);
+		
 		User admin = new User();
 		admin.setUsername("admin");
 		admin.setPassword("lemolemo");
 		admin.setEmail("admin@localhost.com");
 		admin.setFullname("Administrator");
+		admin.setMyCourses(courseList);
 		configuration.add("admin", admin);
 	}
 
