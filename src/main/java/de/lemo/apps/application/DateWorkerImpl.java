@@ -68,8 +68,8 @@ public class DateWorkerImpl implements DateWorker {
 	 * @return A String object in date notation
 	 */
 	public String getLocalizedDate(final Date date, final Locale currentLocale) {
-		final SimpleDateFormat df_date = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
-		return df_date.format(date);
+		final SimpleDateFormat dfDate = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
+		return dfDate.format(date);
 	}
 
 	/**
@@ -80,8 +80,8 @@ public class DateWorkerImpl implements DateWorker {
 	 * @return A String object in Date + Time notation
 	 */
 	public String getLocalizedDateTime(final Date date, final Locale currentLocale) {
-		final SimpleDateFormat df_date = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
-		return df_date.format(date);
+		final SimpleDateFormat dfDate = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
+		return dfDate.format(date);
 	}
 
 	public String getCalendarIconPath() {
@@ -95,7 +95,7 @@ public class DateWorkerImpl implements DateWorker {
 			 * Force jquery ui datepicker to use short month names of the current Java version. Datepicker uses the
 			 * correct
 			 * new ones, though on the backend it's depending on the Java version. The short name for march in german
-			 * changed from 'Mrz' to 'MŠr' in Java 8 for example. Don't mind the 13th month, datepicker ignores it
+			 * changed from 'Mrz' to 'Mï¿½r' in Java 8 for example. Don't mind the 13th month, datepicker ignores it
 			 * anyway.
 			 */
 			monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();

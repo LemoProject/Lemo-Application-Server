@@ -353,15 +353,15 @@ public class VisualizationLOTreeMap {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
-		return df_date.format(inputDate);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		return dfDate.format(inputDate);
 	}
 
 	public String getFirstRequestDate() {
-		return this.getLocalizedDate(this.beginDate);// .course.getFirstRequestDate());
+		return this.getLocalizedDate(this.beginDate);
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// .course.getLastRequestDate());
+		return this.getLocalizedDate(this.endDate);
 	}
 }

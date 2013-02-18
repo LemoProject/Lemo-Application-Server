@@ -343,8 +343,8 @@ public class VisualizationLONVD3 {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
-		return df_date.format(inputDate);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		return dfDate.format(inputDate);
 	}
 
 	public String getFirstRequestDate() {

@@ -58,8 +58,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
 	
-	final int RESOLUTION_MAX = 500;
-	final int RESOLUTION_BASIC_MULTIPLIER = 4;
+	private final int resolutionMax = 500;
+	final int resolutionBasicMultiplier = 4;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -312,7 +312,7 @@ public class VisualizationNVD3 {
 		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
 		
-		this.resolutionComputed = RESOLUTION_MAX;
+		this.resolutionComputed = resolutionMax;
 		
 		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
 				beginStamp, endStamp, this.resolutionComputed, types);
@@ -428,8 +428,8 @@ public class VisualizationNVD3 {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
-		return df_date.format(inputDate);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		return dfDate.format(inputDate);
 	}
 
 	public String getFirstRequestDate() {

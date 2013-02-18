@@ -8,7 +8,6 @@
 package de.lemo.apps.entities;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -23,8 +22,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha1Hash;
 import org.apache.shiro.util.ByteSource;
@@ -35,7 +32,6 @@ import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(name = "User")

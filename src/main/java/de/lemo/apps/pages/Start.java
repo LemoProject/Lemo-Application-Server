@@ -41,12 +41,12 @@ public class Start {
 	@Inject
 	@Path("../images/Nutzungsanalyse.png")
 	@Property
-	private Asset carussel_one;
+	private Asset carusselOne;
 
 	@Inject
 	@Path("../images/Pfadvisualisierung.png")
 	@Property
-	private Asset carussel_two;
+	private Asset carusselTwo;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
