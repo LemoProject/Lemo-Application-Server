@@ -16,6 +16,6 @@ public interface QuestionDAO {
 	@CommitAfter
 	Boolean doSave(Question question) throws ObjectNotSavedException;
 
-	Question doGet(Long Id);
+	Question doGet(Long id);
 
 }

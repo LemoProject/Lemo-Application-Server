@@ -1,8 +1,12 @@
+/apps/bin
 /apps/run.cmd
-/src/main/resources/hibernate.cfg.xml
 /apps/src/main/resources/hibernate.cfg.xml
 /apps/target
-/apps/bin
-.gitignore
-/target
 /bin
+.gitignore
+.gitignore~
+log.txt
+.project
+.settings/
+/src/main/resources/hibernate.cfg.xml
+/target

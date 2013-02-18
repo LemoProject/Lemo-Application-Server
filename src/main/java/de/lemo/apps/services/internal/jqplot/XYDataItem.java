@@ -34,12 +34,12 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 	/**
 	 * The x-value.
 	 */
-	private Number _xValue;
+	private Number xValue;
 
 	/**
 	 * The y-value.
 	 */
-	private Number _yValue;
+	private Number yValue;
 
 	/**
 	 * Constructs a new data item.
@@ -53,8 +53,8 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 		assert xValue != null;
 		assert yValue != null;
 
-		this._xValue = xValue;
-		this._yValue = yValue;
+		this.xValue = xValue;
+		this.yValue = yValue;
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 	 * @return The x-value.
 	 */
 	public Number getXValue() {
-		return this._xValue;
+		return this.xValue;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 	 * @return The y-value.
 	 */
 	public Number getYValue() {
-		return this._yValue;
+		return this.yValue;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 	 */
 	public void setYValue(final Number yValue) {
 		assert yValue != null;
-		this._yValue = yValue;
+		this.yValue = yValue;
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 	 */
 	public void setXValue(final Number xValue) {
 		assert xValue != null;
-		this._xValue = xValue;
+		this.xValue = xValue;
 	}
 
 	/**
@@ -115,10 +115,10 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 
 		final XYDataItem that = (XYDataItem) obj;
 
-		if (this._xValue != null ? !this._xValue.equals(that._xValue) : that._xValue != null) {
+		if (this.xValue != null ? !this.xValue.equals(that.xValue) : that.xValue != null) {
 			return false;
 		}
-		if (this._yValue != null ? !this._yValue.equals(that._yValue) : that._yValue != null) {
+		if (this.yValue != null ? !this.yValue.equals(that.yValue) : that.yValue != null) {
 			return false;
 		}
 
@@ -133,8 +133,8 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 	@Override
 	public int hashCode() {
 		int result;
-		result = (this._xValue != null ? this._xValue.hashCode() : 0);
-		result = 31 * result + (this._yValue != null ? this._yValue.hashCode() : 0);
+		result = (this.xValue != null ? this.xValue.hashCode() : 0);
+		result = 31 * result + (this.yValue != null ? this.yValue.hashCode() : 0);
 		return result;
 	}
 
@@ -157,7 +157,7 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 		// -------------------------------------------------------
 		if (o1 instanceof XYDataItem) {
 			final XYDataItem dataItem = (XYDataItem) o1;
-			final double compare = this._xValue.doubleValue() - dataItem.getXValue().doubleValue();
+			final double compare = this.xValue.doubleValue() - dataItem.getXValue().doubleValue();
 			if (compare > 0.0) {
 				result = 1;
 			} else {
@@ -180,10 +180,10 @@ public class XYDataItem implements Serializable, Comparable, DataJqPlotSerialize
 
 	@Override
 	public String toString() {
-		return String.format("[%s,%s]", this._xValue.toString(), this._yValue.toString());
+		return String.format("[%s,%s]", this.xValue.toString(), this.yValue.toString());
 	}
 
 	public JSONArray toJSONArray() {
-		return new JSONArray(this._xValue, this._yValue);
+		return new JSONArray(this.xValue, this.yValue);
 	}
 }

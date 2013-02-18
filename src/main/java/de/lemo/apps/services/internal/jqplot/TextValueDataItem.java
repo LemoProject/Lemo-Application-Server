@@ -34,12 +34,12 @@ public class TextValueDataItem implements Serializable, DataJqPlotSerializer {
 	/**
 	 * The text
 	 */
-	private String _text;
+	private String text;
 
 	/**
 	 * The value.
 	 */
-	private Number _value;
+	private Number value;
 
 	/**
 	 * Constructs a new data item.
@@ -53,8 +53,8 @@ public class TextValueDataItem implements Serializable, DataJqPlotSerializer {
 		assert text != null;
 		assert value != null;
 
-		this._text = text;
-		this._value = value;
+		this.text = text;
+		this.value = value;
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class TextValueDataItem implements Serializable, DataJqPlotSerializer {
 	 * @return The texr.
 	 */
 	public String getText() {
-		return this._text;
+		return this.text;
 	}
 
 	/**
@@ -72,18 +72,18 @@ public class TextValueDataItem implements Serializable, DataJqPlotSerializer {
 	 * @return The value.
 	 */
 	public Number getValue() {
-		return this._value;
+		return this.value;
 	}
 
 	/**
 	 * Sets the value for this data item.
 	 * 
-	 * @param Value
+	 * @param value
 	 *            the new value.
 	 */
-	public void setValue(final Number Value) {
-		assert Value != null;
-		this._value = Value;
+	public void setValue(final Number value) {
+		assert value != null;
+		this.value = value;
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class TextValueDataItem implements Serializable, DataJqPlotSerializer {
 	 */
 	public void setXValue(final String text) {
 		assert text != null;
-		this._text = text;
+		this.text = text;
 	}
 
 	/**
@@ -105,17 +105,17 @@ public class TextValueDataItem implements Serializable, DataJqPlotSerializer {
 	@Override
 	public int hashCode() {
 		int result;
-		result = (this._text != null ? this._text.hashCode() : 0);
-		result = 31 * result + (this._value != null ? this._value.hashCode() : 0);
+		result = (this.text != null ? this.text.hashCode() : 0);
+		result = 31 * result + (this.value != null ? this.value.hashCode() : 0);
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("[%s,%s]", this._text.toString(), this._value.toString());
+		return String.format("[%s,%s]", this.text.toString(), this.value.toString());
 	}
 
 	public JSONArray toJSONArray() {
-		return new JSONArray(this._text, this._value);
+		return new JSONArray(this.text, this.value);
 	}
 }

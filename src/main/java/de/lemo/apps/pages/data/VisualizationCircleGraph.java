@@ -120,7 +120,7 @@ public class VisualizationCircleGraph {
 
 	@Property
 	@Persist
-	Integer resolution;
+	private Integer resolution;
 
 	@Property
 	@Persist
@@ -241,7 +241,6 @@ public class VisualizationCircleGraph {
 
 		return this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp,
 				endStamp);
-		// return analysis.computeQFrequentPathBIDE(courseIds, null, 0.9, false, beginStamp, endStamp);
 	}
 
 	void setupRender() {
@@ -293,8 +292,8 @@ public class VisualizationCircleGraph {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
-		return df_date.format(inputDate);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		return dfDate.format(inputDate);
 	}
 
 	public String getFirstRequestDate() {

@@ -67,9 +67,11 @@ public class Course extends AbstractEntity {
 			this.courseDescription = courseObject.getDescription();
 			
 			if(this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1){
-				final int MAX_LENGTH = 35;
+				final int maxLength = 35;
 				int length = this.courseDescription.length();
-				if(length>MAX_LENGTH) length = MAX_LENGTH;
+				if(length>maxLength) {
+					length = maxLength;
+				}
 				this.courseName = this.courseDescription.substring(0, length-1);
 			}
 			
