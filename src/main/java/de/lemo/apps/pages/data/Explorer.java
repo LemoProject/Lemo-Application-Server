@@ -1,3 +1,10 @@
+/**
+	 * File Explorer.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.pages.data;
 
 import java.util.Calendar;
@@ -28,6 +35,7 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
@@ -97,6 +105,9 @@ public class Explorer {
 
 	@Inject
 	private CourseDAO courseDAO;
+	
+	@Inject
+	private UserDAO userDAO;
 
 	@Inject
 	private UserWorker userWorker;
@@ -177,9 +188,9 @@ public class Explorer {
 	public Course getCurrentCourse() {
 		if (this.initCourse != null) {
 			return this.initCourse;
-		} else {
+		} else if (this.getCourses() !=null && this.getCourses().size() > 0){
 			return this.getCourses().get(0);
-		}
+		} else return null;
 	}
 
 	// TODO Fix Problem with jqplot and zone updates
@@ -194,40 +205,48 @@ public class Explorer {
 	}
 
 	Object onActionFromFavorite(final Long id) {
-		this.courseDAO.toggleFavorite(id);
+		this.userDAO.toggleFavoriteCourse(id,this.userWorker.getCurrentUser().getId());
 		this.initCourse = this.courseDAO.getCourse(id);
 		return this;
 	}
 
 	public String getFirstRequestDate() {
-		return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().getFirstRequestDate(), this.currentLocale);
+		if(this.getCurrentCourse()!= null)
+			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().getFirstRequestDate(), this.currentLocale);
+		else return null;
 	}
 
 	public String getLastRequestDate() {
-		return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().getLastRequestDate(), this.currentLocale);
+		if(this.getCurrentCourse()!= null)
+			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().getLastRequestDate(), this.currentLocale);
+		else return null;
 	}
 
 	@Cached
 	public List getUsageAnalysisLastMonth() {
-
-		final Date endDate = this.getCurrentCourse().getLastRequestDate();
-		return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+		if(this.getCurrentCourse()!= null){
+			final Date endDate = this.getCurrentCourse().getLastRequestDate();
+			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+		} else return null;
 	}
 
 	// TODO Scheinbar greift ein Template Property noch auf diese Funktion zu ... auch wen dem nicht so sein sollte ->
 	// die korrekte Methode lautet ...LastMonth
 	@Cached
 	public List getUsageAnalysis() {
-		final Date endDate = this.getCurrentCourse().getLastRequestDate();
-		return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+		if(this.getCurrentCourse()!= null){
+			final Date endDate = this.getCurrentCourse().getLastRequestDate();
+			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+		} else return null;
 	}
 
 	@Cached
 	public List getUsageAnalysisOverall() {
-
-		final Date endDate = this.getCurrentCourse().getLastRequestDate();
-		final Date beginDate = this.getCurrentCourse().getFirstRequestDate();
-		return this.analysisWorker.usageAnalysis(this.course, beginDate, endDate, null);
+		if(this.getCurrentCourse()!= null){
+			final Date endDate = this.getCurrentCourse().getLastRequestDate();
+			final Date beginDate = this.getCurrentCourse().getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(this.course, beginDate, endDate, null);
+		} else return null;
 	}
 
 	public Long getAverageRequest(final List<List<XYDateDataItem>> dataItemList) {

@@ -1,10 +1,13 @@
 /**
- * 
- */
+	 * File QFrequentPathsBIDE.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.*;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,7 +23,7 @@ public interface QFrequentPathsBIDE {
 	@POST
 	@Path("frequentPaths")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String compute(
+	String compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courseIds,
 			@FormParam(MetaParam.USER_IDS) List<Long> userIds,
 			@FormParam(MetaParam.TYPES) List<String> types,

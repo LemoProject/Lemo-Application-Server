@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Course {
 
-	private Long Id;
+	private Long id;
 
 	private String title;
 
@@ -20,7 +20,7 @@ public class Course {
 	 * @return the id
 	 */
 	public Long getId() {
-		return this.Id;
+		return this.id;
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class Course {
 	 *            the id to set
 	 */
 	public void setId(final Long id) {
-		this.Id = id;
+		this.id = id;
 	}
 
 	/**

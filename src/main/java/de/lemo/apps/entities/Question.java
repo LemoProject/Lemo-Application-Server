@@ -1,12 +1,24 @@
+/**
+ 	 * File Question.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement(name = "question")
+@Table(name = "Question")
 public class Question extends AbstractEntity {
+
+	
+	private static final long serialVersionUID = 1402869189061923941L;
 
 	private String name;
 

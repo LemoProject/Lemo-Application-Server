@@ -1,3 +1,10 @@
+/**
+	 * File ServerConfiguration.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application.config;
 
 import java.io.InputStream;
@@ -80,7 +87,8 @@ public enum ServerConfiguration {
 		} else {
 			for (final UserConfig userConfig : userConfigurations.users) {
 				final User user = new User(userConfig.fullName, userConfig.username, userConfig.email, userConfig.password);
-				user.setMyCourses(userConfig.courses);
+				//TODO FIX Course import to match new database schema
+				//user.setMyCourses(userConfig.courses);
 				users.add(user);
 			}
 		}

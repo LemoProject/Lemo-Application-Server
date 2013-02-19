@@ -1,3 +1,10 @@
+/**
+	 * File Dashbaord.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.pages.data;
 
 import java.util.ArrayList;
@@ -49,9 +56,6 @@ public class Dashboard {
 
 	@Component(parameters = { "dataItems=usageAnalysisWidget3" })
 	private JqPlotLine chart3;
-
-	// @Component(parameters = {"dataItems=testPieData"})
-	// private JqPlotPie chart4 ;
 
 	@Inject
 	private Logger logger;
@@ -169,24 +173,6 @@ public class Dashboard {
 			this.widgetCourse3Id = this.widgetCourse3.getId();
 		}
 	}
-
-	// @Cached
-	// public List getTestPieData()
-	// {
-	// List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-	// List<TextValueDataItem> list1 = CollectionFactory.newList();
-	//      
-	// list1.add(new TextValueDataItem("Mozilla Firefox",12));
-	// list1.add(new TextValueDataItem("Google Chrome", 9));
-	// list1.add(new TextValueDataItem("Safari (Webkit)",14));
-	// list1.add(new TextValueDataItem("Internet Explorer", 16));
-	// list1.add(new TextValueDataItem("Opera", 2));
-	//
-	//      
-	// dataList.add(list1);
-	//      
-	// return dataList;
-	// }
 
 	@Property
 	@Persist

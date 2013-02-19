@@ -1,3 +1,10 @@
+/**
+	 * File DateWorker.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application;
 
 import java.util.Calendar;
@@ -7,14 +14,14 @@ import org.apache.tapestry5.json.JSONLiteral;
 
 public interface DateWorker {
 
-	public Integer daysBetween(Calendar startDate, Calendar endDate);
+	Integer daysBetween(Calendar startDate, Calendar endDate);
 
-	public Integer daysBetween(Date startDate, Date endDate);
+	Integer daysBetween(Date startDate, Date endDate);
 
-	public String getLocalizedDate(Date date, Locale locale);
+	String getLocalizedDate(Date date, Locale locale);
 
-	public String getLocalizedDateTime(Date date, Locale locale);
+	String getLocalizedDateTime(Date date, Locale locale);
 
-	public JSONLiteral getDatePickerParams(Locale locale);
+	JSONLiteral getDatePickerParams(Locale locale);
 
 }

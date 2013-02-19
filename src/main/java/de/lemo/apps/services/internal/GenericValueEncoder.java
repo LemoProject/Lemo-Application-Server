@@ -1,6 +1,10 @@
 /**
- * 
- */
+	 * File GenericValueEncoder.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.services.internal;
 
 import java.util.List;
@@ -8,9 +12,7 @@ import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.ioc.services.PropertyAdapter;
 
-/**
- * @author johndoe
- */
+
 public class GenericValueEncoder<T> implements ValueEncoder<T> {
 
 	private PropertyAdapter idFieldAdapter = null;

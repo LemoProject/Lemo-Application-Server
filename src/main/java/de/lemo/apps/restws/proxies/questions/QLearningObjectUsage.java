@@ -1,10 +1,12 @@
+/**
+	 * File QLearningObjectUsage.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.restws.proxies.questions;
 
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.COURSE_IDS;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.END_TIME;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.START_TIME;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.TYPES;
-import static de.lemo.apps.restws.proxies.questions.parameters.MetaParam.USER_IDS;
 import java.util.List;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -19,7 +21,7 @@ public interface QLearningObjectUsage {
 	@POST
 	@Path("learningobjectusage")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListResourceRequestInfo compute(
+	ResultListResourceRequestInfo compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courseIds,
 			@FormParam(MetaParam.USER_IDS) List<Long> userIds,
 			@FormParam(MetaParam.TYPES) List<String> types,

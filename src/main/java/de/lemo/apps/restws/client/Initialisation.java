@@ -2,18 +2,28 @@ package de.lemo.apps.restws.client;
 
 import java.util.Date;
 import java.util.List;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 
 public interface Initialisation {
+	
+	Boolean defaultConnectionCheck() throws RestServiceCommunicationException;
 
-	public Date getStartTime();
+	Date getStartTime() throws RestServiceCommunicationException;
 
-	public CourseObject getCourseDetails(Long id);
+	CourseObject getCourseDetails(Long id) throws RestServiceCommunicationException;
 
-	public ResultListCourseObject getCoursesDetails(List<Long> ids);
+	ResultListCourseObject getCoursesDetails(List<Long> ids) throws RestServiceCommunicationException;
 
-	public ResultListStringObject getRatedObjects(List<Long> courseIds);
+	ResultListStringObject getRatedObjects(List<Long> courseIds) throws RestServiceCommunicationException;
+	
+	ResultListLongObject identifyUserName(final String login) throws RestServiceCommunicationException;
+	
+	ResultListLongObject getUserCourses(Long userId) throws RestServiceCommunicationException;
+	
+	ResultListCourseObject getUserCourses(Long userId, Long amount, Long offset) throws RestServiceCommunicationException;
 
 }

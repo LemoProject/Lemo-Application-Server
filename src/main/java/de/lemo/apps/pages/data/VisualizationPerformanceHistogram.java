@@ -37,6 +37,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -168,7 +169,7 @@ public class VisualizationPerformanceHistogram {
 
 	public Object onActivate(final Course course) {
 		this.logger.debug("--- Bin im ersten onActivate");
-		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourses();
+		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourseIds();
 		if ((allowedCourses != null) && (course != null) && (course.getCourseId() != null)
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
@@ -219,7 +220,13 @@ public class VisualizationPerformanceHistogram {
 
 		final List<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.courseId);
-		final ResultListStringObject quizList = this.init.getRatedObjects(courseList);
+		ResultListStringObject quizList = null;
+		try {
+			quizList = this.init.getRatedObjects(courseList);
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 		final List<String> quizzesTitles = new ArrayList<String>();
@@ -295,7 +302,13 @@ public class VisualizationPerformanceHistogram {
 			// quizzesList.add(11114282L);
 			// quizzesList.add(11114861L);
 
-			final ResultListStringObject quizList = this.init.getRatedObjects(courseList);
+			ResultListStringObject quizList = null;
+			try {
+				quizList = this.init.getRatedObjects(courseList);
+			} catch (RestServiceCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 			final List<String> quizzesTitles = new ArrayList<String>();
@@ -445,15 +458,15 @@ public class VisualizationPerformanceHistogram {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
-		return df_date.format(inputDate);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		return dfDate.format(inputDate);
 	}
 
 	public String getFirstRequestDate() {
-		return this.getLocalizedDate(this.beginDate);// .course.getFirstRequestDate());
+		return this.getLocalizedDate(this.beginDate);
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// .course.getLastRequestDate());
+		return this.getLocalizedDate(this.endDate);
 	}
 }

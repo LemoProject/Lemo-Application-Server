@@ -1,3 +1,10 @@
+/**
+	 * File DateWorkerImpl.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application;
 
 import java.text.SimpleDateFormat;
@@ -12,16 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.slf4j.Logger;
 
-/**
- * @author Andreas Pursian
- */
 public class DateWorkerImpl implements DateWorker {
 
 	@Inject
 	private Messages messages;
-
-	@Inject
-	private Logger log;
 
 	private final AssetSource assetSource;
 
@@ -30,6 +31,7 @@ public class DateWorkerImpl implements DateWorker {
 	 */
 	public static final String DATE_FORMAT = "MMM dd, yyyy";
 	public static final String CALENDAR_ICON_PATH = "layout/images/glyphicons_045_calendar.png";
+	public static final int MILLISEC_MULTIPLIER = 1000;
 
 	public DateWorkerImpl(final Logger logger, final AssetSource assetSource) {
 		this.assetSource = assetSource;
@@ -47,13 +49,13 @@ public class DateWorkerImpl implements DateWorker {
 
 	public Integer daysBetween(final Date startDate, final Date endDate) {
 
-		final Calendar _startDate = Calendar.getInstance();
-		final Calendar _endDate = (Calendar) _startDate.clone();
-		_endDate.setTime(endDate);
-		_startDate.setTime(startDate);
+		final Calendar startDateTemp = Calendar.getInstance();
+		final Calendar endDateTemp = (Calendar) startDateTemp.clone();
+		endDateTemp.setTime(endDate);
+		startDateTemp.setTime(startDate);
 		Integer daysBetween = 0;
-		while (_startDate.before(_endDate)) {
-			_startDate.add(Calendar.DAY_OF_MONTH, 1);
+		while (startDateTemp.before(endDateTemp)) {
+			startDateTemp.add(Calendar.DAY_OF_MONTH, 1);
 			daysBetween++;
 		}
 		return daysBetween;
@@ -66,8 +68,8 @@ public class DateWorkerImpl implements DateWorker {
 	 * @return A String object in date notation
 	 */
 	public String getLocalizedDate(final Date date, final Locale currentLocale) {
-		final SimpleDateFormat df_date = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
-		return df_date.format(date);
+		final SimpleDateFormat dfDate = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
+		return dfDate.format(date);
 	}
 
 	/**
@@ -78,8 +80,8 @@ public class DateWorkerImpl implements DateWorker {
 	 * @return A String object in Date + Time notation
 	 */
 	public String getLocalizedDateTime(final Date date, final Locale currentLocale) {
-		final SimpleDateFormat df_date = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
-		return df_date.format(date);
+		final SimpleDateFormat dfDate = new SimpleDateFormat(DateWorkerImpl.DATE_FORMAT, currentLocale);
+		return dfDate.format(date);
 	}
 
 	public String getCalendarIconPath() {
@@ -93,7 +95,7 @@ public class DateWorkerImpl implements DateWorker {
 			 * Force jquery ui datepicker to use short month names of the current Java version. Datepicker uses the
 			 * correct
 			 * new ones, though on the backend it's depending on the Java version. The short name for march in german
-			 * changed from 'Mrz' to 'Mär' in Java 8 for example. Don't mind the 13th month, datepicker ignores it
+			 * changed from 'Mrz' to 'M�r' in Java 8 for example. Don't mind the 13th month, datepicker ignores it
 			 * anyway.
 			 */
 			monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();

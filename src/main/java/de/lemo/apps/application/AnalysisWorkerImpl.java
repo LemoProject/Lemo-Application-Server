@@ -1,6 +1,10 @@
 /**
- * 
- */
+	 * File AnalysisWorkerImpl.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.application;
 
 import java.util.ArrayList;
@@ -20,9 +24,6 @@ import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
-/**
- * @author johndoe
- */
 public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Inject
@@ -33,6 +34,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Inject
 	private Analysis analysis;
+	
+	
 
 	public List<ResourceRequestInfo> usageAnalysisExtended(final Course course, final Date beginDate, final Date endDate,
 			final List<EResourceType> resourceTypes) {
@@ -44,12 +47,12 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 			if (endDate != null) {
 
-				endStamp = new Long(endDate.getTime() / 1000);
+				endStamp = new Long(endDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if (beginDate != null) {
 
-				beginStamp = new Long(beginDate.getTime() / 1000);
+				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
@@ -98,12 +101,12 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 			if (endDate != null) {
 
-				endStamp = new Long(endDate.getTime() / 1000);
+				endStamp = new Long(endDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if (beginDate != null) {
 
-				beginStamp = new Long(beginDate.getTime() / 1000);
+				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
@@ -152,12 +155,12 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 			if (endDate != null) {
 
-				endStamp = new Long(endDate.getTime() / 1000);
+				endStamp = new Long(endDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if (beginDate != null) {
 
-				beginStamp = new Long(beginDate.getTime() / 1000);
+				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
@@ -188,7 +191,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 						for (int i = 0; i < ass.size(); i++) {
 							final ResourceRequestInfo res = ass.get(i);
 							this.logger.debug("ASS ResourceRequest " + res.getId() + " ----- " + res.getTitle() + " ----- "
-									+ res.getResourcetype() + " ------- " + res.getRequests() + " ----- "
+									+ res.getResourcetype() + " ------ " + res.getRequests() + " ----- "
 									+ res.getResolutionSlot());
 						}
 					}
@@ -276,12 +279,12 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 			if (endDate != null) {
 
-				endStamp = new Long(endDate.getTime() / 1000);
+				endStamp = new Long(endDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if (beginDate != null) {
 
-				beginStamp = new Long(beginDate.getTime() / 1000);
+				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
 			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {

@@ -2,8 +2,11 @@ package de.lemo.apps.entities;
 
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.DataType;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import de.lemo.apps.application.DateWorkerImpl;
 import de.lemo.apps.restws.entities.CourseObject;
 
 /**
@@ -32,7 +35,7 @@ import de.lemo.apps.restws.entities.CourseObject;
  */
 
 @Entity
-@Table(name = "course")
+@Table(name = "Course")
 public class Course extends AbstractEntity {
 
 	private static final long serialVersionUID = -5156611987477622933L;
@@ -44,25 +47,24 @@ public class Course extends AbstractEntity {
 	private Date firstRequestDate;
 	private Long maxParticipants;
 	private Long enroledParticipants;
-	private Boolean favorite;
+	private Boolean needUpdate;
+	private Long dataVersion;
+	//private Boolean favorite;
 
 	@Inject
 	public Course() {
 	}
+	
+	public Course(final Long courseId){
+		if(courseId != null){
+			this.courseId = courseId;
+			this.needUpdate = true;
+		}
+	}
 
 	public Course(final CourseObject courseObject) {
 		if (courseObject != null) {
-			this.courseName = courseObject.getTitle();
-			this.courseDescription = courseObject.getDescription();
-			if (courseObject.getFirstRequest() != null) {
-				this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * 1000);
-			}
-			if (courseObject.getLastRequest() != null) {
-				this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * 1000);
-			}
-			this.enroledParticipants = courseObject.getParticipants();
-			this.enroledParticipants = 1L;
-			this.courseId = courseObject.getId();
+			updateCourse(courseObject);
 		}
 	}
 
@@ -74,6 +76,7 @@ public class Course extends AbstractEntity {
 		this.firstRequestDate = begin;
 		this.maxParticipants = maxParticipants;
 		this.enroledParticipants = enroledParticipants;
+		this.needUpdate = false;
 	}
 
 	/**
@@ -117,6 +120,8 @@ public class Course extends AbstractEntity {
 	 * @param courseDescription
 	 *            the courseDescription to set
 	 */
+	@DataType(value="longtext")
+	@Lob
 	public void setCourseDescription(final String courseDescription) {
 		this.courseDescription = courseDescription;
 	}
@@ -183,17 +188,47 @@ public class Course extends AbstractEntity {
 
 	/**
 	 * @return the isFavorite
-	 */
+	 *//*
 	public Boolean getFavorite() {
 		return this.favorite;
 	}
 
-	/**
+	*//**
 	 * @param isFavorite
 	 *            the isFavorite to set
-	 */
+	 *//*
 	public void setFavorite(final Boolean isFavorite) {
 		this.favorite = isFavorite;
+	}*/
+
+	/**
+	 * @return the needUpdate
+	 */
+	public Boolean getNeedUpdate() {
+		return needUpdate;
+	}
+
+	/**
+	 * @param needUpdate the needUpdate to set
+	 */
+	public void setNeedUpdate(Boolean needUpdate) {
+		this.needUpdate = needUpdate;
+	}
+
+	
+	/**
+	 * @return the version
+	 */
+	public Long getDataVersion() {
+		return dataVersion;
+	}
+
+	
+	/**
+	 * @param version the version to set
+	 */
+	public void setDataVersion(Long dataVersion) {
+		this.dataVersion = dataVersion;
 	}
 
 	@Override
@@ -208,5 +243,31 @@ public class Course extends AbstractEntity {
 	@Override
 	public int hashCode() {
 		return this.courseName == null ? 0 : this.courseName.hashCode();
+	}
+	
+	public void updateCourse(CourseObject courseObject) {
+		this.courseName = courseObject.getTitle();
+		this.courseDescription = courseObject.getDescription();
+		
+		if(this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1){
+			final int maxLength = 35;
+			int length = this.courseDescription.length();
+			if(length>maxLength) {
+				length = maxLength;
+			}
+			this.courseName = this.courseDescription.substring(0, length-1);
+		}
+		
+		if (courseObject.getFirstRequest() != null) {
+			this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
+		}
+		
+		if (courseObject.getLastRequest() != null) {
+			this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
+		}
+		this.enroledParticipants = courseObject.getParticipants();
+		this.enroledParticipants = 1L;
+		this.courseId = courseObject.getId();
+		this.needUpdate = false;
 	}
 }

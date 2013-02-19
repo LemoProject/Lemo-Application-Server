@@ -163,7 +163,7 @@ public class VisualizationLONVD3 {
 
 	public Object onActivate(final Course course) {
 		this.logger.debug("--- Bin im ersten onActivate");
-		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourses();
+		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourseIds();
 		if ((allowedCourses != null) && (course != null) && (course.getCourseId() != null)
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
@@ -343,8 +343,8 @@ public class VisualizationLONVD3 {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat df_date = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
-		return df_date.format(inputDate);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		return dfDate.format(inputDate);
 	}
 
 	public String getFirstRequestDate() {

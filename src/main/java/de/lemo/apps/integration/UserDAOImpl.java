@@ -1,3 +1,11 @@
+/**
+	 * File UserDAOImpl.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
+
 package de.lemo.apps.integration;
 
 import java.util.List;
@@ -6,6 +14,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
+import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 
 public class UserDAOImpl implements UserDAO {
@@ -15,6 +24,9 @@ public class UserDAOImpl implements UserDAO {
 
 	@Inject
 	private Logger logger;
+	
+	@Inject
+	private CourseDAO courseDAO;
 
 	public boolean doExist(final User user) {
 		final Criteria criteria = this.session.createCriteria(User.class);
@@ -35,6 +47,30 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return results.get(0);
 	}
+	
+	public User getUser(final Long userId) {
+		final Criteria criteria = this.session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("id", userId));
+		final List<User> results = criteria.list();
+		if (results.size() == 0) {
+			return null;
+		}
+		return results.get(0);
+	}
+	
+	public void toggleFavoriteCourse(final Long courseId, final Long userId) {
+		logger.info("Setting favorite course courseId:" + courseId);
+		
+		Course course = this.courseDAO.getCourse(courseId); 
+		User user = this.getUser(userId);
+		
+		if (user.getFavoriteCourses().contains(course))
+				user.getFavoriteCourses().remove(course);
+		else user.getFavoriteCourses().add(course);
+		
+		this.session.update(user);
+	}
+	
 
 	public void save(final User user) {
 		this.session.persist(user);

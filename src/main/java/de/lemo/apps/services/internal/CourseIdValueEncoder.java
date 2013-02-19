@@ -1,3 +1,10 @@
+/**
+	 * File CourseIdValueEncoder.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.services.internal;
 
 import org.apache.tapestry5.ValueEncoder;

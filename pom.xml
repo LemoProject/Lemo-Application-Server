@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.lemo</groupId>
 	<artifactId>apps</artifactId>
-	<version>PT2S8_Final-5-g4d51edc</version><!-- FLAG 1 identifier DONT DELETE -->
+	<version>PT2S8_Final-29-g80dda8b</version><!-- FLAG 1 identifier DONT DELETE -->
 	<packaging>war</packaging>
 	<name>Lemo Application Server</name>
 
@@ -33,8 +33,8 @@
 			<properties>
 				<lemo-system-name>lemo-dev</lemo-system-name>
 				<lemo-display-name>LeMo [development]</lemo-display-name>
-				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
-				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+				<tomcat-server>lemo2-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo2-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
 
@@ -43,8 +43,8 @@
 			<properties>
 				<lemo-system-name>lemo-stable</lemo-system-name>
 				<lemo-display-name>LeMo [stable]</lemo-display-name>
-				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
-				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+				<tomcat-server>lemo2-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo2-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
 
@@ -94,6 +94,28 @@
 			<properties>
 				<lemo-system-name>clix-im</lemo-system-name>
 				<lemo-display-name>Clix Meichsner</lemo-display-name>
+				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+			</properties>
+		</profile>
+		
+		
+		<profile>
+			<id>clix-forte</id>
+			<properties>
+				<lemo-system-name>clix-forte</lemo-system-name>
+				<lemo-display-name>Clix Fortenbacher</lemo-display-name>
+				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+			</properties>
+		</profile>
+		
+		
+		<profile>
+			<id>clix</id>
+			<properties>
+				<lemo-system-name>clix</lemo-system-name>
+				<lemo-display-name>Clix</lemo-display-name>
 				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
 				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
 			</properties>
@@ -177,11 +199,10 @@
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
-			<version>0.4.3</version>
+			<version>0.4.6</version>
 		</dependency>
 
-
-		<dependency>
+  		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-hibernate-seedentity</artifactId>
 			<version>0.1.0</version>
@@ -473,6 +494,7 @@
 		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.9</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>
+		<lemo2-tomcat-url>http://lemo2.f4.htw-berlin.de:8080</lemo2-tomcat-url>
 		<lemo3-tomcat-url>http://141.45.146.174:8080</lemo3-tomcat-url>
 	</properties>
 </project>

@@ -1,3 +1,10 @@
+/**
+	 * File UserDAO.java
+	 *
+	 * Date Feb 14, 2013 
+	 *
+	 * Copyright TODO (INSERT COPYRIGHT)
+	 */
 package de.lemo.apps.integration;
 
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
@@ -5,16 +12,19 @@ import de.lemo.apps.entities.User;
 
 public interface UserDAO {
 
-	public boolean doExist(User user);
+	boolean doExist(User user);
 
-	public User getUser(String username);
+	User getUser(String username);
+	
+	@CommitAfter
+	void toggleFavoriteCourse(final Long courseId, final Long userId);
 
 	@CommitAfter
-	public void update(User user);
+	void update(User user);
 
 	@CommitAfter
-	public void save(User user);
+	void save(User user);
 
-	public User login(String username, String password);
+	User login(String username, String password);
 
 }

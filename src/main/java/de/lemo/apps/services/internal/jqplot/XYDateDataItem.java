@@ -35,12 +35,12 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	/**
 	 * The x-value.
 	 */
-	private Date _xValue;
+	private Date xValue;
 
 	/**
 	 * The y-value.
 	 */
-	private Number _yValue;
+	private Number yValue;
 
 	/**
 	 * Constructs a new data item.
@@ -54,8 +54,8 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 		assert xValue != null;
 		assert yValue != null;
 
-		this._xValue = xValue;
-		this._yValue = yValue;
+		this.xValue = xValue;
+		this.yValue = yValue;
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	 * @return The x-value.
 	 */
 	public Date getXValue() {
-		return this._xValue;
+		return this.xValue;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	 * @return The y-value.
 	 */
 	public Number getYValue() {
-		return this._yValue;
+		return this.yValue;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	 */
 	public void setYValue(final Number yValue) {
 		assert yValue != null;
-		this._yValue = yValue;
+		this.yValue = yValue;
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	 */
 	public void setXValue(final Date xValue) {
 		assert xValue != null;
-		this._xValue = xValue;
+		this.xValue = xValue;
 	}
 
 	/**
@@ -116,10 +116,10 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 
 		final XYDateDataItem that = (XYDateDataItem) obj;
 
-		if (this._xValue != null ? !this._xValue.equals(that._xValue) : that._xValue != null) {
+		if (this.xValue != null ? !this.xValue.equals(that.xValue) : that.xValue != null) {
 			return false;
 		}
-		if (this._yValue != null ? !this._yValue.equals(that._yValue) : that._yValue != null) {
+		if (this.yValue != null ? !this.yValue.equals(that.yValue) : that.yValue != null) {
 			return false;
 		}
 
@@ -134,8 +134,8 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	@Override
 	public int hashCode() {
 		int result;
-		result = (this._xValue != null ? this._xValue.hashCode() : 0);
-		result = 31 * result + (this._yValue != null ? this._yValue.hashCode() : 0);
+		result = (this.xValue != null ? this.xValue.hashCode() : 0);
+		result = 31 * result + (this.yValue != null ? this.yValue.hashCode() : 0);
 		return result;
 	}
 
@@ -168,7 +168,7 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 			// else
 			// result = 0;
 			// }
-			return this._xValue.compareTo(dataItem.getXValue());
+			return this.xValue.compareTo(dataItem.getXValue());
 		} else {
 			result = 1;
 		}
@@ -178,7 +178,7 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 
 	@Override
 	public String toString() {
-		return String.format("[%s,%s]", this._xValue.toString(), this._yValue.toString());
+		return String.format("[%s,%s]", this.xValue.toString(), this.yValue.toString());
 	}
 
 	public JSONArray toJSONArray() {
@@ -186,6 +186,6 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 		// String dateString = "2011"+"-"+(new Integer(_xValue.getMonth())).toString()+"-"+(new
 		// Integer(_xValue.getDay())).toString();
 		// Timestamp ts = new Timestamp(_xValue.getTime());
-		return new JSONArray(this._xValue.getTime(), this._yValue);
+		return new JSONArray(this.xValue.getTime(), this.yValue);
 	}
 }
