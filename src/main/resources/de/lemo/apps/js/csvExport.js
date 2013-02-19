@@ -56,6 +56,14 @@
   };
 
 
+  /**
+   * Open a modal window when the element specified by the selector is clicked.
+   * The modal contains option to download CSV files containing all data or
+   * currently visible data only (depending on the visualization).
+   * 
+   * @param exportFunction
+   *          f(data, chart, visibleOnly)->csv:String
+   */
   function createModalExportOptions(selector, exportFunction, data, chart) {
     // TODO recreate as reusable tml template?
     // TODO Use better file name, like course + current date
@@ -119,8 +127,9 @@
       });
     });
 
-    var csvData = dataExport.createCSV(series, series[0].values.length, converter, header);
-    console.log(csvData);
+    var csv = dataExport.createCSV(series, series[0].values.length, converter, header);
+    console.log(csv);
+    return csv;
   }
 
 
@@ -172,10 +181,30 @@
    * public button creation functions
    */
 
+  /**
+   * Export a nvd3 bar chart to CSV.
+   * 
+   * @param selector
+   *          export button selector
+   * @param data
+   *          data object to export as csv
+   * @param chart
+   *          nvd3 chart
+   */
   dataExport.barChartButton = function(selector, data, chart) {
     createModalExportOptions(selector, exportLOBarChart, data, chart);
   };
 
+  /**
+   * Export a nvd3 bar line chart to CSV.
+   * 
+   * @param selector
+   *          export button selector
+   * @param data
+   *          data object to export as csv
+   * @param chart
+   *          nvd3 chart
+   */
   dataExport.lineWithFocusChartButton = function(selector, data, chart) {
     createModalExportOptions(selector, exportUsageLineWithFocusChart, data, chart);
   };
