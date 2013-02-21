@@ -40,6 +40,8 @@ public class User extends AbstractEntity {
 	
 	
 	private static final long serialVersionUID = -432098998274596203L;
+	
+	private final int ColumnLength = 128;
 
 	private List<Course> myCourses = new ArrayList<Course>();
 	
@@ -99,7 +101,8 @@ public class User extends AbstractEntity {
 		this.setPassword(password);
 	}
 
-	public User(final Long id, final String username, final String fullname, final String email, final String password) {
+	public User(final Long id, final String username, 
+			final String fullname, final String email, final String password) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -177,7 +180,7 @@ public class User extends AbstractEntity {
 	}
 
 	@NonVisual
-	@Column(length = 128)
+	@Column(length = ColumnLength)
 	public byte[] getPasswordSalt() {
 		return passwordSalt;
 	}
@@ -330,8 +333,9 @@ public class User extends AbstractEntity {
 	public Boolean checkPassword(String password){
 		ByteSource saltSource = ByteSource.Util.bytes(this.getPasswordSalt()); 
 		String givenPassword = new Sha1Hash(password, saltSource).toString();
-		if(givenPassword != null && givenPassword.equals(this.encryptedPassword))
+		if(givenPassword != null && givenPassword.equals(this.encryptedPassword)) {
 			return true;
+		}
 	    return false;
 	}
 
