@@ -64,13 +64,13 @@
     		<!-- Carousel items -->
     		<div class="carousel-inner">
    				<div class="active item">
-   					<img src="${carussel_one}" height="300" width="500" />
+   					<img src="${carusselOne}" height="300" width="500" />
    					
    				</div>
-    			<div class="item"><img src="${carussel_two}" height="300" width="500" />
+    			<div class="item"><img src="${carusselTwo}" height="300" width="500" />
     				
     			</div>
-    			<div class="item"><img src="${carussel_one}" height="300" width="500" />
+    			<div class="item"><img src="${carusselOne}" height="300" width="500" />
     				
     			</div>
    			 </div>

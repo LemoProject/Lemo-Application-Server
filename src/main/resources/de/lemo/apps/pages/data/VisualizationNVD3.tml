@@ -28,7 +28,8 @@
         	</div>
         	
         	<br />
-    			
+    			  <div class="btn export-button">Export to CSV</div>
+            
     			<div class="accordion2" id="accordion3">
 			            <div class="accordion-group">
 			              <div class="accordion-heading">
