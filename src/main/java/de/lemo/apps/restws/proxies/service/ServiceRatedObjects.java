@@ -19,7 +19,7 @@ public interface ServiceRatedObjects {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListStringObject getRatedObjects(
+	ResultListStringObject getRatedObjects(
 			@QueryParam(MetaParam.COURSE_IDS) List<Long> courses);
 
 }

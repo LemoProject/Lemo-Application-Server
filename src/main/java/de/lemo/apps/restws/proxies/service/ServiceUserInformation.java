@@ -19,7 +19,7 @@ public interface ServiceUserInformation {
 	@GET
 	@Path("{user_id}/courses")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListCourseObject getCoursesByUser(
+	ResultListCourseObject getCoursesByUser(
 			@QueryParam("user_id") Long id,
 			@QueryParam("course_count") Long count,
 			@QueryParam("course_offset") Long offset);

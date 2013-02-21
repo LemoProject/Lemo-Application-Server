@@ -81,7 +81,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					&& (results.getResourceRequestInfos().size() > 0)) {
 				for (int i = 0; i < results.getResourceRequestInfos().size(); i++) {
 					final ResourceRequestInfo res = results.getResourceRequestInfos().get(i);
-					// logger.debug("ResourceRequest"+ res.getTitle()+" ----- "+ res.getResourcetype());
 				}
 				return results.getResourceRequestInfos();
 			}
@@ -135,7 +134,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					&& (results.getResourceRequestInfos().size() > 0)) {
 				for (int i = 0; i < results.getResourceRequestInfos().size(); i++) {
 					final ResourceRequestInfo res = results.getResourceRequestInfos().get(i);
-					// logger.debug("ResourceRequest"+ res.getTitle()+" ----- "+ res.getResourcetype());
 				}
 				return results.getResourceRequestInfos();
 			}

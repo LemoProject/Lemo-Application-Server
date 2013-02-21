@@ -22,7 +22,7 @@ public interface ServiceLoginAuthentification {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListLongObject authentificateUser(
+	ResultListLongObject authentificateUser(
 			@QueryParam(MetaParam.USER_NAME) String login);
 
 }

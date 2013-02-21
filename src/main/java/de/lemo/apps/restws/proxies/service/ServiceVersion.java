@@ -20,10 +20,10 @@ public interface ServiceVersion {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getDMSVersion();
+	String getDMSVersion();
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getDBVersion();
+	String getDBVersion();
 
 }

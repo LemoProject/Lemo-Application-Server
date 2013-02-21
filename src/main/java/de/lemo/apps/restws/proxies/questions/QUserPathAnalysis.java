@@ -20,7 +20,7 @@ public interface QUserPathAnalysis {
 	@POST
 	@Path("userpathanalysis")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String compute(
+	String compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courseIds,
 			@FormParam(MetaParam.USER_IDS) List<Long> userIds,
 			@FormParam(MetaParam.TYPES) List<String> types,
