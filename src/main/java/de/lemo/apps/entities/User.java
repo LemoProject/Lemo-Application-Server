@@ -186,7 +186,7 @@ public class User extends AbstractEntity {
 	}
 	
 	public void setPasswordSalt(byte[] passwordSalt) {
-		this.passwordSalt = passwordSalt;
+		this.passwordSalt = (byte[])passwordSalt.clone();
 	}
 
 	public boolean isAccountLocked() {
