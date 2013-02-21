@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
@@ -34,6 +33,7 @@ public class InitialisationImpl implements Initialisation {
 	private static final String SERVICE_RATED_OBJECTS_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/ratedobjects";
 	private static final String SERVICE_AUTH_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/authentification";
 	private static final String SERVICE_USER_COURSES_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/teachercourses";
+	private static final int STATUS_ID = 200;
 	
 
 	
@@ -54,7 +54,7 @@ public class InitialisationImpl implements Initialisation {
 	
 				ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
 	
-				if (response.getStatus() != 200) {
+				if (response.getStatus() != STATUS_ID) {
 					throw new ClientProtocolException("Default Connection Check: Failed : HTTP error code : "
 							+ response.getStatus());
 				}
@@ -76,7 +76,7 @@ public class InitialisationImpl implements Initialisation {
 
 			ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
 
-			if (response.getStatus() != 200) {
+			if (response.getStatus() != STATUS_ID) {
 				throw new RuntimeException("Failed : HTTP error code : "
 						+ response.getStatus());
 			}
