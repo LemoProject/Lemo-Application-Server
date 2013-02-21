@@ -25,6 +25,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
+import org.tynamo.seedentity.SeedEntityIdentifier;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
 import de.lemo.apps.application.DateWorker;
@@ -171,9 +172,11 @@ public class AppModule {
 	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {
 		for (User user : ServerConfiguration.getInstance().getUserImports()) {
 			for (Course course : user.getMyCourses()) {
-				configuration.add(course.getCourseId().toString(), course);
+				// TODO Courses can be identified by their unique course id. There should be no need to use explicitly
+				// select courseId with a SeedEntityIdentifier, but for some reason it doesn't work without it.
+				configuration.add("course" + course.getCourseId(), new SeedEntityIdentifier(course, "courseId"));
 			}
-			configuration.add(user.getUsername(), user);
+			configuration.add("user-" + user.getUsername(), user);
 		}
 	}
 

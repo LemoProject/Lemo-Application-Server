@@ -6,6 +6,7 @@
 package de.lemo.apps.application.config;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -91,7 +92,7 @@ public enum ServerConfiguration {
 					}
 				}
 				if (userConfig.courses != null) {
-					List<Course> courses = Lists.newArrayList();
+					List<Course> courses =  new ArrayList<Course>(); 
 					for (Long courseId : userConfig.courses) {
 						courses.add(new Course(courseId));
 					}
