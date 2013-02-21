@@ -1,23 +1,22 @@
 /**
-	 * File UserConfig.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
-	 */
+ * File UserConfig.java
+ * Date Feb 14, 2013
+ * Copyright TODO (INSERT COPYRIGHT)
+ * 
+ * @author Leonard Kappe
+ */
 package de.lemo.apps.application.config;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
 
 @XmlType
 class UserConfig {
 
 	@XmlAttribute(required = true)
-	public String username;
+	public String name;
 
 	@XmlAttribute(required = true)
 	public String password;
@@ -28,8 +27,12 @@ class UserConfig {
 	@XmlAttribute(name = "fullname")
 	public String fullName;
 
-	@XmlValue
 	@XmlList
+	@XmlAttribute
+	public List<String> roles;
+
+	@XmlList
+	@XmlAttribute
 	public List<Long> courses;
 
 }
