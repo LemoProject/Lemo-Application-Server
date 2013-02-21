@@ -31,7 +31,7 @@ public enum ServerConfiguration {
 		// TODO the DMS initializes the logger here - is there a better way in tapestry?
 	}
 
-	private static String USER_FILE = "users.xml";
+	private static String userFile = "users.xml";
 
 	private final Logger logger = Logger.getLogger(this.getClass());
 	private String serverName;
@@ -83,7 +83,7 @@ public enum ServerConfiguration {
 	private List<User> createUsers(final LemoUserConfig userConfigurations) {
 		final List<User> users = Lists.newArrayList();
 		if ((userConfigurations.users == null) || userConfigurations.users.isEmpty()) {
-			this.logger.warn(ServerConfiguration.USER_FILE + " loaded but no users elements were found.");
+			this.logger.warn(ServerConfiguration.userFile + " loaded but no users elements were found.");
 		} else {
 			for (final UserConfig userConfig : userConfigurations.users) {
 				final User user = new User(userConfig.fullName, userConfig.username, userConfig.email, userConfig.password);
@@ -98,11 +98,11 @@ public enum ServerConfiguration {
 	private LemoUserConfig readUserFile() {
 		try {
 			final Unmarshaller jaxbUnmarshaller = JAXBContext.newInstance(LemoUserConfig.class).createUnmarshaller();
-			final InputStream in = this.getClass().getResourceAsStream("/" + ServerConfiguration.USER_FILE);
+			final InputStream in = this.getClass().getResourceAsStream("/" + ServerConfiguration.userFile);
 			if (in == null) {
 				return null;
 			}
-			this.logger.info("Loading user file: " + ServerConfiguration.USER_FILE);
+			this.logger.info("Loading user file: " + ServerConfiguration.userFile);
 			return (LemoUserConfig) jaxbUnmarshaller.unmarshal(in);
 		} catch (final JAXBException e) {
 			// no way to recover, re-throw at runtime
@@ -120,7 +120,8 @@ public enum ServerConfiguration {
 		final String warName = contextPath.substring(1).replace('/', '#');
 
 		final Set<String> fileNames = new LinkedHashSet<String>();
-		fileNames.add(warName + ".xml"); // default, based on war name
+		// default, based on war name
+		fileNames.add(warName + ".xml");
 
 		int lastHash;
 		String warPath = warName;
@@ -131,7 +132,8 @@ public enum ServerConfiguration {
 			fileNames.add(warPath + ".xml");
 		}
 
-		fileNames.add("lemo.xml"); // eventually try generic lemo.xml for use in local development
+		// eventually try generic lemo.xml for use in local development
+		fileNames.add("lemo.xml");
 
 		LemoConfig lemoConfig = null;
 		try {

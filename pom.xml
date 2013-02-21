@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.lemo</groupId>
 	<artifactId>apps</artifactId>
-	<version>PT2S8_Final-29-g80dda8b</version><!-- FLAG 1 identifier DONT DELETE -->
+	<version>PT2S8_Final-49-gf3e3760</version><!-- FLAG 1 identifier DONT DELETE -->
 	<packaging>war</packaging>
 	<name>Lemo Application Server</name>
 
