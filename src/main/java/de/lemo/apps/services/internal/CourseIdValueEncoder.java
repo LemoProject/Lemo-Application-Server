@@ -13,8 +13,8 @@ import de.lemo.apps.integration.CourseDAO;
 
 public interface CourseIdValueEncoder {
 
-	public ValueEncoder<Course> create(Class<Course> arg0);
+	ValueEncoder<Course> create(Class<Course> arg0);
 
-	public ValueEncoder<Course> create(Class<Course> type, CourseDAO courseDAO);
+	ValueEncoder<Course> create(Class<Course> type, CourseDAO courseDAO);
 
 }
