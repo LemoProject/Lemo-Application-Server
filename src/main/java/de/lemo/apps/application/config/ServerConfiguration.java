@@ -88,7 +88,6 @@ public enum ServerConfiguration {
 			for (final UserConfig userConfig : userConfigurations.users) {
 				final User user = new User(userConfig.fullName, userConfig.username, userConfig.email, userConfig.password);
 				//TODO FIX Course import to match new database schema
-				//user.setMyCourses(userConfig.courses);
 				users.add(user);
 			}
 		}
