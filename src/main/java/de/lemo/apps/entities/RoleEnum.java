@@ -26,9 +26,9 @@ public enum RoleEnum implements Serializable{
 	public static RoleEnum fromValue(String v) throws EnumValueNotFoundException { 
 		if(v!=null) {
 			v = v.trim();
-			if(v.equals("") || v.equals("-1"))
+			if(v.equals("") || v.equals("-1")) {
 				return null;
-			
+			}
 			for (RoleEnum c: RoleEnum.values()) { 
 				if (c.value.equals(v.toUpperCase())) 
 					{ 

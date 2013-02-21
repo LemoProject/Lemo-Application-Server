@@ -41,7 +41,7 @@ public class User extends AbstractEntity {
 	
 	private static final long serialVersionUID = -432098998274596203L;
 	
-	private final int ColumnLength = 128;
+	private final static int COLUMN_LENGTH = 128;
 
 	private List<Course> myCourses = new ArrayList<Course>();
 	
@@ -180,7 +180,7 @@ public class User extends AbstractEntity {
 	}
 
 	@NonVisual
-	@Column(length = ColumnLength)
+	@Column(length = COLUMN_LENGTH)
 	public byte[] getPasswordSalt() {
 		return passwordSalt;
 	}
