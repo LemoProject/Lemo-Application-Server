@@ -14,6 +14,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -175,6 +177,7 @@ public class User extends AbstractEntity {
 		this.roles = roles;
 	}
 
+	@Enumerated(EnumType.STRING)
 	@ElementCollection
 	public Set<Roles> getRoles() {
 		return this.roles;
