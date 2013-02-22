@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -25,54 +26,33 @@ import org.apache.shiro.crypto.hash.Sha1Hash;
 import org.apache.shiro.util.ByteSource;
 import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User extends AbstractEntity {
 
 	private static final long serialVersionUID = -432098998274596203L;
 
 	private List<Course> myCourses = new ArrayList<Course>();
-
 	private List<Course> favoriteCourses = new ArrayList<Course>();
-
 	private List<Widget> myWidgets = new ArrayList<Widget>();
 
-	// @NaturalId
-	// @Column(nullable = false, unique = true)
-	// @NotNull
-	// @Size(min = 3, max = 15)
 	private String username;
-
-	// @Column(nullable = false)
-	// @NotNull
-	// @Size(min = 3, max = 50)
 	private String fullname;
-
-	// @Column(nullable = false)
-	// @NotNull
-	// @Email
 	private String email;
 
-	private String encryptedPassword;
-
 	private boolean accountLocked;
-
 	private boolean credentialsExpired;
 
+	private String encryptedPassword;
+	private byte[] passwordSalt;
 	private Set<Roles> roles = new HashSet<Roles>();
 
-	private byte[] passwordSalt;
-
 	private Long widget1;
-
 	private Long widget2;
-
 	private Long widget3;
 
 	public User() {
@@ -90,7 +70,6 @@ public class User extends AbstractEntity {
 	}
 
 	public User(final Long id, final String username, final String fullname, final String email, final String password) {
-		super();
 		this.id = id;
 		this.username = username;
 		this.fullname = fullname;
@@ -120,7 +99,7 @@ public class User extends AbstractEntity {
 
 	@NaturalId
 	@Column(unique = true)
-	@Index(name = "User_username")
+	@Index(name = "user_username")
 	public String getUsername() {
 		return this.username;
 	}
@@ -139,7 +118,6 @@ public class User extends AbstractEntity {
 
 	@Transient
 	public String getPassword() {
-
 		return "";
 	}
 
@@ -197,8 +175,7 @@ public class User extends AbstractEntity {
 		this.roles = roles;
 	}
 
-	// @Enumerated(EnumType.STRING)
-	@CollectionOfElements(targetElement = Roles.class)
+	@ElementCollection
 	public Set<Roles> getRoles() {
 		return this.roles;
 	}
@@ -209,7 +186,7 @@ public class User extends AbstractEntity {
 
 	@NonVisual
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "User_Course")
+	@JoinTable(name = "user_course")
 	public List<Course> getMyCourses() {
 		return this.myCourses;
 	}
@@ -220,7 +197,7 @@ public class User extends AbstractEntity {
 
 	@NonVisual
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "User_FavCourse")
+	@JoinTable(name = "user_favcourse")
 	public List<Course> getFavoriteCourses() {
 		return this.favoriteCourses;
 	}
@@ -229,8 +206,7 @@ public class User extends AbstractEntity {
 	 * @return the myWidgets
 	 */
 	@NonVisual
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@Cascade({ org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "user_id")
 	@IndexColumn(name = "index_col")
 	public List<Widget> getMyWidgets() {
@@ -304,18 +280,44 @@ public class User extends AbstractEntity {
 		this.widget3 = widget3;
 	}
 
-	@Override
-	public boolean equals(final Object obj) {
-		try {
-			return ((obj instanceof User) && ((User) obj).getUsername().equals(this.username));
-		} catch (final NullPointerException e) {
-			return false;
-		}
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
-		return this.username == null ? 0 : this.username.hashCode();
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		User other = (User) obj;
+		if (username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!username.equals(other.username)) {
+			return false;
+		}
+		return true;
 	}
 
 	@Transient
