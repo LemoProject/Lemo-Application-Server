@@ -26,13 +26,13 @@ public interface ServiceCourseDetails {
 	@GET
 	@Path("{cid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public CourseObject getCourseDetails(
+	CourseObject getCourseDetails(
 			@PathParam("cid") Long id);
 
 	@GET
 	// @Path("courses")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListCourseObject getCoursesDetails(
+	ResultListCourseObject getCoursesDetails(
 			@QueryParam(MetaParam.COURSE_IDS) List<Long> courseIds);
 
 }

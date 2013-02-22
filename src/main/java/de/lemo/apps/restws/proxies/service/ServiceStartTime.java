@@ -15,10 +15,10 @@ public interface ServiceStartTime {
 
 	@GET
 	@Produces("application/json")
-	public SCTime startTimeJson();
+	SCTime startTimeJson();
 
 	@GET
 	@Produces("text/html")
-	public String startTimeHtml();
+	String startTimeHtml();
 
 }

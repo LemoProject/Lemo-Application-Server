@@ -1,10 +1,10 @@
 package de.lemo.apps.restws.entities;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ResultListHashMapObject {
 
-	private HashMap<Long, ResultListLongObject> elements;
+	private Map<Long, ResultListLongObject> elements;
 	private List<ResultListLongObject> entries;
 	private Long[] keys;
 
@@ -20,12 +20,11 @@ public class ResultListHashMapObject {
 
 	}
 
-	public ResultListHashMapObject(final HashMap<Long, ResultListLongObject> elements) {
+	public ResultListHashMapObject(final Map<Long, ResultListLongObject> elements) {
 		this.elements = elements;
 
 		if (elements != null) {
 			final Set<Long> keys = elements.keySet();
-			final Collection<ResultListLongObject> entries = elements.values();
 			this.keys = keys.toArray(new Long[keys.size()]);
 			this.entries = new ArrayList<ResultListLongObject>();
 			final Iterator<Long> it = keys.iterator();
@@ -36,13 +35,14 @@ public class ResultListHashMapObject {
 		}
 	}
 
-	public HashMap<Long, ResultListLongObject> getElements() {
+	public Map<Long, ResultListLongObject> getElements() {
 		this.elements = new HashMap<Long, ResultListLongObject>();
 		if ((this.keys != null) && (this.entries != null) && (this.keys.length == this.entries.size())) {
 			for (int i = 0; i < this.keys.length; i++) {
 				this.elements.put(this.keys[i], this.entries.get(i));
 			}
 		} else {
+			//TODO Logger verwenden
 			System.out.println("ResultListHashMap ---  Empty Resultset !!!");
 		}
 
@@ -64,6 +64,6 @@ public class ResultListHashMapObject {
 	}
 
 	public void setKeys(final Long[] keys) {
-		this.keys = keys;
+		this.keys = (Long[]) keys.clone();
 	}
 }

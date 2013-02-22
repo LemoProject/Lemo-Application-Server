@@ -23,7 +23,7 @@ public interface ServiceTeacherCourses {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultListLongObject getTeachersCourses(
+	ResultListLongObject getTeachersCourses(
 			@QueryParam(MetaParam.USER_IDS) Long userId);
 
 

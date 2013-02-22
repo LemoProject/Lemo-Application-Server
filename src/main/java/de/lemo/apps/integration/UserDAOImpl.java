@@ -64,10 +64,13 @@ public class UserDAOImpl implements UserDAO {
 		Course course = this.courseDAO.getCourse(courseId); 
 		User user = this.getUser(userId);
 		
-		if (user.getFavoriteCourses().contains(course))
-				user.getFavoriteCourses().remove(course);
-		else user.getFavoriteCourses().add(course);
-		
+		if (user.getFavoriteCourses().contains(course)) {
+			user.getFavoriteCourses().remove(course);
+		}
+
+		else {
+			user.getFavoriteCourses().add(course);
+		}
 		this.session.update(user);
 	}
 	
