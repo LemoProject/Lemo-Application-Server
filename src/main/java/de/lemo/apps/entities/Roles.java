@@ -23,20 +23,20 @@ public enum Roles {
 		return value;
 	}
 
-	public static Roles fromValue(String v) throws EnumValueNotFoundException {
-		if (v != null) {
-			v = v.trim().toUpperCase();
-			if (v.equals("") || v.equals("-1")) {
+	public static Roles fromValue(String value) throws EnumValueNotFoundException {
+		if (value != null) {
+			value = value.trim().toUpperCase();
+			if (value.equals("") || value.equals("-1")) {
 				return null;
 			}
 
 			for (Roles c : Roles.values()) {
-				if (c.value.equals(v)) {
+				if (c.value.equals(value)) {
 					return c;
 				}
 			}
 		}
-		System.out.println("Unable to Parse Roles: " + v);
+		System.out.println("Unable to Parse Roles: " + value);
 		throw new EnumValueNotFoundException();
 	}
 }

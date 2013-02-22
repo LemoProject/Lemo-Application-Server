@@ -1,8 +1,6 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -34,11 +32,11 @@ import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.StatisticWorkerImpl;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.UserWorkerImpl;
+import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
-import de.lemo.apps.application.VisualisationHelperWorker;
-import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
 import de.lemo.apps.integration.QuestionDAO;

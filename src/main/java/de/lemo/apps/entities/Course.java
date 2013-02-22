@@ -35,7 +35,7 @@ import de.lemo.apps.restws.entities.CourseObject;
  */
 
 @Entity
-@Table(name = "Course")
+@Table(name = "course")
 public class Course extends AbstractEntity {
 
 	private static final long serialVersionUID = -5156611987477622933L;
@@ -49,14 +49,13 @@ public class Course extends AbstractEntity {
 	private Long enroledParticipants;
 	private Boolean needUpdate;
 	private Long dataVersion;
-	//private Boolean favorite;
 
 	@Inject
 	public Course() {
 	}
-	
-	public Course(final Long courseId){
-		if(courseId != null){
+
+	public Course(final Long courseId) {
+		if (courseId != null) {
 			this.courseId = courseId;
 			this.needUpdate = true;
 		}
@@ -69,7 +68,7 @@ public class Course extends AbstractEntity {
 	}
 
 	public Course(final String courseName, final String courseDescription, final Date begin,
-						final Date end, final Long maxParticipants, final Long enroledParticipants) {
+			final Date end, final Long maxParticipants, final Long enroledParticipants) {
 		this.courseName = courseName;
 		this.courseDescription = courseDescription;
 		this.lastRequestDate = end;
@@ -120,7 +119,7 @@ public class Course extends AbstractEntity {
 	 * @param courseDescription
 	 *            the courseDescription to set
 	 */
-	@DataType(value="longtext")
+	@DataType(value = "longtext")
 	@Lob
 	public void setCourseDescription(final String courseDescription) {
 		this.courseDescription = courseDescription;
@@ -187,21 +186,6 @@ public class Course extends AbstractEntity {
 	}
 
 	/**
-	 * @return the isFavorite
-	 *//*
-	public Boolean getFavorite() {
-		return this.favorite;
-	}
-
-	*//**
-	 * @param isFavorite
-	 *            the isFavorite to set
-	 *//*
-	public void setFavorite(final Boolean isFavorite) {
-		this.favorite = isFavorite;
-	}*/
-
-	/**
 	 * @return the needUpdate
 	 */
 	public Boolean getNeedUpdate() {
@@ -209,13 +193,13 @@ public class Course extends AbstractEntity {
 	}
 
 	/**
-	 * @param needUpdate the needUpdate to set
+	 * @param needUpdate
+	 *            the needUpdate to set
 	 */
 	public void setNeedUpdate(Boolean needUpdate) {
 		this.needUpdate = needUpdate;
 	}
 
-	
 	/**
 	 * @return the version
 	 */
@@ -223,47 +207,75 @@ public class Course extends AbstractEntity {
 		return dataVersion;
 	}
 
-	
 	/**
-	 * @param version the version to set
+	 * @param version
+	 *            the version to set
 	 */
 	public void setDataVersion(Long dataVersion) {
 		this.dataVersion = dataVersion;
 	}
 
-	@Override
-	public boolean equals(final Object obj) {
-		try {
-			return ((obj instanceof Course) && ((Course) obj).getCourseName().equals(this.courseName));
-		} catch (final NullPointerException e) {
-			return false;
-		}
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
-		return this.courseName == null ? 0 : this.courseName.hashCode();
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((courseId == null) ? 0 : courseId.hashCode());
+		return result;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Course other = (Course) obj;
+		if (courseId == null) {
+			if (other.courseId != null) {
+				return false;
+			}
+		} else if (!courseId.equals(other.courseId)) {
+			return false;
+		}
+		return true;
+	}
+
 	public void updateCourse(CourseObject courseObject) {
 		this.courseName = courseObject.getTitle();
 		this.courseDescription = courseObject.getDescription();
-		
-		if(this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1){
+
+		if (this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1) {
 			final int maxLength = 35;
 			int length = this.courseDescription.length();
-			if(length>maxLength) {
+			if (length > maxLength) {
 				length = maxLength;
 			}
-			this.courseName = this.courseDescription.substring(0, length-1);
+			this.courseName = this.courseDescription.substring(0, length - 1);
 		}
-		
+
 		if (courseObject.getFirstRequest() != null) {
-			this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
+			this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest()
+					* DateWorkerImpl.MILLISEC_MULTIPLIER);
 		}
-		
+
 		if (courseObject.getLastRequest() != null) {
-			this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest() * DateWorkerImpl.MILLISEC_MULTIPLIER);
+			this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest()
+					* DateWorkerImpl.MILLISEC_MULTIPLIER);
 		}
 		this.enroledParticipants = courseObject.getParticipants();
 		this.enroledParticipants = 1L;

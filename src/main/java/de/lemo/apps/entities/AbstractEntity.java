@@ -1,10 +1,8 @@
 /**
-	 * File AbstractEntity.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
-	 */
+ * File AbstractEntity.java
+ * Date Feb 14, 2013
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
 package de.lemo.apps.entities;
 
 import java.io.Serializable;
@@ -17,19 +15,14 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import org.apache.tapestry5.beaneditor.NonVisual;
 
-@SuppressWarnings("unchecked")
 @MappedSuperclass
-public class AbstractEntity implements Serializable, Comparable {
+public class AbstractEntity implements Serializable {
 
 	protected static final long serialVersionUID = -5269831219220124237L;
 	protected long id;
 	protected long version;
 	protected Date created;
 	protected Date modified;
-
-	public int compareTo(final Object o) {
-		return String.valueOf(this).compareTo(String.valueOf(o));
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -61,7 +54,6 @@ public class AbstractEntity implements Serializable, Comparable {
 	/**
 	 * @return the created
 	 */
-
 	public Date getCreated() {
 		return this.created;
 	}
