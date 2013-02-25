@@ -1,21 +1,20 @@
 /**
-	 * File ServerConfiguration.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
-	 * 
-	 *  * TODO this is very much based on the DMS implementation using the standard servlet api and is probably not done in the
-	 * tapestry way
-	 * 
-	 * @author Leonard Kappe
-	 */
+ * File ServerConfiguration.java
+ * Date Feb 14, 2013
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
 package de.lemo.apps.application.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import org.apache.log4j.Logger;
 
+/*
+ * TODO this is very much based on the DMS implementation using the standard servlet api and is probably not done in the
+ * 'tapestry way'.
+ * 
+ * @author Leonard Kappe
+ */
 public class ServletContextListener implements javax.servlet.ServletContextListener {
 
 	private Logger logger;

@@ -1,13 +1,12 @@
 /**
-	 * File ServerConfiguration.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
-	 */
+ * File ServerConfiguration.java
+ * Date Feb 14, 2013
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
 package de.lemo.apps.application.config;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,8 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.Roles;
 import de.lemo.apps.entities.User;
 
 /**
@@ -72,22 +73,32 @@ public enum ServerConfiguration {
 		for (final PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
 			this.dbConfig.put(property.key, property.value);
 		}
-		final LemoUserConfig userConfigurations = this.readUserFile();
-		if (userConfigurations != null) {
-			this.userImports = this.createUsers(userConfigurations);
-		} else {
-			this.userImports = Lists.newArrayList();
-		}
+
+		LemoUserConfig userConfigurations = this.readUserFile();
+		this.userImports = this.createUsers(userConfigurations);
 	}
 
 	private List<User> createUsers(final LemoUserConfig userConfigurations) {
 		final List<User> users = Lists.newArrayList();
-		if ((userConfigurations.users == null) || userConfigurations.users.isEmpty()) {
+		if (userConfigurations.users == null || userConfigurations.users.isEmpty()) {
 			this.logger.warn(ServerConfiguration.userFile + " loaded but no users elements were found.");
 		} else {
 			for (final UserConfig userConfig : userConfigurations.users) {
-				final User user = new User(userConfig.fullName, userConfig.username, userConfig.email, userConfig.password);
-				//TODO FIX Course import to match new database schema
+				User user = new User(userConfig.fullName, userConfig.name, userConfig.email, userConfig.password);
+
+				if (userConfig.roles != null) {
+					for (String role : userConfig.roles) {
+						user.getRoles().add(Roles.valueOf(role.toUpperCase()));
+					}
+				}
+				if (userConfig.courses != null) {
+					List<Course> courses =  new ArrayList<Course>(); 
+					for (Long courseId : userConfig.courses) {
+						courses.add(new Course(courseId));
+					}
+					user.setMyCourses(courses);
+				}
+				logger.debug("User from config: " + user.getUsername() + " " + user.getRoles() + user.getMyCourseIds());
 				users.add(user);
 			}
 		}

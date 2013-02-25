@@ -1,8 +1,6 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -25,6 +23,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
+import org.tynamo.seedentity.SeedEntityIdentifier;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
 import de.lemo.apps.application.DateWorker;
@@ -33,11 +32,11 @@ import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.StatisticWorkerImpl;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.UserWorkerImpl;
+import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
-import de.lemo.apps.application.VisualisationHelperWorker;
-import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
 import de.lemo.apps.integration.QuestionDAO;
@@ -156,51 +155,27 @@ public class AppModule {
 	// }
 
 	@Match("*DAO")
-	public static <T> T decorateTransactionally(final HibernateTransactionDecorator decorator, final Class<T> serviceInterface,
+	public static <T> T decorateTransactionally(final HibernateTransactionDecorator decorator,
+			final Class<T> serviceInterface,
 			final T delegate,
 			final String serviceId) {
 		System.out.println("AppModule: Generating Decorator for DAO Interface");
 		return decorator.build(serviceInterface, delegate, serviceId);
 	}
 
-	public static void contributeWebSecurityManager(final Configuration<Realm> configuration,
-			@Inject final AuthorizingRealm realm) {
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm) {
 		configuration.add(realm);
 	}
 
-	public static void contributeSeedEntity(final OrderedConfiguration<Object> configuration) {
-		/*final List<User> userImports = ServerConfiguration.getInstance().getUserImports();
-		for (final User user : userImports) {
-			configuration.add(user.getUsername(), user);
-		}*/
-		
-		Course course0 = new Course();
-		course0.setCourseId(112100L);
-		course0.setNeedUpdate(true);
-		//configuration.add("course0", course0);
-		
-		Course course1 = new Course();
-		course1.setCourseId(11476L);
-		course1.setNeedUpdate(true);
-		configuration.add("course1", course1);
-		
-		Course course2 = new Course();
-		course2.setCourseId(112200L);
-		course2.setNeedUpdate(true);
-		configuration.add("course2", course2);
-		
-		List<Course> courseList = new ArrayList<Course>(); 
-		//courseList.add(course0);
-		courseList.add(course1);
-		courseList.add(course2);
-		
-		User admin = new User();
-		admin.setUsername("admin");
-		admin.setPassword("lemolemo");
-		admin.setEmail("admin@localhost.com");
-		admin.setFullname("Administrator");
-		admin.setMyCourses(courseList);
-		configuration.add("admin", admin);
+	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {
+		for (User user : ServerConfiguration.getInstance().getUserImports()) {
+			for (Course course : user.getMyCourses()) {
+				// TODO Courses can be identified by their unique course id. There should be no need to use explicitly
+				// select courseId with a SeedEntityIdentifier, but for some reason it doesn't work without it.
+				configuration.add("course" + course.getCourseId(), new SeedEntityIdentifier(course, "courseId"));
+			}
+			configuration.add("user-" + user.getUsername(), user);
+		}
 	}
 
 	/**

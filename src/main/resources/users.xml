@@ -1,9 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<lemo-user-import>
-   
-    <user username="test"
-    password="lemotest8520"
-    email="lemo@example.com"
-    fullname="Testy Tester">1111 1112</user>
-  
-</lemo-user-import>
+<lemo-users>
+
+  <user name="admin"
+  password="lemolemo"
+  roles="admin global"
+  email="lemo@example.com"
+  fullname="Administrator"
+  courses="112100 11476 112200"/>
+  <user name="global"
+  password="lemolemo"
+  roles="GLOBAL"
+  email="lemo@example.com"
+  fullname="Global user"/>
+
+</lemo-users>

@@ -14,7 +14,7 @@ public interface Analysis {
 			List<Long> users,
 			Long starttime,
 			Long endtime,
-			int resolution,
+			Long resolution,
 			List<String> resourceTypes);
 
 	// String computeQ1JSON(
@@ -103,7 +103,7 @@ public interface Analysis {
 			List<Long> courses,
 			List<Long> users,
 			List<Long> quizzes,
-			Integer resolution,
+			Long resolution,
 			Long startTime,
 			Long endTime);
 

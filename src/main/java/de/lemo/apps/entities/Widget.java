@@ -1,10 +1,8 @@
 /**
-	 * File Widget.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
-	 */
+ * File Widget.java
+ * Date Feb 14, 2013
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
 package de.lemo.apps.entities;
 
 import javax.persistence.Entity;
@@ -13,10 +11,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Widget")
+@Table(name = "widget")
 public class Widget extends AbstractEntity {
-	
+
 	private static final long serialVersionUID = -8473743292482994742L;
+
+	private String name;
+	private Long courseId;
+	private Long position;
+	private User user;
 
 	public Widget(final String name, final User user, final Long courseId, final Long position) {
 		this.name = name;
@@ -24,11 +27,6 @@ public class Widget extends AbstractEntity {
 		this.courseId = courseId;
 		this.position = position;
 	}
-
-	private String name;
-	private Long courseId;
-	private Long position;
-	private User user;
 
 	/**
 	 * @return the name
@@ -78,10 +76,9 @@ public class Widget extends AbstractEntity {
 	/**
 	 * @return the user
 	 */
-	
-	
+
 	@ManyToOne
-	@JoinColumn(updatable=true, insertable=true, name = "user_id")
+	@JoinColumn(updatable = true, insertable = true, name = "user_id")
 	public User getUser() {
 		return this.user;
 	}

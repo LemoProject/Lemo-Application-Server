@@ -1,10 +1,8 @@
 /**
-	 * File User.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
-	 */
+ * File User.java
+ * Date Feb 14, 2013
+ * Copyright TODO (INSERT COPYRIGHT)
+ */
 package de.lemo.apps.entities;
 
 import java.util.ArrayList;
@@ -14,7 +12,10 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -27,63 +28,35 @@ import org.apache.shiro.crypto.hash.Sha1Hash;
 import org.apache.shiro.util.ByteSource;
 import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User extends AbstractEntity {
 
-	
-	
 	private static final long serialVersionUID = -432098998274596203L;
 	
 	private final static int COLUMN_LENGTH = 128;
 
 	private List<Course> myCourses = new ArrayList<Course>();
-	
 	private List<Course> favoriteCourses = new ArrayList<Course>();
-	
 	private List<Widget> myWidgets = new ArrayList<Widget>();
 
-	//@NaturalId
-	//@Column(nullable = false, unique = true)
-	//@NotNull
-	//@Size(min = 3, max = 15)
 	private String username;
-
-	//@Column(nullable = false)
-	//@NotNull
-	//@Size(min = 3, max = 50)
 	private String fullname;
-
-	//@Column(nullable = false)
-	//@NotNull
-	//@Email
 	private String email;
 
-	//@Column(nullable = false)
-	//@Size(min = 5, max = 25)
-	//@NotNull
-	private String password;
-	
-	private String encryptedPassword;
-
 	private boolean accountLocked;
-
 	private boolean credentialsExpired;
 
-	private Set<RoleEnum> roles = new HashSet<RoleEnum>();
-
+	private String encryptedPassword;
 	private byte[] passwordSalt;
+	private Set<Roles> roles = new HashSet<Roles>();
 
 	private Long widget1;
-
 	private Long widget2;
-
 	private Long widget3;
 
 	public User() {
@@ -95,15 +68,13 @@ public class User extends AbstractEntity {
 		this.email = email;
 	}
 
-	public User(final String fullname, final String username, final String email,
-			final String password) {
+	public User(final String fullname, final String username, final String email, final String password) {
 		this(fullname, username, email);
 		this.setPassword(password);
 	}
 
 	public User(final Long id, final String username, 
 			final String fullname, final String email, final String password) {
-		super();
 		this.id = id;
 		this.username = username;
 		this.fullname = fullname;
@@ -133,7 +104,7 @@ public class User extends AbstractEntity {
 
 	@NaturalId
 	@Column(unique = true)
-	@Index(name = "User_username")
+	@Index(name = "user_username")
 	public String getUsername() {
 		return this.username;
 	}
@@ -152,7 +123,6 @@ public class User extends AbstractEntity {
 
 	@Transient
 	public String getPassword() {
-		
 		return "";
 	}
 
@@ -163,7 +133,7 @@ public class User extends AbstractEntity {
 			this.encryptedPassword = new Sha1Hash(newPassword, saltSource).toString();
 		}
 	}
-	
+
 	/**
 	 * @return the encryptedPassword
 	 */
@@ -173,7 +143,8 @@ public class User extends AbstractEntity {
 	}
 
 	/**
-	 * @param encryptedPassword the encryptedPassword to set
+	 * @param encryptedPassword
+	 *            the encryptedPassword to set
 	 */
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
@@ -184,7 +155,7 @@ public class User extends AbstractEntity {
 	public byte[] getPasswordSalt() {
 		return passwordSalt;
 	}
-	
+
 	public void setPasswordSalt(byte[] passwordSalt) {
 		this.passwordSalt = (byte[])passwordSalt.clone();
 	}
@@ -205,13 +176,13 @@ public class User extends AbstractEntity {
 		this.credentialsExpired = credentialsExpired;
 	}
 
-	public void setRoles(final Set<RoleEnum> roles) {
+	public void setRoles(final Set<Roles> roles) {
 		this.roles = roles;
 	}
 
-	//@Enumerated(EnumType.STRING)
-	@CollectionOfElements(targetElement = RoleEnum.class)
-	public Set<RoleEnum> getRoles() {
+	@Enumerated(EnumType.STRING)
+	@ElementCollection
+	public Set<Roles> getRoles() {
 		return this.roles;
 	}
 
@@ -220,37 +191,37 @@ public class User extends AbstractEntity {
 	}
 
 	@NonVisual
-	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}) 
-	@JoinTable(name = "User_Course")
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "user_course")
 	public List<Course> getMyCourses() {
 		return this.myCourses;
 	}
-	
+
 	public void setFavoriteCourses(final List<Course> favoriteCourses) {
 		this.favoriteCourses = favoriteCourses;
 	}
 
 	@NonVisual
-	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}) 
-	@JoinTable(name = "User_FavCourse")
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "user_favcourse")
 	public List<Course> getFavoriteCourses() {
 		return this.favoriteCourses;
 	}
-	
+
 	/**
 	 * @return the myWidgets
 	 */
 	@NonVisual
-	@OneToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
-	@Cascade({org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinColumn(name="user_id")
-	@IndexColumn(name="index_col")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "user_id")
+	@IndexColumn(name = "index_col")
 	public List<Widget> getMyWidgets() {
 		return myWidgets;
 	}
 
 	/**
-	 * @param myWidgets the myWidgets to set
+	 * @param myWidgets
+	 *            the myWidgets to set
 	 */
 	public void setMyWidgets(List<Widget> myWidgets) {
 		this.myWidgets = myWidgets;
@@ -261,7 +232,7 @@ public class User extends AbstractEntity {
 	public List<Long> getMyCourseIds() {
 		List<Long> courseIds = new ArrayList<Long>();
 		Iterator<Course> it = this.myCourses.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			courseIds.add(it.next().getCourseId());
 		}
 		return courseIds;
@@ -315,28 +286,54 @@ public class User extends AbstractEntity {
 		this.widget3 = widget3;
 	}
 
-	@Override
-	public boolean equals(final Object obj) {
-		try {
-			return ((obj instanceof User) && ((User) obj).getUsername().equals(this.username));
-		} catch (final NullPointerException e) {
-			return false;
-		}
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
-		return this.username == null ? 0 : this.username.hashCode();
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		User other = (User) obj;
+		if (username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!username.equals(other.username)) {
+			return false;
+		}
+		return true;
+	}
+
 	@Transient
-	public Boolean checkPassword(String password){
-		ByteSource saltSource = ByteSource.Util.bytes(this.getPasswordSalt()); 
+	public Boolean checkPassword(String password) {
+		ByteSource saltSource = ByteSource.Util.bytes(this.getPasswordSalt());
 		String givenPassword = new Sha1Hash(password, saltSource).toString();
 		if(givenPassword != null && givenPassword.equals(this.encryptedPassword)) {
 			return true;
 		}
-	    return false;
+		return false;
 	}
 
 }

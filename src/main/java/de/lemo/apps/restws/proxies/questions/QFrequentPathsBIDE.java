@@ -29,8 +29,8 @@ public interface QFrequentPathsBIDE {
 			@FormParam(MetaParam.TYPES) List<String> types,
 			@FormParam(MetaParam.MIN_LENGTH) Long minLength,
 			@FormParam(MetaParam.MAX_LENGTH) Long maxLength,
-			@FormParam(MetaParam.MIN_SUP) double minSup,
-			@FormParam(MetaParam.SESSION_WISE) boolean sessionWise,
-			@FormParam(MetaParam.START_TIME) long startTime,
-			@FormParam(MetaParam.END_TIME) long endTime);
+			@FormParam(MetaParam.MIN_SUP) Double minSup,
+			@FormParam(MetaParam.SESSION_WISE) Boolean sessionWise,
+			@FormParam(MetaParam.START_TIME) Long startTime,
+			@FormParam(MetaParam.END_TIME) Long endTime);
 }

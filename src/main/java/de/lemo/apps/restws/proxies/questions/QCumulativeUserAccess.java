@@ -42,7 +42,7 @@ public interface QCumulativeUserAccess {
 			@FormParam(MetaParam.TYPES) List<String> types,
 			@FormParam(MetaParam.DEPARTMENT) List<Long> departments,
 			@FormParam(MetaParam.DEGREE) List<Long> degrees,
-			@FormParam(MetaParam.START_TIME) long starttime,
-			@FormParam(MetaParam.END_TIME) long endtime);
+			@FormParam(MetaParam.START_TIME) Long starttime,
+			@FormParam(MetaParam.END_TIME) Long endtime);
 
 }
