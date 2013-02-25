@@ -264,7 +264,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 		final List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
 		final List<XYDateDataItem> list1 = CollectionFactory.newList();
-		Integer resolution = 0;
+		long resolution = 0;
 
 		if ((beginDate != null) && (endDate != null)) {
 			resolution = this.dateWorker.daysBetween(beginDate, endDate);
@@ -276,7 +276,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			List<String> resourceTypesNames = null;
 
 			if (endDate != null) {
-
 				endStamp = new Long(endDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 

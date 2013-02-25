@@ -336,7 +336,7 @@ public class VisualizationPerformanceHistogram {
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
 			final List<Long> results = this.analysis.computePerformanceHistogram(courseList, this.selectedUsers, quizzesList,
-					this.resolution, beginStamp, endStamp);
+					(long) this.resolution, beginStamp, endStamp);
 			this.logger.debug("results for performance histogram:" + results);
 
 			final List<List<Long>> preparedResults = CollectionFactory.newList();

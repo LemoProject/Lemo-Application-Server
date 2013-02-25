@@ -37,9 +37,9 @@ public class DateWorkerImpl implements DateWorker {
 		this.assetSource = assetSource;
 	}
 
-	public Integer daysBetween(final Calendar startDate, final Calendar endDate) {
+	public int daysBetween(final Calendar startDate, final Calendar endDate) {
 		final Calendar date = (Calendar) startDate.clone();
-		Integer daysBetween = 0;
+		int daysBetween = 0;
 		while (date.before(endDate)) {
 			date.add(Calendar.DAY_OF_MONTH, 1);
 			daysBetween++;
@@ -47,13 +47,13 @@ public class DateWorkerImpl implements DateWorker {
 		return daysBetween;
 	}
 
-	public Integer daysBetween(final Date startDate, final Date endDate) {
+	public int daysBetween(final Date startDate, final Date endDate) {
 
 		final Calendar startDateTemp = Calendar.getInstance();
 		final Calendar endDateTemp = (Calendar) startDateTemp.clone();
 		endDateTemp.setTime(endDate);
 		startDateTemp.setTime(startDate);
-		Integer daysBetween = 0;
+		int daysBetween = 0;
 		while (startDateTemp.before(endDateTemp)) {
 			startDateTemp.add(Calendar.DAY_OF_MONTH, 1);
 			daysBetween++;
