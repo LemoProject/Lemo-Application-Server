@@ -37,12 +37,13 @@ public class CourseDAOImpl implements CourseDAO {
 		return results;
 	}
 
-	public List<Course> findAllByOwner(final User user) {
+	public List<Course> findAllByOwner(final User user, boolean needUpdate) {
 		if (user.getMyCourses().isEmpty()) {
 			return new ArrayList<Course>();
 		}
 		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.in("courseId", user.getMyCourseIds()));
+		criteria.add(Restrictions.eq("needUpdate", needUpdate));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
 			return new ArrayList<Course>();

@@ -159,7 +159,7 @@ public class LayoutAccount {
 
 	@Cached
 	public List<Course> getAllCourses() {
-		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 	}
 
 	public String getUserName() {
@@ -168,7 +168,7 @@ public class LayoutAccount {
 	}
 
 	public Integer getCourseAmount() {
-		final List<Course> userCourses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		final List<Course> userCourses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		if (userCourses != null) {
 			return userCourses.size();
 		} else {

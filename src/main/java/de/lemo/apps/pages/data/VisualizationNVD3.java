@@ -259,7 +259,7 @@ public class VisualizationNVD3 {
 	// }
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
 		this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();

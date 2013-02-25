@@ -71,6 +71,16 @@
     
     var _nodes = d3custom.nodes,
         _links = d3custom.links;
+    
+    var linkScale = d3.scale.linear()
+    	.clamp(true)
+		.domain([1, 50])
+		.range([1, 5]);
+
+    var linkDistanceScale = d3.scale.linear()
+    	.clamp(true)
+		.domain([1, 50])
+		.range([1, 5]);
     	
     // check if we have values to work with
     if(!_nodes || !_links) {
@@ -107,7 +117,8 @@
 
     var force = d3.layout.force()
       .on("tick",function (e) {tick(e)})
-      .distance(optDistance)
+      //.distance(optDistance)
+      .linkDistance(function(d) { return d.distance; })
       .charge(-optCharge)
       .friction(.9)
       .gravity(1)
@@ -158,7 +169,7 @@
     		 nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type, "focus": -1});
     	 });
     	 $.each(_links, function(i,v) {
-    		 links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value});
+    		 links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value, "distance":(maxDistance - linkDistanceScale(v.value)*40)});
     	 });
     	 
     	 $( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + optCharge*k );
@@ -174,9 +185,7 @@
     }
     
     
-    var linkScale = d3.scale.linear()
-    	.domain([1, 50])
-    	.range([1, 7]);
+   
     
     var	nodes = force.nodes(),
       	links = force.links();
@@ -381,7 +390,7 @@
 		      	.attr("marker-end", "url(#Triangle)")
 		      	.classed("highlightable",true)
 		      	.style("stroke-width", function(l) {return linkScale(l.value)})
-		      	.each(function(l) {return console.log("link weight: "+ l.value+ " SourceId: "+l.source.id+" TargetId: "+l.target.id)})
+		      	.each(function(l) {return console.log("link weight: "+ l.value+ " SourceId: "+l.source.id+" TargetId: "+l.target.id+ " Distance: "+l.distance)})
 		
 		      selectedCircle = vis.selectAll("circle.nodeId-"+d.index).transition()
 	    	    .duration(250)

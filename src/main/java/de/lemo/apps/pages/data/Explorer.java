@@ -182,7 +182,7 @@ public class Explorer {
 
 	@Cached
 	public List<Course> getCourses() {
-		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 	}
 
 	public Course getCurrentCourse() {

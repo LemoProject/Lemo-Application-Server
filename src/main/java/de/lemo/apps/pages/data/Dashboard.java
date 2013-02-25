@@ -155,7 +155,7 @@ public class Dashboard {
 	// }
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel1 = new CourseIdSelectModel(courses);
 		this.courseModel2 = new CourseIdSelectModel(courses);
 		this.courseModel3 = new CourseIdSelectModel(courses);
@@ -179,7 +179,7 @@ public class Dashboard {
 	private Integer count;
 
 	public List<Course> getMyCourses() {
-		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 	}
 
 	void onSuccessFromCourseForm1() {

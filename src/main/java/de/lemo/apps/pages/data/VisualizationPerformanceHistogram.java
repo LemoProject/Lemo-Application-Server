@@ -212,7 +212,7 @@ public class VisualizationPerformanceHistogram {
 	// }
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser());
+		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
 
