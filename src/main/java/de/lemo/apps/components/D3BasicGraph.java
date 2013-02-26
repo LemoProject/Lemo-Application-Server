@@ -75,14 +75,8 @@ public class D3BasicGraph implements ClientElement {
 	@AfterRender
 	void afterRender() {
 		final JSONObject spec = new JSONObject();
-		// JSONObject config = new JSONObject();
 		JSONArray dataArrayNodes = null;
 		JSONArray dataArrayLinks = null;
-
-		//
-		// Let subclasses do more.
-		//
-		// configure(config);
 
 		//
 		// do it only if user give us some values
@@ -109,9 +103,6 @@ public class D3BasicGraph implements ClientElement {
 		} else {
 			spec.put("links", new JSONArray(new JSONArray()));
 		}
-
-		// if (config.has("options"))
-		// spec.put("options", config.get("options"));
 
 		spec.put("id", this.getClientId());
 

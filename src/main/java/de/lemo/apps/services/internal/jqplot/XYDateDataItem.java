@@ -158,16 +158,6 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 		// -------------------------------------------------------
 		if (o1 instanceof XYDateDataItem) {
 			final XYDateDataItem dataItem = (XYDateDataItem) o1;
-			// double compare = _xValue.doubleValue() - dataItem.getXValue().doubleValue();
-			// if (compare > 0.0)
-			// result = 1;
-			// else
-			// {
-			// if (compare < 0.0)
-			// result = -1;
-			// else
-			// result = 0;
-			// }
 			return this.xValue.compareTo(dataItem.getXValue());
 		} else {
 			result = 1;

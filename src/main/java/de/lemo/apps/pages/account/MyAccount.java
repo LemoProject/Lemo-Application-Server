@@ -48,7 +48,8 @@ public class MyAccount {
 			this.myAccount = user;
 			return this.myAccount;
 		} else {
-			return new User(); // TODO valid null check
+			// TODO valid null check
+			return new User();
 		}
 	}
 

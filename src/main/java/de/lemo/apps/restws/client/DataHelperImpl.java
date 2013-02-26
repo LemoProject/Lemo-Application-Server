@@ -43,14 +43,12 @@ public class DataHelperImpl implements DataHelper{
 							final Long keyValue = Long.parseLong(kit.next().getValueAsText());
 							final JsonNode entryNodes = eit.next();
 							final JsonNode entryNodesArray = entryNodes.get("elements");
-							// logger.debug("EntryNodes Complete:"+entryNodesArray);
 							if (entryNodesArray.isArray()) {
 								this.logger.debug("Entries is Array ....");
 								entryList = new ArrayList<Long>();
 								final Iterator<JsonNode> enit = entryNodesArray.getElements();
 								while (enit.hasNext()) {
 									final Long enitValue = enit.next().getValueAsLong(0L);
-									// logger.debug("Entry Values: "+enitValue);
 									entryList.add(enitValue);
 								}
 							} else {
@@ -66,14 +64,12 @@ public class DataHelperImpl implements DataHelper{
 						final Long keyValue = Long.parseLong(keys.getValueAsText());
 						final JsonNode entryNodesArray = entries.get("elements");
 						List<Long> entryList = new ArrayList<Long>();
-						// logger.debug("EntryNodes :"+entryNodesArray);
 		
 						if (entryNodesArray.isArray()) {
 							this.logger.debug("Entries is Array ....");
 							final Iterator<JsonNode> enit = entryNodesArray.getElements();
 							while (enit.hasNext()) {
 								Long enitValue = enit.next().getValueAsLong(0L);
-								// logger.debug("Entry Values: "+enitValue);
 								entryList.add(enitValue);
 							}
 						} else {

@@ -6,6 +6,7 @@ package de.lemo.apps.restws.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.slf4j.Logger;
@@ -69,10 +70,9 @@ public class AnalysisImpl implements Analysis {
 			}
 
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return new HashMap<Long, ResultListLongObject>();
 	}
 
@@ -98,10 +98,9 @@ public class AnalysisImpl implements Analysis {
 			}
 
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return new ResultListResourceRequestInfo();
 	}
 
@@ -135,10 +134,9 @@ public class AnalysisImpl implements Analysis {
 			}
 
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return new ResultListRRITypes();
 	}
 
@@ -169,9 +167,9 @@ public class AnalysisImpl implements Analysis {
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return new ResultListResourceRequestInfo();
 	}
 
@@ -204,7 +202,7 @@ public class AnalysisImpl implements Analysis {
 				.create(QUserPathAnalysis.class, AnalysisImpl.QUESTIONS_BASE_URL);
 		if (analysis != null) {
 			final String result = analysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
-			System.out.println("PATH result: " + result);
+			logger.info("PATH result: " + result);
 			return result;
 		}
 		return "{}";
@@ -220,15 +218,14 @@ public class AnalysisImpl implements Analysis {
 				final QCourseUserPaths qUserPath = ProxyFactory.create(QCourseUserPaths.class,
 						AnalysisImpl.QUESTIONS_BASE_URL);
 				if (qUserPath != null) {
-					final String result = qUserPath.compute(courseIds, startTime, endTime);
-					return result;
+					return qUserPath.compute(courseIds, startTime, endTime);
 				}
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return "{}";
 	}
 
@@ -243,7 +240,7 @@ public class AnalysisImpl implements Analysis {
 			final Boolean sessionWise,
 			final Long startTime,
 			final Long endTime) {
-		System.out.println("Starte BIDE Request");
+		logger.info("Starte BIDE Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {
@@ -254,15 +251,15 @@ public class AnalysisImpl implements Analysis {
 					final String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength,
 							minSup,
 							sessionWise, startTime, endTime);
-					System.out.println("BIDE result: " + result);
+					logger.info("BIDE result: " + result);
 					return result;
 				}
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return "{}";
 	}
 
@@ -277,7 +274,7 @@ public class AnalysisImpl implements Analysis {
 			final Boolean sessionWise,
 			final Long startTime,
 			final Long endTime) {
-		System.out.println("Starte BIDE Request");
+		logger.info("Starte BIDE Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {
@@ -288,15 +285,15 @@ public class AnalysisImpl implements Analysis {
 					final String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength,
 							minSup,
 							sessionWise, startTime, endTime);
-					System.out.println("BIDE result: " + result);
+					logger.info("BIDE result: " + result);
 					return result;
 				}
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		System.out.println("Gebe leere Resultlist zurueck");
+		logger.info("Gebe leere Resultlist zurueck");
 		return "{}";
 	}
 
@@ -324,7 +321,7 @@ public class AnalysisImpl implements Analysis {
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return "{}";
@@ -360,7 +357,7 @@ public class AnalysisImpl implements Analysis {
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return new ArrayList<Long>();
@@ -389,7 +386,7 @@ public class AnalysisImpl implements Analysis {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return "{}";

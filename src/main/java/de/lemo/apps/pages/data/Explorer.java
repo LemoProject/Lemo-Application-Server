@@ -157,8 +157,6 @@ public class Explorer {
 	{
 		this.coursesGridModel = this.beanModelSource.createDisplayModel(Course.class, this.componentResources.getMessages());
 		this.coursesGridModel.include("coursename", "lastRequestDate");
-		// coursesGridModel.add("compare",null);
-
 	}
 
 	public Object onActivate(final Course course) {
@@ -187,19 +185,17 @@ public class Explorer {
 	public Course getCurrentCourse() {
 		if (this.initCourse != null) {
 			return this.initCourse;
-		} else if (this.getCourses() !=null && this.getCourses().size() > 0){
+		} else if (this.getCourses() !=null && this.getCourses().size() > 0) {
 			return this.getCourses().get(0);
-		} else return null;
+		} else {
+			return null;
+		}
 	}
 
 	// TODO Fix Problem with jqplot and zone updates
 	Object onActionFromShow(final Long id) {
 		this.initCourse = this.courseDAO.getCourse(id);
 		// TODO Till problem with chart painting and zone updates is not solved, incremental page rendering is off
-		// return new MultiZoneUpdate("courseZone", courseZone.getBody()).add("courseLastMonthZone",
-		// courseLastMonthZone.getBody())
-		// .add("analysisSelectZone", analysisSelectZone.getBody());
-		// .add("courseVisZone", courseVisZone.getBody());
 		return this;
 	}
 
@@ -210,14 +206,20 @@ public class Explorer {
 	}
 
 	public String getFirstRequestDate() {
-		if(this.getCurrentCourse()!= null)
-			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().getFirstRequestDate(), this.currentLocale);
-		else return null;
+		if(this.getCurrentCourse()!= null) {
+			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().
+					getFirstRequestDate(), this.currentLocale);
+		}
+		else {
+			return null;
+		}
 	}
 
 	public String getLastRequestDate() {
-		if(this.getCurrentCourse()!= null)
-			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().getLastRequestDate(), this.currentLocale);
+		if(this.getCurrentCourse()!= null) {
+			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().
+					getLastRequestDate(), this.currentLocale);
+		}
 		else return null;
 	}
 

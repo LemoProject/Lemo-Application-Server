@@ -21,7 +21,8 @@ import de.lemo.apps.restws.entities.CourseObject;
 
 @RequiresAuthentication
 public class Initialize {
-
+	private static final int THOU = 1000;
+	
 	@Inject
 	private Initialisation init;
 
@@ -51,36 +52,24 @@ public class Initialize {
 			for (int i = 0; i < userCourses.size(); i++) {
 				
 				logger.debug("Looking if course ID:"+userCourses.get(i)+" needs update.");
-
-//				if (!this.courseDAO.doExistByForeignCourseId(userCourses.get(i))) {
-//					CourseObject courseObject = null;
-//					try {
-//						courseObject = this.init.getCourseDetails(userCourses.get(i));
-//					} catch (RestServiceCommunicationException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					if (courseObject != null)
-//						this.courseDAO.save(courseObject);
-//				} else
 				if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
 					CourseObject updateObject = null;
 					try {
 						updateObject = this.init.getCourseDetails(userCourses.get(i));
 					} catch (RestServiceCommunicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error(e.getMessage());
 					}
-					if (updateObject != null)
-						logger.debug("ID of updated object is: "+ updateObject.getId()+ "  ----  "+updateObject.getTitle()+ "  ----  "+ updateObject.getDescription() );
+					if (updateObject != null) {
+						logger.debug("ID of updated object is: "+ updateObject.getId() 
+								+ "  ----  "+updateObject.getTitle()+ "  ----  "+ updateObject.getDescription() );
 						this.courseDAO.update(updateObject);
+					}
 				}
 			}
-		// ResultListCourseObject courses = init.getCoursesDetails(user.getMyCourses());
 		}
 
 		// Sleep 2 seconds to simulate a long-running operation
-		this.sleep(1000);
+		this.sleep(THOU);
 
 		return Dashboard.class;
 

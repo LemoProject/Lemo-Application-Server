@@ -17,25 +17,11 @@ public interface Analysis {
 			Long resolution,
 			List<String> resourceTypes);
 
-	// String computeQ1JSON(
-	// List<Long> courses,
-	// List<Long> roles,
-	// Long starttime,
-	// Long endtime,
-	// int resolution,
-	// List<String> resourceTypes);
-
 	ResultListResourceRequestInfo computeCourseActivityExtended(
 			List<Long> courses,
 			Long startTime,
 			Long endTime,
 			List<String> resourceTypes);
-
-	// String computeQ1ExtendedJSON(
-	// List<Long> courses,
-	// Long startTime,
-	// Long endTime,
-	// List<String> resourceTypes);
 
 	ResultListRRITypes computeCourseActivityExtendedDetails(
 			List<Long> courses,
