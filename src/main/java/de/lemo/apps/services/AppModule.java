@@ -65,8 +65,6 @@ import de.lemo.apps.services.security.BasicSecurityRealm;
 public class AppModule {
 
 	public static void bind(final ServiceBinder binder) {
-		// binder.bind(MyServiceInterface.class, MyServiceImpl.class);
-
 		// Service for basic user authentification
 		binder.bind(AuthorizingRealm.class, BasicSecurityRealm.class);
 		binder.bind(UserDAO.class, UserDAOImpl.class);
@@ -113,20 +111,6 @@ public class AppModule {
 		configuration.addInstance(JqPlotJavaScriptStack.STACK_ID, JqPlotJavaScriptStack.class);
 	}
 
-	// /**
-	// * Contributions to the RESTeasy main Application.
-	// */
-	// public static void contributeApplication(Configuration<Object> singletons, ObjectLocator locator)
-	// {
-	// singletons.add(locator.autobuild(LemoServiceResourceImpl.class));
-	// }
-
-	// @Contribute(javax.ws.rs.core.Application.class)
-	// public static void configureRestResources(Configuration<Object> singletons, Initialisation init)
-	// {
-	// singletons.add(init);
-	// }
-
 	public static void contributeApplicationDefaults(
 			final MappedConfiguration<String, Object> configuration) {
 		// Contributions to ApplicationDefaults will override any contributions to
@@ -147,12 +131,6 @@ public class AppModule {
 		configuration.add(SecuritySymbols.UNAUTHORIZED_URL, "/start");
 		configuration.add(SecuritySymbols.SUCCESS_URL, "/data/initialize");
 	}
-
-	// @Match("*DAO")
-	// public static void adviseTransactions(HibernateTransactionAdvisor advisor, MethodAdviceReceiver receiver)
-	// {
-	// advisor.addTransactionCommitAdvice(receiver);
-	// }
 
 	@Match("*DAO")
 	public static <T> T decorateTransactionally(final HibernateTransactionDecorator decorator,

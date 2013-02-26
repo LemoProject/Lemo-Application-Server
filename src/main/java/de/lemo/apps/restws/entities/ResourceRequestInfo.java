@@ -3,10 +3,9 @@ package de.lemo.apps.restws.entities;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ResourceRequestInfo { // implements Comparable<ResourceRequestInfo>{
+public class ResourceRequestInfo {
 
 	private Long id;
-	// private EResourceType resourcetype;
 	private String resourcetype;
 	private Long requests;
 	private Long users;
@@ -40,10 +39,6 @@ public class ResourceRequestInfo { // implements Comparable<ResourceRequestInfo>
 	public String getResourcetype() {
 		return this.resourcetype;
 	}
-
-	// public void setResourcetype(EResourceType resourcetype) {
-	// this.resourcetype = resourcetype.toString();
-	// }
 
 	public void setResourcetype(final String resourcetype) {
 		this.resourcetype = resourcetype;
@@ -79,16 +74,5 @@ public class ResourceRequestInfo { // implements Comparable<ResourceRequestInfo>
 		this.title = title;
 		this.resolutionSlot = resolutionSlot;
 	}
-
-	// // Compare method for comparison of object within lists ....
-	// public int compareTo(ResourceRequestInfo compareObject)
-	// {
-	// if (getNumber() < compareObject.getNumber())
-	// return -1;
-	// else if (getNumber() == compareObject.getNumber())
-	// return 0;
-	// else
-	// return 1;
-	// }
 
 }

@@ -58,6 +58,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/d3_custom_PerformanceBoxPlot.js" })
 public class VisualizationPerformanceCumulative {
 
+	private static final int THOU = 1000;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -166,7 +168,7 @@ public class VisualizationPerformanceCumulative {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -206,11 +208,6 @@ public class VisualizationPerformanceCumulative {
 		this.selectedActivities = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -223,8 +220,7 @@ public class VisualizationPerformanceCumulative {
 		try {
 			quizList = this.init.getRatedObjects(courseList);
 		} catch (RestServiceCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -246,8 +242,6 @@ public class VisualizationPerformanceCumulative {
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
-		// List<Course> courses =
-		// courseDAO.findAllByOwner(userWorker.getCurrentUser());
 		return this.courseValueEncoder.create(Course.class);
 	}
 
@@ -261,12 +255,12 @@ public class VisualizationPerformanceCumulative {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
 			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / 1000);
-			} // else endtime= 1334447632L;
+				endStamp = new Long(this.endDate.getTime() / THOU);
+			}
 
 			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / 1000);
-			} // else starttime = 1308968800L;
+				beginStamp = new Long(this.beginDate.getTime() / THOU);
+			}
 
 			if ((this.resolution == null) || (this.resolution < 10)) {
 				this.resolution = 30;
@@ -280,25 +274,13 @@ public class VisualizationPerformanceCumulative {
 				this.logger.debug("Courses: " + courseList.get(i));
 			}
 
-			// List<String> types = null;
-			// if(selectedActivities != null && !selectedActivities.isEmpty()) {
-			// types = new ArrayList<String>();
-			// for(EResourceType resourceType : selectedActivities) {
-			// types.add(resourceType.name().toLowerCase());
-			// }
-			// }
-			//        	
-
 			List<Long> quizzesList = new ArrayList<Long>();
-			// quizzesList.add(11114282L);
-			// quizzesList.add(11114861L);
 
 			ResultListStringObject quizList = null;
 			try {
 				quizList = this.init.getRatedObjects(courseList);
 			} catch (RestServiceCommunicationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.error(e1.getMessage());
 			}
 
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -354,7 +336,6 @@ public class VisualizationPerformanceCumulative {
 						for (Integer w = 0; w < resultList.size(); w++) {
 							final Long quizID = Long.parseLong(resultList.get(w).getName());
 							resultList.get(w).setName(quizzesMap.get(quizID));
-							// resultList.get(w).setName(quizzesTitles.get(w));
 						}
 
 						resultListString = mapper.writeValueAsString(resultList);
@@ -370,7 +351,6 @@ public class VisualizationPerformanceCumulative {
 
 						final Long quizID = Long.parseLong(singleResult.getName());
 						singleResult.setName(quizzesMap.get(quizID));
-						// resultList.get(w).setName(quizzesTitles.get(w));
 
 						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
 						tmpResultList.add(singleResult);
@@ -380,11 +360,9 @@ public class VisualizationPerformanceCumulative {
 					}
 				}
 			} catch (final JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			this.logger.debug("Cumulative result: " + result);
@@ -417,14 +395,6 @@ public class VisualizationPerformanceCumulative {
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-
-		//
-		// Calendar beginCal = Calendar.getInstance();
-		// Calendar endCal = Calendar.getInstance();
-		// beginCal.setTime(beginDate);
-		// endCal.setTime(endDate);
-		// this.resolution = dateWorker.daysBetween(beginDate, endDate);
-		// logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
 	}
 
 	@AfterRender
@@ -448,10 +418,10 @@ public class VisualizationPerformanceCumulative {
 	}
 
 	public String getFirstRequestDate() {
-		return this.getLocalizedDate(this.beginDate);// .course.getFirstRequestDate());
+		return this.getLocalizedDate(this.beginDate);
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// .course.getLastRequestDate());
+		return this.getLocalizedDate(this.endDate);
 	}
 }

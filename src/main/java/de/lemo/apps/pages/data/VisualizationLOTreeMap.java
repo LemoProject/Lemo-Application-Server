@@ -54,6 +54,8 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
 public class VisualizationLOTreeMap {
 
+	private static final int THOU = 1000;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -159,7 +161,7 @@ public class VisualizationLOTreeMap {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -198,11 +200,6 @@ public class VisualizationLOTreeMap {
 		this.selectedActivities = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -210,8 +207,6 @@ public class VisualizationLOTreeMap {
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
-		// List<Course> courses =
-		// courseDAO.findAllByOwner(userWorker.getCurrentUser());
 		return this.courseValueEncoder.create(Course.class);
 	}
 
@@ -228,12 +223,12 @@ public class VisualizationLOTreeMap {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
 			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / 1000);
-			} // else endtime= 1334447632L;
+				endStamp = new Long(this.endDate.getTime() / THOU);
+			}
 
 			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / 1000);
-			} // else starttime = 1308968800L;
+				beginStamp = new Long(this.beginDate.getTime() / THOU);
+			}
 
 			if ((this.resolution == null) || (this.resolution < 10)) {
 				this.resolution = 30;
@@ -327,14 +322,6 @@ public class VisualizationLOTreeMap {
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-
-		//
-		// Calendar beginCal = Calendar.getInstance();
-		// Calendar endCal = Calendar.getInstance();
-		// beginCal.setTime(beginDate);
-		// endCal.setTime(endDate);
-		// this.resolution = dateWorker.daysBetween(beginDate, endDate);
-		// logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
 	}
 
 	@AfterRender

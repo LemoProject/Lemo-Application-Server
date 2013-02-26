@@ -209,11 +209,6 @@ public class VisualizationFPViger {
 		this.pathLengthMax = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -378,7 +373,6 @@ public class VisualizationFPViger {
 			this.minSup = Integer.parseInt(input);
 		}
 		this.logger.debug("MinSup Value: " + this.minSup);
-		// logger.debug("Selected activities: " + selectedActivities);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 
@@ -388,10 +382,10 @@ public class VisualizationFPViger {
 	}
 
 	public String getFirstRequestDate() {
-		return this.getLocalizedDate(this.beginDate);// .course.getFirstRequestDate());
+		return this.getLocalizedDate(this.beginDate);
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// .course.getLastRequestDate());
+		return this.getLocalizedDate(this.endDate);
 	}
 }

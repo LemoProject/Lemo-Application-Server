@@ -188,11 +188,6 @@ public class VisualizationD3 {
 		this.endDate = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -200,8 +195,6 @@ public class VisualizationD3 {
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
-		// List<Course> courses =
-		// courseDAO.findAllByOwner(userWorker.getCurrentUser());
 		return this.courseValueEncoder.create(Course.class);
 	}
 
@@ -238,7 +231,6 @@ public class VisualizationD3 {
 		this.logger.debug("ResultString: "+result);
 		
 		return result;
-		// return analysis.computeQFrequentPathBIDE(courseIds, null, 0.9, false, beginStamp, endStamp);
 	}
 
 	void setupRender() {
@@ -264,14 +256,6 @@ public class VisualizationD3 {
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-
-		//
-		// Calendar beginCal = Calendar.getInstance();
-		// Calendar endCal = Calendar.getInstance();
-		// beginCal.setTime(beginDate);
-		// endCal.setTime(endDate);
-		// this.resolution = dateWorker.daysBetween(beginDate, endDate);
-		// logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
 	}
 
 	@AfterRender
@@ -295,10 +279,10 @@ public class VisualizationD3 {
 	}
 
 	public String getFirstRequestDate() {
-		return this.getLocalizedDate(this.beginDate);// .course.getFirstRequestDate());
+		return this.getLocalizedDate(this.beginDate);
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// .course.getLastRequestDate());
+		return this.getLocalizedDate(this.endDate);
 	}
 }

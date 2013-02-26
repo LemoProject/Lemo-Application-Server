@@ -21,6 +21,9 @@ import org.slf4j.Logger;
 public class DateWorkerImpl implements DateWorker {
 
 	@Inject
+	private Logger logger;
+	
+	@Inject
 	private Messages messages;
 
 	private final AssetSource assetSource;
@@ -99,7 +102,7 @@ public class DateWorkerImpl implements DateWorker {
 			 */
 			monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();
 		} catch (final JSONException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		final JSONLiteral datePickerConfig = new JSONLiteral("{" +
 				"  nextText: 'Next Month'" +

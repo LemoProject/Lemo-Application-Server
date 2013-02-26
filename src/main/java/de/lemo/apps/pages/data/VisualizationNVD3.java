@@ -58,8 +58,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
 	
-	private final int resolutionMax = 500;
-	final int resolutionBasicMultiplier = 4;
+	private final static int THOU = 1000;
+	private final static  int resolutionMax = 500;
+	final static int resolutionBasicMultiplier = 4;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -161,8 +162,6 @@ public class VisualizationNVD3 {
 		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
 				.getMessages());
 		this.resourceGridModel.include("resourcetype", "title", "requests");
-		// resourceGridModel.add("show",null);
-
 	}
 
 	// Select Model for activity multi-select component
@@ -189,7 +188,7 @@ public class VisualizationNVD3 {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
 		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
 	}
@@ -253,11 +252,6 @@ public class VisualizationNVD3 {
 		this.endDate = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -266,8 +260,6 @@ public class VisualizationNVD3 {
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
-		// List<Course> courses =
-		// courseDAO.findAllByOwner(userWorker.getCurrentUser());
 		return this.courseValueEncoder.create(Course.class);
 	}
 
@@ -301,10 +293,10 @@ public class VisualizationNVD3 {
 		Long endStamp = 0L;
 		Long beginStamp = 0L;
 		if (this.beginDate != null) {
-			beginStamp = new Long(this.beginDate.getTime() / 1000);
+			beginStamp = new Long(this.beginDate.getTime() / THOU);
 		}
 		if (this.endDate != null) {
-			endStamp = new Long(this.endDate.getTime() / 1000);
+			endStamp = new Long(this.endDate.getTime() / THOU);
 		}
 
 		
@@ -348,8 +340,8 @@ public class VisualizationNVD3 {
 				for (Integer i = 0; i < resultDataObjects.getElements().size(); i++) {
 					final JSONArray graphDataValue = new JSONArray();
 					final JSONArray graphUserValue = new JSONArray();
-					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * 1000;
-					currentDateStamp = beginStamp * 1000 + dateMultiplier.longValue();
+					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * THOU;
+					currentDateStamp = beginStamp * THOU + dateMultiplier.longValue();
 					graphDataValue.put(0, currentDateStamp);
 					graphDataValue.put(1, resultDataObjects.getElements().get(i));
 
@@ -373,9 +365,6 @@ public class VisualizationNVD3 {
 			}
 
 		}
-
-		// logger.debug(graphParentArray.toString());
-
 		return graphParentArray.toString();
 	}
 
@@ -402,14 +391,6 @@ public class VisualizationNVD3 {
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-
-		//
-		// Calendar beginCal = Calendar.getInstance();
-		// Calendar endCal = Calendar.getInstance();
-		// beginCal.setTime(beginDate);
-		// endCal.setTime(endDate);
-		// this.resolution = dateWorker.daysBetween(beginDate, endDate);
-		// logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
 	}
 
 	@AfterRender
@@ -433,15 +414,15 @@ public class VisualizationNVD3 {
 	}
 
 	public String getFirstRequestDate() {
-		return this.getLocalizedDate(this.beginDate);// .course.getFirstRequestDate());
+		return this.getLocalizedDate(this.beginDate);
 	}
 
 	public String getLastRequestDate() {
-		return this.getLocalizedDate(this.endDate);// course.getLastRequestDate());
+		return this.getLocalizedDate(this.endDate);
 	}
 
 	public String getResourceTypeName() {
-		if ((this.resourceItem != null) && (this.resourceItem.getResourcetype() != "")) {
+		if ((this.resourceItem != null) && (!this.resourceItem.getResourcetype().equals(""))) {
 			return this.messages.get("EResourceType." + this.resourceItem.getResourcetype());
 		} else {
 			return this.messages.get("EResourceType.UNKNOWN");

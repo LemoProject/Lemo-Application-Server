@@ -110,16 +110,6 @@ public class Start {
 
 			final UsernamePasswordToken token = new UsernamePasswordToken(this.username, this.password);
 			this.logger.info("Prepare Logintoken. Username: " + this.username);
-
-//			ResultListLongObject result = init.identifyUserName(this.username);
-//			
-//			if (result  != null && result.getElements()!=null && result.getElements().size() > 0) {
-//				
-//				logger.debug("Corresponding LeMo user ID : "+result.getElements().get(result.getElements().size()-1));
-//				
-//			} else logger.debug("No matching user found");
-//				
-			
 			currentUser.login(token);
 
 		} catch (AuthenticationException ex) {
@@ -136,8 +126,7 @@ public class Start {
 					result = init.identifyUserName(this.username);
 			
 			} catch (RestServiceCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			
 			if (result != null && result.getElements()!=null && result.getElements().size() > 0) {
@@ -151,14 +140,10 @@ public class Start {
 		
 				return registerPage;
 				
-			} else return null;
+			} else {
+				return null;
+			}
 		} 
-//		catch (RestServiceCommunicationException e) {
-//			this.logger.info("Login unsuccessful.");
-//			this.loginForm.recordError(this.messages.get("error.login"));
-//			this.alertManager.info("Login server not available at the moment. Please try again later.");
-//			return null;
-//		}
 
 		return this.pageService.getSuccessPage();
 	}

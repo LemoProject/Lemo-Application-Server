@@ -139,20 +139,6 @@ public class Dashboard {
 
 	private Course widgetCourse3;
 
-	// @SuppressWarnings("unused")
-	// @SessionState(create = false)
-	// @Property
-	// private CurrentUser currentUser;
-	//	
-	//
-	// void onActivate() {
-	// if (securityService.getSubject().isAuthenticated() && !applicationStateManager.exists(CurrentUser.class)) {
-	// CurrentUser currentUser = applicationStateManager.get(CurrentUser.class);
-	// currentUser.merge(securityService.getSubject().getPrincipal());
-	// }
-	//
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel1 = new CourseIdSelectModel(courses);
@@ -266,17 +252,17 @@ public class Dashboard {
 			case 1:
 				final Long id1 = this.userWorker.getCurrentUser().getWidget1();
 				if ((id1 != null) && (this.getWidgetCourse1() != null)) {
-					return this.getWidgetCourse1().getCourseDescription(); // courseDAO.getCourse(id1).getCourseDescription();
+					return this.getWidgetCourse1().getCourseDescription();
 				}
 			case 2:
 				final Long id2 = this.userWorker.getCurrentUser().getWidget2();
 				if ((id2 != null) && (this.getWidgetCourse2() != null)) {
-					return this.getWidgetCourse2().getCourseDescription(); // courseDAO.getCourse(id2).getCourseDescription();
+					return this.getWidgetCourse2().getCourseDescription();
 				}
 			case 3:
 				final Long id3 = this.userWorker.getCurrentUser().getWidget3();
 				if ((id3 != null) && (this.getWidgetCourse3() != null)) {
-					return this.getWidgetCourse3().getCourseDescription(); // courseDAO.getCourse(id3).getCourseDescription();
+					return this.getWidgetCourse3().getCourseDescription();
 				}
 			default:
 				return "Widget unused";

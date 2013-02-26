@@ -206,11 +206,6 @@ public class VisualizationPerformanceHistogramAvg {
 		this.selectedActivities = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -224,8 +219,7 @@ public class VisualizationPerformanceHistogramAvg {
 		try {
 			quizList = this.init.getRatedObjects(courseList);
 		} catch (RestServiceCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -247,8 +241,6 @@ public class VisualizationPerformanceHistogramAvg {
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
-		// List<Course> courses =
-		// courseDAO.findAllByOwner(userWorker.getCurrentUser());
 		return this.courseValueEncoder.create(Course.class);
 	}
 
@@ -270,8 +262,6 @@ public class VisualizationPerformanceHistogramAvg {
 			if (this.beginDate != null) {
 				beginStamp = new Long(this.beginDate.getTime() / 1000);
 			}
-
-			// if(this.resolution == null || this.resolution < 10)
 			this.resolution = 100;
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
@@ -284,9 +274,6 @@ public class VisualizationPerformanceHistogramAvg {
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
-			// @SuppressWarnings("unchecked")
-			// List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate,
-			// selectedUsers, selectedActivities);
 
 			List<Long> courseList = new ArrayList<Long>();
 			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
@@ -304,8 +291,7 @@ public class VisualizationPerformanceHistogramAvg {
 			try {
 				quizList = this.init.getRatedObjects(courseList);
 			} catch (RestServiceCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -344,12 +330,10 @@ public class VisualizationPerformanceHistogramAvg {
 				Integer quizCounter = 0;
 				Long avgCounter = 0L;
 				Long avgAmount = 0L;
-				// preparedResults.add(new ArrayList<Long>());
 				List<Long> currentList = new ArrayList<Long>();
 				for (Integer i = 0; i < results.size(); i++) {
 					currentList.add(results.get(i));
 					avgAmount = avgAmount + results.get(i) * splitCounter;
-					// logger.debug("Percent: "+splitCounter+" persons:"+results.get(i)+" Result:"+results.get(i)*splitCounter);
 					if ((results.get(i) != null) && (results.get(i) > 0)) {
 						avgCounter = avgCounter + results.get(i);
 					}
@@ -365,7 +349,6 @@ public class VisualizationPerformanceHistogramAvg {
 						} else {
 							preparedResults.add(0L);
 						}
-						// preparedResults.add(avgResult);
 						quizCounter++;
 						splitCounter = 0;
 						avgAmount = 0L;
@@ -377,8 +360,6 @@ public class VisualizationPerformanceHistogramAvg {
 			}
 
 			final JSONArray graphParentArray = new JSONArray();
-
-			// for(Integer z = 0; z < preparedResults.size(); z++) {
 			final JSONObject graphDataObject = new JSONObject();
 			final JSONArray graphDataValues = new JSONArray();
 			final List<Long> tmpResults = preparedResults;
@@ -398,24 +379,6 @@ public class VisualizationPerformanceHistogramAvg {
 			graphDataObject.put("key", "Performance");
 
 			graphParentArray.put(graphDataObject);
-			// }
-			// JSONObject graphDataObject2 = new JSONObject();
-			// JSONArray graphDataValues2 = new JSONArray();
-			//
-			// if(results != null && results.size() > 0) {
-			// for(Integer i = 0; i < results.size(); i++) {
-			// JSONObject graphValue2 = new JSONObject();
-			//
-			// graphValue2.put("x", results.get(i).getTitle());
-			// graphValue2.put("y", results.get(i).getUsers());
-			//
-			// graphDataValues2.put(graphValue2);
-			// }
-			// }
-			// graphDataObject2.put("values", graphDataValues2);
-			// graphDataObject2.put("key", "User");
-
-			// graphParentArray.put(graphDataObject2);
 
 			this.logger.debug(graphParentArray.toString());
 
@@ -447,14 +410,6 @@ public class VisualizationPerformanceHistogramAvg {
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-
-		//
-		// Calendar beginCal = Calendar.getInstance();
-		// Calendar endCal = Calendar.getInstance();
-		// beginCal.setTime(beginDate);
-		// endCal.setTime(endDate);
-		// this.resolution = dateWorker.daysBetween(beginDate, endDate);
-		// logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
 	}
 
 	@AfterRender

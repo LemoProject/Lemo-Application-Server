@@ -53,6 +53,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })
 public class VisualizationPerformanceHistogram {
+	private static final int THOU = 1000;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -162,7 +163,7 @@ public class VisualizationPerformanceHistogram {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -206,11 +207,6 @@ public class VisualizationPerformanceHistogram {
 		this.selectedActivities = null;
 	}
 
-	// void pageReset() {
-	// selectedUsers = null;
-	// userIds = getUsers();
-	// }
-
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -224,8 +220,7 @@ public class VisualizationPerformanceHistogram {
 		try {
 			quizList = this.init.getRatedObjects(courseList);
 		} catch (RestServiceCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -247,8 +242,6 @@ public class VisualizationPerformanceHistogram {
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
-		// List<Course> courses =
-		// courseDAO.findAllByOwner(userWorker.getCurrentUser());
 		return this.courseValueEncoder.create(Course.class);
 	}
 
@@ -264,14 +257,12 @@ public class VisualizationPerformanceHistogram {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
 			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / 1000);
+				endStamp = new Long(this.endDate.getTime() / THOU);
 			}
 
 			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / 1000);
+				beginStamp = new Long(this.beginDate.getTime() / THOU);
 			}
-
-			// if(this.resolution == null || this.resolution < 10)
 			this.resolution = 20;
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
@@ -284,10 +275,6 @@ public class VisualizationPerformanceHistogram {
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
-			// @SuppressWarnings("unchecked")
-			// List<ResourceRequestInfo> results = analysisWorker.learningObjectUsage(this.course, beginDate, endDate,
-			// selectedUsers, selectedActivities);
-
 			List<Long> courseList = new ArrayList<Long>();
 			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
 				if (!this.selectedCourses.contains(this.courseId)) {
@@ -299,15 +286,12 @@ public class VisualizationPerformanceHistogram {
 			}
 
 			List<Long> quizzesList = new ArrayList<Long>();
-			// quizzesList.add(11114282L);
-			// quizzesList.add(11114861L);
 
 			ResultListStringObject quizList = null;
 			try {
 				quizList = this.init.getRatedObjects(courseList);
 			} catch (RestServiceCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -344,7 +328,6 @@ public class VisualizationPerformanceHistogram {
 			if (results != null) {
 				Integer splitCounter = 0;
 				Integer quizCounter = 0;
-				// preparedResults.add(new ArrayList<Long>());
 				List<Long> currentList = new ArrayList<Long>();
 				for (Integer i = 0; i < results.size(); i++) {
 					currentList.add(results.get(i));
@@ -379,28 +362,8 @@ public class VisualizationPerformanceHistogram {
 
 				graphDataObject.put("values", graphDataValues);
 				graphDataObject.put("key", quizzesMap.get(quizzesList.get(z)));
-
-				// quizzesTitles.get(z)
-
 				graphParentArray.put(graphDataObject);
 			}
-			// JSONObject graphDataObject2 = new JSONObject();
-			// JSONArray graphDataValues2 = new JSONArray();
-			//
-			// if(results != null && results.size() > 0) {
-			// for(Integer i = 0; i < results.size(); i++) {
-			// JSONObject graphValue2 = new JSONObject();
-			//
-			// graphValue2.put("x", results.get(i).getTitle());
-			// graphValue2.put("y", results.get(i).getUsers());
-			//
-			// graphDataValues2.put(graphValue2);
-			// }
-			// }
-			// graphDataObject2.put("values", graphDataValues2);
-			// graphDataObject2.put("key", "User");
-
-			// graphParentArray.put(graphDataObject2);
 
 			this.logger.debug(graphParentArray.toString());
 
@@ -432,14 +395,6 @@ public class VisualizationPerformanceHistogram {
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-
-		//
-		// Calendar beginCal = Calendar.getInstance();
-		// Calendar endCal = Calendar.getInstance();
-		// beginCal.setTime(beginDate);
-		// endCal.setTime(endDate);
-		// this.resolution = dateWorker.daysBetween(beginDate, endDate);
-		// logger.debug("SetupRender End --- BeginDate:" + beginDate + " EndDate: " + endDate + " Res: " + resolution);
 	}
 
 	@AfterRender

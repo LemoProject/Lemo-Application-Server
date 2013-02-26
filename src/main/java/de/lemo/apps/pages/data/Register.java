@@ -42,17 +42,14 @@ public class Register {
 	private String dmsUserName;
 
 	Object onActivate() {
-		if (dmsUserId == null)
+		if (dmsUserId == null) {
 			return Start.class;
+		}
 		return true;
 	}
 
 	void cleanupRender() {
 
-		// Clear the flash-persisted fields to prevent anomalies in onActivate
-		// when we hit refresh on page or browser button
-		// this.dmsUserName = null;
-		// this.dmsUserId = null;
 	}
 
 	public String getUserName() {
@@ -70,8 +67,7 @@ public class Register {
 			userCourseIds = init.getUserCourses(dmsUserId).getElements();
 
 		} catch (RestServiceCommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error(e1.getMessage());
 		}
 
 		if (userCourseIds != null) {
@@ -83,8 +79,7 @@ public class Register {
 					try {
 						courseObject = this.init.getCourseDetails(courseId);
 					} catch (RestServiceCommunicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error(e.getMessage());
 					}
 					if (courseObject != null) {
 						logger.debug("New Course with Id: " + courseId + " added.");
