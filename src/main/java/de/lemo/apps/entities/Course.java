@@ -1,11 +1,13 @@
 package de.lemo.apps.entities;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import org.apache.tapestry5.beaneditor.DataType;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.hibernate.annotations.NaturalId;
 import de.lemo.apps.application.DateWorkerImpl;
 import de.lemo.apps.restws.entities.CourseObject;
 
@@ -81,6 +83,8 @@ public class Course extends AbstractEntity {
 	/**
 	 * @return the courseId
 	 */
+	@NaturalId
+	@Column(unique = true)
 	public Long getCourseId() {
 		return this.courseId;
 	}
