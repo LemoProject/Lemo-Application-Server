@@ -1,7 +1,6 @@
 /**
  * File UserConfig.java
  * Date Feb 14, 2013
- * Copyright TODO (INSERT COPYRIGHT)
  * 
  * @author Leonard Kappe
  */

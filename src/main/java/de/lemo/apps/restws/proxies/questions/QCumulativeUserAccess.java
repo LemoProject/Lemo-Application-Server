@@ -3,7 +3,6 @@
 	 *
 	 * Date Feb 14, 2013 
 	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
 	 * 
 	 * @param starttime
 	 *            min time for the data

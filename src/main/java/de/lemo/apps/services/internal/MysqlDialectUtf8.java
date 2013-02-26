@@ -3,7 +3,6 @@
 	 *
 	 * Date Feb 14, 2013 
 	 *
-	 * Copyright TODO (INSERT COPYRIGHT)
 	 * 
 	 * adding custom MySQL Dialect with UTF-8 as default charset and InnoDB table engine
 	 */
