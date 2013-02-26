@@ -27,7 +27,6 @@ public class UserRealm extends AuthorizingRealm {
 	public UserRealm(final Session session) {
 		super(new MemoryConstrainedCacheManager());
 		this.session = session;
-		// setName("localaccounts");
 		this.setAuthenticationTokenClass(UsernamePasswordToken.class);
 		this.setCredentialsMatcher(new HashedCredentialsMatcher(Sha1Hash.ALGORITHM_NAME));
 	}
@@ -60,11 +59,6 @@ public class UserRealm extends AuthorizingRealm {
 			return null;
 		// TODO Role logic not yet implemented
 		}
-
-		// Set<String> roles = new HashSet<String>(user.getRoles().size());
-		// for (Role role : user.getRoles())
-		// roles.add(role.name());
-		// return new SimpleAuthorizationInfo(roles);
 
 		return new SimpleAuthorizationInfo();
 	}

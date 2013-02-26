@@ -12,7 +12,6 @@ public class QaModule {
 
 	public static void bind(final ServiceBinder binder) {
 		// Bind any services needed by the QA team to produce their reports
-		// binder.bind(MyServiceMonitorInterface.class, MyServiceMonitorImpl.class);
 	}
 
 	public static void contributeApplicationDefaults(

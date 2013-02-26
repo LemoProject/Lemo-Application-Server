@@ -220,7 +220,9 @@ public class Explorer {
 			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().
 					getLastRequestDate(), this.currentLocale);
 		}
-		else return null;
+		else {
+			return null;
+		}
 	}
 
 	@Cached
@@ -228,7 +230,9 @@ public class Explorer {
 		if(this.getCurrentCourse()!= null){
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
 			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
-		} else return null;
+		} else {
+			return null;
+		}
 	}
 
 	// TODO Scheinbar greift ein Template Property noch auf diese Funktion zu ... auch wen dem nicht so sein sollte ->
@@ -238,7 +242,9 @@ public class Explorer {
 		if(this.getCurrentCourse()!= null){
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
 			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
-		} else return null;
+		} else {
+			return null;
+		}
 	}
 
 	@Cached
@@ -247,7 +253,9 @@ public class Explorer {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
 			final Date beginDate = this.getCurrentCourse().getFirstRequestDate();
 			return this.analysisWorker.usageAnalysis(this.course, beginDate, endDate, null);
-		} else return null;
+		} else {
+			return null;
+		}
 	}
 
 	public Long getAverageRequest(final List<List<XYDateDataItem>> dataItemList) {

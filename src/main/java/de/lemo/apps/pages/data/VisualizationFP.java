@@ -46,6 +46,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
 public class VisualizationFP {
 
+	private static final int THOU = 1000;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -148,7 +150,7 @@ public class VisualizationFP {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -302,10 +304,10 @@ public class VisualizationFP {
 		Long endStamp = 0L;
 		Long beginStamp = 0L;
 		if (this.beginDate != null) {
-			beginStamp = new Long(this.beginDate.getTime() / 1000);
+			beginStamp = new Long(this.beginDate.getTime() / THOU);
 		}
 		if (this.endDate != null) {
-			endStamp = new Long(this.endDate.getTime() / 1000);
+			endStamp = new Long(this.endDate.getTime() / THOU);
 		}
 
 		// Check value for minumim support .. if no value is set it will default to 8 -> 0.8

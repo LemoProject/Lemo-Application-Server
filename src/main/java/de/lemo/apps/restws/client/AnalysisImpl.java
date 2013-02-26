@@ -6,7 +6,6 @@ package de.lemo.apps.restws.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.slf4j.Logger;

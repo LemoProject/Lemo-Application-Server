@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
 
 @XmlRootElement
 public class ResultListHashMapObject {
@@ -15,6 +17,8 @@ public class ResultListHashMapObject {
 	private Map<Long, ResultListLongObject> elements;
 	private List<ResultListLongObject> entries;
 	private Long[] keys;
+	@Inject
+	private Logger logger;
 
 	public ResultListHashMapObject() {
 
@@ -42,8 +46,7 @@ public class ResultListHashMapObject {
 				this.elements.put(this.keys[i], this.entries.get(i));
 			}
 		} else {
-			//TODO Logger verwenden
-			System.out.println("ResultListHashMap ---  Empty Resultset !!!");
+			logger.info("ResultListHashMap ---  Empty Resultset !!!");
 		}
 
 		return this.elements;

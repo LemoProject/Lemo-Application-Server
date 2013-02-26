@@ -112,12 +112,6 @@ public class LayoutAccount {
 		this.persistentLocaleService.set(Locale.ENGLISH);
 	}
 
-	void setupRender() {
-		// javaScriptSupport.importJavaScriptLibrary(dashboardJS);
-		// javaScriptSupport.addScript("InitDashboard();+" +
-		// "alert('Hello!');");
-	}
-
 	public String getGermanLocale() {
 		final Locale currentLocale = this.persistentLocaleService.get();
 		if ((currentLocale != null) && currentLocale.equals(Locale.GERMAN)) {

@@ -25,28 +25,12 @@ public class JqPlotLine extends JqPlot {
 	@Override
 	protected void configure(final JSONObject config) {
 
-		final JSONObject options = new JSONObject();
 		final JSONObject seriesDefaults = new JSONObject();
-
 		final JSONObject axisDefaults = new JSONObject();
 		final JSONObject renderer = new JSONObject();
-		final JSONObject dateAxisRenderer = new JSONObject();
-		final JSONObject rendererOptions = new JSONObject();
 
 		// change to "jQuery.jqplot.BarRenderer" and create an corresponding class if Bar Chart is required
 		renderer.put("renderer", new JSONLiteral("jQuery.jqplot.LineRenderer"));
-
-		// Bar chart related properties
-		/*
-		 * renderer.put("rendererOptions",new
-		 * JSONLiteral("{barDirection: 'vertical', highlightMouseDown: false, barWidth: 10, barPadding: 5}"));
-		 * renderer.put("pointLabels", new JSONLiteral("{show: true}"));
-		 * renderer.put("shadowAngle", new JSONLiteral("135"));
-		 * renderer.put("fill", new JSONLiteral("false"));
-		 * renderer.put("fillColor", new JSONLiteral("'#222'"));
-		 * renderer.put("fillAlpha", new JSONLiteral("0.2"));
-		 * renderer.put("fillAndStroke", new JSONLiteral("true"));
-		 */
 
 		seriesDefaults.put("seriesDefaults", renderer);
 		seriesDefaults.put("legend", new JSONObject("{ show:false, location: 'e' }"));
@@ -65,10 +49,6 @@ public class JqPlotLine extends JqPlot {
 						new JSONLiteral(
 								"{padMin: 0, label: 'Activities', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
 		axisDefaults.put("xaxis", new JSONLiteral("{padMin: 0, renderer:jQuery.jqplot.DateAxisRenderer}"));
-
-		// dateAxisRenderer.put("renderer", new JSONLiteral("jQuery.jqplot.DateAxisRenderer"));
-		// seriesDefaults.put("shadowAngle", new JSONLiteral("5"));
-		// seriesDefaults.put("pointLabels", new JSONObject("{ show:true }"));
 
 		seriesDefaults.put("axes", axisDefaults);
 

@@ -7,7 +7,7 @@ package de.lemo.apps.services.internal.jqplot;
  * 
  * Copyright 2008 by chenillekit.org
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
@@ -172,10 +172,6 @@ public class XYDateDataItem implements Serializable, Comparable, DataJqPlotSeria
 	}
 
 	public JSONArray toJSONArray() {
-		// +(new Integer(_xValue.getYear())).toString()
-		// String dateString = "2011"+"-"+(new Integer(_xValue.getMonth())).toString()+"-"+(new
-		// Integer(_xValue.getDay())).toString();
-		// Timestamp ts = new Timestamp(_xValue.getTime());
 		return new JSONArray(this.xValue.getTime(), this.yValue);
 	}
 }

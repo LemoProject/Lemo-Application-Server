@@ -20,8 +20,7 @@ public class UserWorkerImpl implements UserWorker {
 	private HttpServletRequest request;
 
 	public User getCurrentUser() {
-		final User user = this.userDAO.getUser(this.request.getRemoteUser());
-		return user;
+		return this.userDAO.getUser(this.request.getRemoteUser());
 	}
 
 }

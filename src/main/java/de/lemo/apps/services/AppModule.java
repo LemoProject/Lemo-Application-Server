@@ -116,7 +116,7 @@ public class AppModule {
 		// Contributions to ApplicationDefaults will override any contributions to
 		// FactoryDefaults (with the same key). Here we're restricting the supported
 		// locales to just "en" (English). As you add localised message catalogs and other assets,
-		// you can extend this list of locales (it's a comma separated series of locale names;
+		// you can extend this list of locales (it's a comma separated series of locale names
 		// the first locale name is the default when there's no reasonable match).
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,de");
 

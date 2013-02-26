@@ -73,11 +73,6 @@ public class JqPlotBar extends JqPlot {
 		axisDefaults.put("xaxis", new JSONLiteral("{padMin: 0, renderer:jQuery.jqplot.CategoryAxisRenderer}"));
 		axisDefaults2.put("tickRenderer", new JSONLiteral("jQuery.jqplot.CanvasAxisTickRenderer "));
 		axisDefaults2.put("tickOptions", new JSONLiteral("{angle: -30, fontSize: '10pt'}"));
-
-		// dateAxisRenderer.put("renderer", new JSONLiteral("jQuery.jqplot.DateAxisRenderer"));
-		// seriesDefaults.put("shadowAngle", new JSONLiteral("5"));
-		// seriesDefaults.put("pointLabels", new JSONObject("{ show:true }"));
-
 		seriesDefaults.put("axes", axisDefaults);
 		seriesDefaults.put("axesDefaults", axisDefaults2);
 		config.put("options", seriesDefaults);
