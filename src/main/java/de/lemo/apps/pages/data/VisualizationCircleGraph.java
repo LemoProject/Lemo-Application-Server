@@ -52,7 +52,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 					"../../js/d3/packages.js"})
 public class VisualizationCircleGraph {
 
-	private final static int THOU = 1000;
+	private static final int THOU = 1000;
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 

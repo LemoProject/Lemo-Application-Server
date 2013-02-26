@@ -18,10 +18,8 @@ public class GenericValueEncoder<T> implements ValueEncoder<T> {
 	private final List<T> list;
 
 	public GenericValueEncoder(final List<T> list, final String idField, final PropertyAccess access) {
-		if ((idField != null) && !idField.equalsIgnoreCase("null")) {
-			if (list.size() > 0) {
-				this.idFieldAdapter = access.getAdapter(list.get(0).getClass()).getPropertyAdapter(idField);
-			}
+		if (((idField != null) && !idField.equalsIgnoreCase("null")) && list.size() > 0) {
+			this.idFieldAdapter = access.getAdapter(list.get(0).getClass()).getPropertyAdapter(idField);
 		}
 		this.list = list;
 	}

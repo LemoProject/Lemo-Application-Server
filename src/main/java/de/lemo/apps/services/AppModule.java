@@ -1,8 +1,6 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -26,7 +24,6 @@ import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 import org.tynamo.seedentity.SeedEntityIdentifier;
-import org.tynamo.seedentity.SeedEntityUpdater;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
 import de.lemo.apps.application.DateWorker;
@@ -150,19 +147,12 @@ public class AppModule {
 
 	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {
 		for (User user : ServerConfiguration.getInstance().getUserImports()) {
-			//List<Course> courseList = user.getMyCourses();
-			//if(courseList != null) courseList.clear();	
-			//	else courseList = new ArrayList<Course>(); 
 			for (Course course : user.getMyCourses()) {
 				// TODO Courses can be identified by their unique course id. There should be no need to use explicitly
 				// select courseId with a SeedEntityIdentifier, but for some reason it doesn't work without it.
 				configuration.add("course" + course.getCourseId(), new SeedEntityIdentifier(course, "courseId"));
-			//	courseList.add(course);
 			}
 			configuration.add("user-" + user.getUsername(), new SeedEntityIdentifier(user, "username"));
-			//User updatedUser = user;
-			//updatedUser.setMyCourses(courseList);
-			//configuration.add("user-" + user.getUsername(), new SeedEntityUpdater(user, updatedUser));
 		}
 	}
 

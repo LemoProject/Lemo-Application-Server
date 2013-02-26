@@ -37,7 +37,7 @@ public class User extends AbstractEntity {
 
 	private static final long serialVersionUID = -432098998274596203L;
 	
-	private final static int COLUMN_LENGTH = 128;
+	private static final int COLUMN_LENGTH = 128;
 
 	private List<Course> myCourses = new ArrayList<Course>();
 	private List<Course> favoriteCourses = new ArrayList<Course>();

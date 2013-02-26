@@ -58,9 +58,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
 	
-	private final static int THOU = 1000;
-	private final static  int resolutionMax = 500;
-	final static int resolutionBasicMultiplier = 4;
+	private static final int THOU = 1000;
+	private static final  int RESOLUTION_MAX = 500;
+	static final int RESOLUTION_BASIC_MULTIPLIER = 4;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -304,7 +304,7 @@ public class VisualizationNVD3 {
 		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
 		
-		this.resolutionComputed = resolutionMax;
+		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
 				beginStamp, endStamp, (long) this.resolutionComputed, types);
