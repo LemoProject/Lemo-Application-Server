@@ -4,17 +4,15 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
  
-<head>
+  <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title>${title}</title>
-	<link rel="stylesheet" href="../css/layout.css" type="text/css" media="screen" />
-	<!--[if lt IE 9]>
-	<link rel="stylesheet" href="../css/ie.css" type="text/css" media="screen" />
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+    <title>${title}</title>
+    
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  
     <!-- Le styles -->
-
-    <!--<link href="../css/bootstrap.css" rel="stylesheet" />-->
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -25,7 +23,6 @@
 		.ui-dialog { text-align:left; }
 		.ui-dialog input[type="text"], .ui-dialog textarea { display:block; width:90%; }
     </style>
-    <!--<link href="../css/bootstrap-responsive.css" rel="stylesheet" />-->
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
