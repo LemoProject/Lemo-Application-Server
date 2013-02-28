@@ -427,8 +427,8 @@
 				</executions>
 				<configuration>
 					<preloadSources>
-						<source>//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js</source>
-						<source>//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js</source>
+						<source>${project.basedir}/src/test/resources/js/jquery.min.js</source>
+						<source>${project.basedir}/src/test/resources/js/underscore-min.js</source>
 					</preloadSources>
 					<jsSrcDir>${project.basedir}/src/main/resources/de/lemo/apps/js</jsSrcDir>
 					<jsTestSrcDir>${project.basedir}/src/test/js</jsTestSrcDir>
