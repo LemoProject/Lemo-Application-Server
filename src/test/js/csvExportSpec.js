@@ -35,35 +35,35 @@ describe("Export", function() {
     };
 
 
-    it("create CSV without any headers", function() {
+    it("should create CSV without any headers", function() {
       var csv = dataExport.createCSV(data, recordCount, [date, activity, users]);
       expect(csv).toEqual(BOM + "1234567891,11,1\n" + "1234567892,22,2\n" + "1234567893,33,3");
     });
 
-    it("create CSV with a header record", function() {
+    it("should create CSV with a header record", function() {
       var csv = dataExport.createCSV(data, recordCount, [date, activity, users], ["Date", "Activity", "Users"]);
       expect(csv)
           .toEqual(BOM + "Date,Activity,Users\n" + "1234567891,11,1\n" + "1234567892,22,2\n" + "1234567893,33,3");
     });
 
-    it("don't break on null values", function() {
+    it("should not break on null values", function() {
       var csv = dataExport.createCSV();
       expect(csv).toEqual(BOM);
     });
 
-    it("don't break on empty values", function() {
+    it("should not break on empty values", function() {
       var csv = dataExport.createCSV({}, 0, [], []);
       expect(csv).toEqual(BOM);
     });
 
-    it("escape quotes in values", function() {
+    it("shouldn escape quotes in values", function() {
       var csv = dataExport.createCSV({}, 1, [function() {
         return 'some "value" with quotes';
       }]);
       expect(csv).toEqual(BOM + '"some ""value"" with quotes"');
     });
 
-    it("escape quotes in headers", function() {
+    it("shouldn escape quotes in headers", function() {
       var csv = dataExport.createCSV({}, 0, [], ['some "header" with quotes']);
       expect(csv).toEqual(BOM + '"some ""header"" with quotes"');
     });
