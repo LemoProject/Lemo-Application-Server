@@ -1,5 +1,10 @@
 describe("Export", function() {
 
+  var dataExport = window.dataExport;
+
+  // byte order mark
+  var BOM = '\uFEFF';
+
   describe("to CSV", function() {
 
     /*
@@ -30,36 +35,37 @@ describe("Export", function() {
     };
 
 
-    it("create CSV without a headers", function() {
-      var csv = window.dataExport.createCSV(data, recordCount, [date, activity, users]);
-      expect(csv).toEqual("1234567891,11,1\n" + "1234567892,22,2\n" + "1234567893,33,3");
+    it("create CSV without any headers", function() {
+      var csv = dataExport.createCSV(data, recordCount, [date, activity, users]);
+      expect(csv).toEqual(BOM + "1234567891,11,1\n" + "1234567892,22,2\n" + "1234567893,33,3");
     });
 
     it("create CSV with a header record", function() {
-      var csv = window.dataExport.createCSV(data, recordCount, [date, activity, users], ["Date", "Activity", "Users"]);
-      expect(csv).toEqual("Date,Activity,Users\n" + "1234567891,11,1\n" + "1234567892,22,2\n" + "1234567893,33,3");
+      var csv = dataExport.createCSV(data, recordCount, [date, activity, users], ["Date", "Activity", "Users"]);
+      expect(csv)
+          .toEqual(BOM + "Date,Activity,Users\n" + "1234567891,11,1\n" + "1234567892,22,2\n" + "1234567893,33,3");
     });
 
     it("don't break on null values", function() {
-      var csv = window.dataExport.createCSV();
-      expect(csv).toEqual('');
+      var csv = dataExport.createCSV();
+      expect(csv).toEqual(BOM);
     });
 
     it("don't break on empty values", function() {
-      var csv = window.dataExport.createCSV({}, 0, [], []);
-      expect(csv).toEqual('');
+      var csv = dataExport.createCSV({}, 0, [], []);
+      expect(csv).toEqual(BOM);
     });
 
     it("escape quotes in values", function() {
-      var csv = window.dataExport.createCSV({}, 1, [function() {
+      var csv = dataExport.createCSV({}, 1, [function() {
         return 'some "value" with quotes';
       }]);
-      expect(csv).toEqual('"some ""value"" with quotes"');
+      expect(csv).toEqual(BOM + '"some ""value"" with quotes"');
     });
 
     it("escape quotes in headers", function() {
-      var csv = window.dataExport.createCSV({}, 0, [], ['some "header" with quotes']);
-      expect(csv).toEqual('"some ""header"" with quotes"');
+      var csv = dataExport.createCSV({}, 0, [], ['some "header" with quotes']);
+      expect(csv).toEqual(BOM + '"some ""header"" with quotes"');
     });
 
   });
