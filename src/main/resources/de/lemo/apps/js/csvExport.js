@@ -209,4 +209,4 @@
     createModalExportOptions(selector, exportUsageLineWithFocusChart, data, chart);
   };
 
-})(window.dataExport = window.dataExport || {}, window.jQuery, T5._);
+})(window.dataExport = window.dataExport || {}, window.jQuery, window._ || window.T5._);
