@@ -26,6 +26,14 @@ public class UserDAOImpl implements UserDAO {
 	
 	@Inject
 	private CourseDAO courseDAO;
+	
+	
+	public List<User> getAllUser(){
+		final Criteria criteria = this.session.createCriteria(User.class);
+		final List<User> results = criteria.list();
+		
+		return results;
+	}
 
 	public boolean doExist(final User user) {
 		final Criteria criteria = this.session.createCriteria(User.class);

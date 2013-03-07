@@ -71,7 +71,7 @@ public class Initialize {
 		// Sleep 2 seconds to simulate a long-running operation
 		this.sleep(THOU);
 
-		return Dashboard.class;
+		return DashboardAdmin.class;
 
 	}
 

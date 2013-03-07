@@ -27,7 +27,7 @@
 		    	
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>${getWidgetName('3')}</h5></div></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>Admin Widget</h5></div></a></li>
 					</ul>
 		    	</div>
 				<div class="row-fluid">
@@ -35,7 +35,17 @@
 					</div>
 					<div class="span11">
 						<div class="well">
-	    					Admin Functions
+	    					<t:beandisplay object="user">
+            			
+       						 </t:beandisplay>
+       						 
+       						 <t:grid source="alluser" row="userItem" >
+       						 
+       							 <p:empty>
+              						<p>There are no users to display</p>
+            					</p:empty>
+        					</t:grid>
+    					
     					</div>
 					</div>
 					<div class="span1">
@@ -51,151 +61,11 @@
    </section>
   </div>  
 
-<div class="modal hide fade" id="widgetDialog1">
-			<form t:type="form" t:id="courseForm1" name="courseForm1">
-				<div class="modal-header">
-					<a href="#" class="close" data-dismiss="modal">&times;</a>
-					<h3>${message:widgetPrefs}</h3>
-					</div>
-				<div class="modal-body">
-					<div class="divDialogElements">
-<!--						<input class="xlarge" id="xlInput1" name="xlInput1" type="text" />-->
-						
-							<t:select t:id="widgetCourse1" t:value="widgetCourse1Id" model="courseModel1"/>
-							
-						
-					</div>
-				</div>
-				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog1 ();">Cancel</a>
-					<a href="#" class="btn btn-primary" onclick="okClicked1 ();">OK</a>
-				</div>
-			</form>
-</div>
-
-<div class="modal hide fade" id="widgetDialog2">
-			<form t:type="form" t:id="courseForm2" name="courseForm2">
-				<div class="modal-header">
-					<a href="#" class="close" data-dismiss="modal">&times;</a>
-					<h3>${message:widgetPrefs}</h3>
-					</div>
-				<div class="modal-body">
-					<div class="divDialogElements">
-						
-						<t:select t:id="widgetCourse2" t:value="widgetCourse2Id" model="courseModel2"/>
-						
-					</div>
-				</div>
-				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog2 ();">Cancel</a>
-					<a href="#" class="btn btn-primary" onclick="okClicked2 ();">OK</a>
-				</div>
-			</form>
-</div>
-
-<div class="modal hide fade" id="widgetDialog3">
-			<form t:type="form" t:id="courseForm3" name="courseForm3">
-				<div class="modal-header">
-					<a href="#" class="close" data-dismiss="modal">&times;</a>
-					<h3>${message:widgetPrefs}</h3>
-					</div>
-				<div class="modal-body">
-					<div class="divDialogElements">
-						
-						<t:select t:id="widgetCourse3" t:value="widgetCourse3Id" model="courseModel3"/>
-						
-					</div>
-				</div>
-				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog3 ();">Cancel</a>
-					<a href="#" class="btn btn-primary" onclick="okClicked3 ();">OK</a>
-				</div>
-			</form>
-</div>			     
+	     
      
  <script>
-			$(document).ready(
-			function() {
-				$('#widgetDialog1').bind('show', function () {
-						//document.getElementById("xlInput1").value = "widget1";
-					});
-
-				$('#widgetDialog2').bind('show', function () {});
-
-				$('#widgetDialog3').bind('show', function () {});
-				});
-
-			function closeDialog1 () {
-				$('#widgetDialog1').modal('hide'); 
-				};
-			function closeDialog2 () {
-				$('#widgetDialog2').modal('hide'); 
-				};	
-			function closeDialog3 () {
-				$('#widgetDialog3').modal('hide'); 
-				};
-
-			function okClicked1 () {
-				document.courseForm1.submit();
-				closeDialog1 ();
-				};
-			function okClicked2 () {
-				document.courseForm2.submit();
-				closeDialog2 ();
-				};
-			function okClicked3 () {
-				document.courseForm3.submit();
-				closeDialog3 ();
-				};
+			
 </script>    
      
-<!--  <div id="modal-from-dom" class="modal fade">-->
-<!--    <div class="modal-header">-->
-<!--      <h3>Modal Heading</h3>-->
-<!--     <a href="#" class="close">&times;</a>-->
-<!--    </div>-->
-<!--    <div class="modal-body">-->
-<!--      <p>One fine body…</p>-->
-<!--    </div>-->
-<!--    <div class="modal-footer">-->
-<!--     <a id="btnPrimary" href="#" class="btn primary">Primary</a>-->
-<!--     <a id="btnSecondary" href="#" class="btn secondary">Secondary</a>-->
-<!--    </div>-->
-<!--  </div>-->
-    
-    
-<!--   <div class="modal" id="myModal">-->
-<!--    	<div class="modal-header">-->
-<!--    	<a class="close" data-dismiss="modal">×</a>-->
-<!--    <h3>${message:myAccount}</h3>-->
-<!--    </div>-->
-<!--    <div class="modal-body">-->
-<!--    <p>${message:myAccount}</p>-->
-<!--    </div>-->
-<!--    <div class="modal-footer">-->
-<!--    <a href="#" class="btn">Close</a>-->
-<!--    <a href="#" class="btn btn-primary">Save changes</a>-->
-<!--    </div>-->
-<!--    </div>-->
-<!--    -->
-<!---->
-<!--<script>-->
-<!--    $(document).ready(function () {-->
-<!--      domModal = $('#modal-from-dom');-->
-<!---->
-<!--      $('#btnPrimary').live('click', function(){-->
-<!--        alert('btnPrimary clicked!');-->
-<!--        domModal.modal('hide');-->
-<!--      });-->
-<!---->
-<!--      $('#btnSecondary').live('click', function(){-->
-<!--        alert('btnSecondary clicked!');-->
-<!--        domModal.modal('hide');-->
-<!--      });-->
-<!---->
-<!--    //Removes the close 'x'-->
-<!--      $('.close', $('#modal-from-dom')).remove();-->
-<!--    });-->
-<!--  </script>-->
 
 </html>
