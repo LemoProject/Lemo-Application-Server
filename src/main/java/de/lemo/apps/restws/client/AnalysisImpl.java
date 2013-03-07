@@ -24,6 +24,7 @@ import de.lemo.apps.restws.proxies.questions.QFrequentPathsViger;
 import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
 import de.lemo.apps.restws.proxies.questions.QPerformanceBoxPlot;
 import de.lemo.apps.restws.proxies.questions.QPerformanceHistogram;
+import de.lemo.apps.restws.proxies.questions.QPerformanceUserTest;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 
 /**
@@ -390,5 +391,45 @@ public class AnalysisImpl implements Analysis {
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return "{}";
 	}
+	
+	
+	@Override
+	public List<Long> computePerformanceUserTest(
+			final List<Long> courses,
+			final List<Long> users,
+			final List<Long> quizzes,
+			final Long resolution,
+			final Long startTime,
+			final Long endTime) {
+		this.logger.debug("Starting Performance user test Analysis ... ");
+		try {
+
+			if (init.defaultConnectionCheck()) {
+
+				final QPerformanceUserTest qPerformanceUserTest = ProxyFactory.create(QPerformanceUserTest.class,
+						AnalysisImpl.QUESTIONS_BASE_URL);
+				if (qPerformanceUserTest != null) {
+					List<Long> result;
+					final ResultListLongObject tmpresult = qPerformanceUserTest.compute(courses, users, quizzes,
+							resolution,
+							startTime, endTime);
+					if (tmpresult == null) {
+						result = new ArrayList<Long>();
+					} else {
+						result = tmpresult.getElements();
+					}
+					return result;
+				}
+			}
+
+		} catch (final Exception e) {
+			logger.error(e.getMessage());
+		}
+		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
+		return new ArrayList<Long>();
+	}
+
+	
+	
 
 }

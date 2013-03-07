@@ -6,7 +6,7 @@
   roles="admin global"
   email="lemo@example.com"
   fullname="Administrator"
-  courses="112100 11476 112200 112300"/>
+  courses="12591 1482 112100 11476 112200"/>
   <user name="global"
   password="lemolemo"
   roles="GLOBAL"

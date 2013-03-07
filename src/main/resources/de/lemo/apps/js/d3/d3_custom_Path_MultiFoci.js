@@ -8,6 +8,7 @@
     var w = 960,
         h = 700,
         selectedNodes,
+        centerNodeId = null,
   	    vis,
   	    root;
   
@@ -133,6 +134,28 @@
       for (var i in mynodes) {if (mynodes[i]["id"] == id) return mynodes[i];};
     }
     
+    function findMaxNeighborNode() {
+    	var maxNeighborNodeId = null,
+    		currentMaxNodes = 0,
+    		neighbors = {};
+    	$.each(links, function(i,v) {
+    		if(!neighbors[v.source.id+""] ) neighbors[v.source.id+""] = [];
+    		if(!neighbors[v.target.id+""] ) neighbors[v.target.id+""] = [];
+    		neighbors[v.source.id+""].push(v.source);
+    		neighbors[v.target.id+""].push(v.target);
+    		if(neighbors[v.source.id+""].length > currentMaxNodes) {
+    			currentMaxNodes = neighbors[v.source.id+""].length;
+    			maxNeighborNodeId = v.source.id;
+    		}
+    		if(neighbors[v.target.id+""].length > currentMaxNodes) {
+    			currentMaxNodes = neighbors[v.target.id+""].length;
+    			maxNeighborNodeId = v.target.id;
+    		}
+    	})
+    	return maxNeighborNodeId;
+    }
+  
+    
     var findNeighbours = function(id,mylinks) {
     	var neighbours = {};
     	neighbours["0"] = []; // neighbor nodes
@@ -180,7 +203,7 @@
 
     	 currentCharge = -optCharge;
     	 currentDistance = optDistance;
-    	 
+    	 centerNodeId = findMaxNeighborNode();
     	 drawGraph();
     }
     
@@ -499,7 +522,7 @@
 			}) 	  
 
       // display nodes according to focus
-			nodes.forEach(function(o,i) {
+		nodes.forEach(function(o,i) {
 
         if (o.focus==1) {
 				  o.y += (foci[0].y - o.y) ;
@@ -519,9 +542,16 @@
 //					  o.x += (foci[2].x - o.x) * k;
 //			  }
 			});
-
+			
 			vis.selectAll("g.node")
-			  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			  .attr("transform", function(d) { 
+				 // console.log("CurrentID: "+d.id+" CenterNodeID: "+ centerNodeId);
+				  if (d.id == centerNodeId) {
+		  				d.x = w/2
+		  				d.y = h/2;
+		  				return "translate(" + w/2 + "," + h/2 + ")";
+		  				} else return "translate(" + d.x + "," + d.y + ")"; });
+				  
 
 		};
 

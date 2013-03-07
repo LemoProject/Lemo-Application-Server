@@ -99,7 +99,7 @@
     };
     
     $.fn.tipsy.defaults = {
-        fade: false,
+        fade: true,
         fallback: '',
         gravity: 'n',
         html: false,

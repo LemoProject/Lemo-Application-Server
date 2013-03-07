@@ -78,21 +78,25 @@
 
 	function init() {
 		console.log("Bin im Init - Starting Node Init");
-   	var posCounter = 1;
-   	var skippedCounter = 0;
+		var posCounter = 1;
+		var skippedCounter = 0;
+		
 		$.each(_nodes, function(i,v) {
-        if (v.pathId < amt*(page-1)+1) {
-          skippedCounter++;
-        }
+	        if (v.pathId < amt*(page-1)+1) {
+	          skippedCounter++;
+	        }
+	        
   			if(v.pathId < (page-1)*amt+amt+1 && v.pathId >= (page-1)*amt+1) {
   				if (i >=1 && _nodes[i-1].pathId==_nodes[i].pathId) {
   					posCounter++;
   				} else {
   				  posCounter = 1;
   				  //console.log("Neuer Pfad");
-  			  }
-  			  // console.log("Schreibe Node "+i+" Pfad: "+v.pathId+" Position: "+posCounter+" Name:"+v.title);
-  	   		nodes.push({"pid":v.pathId , "pos":posCounter, "name":v.title, "value": v.value, "type": v.type, "totalRequests": v.totalRequests, "totalUsers":v.totalUsers, "selected":false});
+  				}
+  				// console.log("Schreibe Node "+i+" Pfad: "+v.pathId+" Position: "+posCounter+" Name:"+v.title);
+  				
+  				
+  				nodes.push({"id": i, "pid":v.pathId , "pos":posCounter, "name":v.title, "displayname":v.title, "value": v.value, "type": v.type, "totalRequests": v.totalRequests, "totalUsers":v.totalUsers, "nameprepared" : false,  "selected":false});
   			} else {
   			  // console.log("Max. number of pathes ("+amt+") reached ...!");
   			}
@@ -125,7 +129,7 @@
 	}
 
 for (var i=0; i<amt; i++) {
-	foci.push({x:20+(w-40)/(amt+1)*(i), y:20});
+	  foci[i]=({x:20+(w-40)/(amt-1)*(i), y:20});
 }
 
 
@@ -175,46 +179,6 @@ var force = d3.layout.force()
 
  	var pathAmount = [];
 
-//for (var i=0; i<nodes2.length;i++) {
-//
-// 	console.log("Before sort "+nodes2[i].pfad+"/"+nodes2[i].pos);
-// }
-
-
-
-/*nodes2.sort(function(a, b){
-	if(a.path < b.path)
-		return -1;
-	if (a.path > b.path && a.pos < b.pos)
-		return 1;
-	if (a.path = b.path && a.pos > b.pos)
-		return 1;
-	if (a.path = b.path && a.pos < b.pos)
-		return -1;
-	return 0;
-})
-*/
-//for (var i=0; i<nodes2.length;i++) {
-// 	console.log("After sort"+nodes2[i].pfad+"/"+nodes2[i].pos);
-// }
-
-//for(var j=0; j<nodes2.length; j++) {
-//  nodes.push(nodes2[j]);
-//}
-//
-//for (var j=1; j<nodes.length; j++) {
-//       if (nodes[j-1].pfad==nodes[j].pfad) {
-//       console.log("in");
-//       links.push({source: nodes[j-1], target: nodes[j]});
-//       }
-//    }
- console.log(links.length);
-
-/*for (var i=0; i<links.length;i++) {
- 	console.log(""+links[i].source.pfad+"/"+links[i].target.pfad);
- }
-*/
-
     function restart() {
     
     var link = vis.selectAll("line.link")
@@ -253,11 +217,11 @@ var force = d3.layout.force()
             .on("click", function(d) {
     		
     		      if (d.selected == true) {
-      		      for (var i=0; i<foci.length; i++)
-        		      foci[i]=({x:20+(w-40)/(amt-1)*(i), y:20});
-        		      
-      		      d3.selectAll("g.node circle").style("fill", function(o, i) {
-      		        return  fill(o.name);
+    		    	  for (var i=0; i<foci.length; i++){
+    		    		  foci[i]=({x:20+(w-40)/(amt-1)*(i), y:20});
+    		    	  }
+      		        d3.selectAll("g.node circle").style("fill", function(o, i) {
+      		        	return  fill(o.name);
     		        });
         		      
       		       d3.selectAll("g.node text").text(function(o, i) {
@@ -267,50 +231,74 @@ var force = d3.layout.force()
       		       d.selected=false;
     		       } else {
         		      
-    	         d3.selectAll("g.node circle").style("fill", function(o, i) {
-      		        return fill(o.name); 
-      		        // Alternative version with greyout of non  focused ressources
-      		        // o.pid != d.pid ? greyout(d3.rgb(fill(o.name))) : fill(o.name)
-    		       });
+    		    	   d3.selectAll("g.node circle").style("fill", function(o, i) {
+    		    		   return fill(o.name); 
+    		    		   // Alternative version with greyout of non  focused resources
+    		    		   // o.pid != d.pid ? greyout(d3.rgb(fill(o.name))) : fill(o.name)
+    		    	   });
         		
         		       
-               d3.selectAll("g.node text").text(function(o, i) {
-      		        return o.pid != d.pid ? "" : o.name;
-               });
+		              
         		
-    		      nodes.forEach(function(o, i) {
-      		      if (o.pid == d.pid) {
-        		      o.selected=true;
-      		      }
-      		      else {
-        		      o.selected=false;
-      		      }
-    		      });
+		               nodes.forEach(function(o, i) {
+		            	   if (o.pid == d.pid) {
+		            		   o.selected=true;
+		            	   }
+		            	   else {
+		            		   o.selected=false;
+		            	   }
+		               });
+		               
+		               
+		               
+		           
+		  				
+		               
+		               d3.selectAll("g.node text").text(function(o, i) {
+		            	    if(o.selected){
+		            	    	
+			            	    if(!o.nameprepared){
+			            	    		if (o.name.length < 40) {
+			            	    			if (o.pid % amt > amt/2 ) {
+					            	    		while(o.displayname.length < 40) 
+						  						{ o.displayname = "_".concat(o.displayname) }
+			            	    			}
+				            	    	}
+			            	    		else {
+			            	    			o.displayname = o.displayname.slice(0,40).concat(" ...");
+			            	    		}
+			            	    	
+			            	    	o.nameprepared = true;
+			            	    }
+		            	    	console.log(o.displayname)	
+		            	    	return o.displayname;
+		            	    } else return "";
+		               });  
         		
-    		      for (var i=0; i<amt; i++) {
-    			     foci[i]={x:20+(w-40)/(amt-1)*(i), y:20};
-    		      }
+	    		      for (var i=0; i<amt; i++) {
+	    			     foci[i]={x:20+(w-40)/(amt-1)*(i), y:20};
+	    		      }
         		
         		
-    		      var p = d.pid-(amt*(page-1));
-    		      if (p >= amt/2) {
-      		      for (var i=0; i<p; i++){
-      		        foci[i].x=20+660/(amt-1)*i;
-      		      }
-      		      for (var i=p; i<amt; i++) {
-      		        foci[i].x=280+660/(amt-1)*i;
-      		      }
-    		      }
-    		      else {
-      		      for (var i=0; i<p+1; i++) {
-      		        foci[i].x=20+660/(amt-1)*i;
-      		      }
-      		      for (var i=p+1; i<amt; i++) {
-      		        foci[i].x=280+660/(amt-1)*i;
-      		      }
-    		      }
-    		      force.start();
-		        }
+	    		      var p = d.pid-(amt*(page-1))-1;
+	    		      if (p >= amt/2) {
+		      		      for (var i=0; i<p; i++){
+		      		        foci[i].x=20+660/(amt-1)*i;
+		      		      }
+		      		      for (var i=p; i<amt; i++) {
+		      		        foci[i].x=280+660/(amt-1)*i;
+		      		      }
+	    		      }
+	    		      else {
+		      		      for (var i=0; i<p+1; i++) {
+		      		        foci[i].x=20+660/(amt-1)*i;
+		      		      }
+		      		      for (var i=p+1; i<amt; i++) {
+		      		        foci[i].x=280+660/(amt-1)*i;
+		      		      }
+	    		      }
+	    		      force.start();
+    		       }
     	   })
           .style("fill", function(d) { return fill(d.name); })
           .style("stroke", function(d) { return d3.rgb(fill(1)).darker(2); })
@@ -318,7 +306,7 @@ var force = d3.layout.force()
     
       nodeEnter.append("svg:text")
           .attr("class", "nodetext")
-          .attr("dx", function(d) {return d.pid-(amt*(page-1)) >= amt/2 ? -d.name.length*4.5 - 22 : "1.5em";})
+          .attr("dx", function(d) {return d.pid-(amt*(page-1))-1 >= amt/2 ? -40*6.5 : "1.5em";})
           .attr("dy", ".3em")
           .text(function(d) { return ""});
           

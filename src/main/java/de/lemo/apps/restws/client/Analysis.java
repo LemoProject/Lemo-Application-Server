@@ -100,5 +100,13 @@ public interface Analysis {
 			Long resolution,
 			Long startTime,
 			Long endTime);
+	
+	public List<Long> computePerformanceUserTest(
+			List<Long> courses,
+			List<Long> users,
+			List<Long> quizzes,
+			Long resolution,
+			Long startTime,
+			Long endTime);
 
 }
