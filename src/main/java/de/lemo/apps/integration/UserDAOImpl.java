@@ -57,20 +57,21 @@ public class UserDAOImpl implements UserDAO {
 		return results.get(0);
 	}
 	
-	public void toggleFavoriteCourse(final Long courseId, final Long userId) {
+	public boolean toggleFavoriteCourse(final Long courseId, final Long userId) {
 		logger.info("Setting favorite course courseId:" + courseId);
-		
+
 		Course course = this.courseDAO.getCourse(courseId); 
 		User user = this.getUser(userId);
-		
+		boolean isFavorite;
 		if (user.getFavoriteCourses().contains(course)) {
 			user.getFavoriteCourses().remove(course);
-		}
-
-		else {
+			isFavorite = false;
+		} else {
 			user.getFavoriteCourses().add(course);
+			isFavorite = true;
 		}
 		this.session.update(user);
+		return isFavorite;
 	}
 	
 

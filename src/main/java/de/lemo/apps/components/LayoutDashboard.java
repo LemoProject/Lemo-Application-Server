@@ -28,17 +28,17 @@ import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
 @Exclude(stylesheet = { "core" })
-// remove the Tapestry css
-@ImportJQueryUI( { "jquery.ui.mouse", "jquery.ui.slider", "jquery.ui.draggable", "jquery.ui.sortable" })
-@Import(library = { "../js/bootstrap-alert.js",
-
+@ImportJQueryUI({ "jquery.ui.mouse", "jquery.ui.slider", "jquery.ui.draggable", "jquery.ui.sortable" })
+@Import(
+		library = {
+				"../js/bootstrap-alert.js",
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/spin.js",
 				"../js/d3/d3.v2.min.js",
 				"../js/d3/d3_BoxPlot_Lib.js",
 				"../js/d3/nv.d3.js",
-				"../js/d3/jquery.tipsy.js",	
+				"../js/d3/jquery.tipsy.js",
 				"../js/bootstrap-transition.js",
 				"../js/bootstrap-modal.js",
 				"../js/bootstrap-dropdown.js",
@@ -50,15 +50,16 @@ import de.lemo.apps.pages.data.Dashboard;
 				"../js/bootstrap-collapse.js",
 				"../js/bootstrap-carousel.js",
 				"../js/bootstrap-typeahead.js",
-				"../js/csvExport.js"},
-
-stylesheet = { "../css/bootstrap-responsive.css",
-						"../css/bootstrap.css",
-						"../css/jquery.jqplot.css",
-						"../css/nv.d3.css",
-						// "../css/jquery-ui-1.8.16.bootstrap.css",
-		"../css/apps.css" })
-
+				"../js/csvExport.js"
+		},
+		stylesheet = {
+				"../css/bootstrap-responsive.css",
+				"../css/bootstrap.css",
+				"../css/jquery.jqplot.css",
+				"../css/nv.d3.css",
+				// "../css/jquery-ui-1.8.16.bootstrap.css",
+				"../css/apps.css"
+		})
 public class LayoutDashboard {
 
 	/**

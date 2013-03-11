@@ -16,7 +16,7 @@ public interface UserDAO {
 	User getUser(String username);
 	
 	@CommitAfter
-	void toggleFavoriteCourse(final Long courseId, final Long userId);
+	boolean toggleFavoriteCourse(final Long courseId, final Long userId);
 
 	@CommitAfter
 	void update(User user);

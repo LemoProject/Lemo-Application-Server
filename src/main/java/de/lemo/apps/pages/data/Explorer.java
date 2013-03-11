@@ -1,9 +1,7 @@
 /**
-	 * File Explorer.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File Explorer.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.pages.data;
 
 import java.util.Calendar;
@@ -21,12 +19,14 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.slf4j.Logger;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.StatisticWorker;
@@ -44,6 +44,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "myCourses")
 public class Explorer {
+
+	@Inject
+	private Logger logger;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -104,7 +107,7 @@ public class Explorer {
 
 	@Inject
 	private CourseDAO courseDAO;
-	
+
 	@Inject
 	private UserDAO userDAO;
 
@@ -113,6 +116,9 @@ public class Explorer {
 
 	@Property
 	private Course course;
+
+	@Property
+	private boolean favorite;
 
 	@Property
 	@Persist
@@ -155,8 +161,13 @@ public class Explorer {
 	@Retain
 	private BeanModel coursesGridModel;
 	{
-		this.coursesGridModel = this.beanModelSource.createDisplayModel(Course.class, this.componentResources.getMessages());
+		this.coursesGridModel = this.beanModelSource.createDisplayModel(Course.class,
+				this.componentResources.getMessages());
 		this.coursesGridModel.include("coursename", "lastRequestDate");
+	}
+
+	public void onPrepare() {
+		favorite = userWorker.getCurrentUser().getFavoriteCourses().contains(getCurrentCourse());
 	}
 
 	public Object onActivate(final Course course) {
@@ -185,7 +196,7 @@ public class Explorer {
 	public Course getCurrentCourse() {
 		if (this.initCourse != null) {
 			return this.initCourse;
-		} else if (this.getCourses() !=null && this.getCourses().size() > 0) {
+		} else if (this.getCourses() != null && this.getCourses().size() > 0) {
 			return this.getCourses().get(0);
 		} else {
 			return null;
@@ -200,13 +211,13 @@ public class Explorer {
 	}
 
 	Object onActionFromFavorite(final Long id) {
-		this.userDAO.toggleFavoriteCourse(id,this.userWorker.getCurrentUser().getId());
+		favorite = this.userDAO.toggleFavoriteCourse(id, this.userWorker.getCurrentUser().getId());
 		this.initCourse = this.courseDAO.getCourse(id);
 		return this;
 	}
 
 	public String getFirstRequestDate() {
-		if(this.getCurrentCourse()!= null) {
+		if (this.getCurrentCourse() != null) {
 			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().
 					getFirstRequestDate(), this.currentLocale);
 		}
@@ -216,7 +227,7 @@ public class Explorer {
 	}
 
 	public String getLastRequestDate() {
-		if(this.getCurrentCourse()!= null) {
+		if (this.getCurrentCourse() != null) {
 			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().
 					getLastRequestDate(), this.currentLocale);
 		}
@@ -227,7 +238,7 @@ public class Explorer {
 
 	@Cached
 	public List getUsageAnalysisLastMonth() {
-		if(this.getCurrentCourse()!= null){
+		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
 			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
 		} else {
@@ -239,7 +250,7 @@ public class Explorer {
 	// die korrekte Methode lautet ...LastMonth
 	@Cached
 	public List getUsageAnalysis() {
-		if(this.getCurrentCourse()!= null){
+		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
 			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
 		} else {
@@ -249,7 +260,7 @@ public class Explorer {
 
 	@Cached
 	public List getUsageAnalysisOverall() {
-		if(this.getCurrentCourse()!= null){
+		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
 			final Date beginDate = this.getCurrentCourse().getFirstRequestDate();
 			return this.analysisWorker.usageAnalysis(this.course, beginDate, endDate, null);
