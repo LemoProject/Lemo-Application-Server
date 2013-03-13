@@ -16,6 +16,11 @@ import org.slf4j.Logger;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 
+/**
+ * implementation of the DAO for the user
+ * @author Boris Wenzlaff
+ *
+ */
 public class UserDAOImpl implements UserDAO {
 
 	@Inject

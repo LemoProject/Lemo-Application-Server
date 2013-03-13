@@ -15,6 +15,10 @@ import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
 
+/**
+ * Represents the information for the dms 
+ *
+ */
 @RequiresAuthentication
 @BreadCrumbReset
 public class ServerAdministration {

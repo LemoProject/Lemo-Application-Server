@@ -49,6 +49,9 @@ import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
+/**
+ * Visualisation for the performance histogram with avg data
+ */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })

@@ -53,6 +53,9 @@ import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
+/**
+ * Visualisation for the cumulative performance
+ */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/d3_custom_PerformanceBoxPlot.js" })

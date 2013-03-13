@@ -47,6 +47,9 @@ import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
+/**
+ * Visualisation for cumulative user access by week and days
+ */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/d3_custom_BoxPlot.js" })

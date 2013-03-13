@@ -46,6 +46,11 @@ import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
+/**
+ * visualisation for the circle graph
+ * @author Boris Wenzlaff
+ *
+ */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
 @Import(library = { "../../js/d3/d3_custom_Circle_graph.js",
