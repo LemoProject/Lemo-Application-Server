@@ -11,6 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 
+/**
+ * Result list with hashmap objects
+ */
 @XmlRootElement
 public class ResultListHashMapObject {
 

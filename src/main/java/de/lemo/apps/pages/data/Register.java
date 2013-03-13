@@ -18,6 +18,11 @@ import de.lemo.apps.pages.Start;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.CourseObject;
 
+/**
+ * Registration for an user and lookup for the courses
+ * of the user
+ *
+ */
 public class Register {
 
 	@Inject

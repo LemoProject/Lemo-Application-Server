@@ -5,6 +5,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Result list with resource information for the types in the lemo db
+ */
 @XmlRootElement
 public class ResultListRRITypes {
 

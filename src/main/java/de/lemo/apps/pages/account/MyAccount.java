@@ -18,6 +18,10 @@ import de.lemo.apps.integration.UserDAO;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 
+/**
+ * Shows account information for the user
+ *
+ */
 @RequiresAuthentication
 @BreadCrumbReset
 public class MyAccount {

@@ -16,6 +16,10 @@ import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Checks which resources are used in certain courses
+ * an extra parameter specifies the resolution of the data
+ */
 public interface QActivityResourceTypeResolution {
 
 	@POST

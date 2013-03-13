@@ -9,6 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Base object for the widgets
+ *
+ */
 @Entity
 @Table(name = "widget")
 public class Widget extends AbstractEntity {

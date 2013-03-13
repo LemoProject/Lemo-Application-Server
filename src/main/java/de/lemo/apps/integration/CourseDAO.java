@@ -12,6 +12,9 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.restws.entities.CourseObject;
 
+/**
+ * DAO class for courses
+ */
 public interface CourseDAO {
 
 	List<Course> findAllByOwner(User user, boolean needUpdate);

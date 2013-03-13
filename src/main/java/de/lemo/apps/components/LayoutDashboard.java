@@ -27,6 +27,9 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
+/**
+ * Layout for the dashboard
+ */
 @Exclude(stylesheet = { "core" })
 @ImportJQueryUI({ "jquery.ui.mouse", "jquery.ui.slider", "jquery.ui.draggable", "jquery.ui.sortable" })
 @Import(

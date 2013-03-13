@@ -19,6 +19,9 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.restws.entities.CourseObject;
 
+/**
+ * DAO for the course object
+ */
 public class CourseDAOImpl implements CourseDAO {
 
 	@Inject

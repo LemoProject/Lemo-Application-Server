@@ -4,6 +4,10 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 
+/**
+ * Invoked to allow subclasses to further configure the parameters passed to this component's javascript
+ * options. Subclasses may override this method to configure additional features of the jqPlot library.
+ */
 @Import(library = { "../js/jqplot/plugins/jqplot.barRenderer.js",
 					"../js/jqplot/plugins/jqplot.highlighter.min.js",
 					"../js/jqplot/plugins/jqplot.cursor.min.js",

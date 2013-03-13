@@ -9,6 +9,10 @@ package de.lemo.apps.application.config;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Static name for the configuration
+ *
+ */
 @XmlRootElement(name = "config")
 class LemoConfig {
 

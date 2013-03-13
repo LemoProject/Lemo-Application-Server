@@ -2,13 +2,18 @@ package de.lemo.apps.restws.client;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 
+/**
+ * Interface for the analysis for the gui 
+ *
+ */
 public interface Analysis {
 
-	HashMap<Long, ResultListLongObject> computeCourseActivity(
+	Map<Long, ResultListLongObject> computeCourseActivity(
 			List<Long> courses,
 			List<Long> roles,
 			List<Long> users,
@@ -101,7 +106,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime);
 	
-	public List<Long> computePerformanceUserTest(
+	List<Long> computePerformanceUserTest(
 			List<Long> courses,
 			List<Long> users,
 			List<Long> quizzes,

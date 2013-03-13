@@ -15,6 +15,9 @@ import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Use of learning objects
+ */
 public interface QLearningObjectUsage {
 
 	@POST

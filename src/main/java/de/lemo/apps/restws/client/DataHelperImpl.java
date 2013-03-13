@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
@@ -13,13 +14,16 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
-
+/**
+ * Helper to converts Maps
+ */
 public class DataHelperImpl implements DataHelper{
 	
 	@Inject
 	private Logger logger;
 	
-	public HashMap<Long, ResultListLongObject> convertJSONStringToResultListHashMap(String jsonString){
+	public 
+	Map<Long, ResultListLongObject> convertJSONStringToResultListHashMap(String jsonString){
 		
 		
 		HashMap<Long, ResultListLongObject> resultList = new HashMap<Long, ResultListLongObject>();

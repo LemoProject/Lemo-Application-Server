@@ -17,6 +17,10 @@ import org.slf4j.Logger;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
 
+/**
+ * Helper for user authentication
+ *
+ */
 public class BasicSecurityRealm extends AuthorizingRealm {
 
 	@Inject

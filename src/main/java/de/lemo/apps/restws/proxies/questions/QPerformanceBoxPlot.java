@@ -14,6 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Accumulates the performance (result of tests) of the users over a period
+ */
 public interface QPerformanceBoxPlot {
 
 	@POST

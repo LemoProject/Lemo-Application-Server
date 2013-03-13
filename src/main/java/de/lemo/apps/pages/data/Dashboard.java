@@ -42,6 +42,9 @@ import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
+/**
+ * implementation of the dashboard view
+ */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "dashboardTitle")
 @BreadCrumbReset

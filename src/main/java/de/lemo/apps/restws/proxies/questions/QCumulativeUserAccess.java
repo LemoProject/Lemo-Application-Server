@@ -31,6 +31,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Accumulates the requests of the users to the objects over a period
+ */
 public interface QCumulativeUserAccess {
 
 	@POST

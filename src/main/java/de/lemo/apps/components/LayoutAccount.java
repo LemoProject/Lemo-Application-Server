@@ -21,6 +21,9 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
+/**
+ * Layout for the account site
+ */
 @Exclude(stylesheet = { "core" })
 // remove the Tapestry css
 @ImportJQueryUI( { "jquery.ui.core", "jquery.ui.mouse", "jquery.ui.draggable", "jquery.ui.sortable" })

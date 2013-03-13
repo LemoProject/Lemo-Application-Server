@@ -4,6 +4,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Result list with string objects
+ */
 @XmlRootElement
 public class ResultListStringObject {
 

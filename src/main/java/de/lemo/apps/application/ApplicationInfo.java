@@ -8,6 +8,10 @@ package de.lemo.apps.application;
 
 import java.util.ResourceBundle;
 
+/**
+ * Helper class to show information about the application server 
+ *
+ */
 public final class ApplicationInfo {
 
 	private static final String BUNDLE_NAME = "de.lemo.apps.application.config";

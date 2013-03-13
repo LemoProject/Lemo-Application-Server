@@ -11,6 +11,11 @@ import java.util.Date;
 import java.util.Locale;
 import org.apache.tapestry5.json.JSONLiteral;
 
+/**
+ * Interface for helper class for date operations
+ * @author Boris Wenzlaff
+ *
+ */
 public interface DateWorker {
 
 	int daysBetween(Calendar startDate, Calendar endDate);

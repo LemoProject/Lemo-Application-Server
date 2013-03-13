@@ -17,6 +17,9 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import de.lemo.apps.services.internal.d3.D3GraphDataItem;
 
+/*
+ * Basic implementation for an graph object
+ */
 @SupportsInformalParameters
 @Import(library = { "../js/d3/d3_custom.js",
 					"../js/d3/d3.v2.js" })

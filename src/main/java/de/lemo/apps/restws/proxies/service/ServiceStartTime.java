@@ -10,6 +10,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import de.lemo.apps.restws.entities.SCTime;
 
+/**
+ * REST Webservice for the start time of the server
+ */
 public interface ServiceStartTime {
 
 	@GET

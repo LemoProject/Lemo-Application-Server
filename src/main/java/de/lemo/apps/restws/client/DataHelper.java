@@ -2,11 +2,15 @@
 package de.lemo.apps.restws.client;
 
 import java.util.HashMap;
+import java.util.Map;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
-
+/**
+ * Helper to converts Maos 
+ *
+ */
 public interface DataHelper {
 	
-	HashMap<Long, ResultListLongObject> convertJSONStringToResultListHashMap(String jsonString);
+	Map<Long, ResultListLongObject> convertJSONStringToResultListHashMap(String jsonString);
 
 }

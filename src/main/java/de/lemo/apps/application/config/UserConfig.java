@@ -11,6 +11,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * Class reprasentation for the user configuration in user.xml
+ *
+ */
 @XmlType
 class UserConfig {
 

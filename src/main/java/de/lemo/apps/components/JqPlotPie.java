@@ -5,6 +5,9 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 
+/**
+ * Add an pie diagram to jqplot
+ */
 @Import(library = { "../js/jqplot/plugins/jqplot.pieRenderer.js" })
 public class JqPlotPie extends JqPlot {
 

@@ -14,6 +14,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Generates a list of Nodes and edges, representing the user-navigation
+ * 
+ */
 public interface QUserPathAnalysis {
 
 	@POST

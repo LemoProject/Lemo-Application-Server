@@ -3,6 +3,10 @@ package de.lemo.apps.restws.entities;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Represents an course object
+ *
+ */
 @XmlRootElement
 public class CourseObject {
 

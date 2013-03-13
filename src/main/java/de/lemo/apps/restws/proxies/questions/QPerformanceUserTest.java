@@ -11,7 +11,9 @@ import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 
 
-
+/**
+ * Gathers and returns all all test results for every student and every test in a course
+ */
 public interface QPerformanceUserTest {
 	
 	/**

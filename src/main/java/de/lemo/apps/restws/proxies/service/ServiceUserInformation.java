@@ -13,6 +13,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
 
+/**
+ * Service for user information. Provide all courses for a user
+ */
 public interface ServiceUserInformation {
 
 	@GET

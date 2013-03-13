@@ -15,6 +15,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Computes paths for users
+
+ */
 public interface QCourseUserPaths {
 
 	@POST

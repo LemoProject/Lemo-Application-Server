@@ -15,6 +15,9 @@ import org.slf4j.Logger;
 import de.lemo.apps.entities.Question;
 import de.lemo.apps.exceptions.ObjectNotSavedException;
 
+/**
+ * implementation of the questionDao interface
+ */
 public class QuestionDAOImpl implements QuestionDAO {
 
 	@Inject

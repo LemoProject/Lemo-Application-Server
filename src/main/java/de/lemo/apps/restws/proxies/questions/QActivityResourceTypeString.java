@@ -14,6 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Checks which resources are used in certain courses
+ */
 public interface QActivityResourceTypeString {
 
 	@POST

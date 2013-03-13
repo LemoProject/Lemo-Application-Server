@@ -16,7 +16,9 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 
-
+/**
+ * Service for the authentification of an user
+ */
 public interface ServiceLoginAuthentification {
 	
 	@GET

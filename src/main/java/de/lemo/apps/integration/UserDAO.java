@@ -9,6 +9,9 @@ package de.lemo.apps.integration;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import de.lemo.apps.entities.User;
 
+/**
+ * Interface for an dao object for the user
+ */
 public interface UserDAO {
 
 	boolean doExist(User user);

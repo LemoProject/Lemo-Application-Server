@@ -8,6 +8,9 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
 
+/**
+ * Site Layout for the gui
+ */
 @Import(library = { "../js/bootstrap-alert.js",
 			// "../js/jquery-1.5.2.min.js",
 		"../js/bootstrap-transition.js",

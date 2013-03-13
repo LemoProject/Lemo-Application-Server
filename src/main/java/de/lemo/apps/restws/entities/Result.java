@@ -3,6 +3,10 @@ package de.lemo.apps.restws.entities;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Represents a list with results from the dms
+ *
+ */
 @XmlRootElement
 public class Result {
 

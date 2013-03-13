@@ -8,6 +8,10 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Static name for the user configuration 
+ *
+ */
 @XmlRootElement(name = "lemo-users")
 class LemoUserConfig {
 

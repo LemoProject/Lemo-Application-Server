@@ -19,7 +19,6 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
-import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -41,13 +40,19 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 
+/**
+ * Course explorer, represents an overview for the user
+ */
+@SuppressWarnings({ "unused", "unused", "unused", "unused" })
 @RequiresAuthentication
 @BreadCrumb(titleKey = "myCourses")
 public class Explorer {
 
+	@SuppressWarnings("unused")
 	@Inject
 	private Logger logger;
 
+	@SuppressWarnings("unused")
 	@Property
 	private BreadCrumbInfo breadCrumb;
 
@@ -69,6 +74,7 @@ public class Explorer {
 	@Inject
 	private AnalysisWorker analysisWorker;
 
+	@SuppressWarnings("unused")
 	@Inject
 	private Locale currentLocale;
 

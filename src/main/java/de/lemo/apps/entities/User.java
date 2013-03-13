@@ -31,6 +31,9 @@ import org.hibernate.annotations.Index;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.NaturalId;
 
+/**
+ * User object that represents an user in the lemo application
+ */
 @Entity
 @Table(name = "user")
 public class User extends AbstractEntity {

@@ -10,6 +10,10 @@ package de.lemo.apps.services.internal;
 
 import org.hibernate.dialect.MySQL5InnoDBDialect;
 
+/**
+ * Static String with SQL dialect 
+ *
+ */
 public class MysqlDialectUtf8 extends MySQL5InnoDBDialect {
 
 	@Override

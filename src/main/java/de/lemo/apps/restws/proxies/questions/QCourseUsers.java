@@ -15,6 +15,9 @@ import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * All members of a course
+ */
 public interface QCourseUsers {
 
 	@POST

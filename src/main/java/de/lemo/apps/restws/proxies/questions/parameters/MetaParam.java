@@ -6,6 +6,11 @@
 	 */
 package de.lemo.apps.restws.proxies.questions.parameters;
 
+/**
+ * Interface for the metaparams of the question classes
+ * @author Boris Wenzlaff
+ *
+ */
 public interface MetaParam {
 
 	String COURSE_IDS = "cid";

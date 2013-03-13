@@ -3,6 +3,9 @@ package de.lemo.apps.restws.entities;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Result list with boxpot objects
+ */
 @XmlRootElement
 public class ResultListBoxPlot {
 

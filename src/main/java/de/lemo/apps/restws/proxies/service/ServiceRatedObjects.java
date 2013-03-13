@@ -14,6 +14,9 @@ import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Service to get a list of all learning objects within the specified courses that have a grade attribute
+ */
 public interface ServiceRatedObjects {
 
 	@GET

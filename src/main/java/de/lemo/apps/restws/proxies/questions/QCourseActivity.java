@@ -15,6 +15,9 @@ import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListHashMapObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
+/**
+ * Shows to the activities in the courses by objects
+ */
 public interface QCourseActivity {
 
 	@POST

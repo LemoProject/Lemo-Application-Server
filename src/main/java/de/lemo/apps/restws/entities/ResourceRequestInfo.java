@@ -2,6 +2,10 @@ package de.lemo.apps.restws.entities;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Information for an resource object
+ *
+ */
 @XmlRootElement
 public class ResourceRequestInfo {
 

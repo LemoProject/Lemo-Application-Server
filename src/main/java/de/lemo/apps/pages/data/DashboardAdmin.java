@@ -31,7 +31,6 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.UserWorker;
-import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
@@ -42,6 +41,10 @@ import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
+/**
+ * Dashboard view for the administrator
+ *
+ */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "dashboardTitle")
 @BreadCrumbReset
