@@ -1,6 +1,5 @@
 package de.lemo.apps.restws.client;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import de.lemo.apps.restws.entities.ResultListLongObject;

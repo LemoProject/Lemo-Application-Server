@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
@@ -44,7 +44,6 @@ import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
-import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
@@ -306,7 +305,7 @@ public class VisualizationNVD3 {
 		
 		this.resolutionComputed = RESOLUTION_MAX;
 		
-		final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
+		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
 				beginStamp, endStamp, (long) this.resolutionComputed, types);
 
 		final JSONArray graphParentArray = new JSONArray();

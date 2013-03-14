@@ -1,16 +1,14 @@
 /**
-	 * File AnalysisWorkerImpl.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File AnalysisWorkerImpl.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.application;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.slf4j.Logger;
@@ -33,11 +31,10 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Inject
 	private Analysis analysis;
-	
-	
 
-	public List<ResourceRequestInfo> usageAnalysisExtended(final Course course, final Date beginDate, final Date endDate,
-			final List<EResourceType> resourceTypes) {
+	@Override
+	public List<ResourceRequestInfo> usageAnalysisExtended(final Course course, final Date beginDate,
+			final Date endDate, final List<EResourceType> resourceTypes) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -73,7 +70,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " ");
 
 			this.logger.debug("Starting Extended Analysis");
-			final ResultListResourceRequestInfo results = this.analysis.computeCourseActivityExtended(courses, beginStamp,
+			final ResultListResourceRequestInfo results = this.analysis.computeCourseActivityExtended(courses,
+					beginStamp,
 					endStamp, resourceTypesNames);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
@@ -89,6 +87,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 		return new ArrayList<ResourceRequestInfo>();
 	}
 
+	@Override
 	public List<ResourceRequestInfo> learningObjectUsage(final Course course, final Date beginDate, final Date endDate,
 			final List<Long> selectedUsers, final List<EResourceType> resourceTypes) {
 
@@ -126,7 +125,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " ");
 
 			this.logger.debug("Starting Extended Analysis");
-			final ResultListResourceRequestInfo results = this.analysis.computeLearningObjectUsage(courses, selectedUsers,
+			final ResultListResourceRequestInfo results = this.analysis.computeLearningObjectUsage(courses,
+					selectedUsers,
 					resourceTypesNames, beginStamp, endStamp);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
@@ -142,8 +142,9 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 		return new ArrayList<ResourceRequestInfo>();
 	}
 
-	public ResultListRRITypes usageAnalysisExtendedDetails(final Course course, final Date beginDate, final Date endDate,
-			final Integer resolution, final List<EResourceType> resourceTypes) {
+	@Override
+	public ResultListRRITypes usageAnalysisExtendedDetails(final Course course, final Date beginDate,
+			final Date endDate, final Integer resolution, final List<EResourceType> resourceTypes) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -178,7 +179,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " ");
 
 			this.logger.debug("Starting Extended Analysis Details");
-			final ResultListRRITypes results = this.analysis.computeCourseActivityExtendedDetails(courses, beginStamp, endStamp,
+			final ResultListRRITypes results = this.analysis.computeCourseActivityExtendedDetails(courses, beginStamp,
+					endStamp,
 					resolution.longValue(), resourceTypesNames);
 			this.logger.debug("Extended Analysls Details: " + results);
 			if (results != null) {
@@ -187,7 +189,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					if (ass.size() > 0) {
 						for (int i = 0; i < ass.size(); i++) {
 							final ResourceRequestInfo res = ass.get(i);
-							this.logger.debug("ASS ResourceRequest " + res.getId() + " ----- " + res.getTitle() + " ----- "
+							this.logger.debug("ASS ResourceRequest " + res.getId() + " ----- " + res.getTitle()
+									+ " ----- "
 									+ res.getResourcetype() + " ------ " + res.getRequests() + " ----- "
 									+ res.getResolutionSlot());
 						}
@@ -199,7 +202,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					if (cou.size() > 0) {
 						for (int i = 0; i < cou.size(); i++) {
 							final ResourceRequestInfo res = cou.get(i);
-							this.logger.debug("Cou ResourceRequest " + res.getId() + " ----- " + res.getTitle() + " ----- "
+							this.logger.debug("Cou ResourceRequest " + res.getId() + " ----- " + res.getTitle()
+									+ " ----- "
 									+ res.getResourcetype() + " ------- " + res.getRequests() + " ----- "
 									+ res.getResolutionSlot());
 						}
@@ -211,7 +215,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					if (ress.size() > 0) {
 						for (int i = 0; i < ress.size(); i++) {
 							final ResourceRequestInfo res = ress.get(i);
-							this.logger.debug("Res ResourceRequest " + res.getId() + " ----- " + res.getTitle() + " ----- "
+							this.logger.debug("Res ResourceRequest " + res.getId() + " ----- " + res.getTitle()
+									+ " ----- "
 									+ res.getResourcetype() + " ------- " + res.getRequests() + " ----- "
 									+ res.getResolutionSlot());
 						}
@@ -240,8 +245,9 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 		return new ResultListRRITypes();
 	}
 
-	public List usageAnalysis(final Course course, final Date endDate, final int dateRange, final Integer dateMultiplier,
-			final List<EResourceType> resourceTypes) {
+	@Override
+	public List<List<XYDateDataItem>> usageAnalysis(final Course course, final Date endDate, final int dateRange,
+			final Integer dateMultiplier, final List<EResourceType> resourceTypes) {
 
 		Date beginDate = endDate;
 
@@ -258,6 +264,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 		return this.usageAnalysis(course, beginDate, endDate, resourceTypes);
 	}
 
+	@Override
 	public List<List<XYDateDataItem>> usageAnalysis(final Course course, final Date beginDate, final Date endDate,
 			final List<EResourceType> resourceTypes) {
 
@@ -299,7 +306,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
-			final HashMap<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courses, roles, null,
+			final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courses, roles, null,
 					beginStamp, endStamp, resolution, resourceTypesNames);
 			ResultListLongObject uniqueResult = null;
 
@@ -321,8 +328,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 				}
 			} // if there was an error while retrieving result data from dms ... one single null result is added
-			// because jqplot cant handle resultlist without an entry
- else {
+				// because jqplot cant handle resultlist without an entry
+			else {
 				list1.add(new XYDateDataItem(beginCal.getTime(), 0));
 			}
 		}
