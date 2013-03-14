@@ -320,9 +320,12 @@ public class VisualizationPerformanceUserTest {
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
-			final List<Long> results = this.analysis.computePerformanceUserTest(courseList, this.selectedUsers, quizzesList,
-					(long) this.resolution, beginStamp, endStamp);
-			this.logger.debug("results for performance histogram:" + results);
+			List<Long> results = this.analysis.computePerformanceUserTest(courseList, this.selectedUsers, quizzesList,
+					0L, beginStamp, endStamp);
+			
+			
+			
+			this.logger.debug("Results for performance histogram:" + results);
 
 			final List<List<Long>> preparedResults = CollectionFactory.newList();
 

@@ -55,7 +55,7 @@ public class User extends AbstractEntity {
 
 	private String encryptedPassword;
 	private byte[] passwordSalt;
-	private Set<Roles> roles = new HashSet<Roles>();
+	private List<Roles> roles = new ArrayList<Roles>();
 
 	private Long widget1;
 	private Long widget2;
@@ -107,6 +107,7 @@ public class User extends AbstractEntity {
 	@NaturalId
 	@Column(unique = true)
 	@Index(name = "user_username")
+	@Validate("required")
 	public String getUsername() {
 		return this.username;
 	}
@@ -119,11 +120,13 @@ public class User extends AbstractEntity {
 		this.fullname = fullname;
 	}
 
+	@Validate("required")
 	public String getFullname() {
 		return this.fullname;
 	}
 
 	@Transient
+	@Validate("required")
 	public String getPassword() {
 		return "";
 	}
@@ -178,13 +181,13 @@ public class User extends AbstractEntity {
 		this.credentialsExpired = credentialsExpired;
 	}
 
-	public void setRoles(final Set<Roles> roles) {
+	public void setRoles(final List<Roles> roles) {
 		this.roles = roles;
 	}
 
 	@Enumerated(EnumType.STRING)
 	@ElementCollection
-	public Set<Roles> getRoles() {
+	public List<Roles> getRoles() {
 		return this.roles;
 	}
 

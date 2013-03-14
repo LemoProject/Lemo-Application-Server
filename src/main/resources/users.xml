@@ -5,8 +5,15 @@
   password="lemolemo"
   roles="admin global"
   email="lemo@example.com"
-  fullname="Administrator"
-  courses="12591 1482 112100 11476 112200"/>
+  fullname="Administrator"/>
+  
+  <user name="user"
+  password="lemolemo"
+  roles="teacher"
+  email="user@example.com"
+  fullname="Teacher"
+  courses="12591 1482 112100 11476 112200 113905"/>
+  
   <user name="global"
   password="lemolemo"
   roles="GLOBAL"

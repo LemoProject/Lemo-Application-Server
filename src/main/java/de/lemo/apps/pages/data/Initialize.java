@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
+import de.lemo.apps.entities.Roles;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
@@ -70,9 +71,11 @@ public class Initialize {
 
 		// Sleep 2 seconds to simulate a long-running operation
 		this.sleep(THOU);
-
-		return Dashboard.class;
-
+//		if (user.getRoles().contains(Roles.ADMIN)){
+//			return DashboardAdmin.class;
+//		} else return Dashboard.class;
+		return user.getRoles().contains(Roles.ADMIN) ? DashboardAdmin.class : Dashboard.class;
+	//	return Dashboard.class;
 	}
 
 	public String getStatusBar() {

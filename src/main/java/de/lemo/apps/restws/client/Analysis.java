@@ -112,5 +112,13 @@ public interface Analysis {
 			Long resolution,
 			Long startTime,
 			Long endTime);
+	
+	String computePerformanceUserTestBoxPlot(
+			final List<Long> courses,
+			final List<Long> users,
+			final List<Long> quizzes,
+			final Long resolution,
+			final Long startTime,
+			final Long endTime);
 
 }

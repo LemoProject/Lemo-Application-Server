@@ -6,6 +6,7 @@
 	 */
 package de.lemo.apps.integration;
 
+import java.util.List;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import de.lemo.apps.entities.User;
 
@@ -17,6 +18,8 @@ public interface UserDAO {
 	boolean doExist(User user);
 
 	User getUser(String username);
+	
+	List<User> getAllUser();
 	
 	@CommitAfter
 	boolean toggleFavoriteCourse(final Long courseId, final Long userId);

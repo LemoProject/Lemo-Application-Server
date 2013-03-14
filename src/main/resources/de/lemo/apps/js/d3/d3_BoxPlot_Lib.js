@@ -4,7 +4,7 @@
 d3.box = function() {
   var width = 1,
       height = 1,
-      duration = 0,
+      duration = 500,
       domain = null,
       value = Number,
       whiskers = boxWhiskers,
@@ -19,7 +19,8 @@ d3.box = function() {
       var g = d3.select(this),
           //n = d.length,
           min = d.lowerWhisker,
-          max = d.upperWhisker;
+          max = d.upperWhisker
+          name = d.name;
       	
       	console.log(" Min: "+min+" Max: "+max)
       
@@ -174,12 +175,12 @@ d3.box = function() {
         .transition()
           .duration(duration)
           .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1);
+          .style("opacity",  1);
 
       outlier.transition()
           .duration(duration)
           .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1);
+          .style("opacity",  1);
 
       outlier.exit().transition()
           .duration(duration)
@@ -195,20 +196,25 @@ d3.box = function() {
           .data(quartileData);
 
       boxTick.enter().append("text")
-          .attr("class", "box")
+          .attr("class", function(d,i) {return "box boxText-"+name})
           .attr("dy", ".3em")
           .attr("dx", function(d, i) { return i & 1 ? 6 : -6 })
           .attr("x", function(d, i) { return i & 1 ? width : 0 })
           .attr("y", x0)
           .attr("text-anchor", function(d, i) { return i & 1 ? "start" : "end"; })
+          
           .text(format)
+          .style("fill", "none")
         .transition()
           .duration(duration)
+          .style("opacity", 1e-5)
           .attr("y", x1);
 
       boxTick.transition()
           .duration(duration)
+          
           .text(format)
+          .style("opacity", 1e-5)
           .attr("y", x1);
 
       // Update whisker ticks. These are handled separately from the box
@@ -223,18 +229,19 @@ d3.box = function() {
           .attr("dx", 6)
           .attr("x", width)
           .attr("y", x0)
-          .text(format)
           .style("opacity", 1e-6)
+     //     .text(format)
+          
         .transition()
           .duration(duration)
           .attr("y", x1)
-          .style("opacity", 1);
+          .style("opacity", 1e-5);
 
       whiskerTick.transition()
           .duration(duration)
-          .text(format)
+     //      .text(format)
           .attr("y", x1)
-          .style("opacity", 1);
+          .style("opacity",1e-5 );
 
       whiskerTick.exit().transition()
           .duration(duration)

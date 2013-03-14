@@ -11,6 +11,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.slf4j.Logger;
 import de.lemo.apps.application.config.ServerConfiguration;
+import de.lemo.apps.restws.entities.BoxPlot;
+import de.lemo.apps.restws.entities.ResultListBoxPlot;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -26,6 +28,7 @@ import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
 import de.lemo.apps.restws.proxies.questions.QPerformanceBoxPlot;
 import de.lemo.apps.restws.proxies.questions.QPerformanceHistogram;
 import de.lemo.apps.restws.proxies.questions.QPerformanceUserTest;
+import de.lemo.apps.restws.proxies.questions.QPerformanceUserTestBoxPlot;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 
 /**
@@ -428,6 +431,44 @@ public class AnalysisImpl implements Analysis {
 		}
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return new ArrayList<Long>();
+	}
+
+	
+	
+	@Override
+	public String computePerformanceUserTestBoxPlot(
+			final List<Long> courses,
+			final List<Long> users,
+			final List<Long> quizzes,
+			final Long resolution,
+			final Long startTime,
+			final Long endTime) {
+		this.logger.debug("Starting Performance user test Boxplot Analysis ... ");
+		try {
+
+			if (init.defaultConnectionCheck()) {
+
+				final QPerformanceUserTestBoxPlot qPerformanceUserTestBoxPlot = ProxyFactory.create(QPerformanceUserTestBoxPlot.class,
+						AnalysisImpl.QUESTIONS_BASE_URL);
+				if (qPerformanceUserTestBoxPlot != null) {
+					String result = "";
+					final String tmpresult = qPerformanceUserTestBoxPlot.compute(courses, users, quizzes,
+							resolution,
+							startTime, endTime);
+					if (tmpresult == null ) {
+						
+					} else {
+						result = tmpresult;
+					}
+					return result;
+				}
+			}
+
+		} catch (final Exception e) {
+			logger.error(e.getMessage());
+		}
+		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
+		return "";
 	}
 
 	

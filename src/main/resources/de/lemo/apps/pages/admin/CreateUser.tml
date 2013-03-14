@@ -27,44 +27,29 @@
 		    	
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>User Widget</h5></div></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>Create User</h5></div></a></li>
 					</ul>
 		    	</div>
 				<div class="row-fluid">
 					<div class="span1">
 					</div>
 					<div class="span11">
-						<div class="well">
+						<div>
 						
-<!-- 							<br /> -->
-<!-- 							<br /> -->
-<!-- 						    Current user: -->
-<!-- 	    					<t:beandisplay object="user"> -->
-            			
-<!--        						 </t:beandisplay> -->
-<!--        						 <br /> -->
-<!--        						 <br /> -->
-<!--        						 All users: -->
+					<form t:id="accountform" class="well  pull-left">
+				    	<t:beaneditor t:id="editor" object="userItem"  />
+				    		
+				    	
+				    	
+				    	<br />
+				    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
+				    	<div class="pull-right">&nbsp;&nbsp;</div>
+				    	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
+		            	
+				    </form>	
+       						
 
-       						 <t:grid source="alluser" row="userItem" exclude="password" reorder="username,fullname,email" add="view" >
-       						 	 <p:viewCell>
-       						 	 	<t:pagelink t:page="admin/manageuser" context="useritem.id">
-       						 	 		view
-       						 	 	</t:pagelink>
-       						 	 </p:viewCell>
-       							 <p:empty>
-              						<p>There are no users to display</p>
-            					</p:empty>
-        					</t:grid>
-   							<div>
-	   							<br />
-	   							
-					    		
-	    						<t:pagelink page="admin/createuser" class="btn btn-primary pull-left">Add user</t:pagelink>
-	    						<br />
-	   							<br />
-	   							
-    						</div>
+    					
     					</div>
 					</div>
 					<div class="span1">

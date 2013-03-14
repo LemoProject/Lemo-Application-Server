@@ -58,7 +58,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_PerformanceBoxPlot.js" })
+@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart.js" })
 public class VisualizationPerformanceCumulative {
 
 	private static final int THOU = 1000;
@@ -312,9 +312,13 @@ public class VisualizationPerformanceCumulative {
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution
 					+ " QuizzesAmount:" + quizzesList.size());
 
-			final String result = this.analysis.computePerformanceBoxplot(courseList, this.selectedUsers, quizzesList, 100L, beginStamp,
-					endStamp);
-
+			//final String result = this.analysis.computePerformanceBoxplot(courseList, this.selectedUsers, quizzesList, 
+			//																100L, beginStamp,endStamp);
+			final String result = this.analysis.computePerformanceUserTestBoxPlot(courseList, this.selectedUsers, quizzesList, 
+																				100L, beginStamp,endStamp);
+			this.logger.debug("ResultString: "+result);	
+					
+			
 			final JSONArray graphParentArray = new JSONArray();
 
 			final ObjectMapper mapper = new ObjectMapper();
@@ -336,10 +340,10 @@ public class VisualizationPerformanceCumulative {
 
 						this.logger.debug("Entries parsed Size: " + resultList.size() + " Values:" + resultList.toString());
 
-						for (Integer w = 0; w < resultList.size(); w++) {
-							final Long quizID = Long.parseLong(resultList.get(w).getName());
-							resultList.get(w).setName(quizzesMap.get(quizID));
-						}
+//						for (Integer w = 0; w < resultList.size(); w++) {
+//							final Long quizID = Long.parseLong(resultList.get(w).getName());
+//							resultList.get(w).setName(quizzesMap.get(quizID));
+//						}
 
 						resultListString = mapper.writeValueAsString(resultList);
 
@@ -352,8 +356,8 @@ public class VisualizationPerformanceCumulative {
 
 						this.logger.debug("Entries parsed: " + singleResult.toString());
 
-						final Long quizID = Long.parseLong(singleResult.getName());
-						singleResult.setName(quizzesMap.get(quizID));
+//						final Long quizID = Long.parseLong(singleResult.getName());
+//						singleResult.setName(quizzesMap.get(quizID));
 
 						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
 						tmpResultList.add(singleResult);
