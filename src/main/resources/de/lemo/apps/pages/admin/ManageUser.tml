@@ -46,12 +46,13 @@
 	
 							<div>
 								<form t:id="accountform" class="well  pull-left">
-							    	<t:beaneditor t:id="editor" object="userItem" />
-							    	<p:username>
-                                		<t:label for="username" />
-                                			<input t:type="TextField" t:id="username" value="userItem.username" 
-                                        	disabled="true" />
-                        			</p:username>
+							    	<t:beaneditor t:id="editor" object="userItem" >
+								    	<p:username>
+	                                		<t:label for="username" />
+	                                			<input t:type="TextField" t:id="username" value="userItem.username" 
+	                                        	disabled="true" />
+	                        			</p:username>
+                        			</t:beaneditor>
 							    	<br />
 							    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
 							    	<div class="pull-right">&nbsp;&nbsp;</div>

@@ -48,7 +48,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_Circle_graph.js",
+@Import(library = { "../../js/d3/d3_custom_Circle_graph2.js",
 					"../../js/d3/packages.js"})
 public class VisualizationCircleGraph {
 

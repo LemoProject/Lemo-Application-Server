@@ -37,7 +37,10 @@
 						<div>
 						
 					<form t:id="accountform" class="well  pull-left">
-				    	<t:beaneditor t:id="editor" object="userItem" />
+				    	<t:beaneditor t:id="editor" object="userItem"  />
+				    		
+				    	
+				    	
 				    	<br />
 				    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
 				    	<div class="pull-right">&nbsp;&nbsp;</div>

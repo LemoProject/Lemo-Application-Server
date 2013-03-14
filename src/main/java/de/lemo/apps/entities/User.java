@@ -52,7 +52,7 @@ public class User extends AbstractEntity {
 
 	private String encryptedPassword;
 	private byte[] passwordSalt;
-	private Set<Roles> roles = new HashSet<Roles>();
+	private List<Roles> roles = new ArrayList<Roles>();
 
 	private Long widget1;
 	private Long widget2;
@@ -178,13 +178,13 @@ public class User extends AbstractEntity {
 		this.credentialsExpired = credentialsExpired;
 	}
 
-	public void setRoles(final Set<Roles> roles) {
+	public void setRoles(final List<Roles> roles) {
 		this.roles = roles;
 	}
 
 	@Enumerated(EnumType.STRING)
 	@ElementCollection
-	public Set<Roles> getRoles() {
+	public List<Roles> getRoles() {
 		return this.roles;
 	}
 
