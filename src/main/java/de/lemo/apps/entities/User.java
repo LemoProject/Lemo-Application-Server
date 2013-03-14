@@ -104,6 +104,7 @@ public class User extends AbstractEntity {
 	@NaturalId
 	@Column(unique = true)
 	@Index(name = "user_username")
+	@Validate("required")
 	public String getUsername() {
 		return this.username;
 	}
@@ -116,11 +117,13 @@ public class User extends AbstractEntity {
 		this.fullname = fullname;
 	}
 
+	@Validate("required")
 	public String getFullname() {
 		return this.fullname;
 	}
 
 	@Transient
+	@Validate("required")
 	public String getPassword() {
 		return "";
 	}

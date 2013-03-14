@@ -1,0 +1,112 @@
+<html t:type="layoutdashboardAdmin" title="LeMo | ${message:dashboardTitle}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+	 <!-- Breadcrumb component-->
+	<div class="row-fluid">
+        <div class="span12">
+    	<ul class="breadcrumb">
+  			<li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
+    			<a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb" />
+  			</li>
+		</ul>
+		</div>
+	</div>
+	
+   <!-- <div class="alert alert-success">
+         <a class="close">&times;</a>
+       	 <h2>${message:welcomeDashboard}</h2>    	 
+    </div>
+	-->
+    
+    <div class="row-fluid">
+    <section class="thumbnails">
+    	<div class="span12">
+    		<div class="thumbnail">
+		    	
+		    	<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>User Details: ${user?.username} </h5></div></a></li>
+					</ul>
+		    	</div>
+				<div class="row-fluid">
+					<div class="span1">
+					</div>
+					<div class="span11">
+						<div>
+						
+<!-- 							<br /> -->
+<!-- 							<br /> -->
+<!-- 						    Current user: -->
+<!-- 	    					 <t:beandisplay object="userItem" exclude="password" add="courseAmount"> -->
+<!--             					<p:courseamountCell>	 -->
+<!--             						${userCourses?.size()} -->
+<!--             					</p:courseamountCell> -->
+<!--        						 </t:beandisplay> -->
+	
+							<div>
+								<form t:id="accountform" class="well  pull-left">
+							    	<t:beaneditor t:id="editor" object="userItem" />
+							    	<p:username>
+                                		<t:label for="username" />
+                                			<input t:type="TextField" t:id="username" value="userItem.username" 
+                                        	disabled="true" />
+                        			</p:username>
+							    	<br />
+							    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
+							    	<div class="pull-right">&nbsp;&nbsp;</div>
+							    	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
+					            	
+							    </form>	
+							 </div>
+       						 <br />
+       						 <br />
+       				
+    					
+    					</div>
+					</div>
+					<div class="span1">
+					
+					
+						
+						
+						
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="span1">
+					</div>
+					<div class="span11">
+						<div class="well">	
+						
+						 <t:grid source="userCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" >
+	       							 <p:empty>
+	              						<div><p>There are no courses associated with this user</p></div>
+	            					</p:empty>
+	        					</t:grid>
+	        					
+						</div>
+					</div>
+					<div class="span1">
+					
+					
+						
+						
+						
+					</div>
+				</div>
+			</div>
+   		</div>
+
+ 
+   </section>
+  </div>  
+
+	     
+     
+ <script>
+			
+</script>    
+     
+
+</html>

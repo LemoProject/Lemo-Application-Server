@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
@@ -47,6 +48,7 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 @BreadCrumbReset
 public class Dashboard {
 
+	
 	@Component(parameters = { "dataItems=usageAnalysisWidget1" })
 	private JqPlotLine chart1;
 
