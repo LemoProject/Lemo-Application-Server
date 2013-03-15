@@ -3,6 +3,7 @@ package de.lemo.apps.restws.client;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import javax.ws.rs.QueryParam;
 import org.apache.http.client.ClientProtocolException;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
@@ -17,6 +18,7 @@ import de.lemo.apps.restws.entities.ResultListCourseObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
+import de.lemo.apps.restws.proxies.service.ServiceCourseTitleSearch;
 import de.lemo.apps.restws.proxies.service.ServiceLoginAuthentification;
 import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
@@ -236,6 +238,31 @@ public class InitialisationImpl implements Initialisation {
 					if (serviceProxy != null) {
 						
 						return serviceProxy.getCoursesByUser(userId, amount , offset);
+					}
+				}
+
+		} catch (final Exception e) {
+				
+				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
+
+		}
+		
+		
+		logger.info("Courses could not be loaded. Returning empty resultset.");
+		return new ResultListCourseObject();
+		
+	}
+	
+	
+	public ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) throws RestServiceCommunicationException {
+		
+		try {
+
+				if (defaultConnectionCheck()){
+					final ServiceCourseTitleSearch serviceProxy = ProxyFactory.create(ServiceCourseTitleSearch.class, InitialisationImpl.SERVICE_PREFIX_URL);
+					if (serviceProxy != null) {
+						
+						return serviceProxy.getCoursesByText(text, count, offset);
 					}
 				}
 
