@@ -47,6 +47,9 @@ import de.lemo.apps.restws.client.Initialisation;
 public class ManageUser {
 	
 	@Inject
+	private Messages messages;
+	
+	@Inject
 	private Logger logger;
 
 	@Inject
@@ -123,6 +126,10 @@ public class ManageUser {
 	Object onSuccess() {
 		this.userDAO.update(this.userItem);
 		return this;
+	}
+	
+	public String getDeleteString() {
+		return messages.format("sureToDelete", userItem.getFullname());
 	}
 	
 

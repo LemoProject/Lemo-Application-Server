@@ -2,6 +2,21 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
      
+      <script>
+			
+			function setConfirmation(bool) {
+				 var confirm = document.getElementById("deleteUserConfirmation");
+				 if (bool) {
+				 	confirm.style.visibility="visible";
+				 }
+				 else {				 
+				 	confirm.style.visibility="hidden";
+				 }
+			}
+			
+			
+</script>    
+     
 	 <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
@@ -32,7 +47,7 @@
 				<div class="row-fluid">
 					<div class="span1">
 					</div>
-					<div class="span11">
+					<div class="span7">
 						<div>
 						
 <!-- 							<br /> -->
@@ -53,27 +68,47 @@
 	                                        	disabled="true" />
 	                        			</p:username>
                         			</t:beaneditor>
-							    	<br />
+							    	<br />							    	
 							    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
-							    	<div class="pull-right">&nbsp;&nbsp;</div>
-							    	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
-					            	
+							    	<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
+									<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
+							    	<div class="pull-right">&nbsp;&nbsp;</div>		
+							    	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>	
+									
 							    </form>	
 							 </div>
+							
        						 <br />
        						 <br />
        				
     					
     					</div>
 					</div>
-					<div class="span1">
 					
+					 <div class="span4" id="deleteUserConfirmation" style="visibility:hidden">
+					 	<div class="alert alert-error pull-left" style="padding-right:14px;">
+					 		<div class="pull-left">
+								<br/>
+								<p class="pull-left">${DeleteString}</p>
+								<br/>
+								<button type="submit" class="btn btn-danger pull-right">${message:Yes}</button>
+								<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
+								<button type="submit" class="btn btn-primary pull-right" onclick="setConfirmation(false);">${message:No}</button>
+							</div>
+						</div>
+					</div>	
+									
 					
-						
-						
-						
-					</div>
 				</div>
+				
+				<div class="row-fluid">
+				
+					<div class="span1">
+					</div>	
+					
+					
+				</div>
+							
 				<div class="row-fluid">
 					<div class="span1">
 					</div>
@@ -105,9 +140,7 @@
 
 	     
      
- <script>
-			
-</script>    
+
      
 
 </html>

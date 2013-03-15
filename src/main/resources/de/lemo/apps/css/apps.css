@@ -2,6 +2,12 @@
  * LeMo Application Server Default CSS v. 0.1
  *
  */
+ 
+
+
+TABLE.t-data-grid THEAD TR {
+	background-color: #0074cc;
+}
 
 #draggable {
 	width: 100px;
