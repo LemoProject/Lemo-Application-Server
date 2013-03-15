@@ -15,6 +15,7 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import org.slf4j.Logger;
@@ -36,6 +37,9 @@ public class ManageUser {
 	
 	@Inject
 	private Logger logger;
+	
+	@Inject
+	private Messages messages;
 
 	@Inject
 	@Path("../../images/icons/glyphicons_019_cogwheel.png")
@@ -87,6 +91,10 @@ public class ManageUser {
 	Object onSuccess() {
 		this.userDAO.update(this.userItem);
 		return this;
+	}
+	
+	public String getDeleteString() {
+		return messages.format("sureToDelete", userItem.getFullname());
 	}
 	
 
