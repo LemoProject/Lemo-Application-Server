@@ -6,8 +6,6 @@
  */
 
 package de.lemo.apps.pages.admin;
-
-import javax.servlet.http.HttpServletRequest;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -19,7 +17,7 @@ import de.lemo.apps.integration.UserDAO;
 
 
 /**
- * @author Boris Wenzlaff
+ * @author Andreas Pursian
  *
  */
 public class CreateUser {
@@ -29,9 +27,6 @@ public class CreateUser {
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
-
-	@Inject
-	private HttpServletRequest request;
 
 	@Inject
 	UserDAO userDAO;

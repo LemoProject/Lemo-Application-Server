@@ -5,7 +5,7 @@
 	  
 	  
 	  var objTypes = [];
-	  var data_test = [[850,740,500,400,600,720],[830,650,500,600,720,580]];
+	 
 	  
 	 var data = d3custom.data;
 	 
@@ -160,31 +160,11 @@
     				svgBox.selectAll("text.boxId-"+d.name).style("fill","#0000") 
     		})
     		
-//	  gBox.append("text")
-//	  	.attr("class","quiz")
-//		.attr("x", 0 )
-//		.attr("y", 0)
-//		.attr("transform", "translate(5 ," + 10 + ")")
-//		.text(function(d, i) {return i;
-//						//d.name.toUpperCase();
-//						});
-	  
+  
 	  gBox.append("g")
 		.attr("transform", "translate(" + marginPlot.left + "," + marginPlot.top + ")")
 		.call(box);
 	  
-	  
-//	  d3.select("button").on("click", function() {
-//		    svg.data(hours).call(vis.duration(1000)); // TODO automatic transitions
-//		    svg.selectAll(".days")
-//		    	.remove();
-//		    svgBox.append("text")
-//		    .attr("class","hours")
-//		    .attr("x", 0 )
-//			.attr("y", 0)
-//			.attr("transform", "translate(" + (margin.left-8) + "," + 10 + ")")
-//			.text(function(d) {return d.name+":00 h";});
-//		  });
 
 	// Returns a function to compute the interquartile range.
       function iqr(k) {
