@@ -57,6 +57,10 @@ public class ManageUser {
 	@Property
 	@Persist
 	private User userItem;
+	
+	@Property
+	@Persist
+	private Course courseItem;
 
 	
     Boolean onActivate(User user){

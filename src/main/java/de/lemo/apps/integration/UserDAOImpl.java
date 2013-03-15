@@ -95,6 +95,7 @@ public class UserDAOImpl implements UserDAO {
 	public void update(final User user) {
 		this.session.update(user);
 	}
+	
 
 	public User login(final String username, final String password) {
 		this.logger.info("Check login credentials with username " + username);

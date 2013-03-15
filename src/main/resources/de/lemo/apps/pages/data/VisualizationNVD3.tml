@@ -28,7 +28,7 @@
         	</div>
         	
         	<br />
-    			  <div class="btn export-button">Export to CSV</div>
+    			  
             
     			<div class="accordion2" id="accordion3">
 			            <div class="accordion-group">
@@ -56,6 +56,9 @@
     	</div>
       
     	<div class="span3">
+    		<t:zone t:id="formZone" id="formZone">
+    		</t:zone> 
+      		<t:form t:type="form" t:id="customizeForm" class="pull-left">
     		<div class="row-fluid">
       		<div class="span12">
       			<div class="well">
@@ -65,15 +68,23 @@
       				<br />
       				<br />
       				${message:range}: ${resolution} ${message:days}
+      				<br />
+      				<ul class="nav nav-list">
+ 
+					  <li class="divider"></li>
+					
+					</ul>
+      				
+      				<span t:type="submit" value="Update" class="btn btn-primary pull-left" /><span class="btn export-button pull-right">Export to CSV</span>
+      				
+      				<br />
       			</div>
       		</div>
       		</div>
 			<div class="row-fluid">
     		<div class="span12">
         			
-    			<t:zone t:id="formZone" id="formZone">
-    			</t:zone> 
-      			<t:form t:type="form" t:id="customizeForm" class="pull-left">
+    			
       				<t:errors/>
         			<div class="accordion" id="accordion2">
 			            
@@ -163,43 +174,13 @@
                      	 </div>
 			        </div>
 			      </div>  
-			       
-<!--			       Advanced-->
-<!--                  <div class="accordion-group">-->
-<!--                    <div class="accordion-heading">-->
-<!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">-->
-<!--                       Advanced <b class="caret"></b>-->
-<!--                      </a>-->
-<!--                    </div>   -->
-<!--			        <div id="collapseFour" class="accordion-body collapse">  -->
-<!--			        	<div class="accordion-inner">  -->
-<!--			        	-->
-<!--			        			-->
-<!--			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>-->
-<!--  			                	<div class="slider" id="supportSlider"></div><br />-->
-<!--  			                	<br />-->
-<!--  			                	-->
-<!--             -->
-<!--                        -->
-<!--	                            <label class="control-label" id="chargeslider-label"></label>-->
-<!--  			                	<div class="slider" id="chargesupportSlider"></div><br />-->
-<!--  			                	<br/>-->
-<!--  			                	-->
-<!--  			                	<label class="control-label" id="distanceslider-label"></label>-->
-<!--  			                	<div class="slider" id="distancesupportSlider"></div><br />-->
-<!--  			                	<br/>-->
-<!--  			                	-->
-<!--  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   -->
-<!--                       -->
-<!--                     	 </div>-->
-<!--			        </div>-->
-<!--			      </div>  -->
+	
 			            
 			 </div><!-- accordion -->
   			   		
-  			   		<input t:type="submit" value="Update" class="btn btn-primary" />
+  			   		
 
-            </t:form>	
+            
        
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
@@ -207,6 +188,8 @@
 <!--    		</div> THUMBNAIL-->
     		</div> <!--span12-->
     		</div> <!--row fluid-->
+    		
+    		</t:form>	
     	</div>
     	
     
