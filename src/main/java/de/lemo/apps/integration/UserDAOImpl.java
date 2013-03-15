@@ -1,3 +1,4 @@
+
 /**
 	 * File UserDAOImpl.java
 	 *
@@ -95,7 +96,6 @@ public class UserDAOImpl implements UserDAO {
 	public void update(final User user) {
 		this.session.update(user);
 	}
-	
 
 	public User login(final String username, final String password) {
 		this.logger.info("Check login credentials with username " + username);
@@ -108,5 +108,10 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return results.get(0);
 	}
+	
+	public void remove(final User user) {
+		this.session.delete(user);
+	}
 
 }
+

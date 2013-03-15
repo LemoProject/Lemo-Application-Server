@@ -91,7 +91,7 @@
 								<br/>
 								<p class="pull-left">${DeleteString}</p>
 								<br/>
-								<button type="submit" class="btn btn-danger pull-right">${message:Yes}</button>
+								<t:actionlink t:id="delete" class="btn btn-danger pull-right">${message:Yes}</t:actionlink>
 								<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
 								<button type="submit" class="btn btn-primary pull-right" onclick="setConfirmation(false);">${message:No}</button>
 							</div>

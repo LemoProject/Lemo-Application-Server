@@ -1,3 +1,4 @@
+
 /**
  * File ManageUser.java
  * Date Mar 14, 2013
@@ -26,6 +27,7 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
+import de.lemo.apps.pages.data.DashboardAdmin;
 
 
 /**
@@ -96,6 +98,11 @@ public class ManageUser {
 	public String getDeleteString() {
 		return messages.format("sureToDelete", userItem.getFullname());
 	}
+	
+	 Object onActionFromDelete() {
+	    	this.userDAO.remove(this.userItem);
+	    	return DashboardAdmin.class;
+	    }
 	
 
 
