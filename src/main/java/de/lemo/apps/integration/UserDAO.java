@@ -31,5 +31,8 @@ public interface UserDAO {
 	void save(User user);
 
 	User login(String username, String password);
+	
+	@CommitAfter
+	void remove(User user);
 
 }

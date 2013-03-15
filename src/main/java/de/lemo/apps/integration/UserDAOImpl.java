@@ -107,5 +107,9 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return results.get(0);
 	}
+	
+	public void remove(final User user) {
+		this.session.delete(user);
+	}
 
 }

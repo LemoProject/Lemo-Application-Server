@@ -132,6 +132,10 @@ public class ManageUser {
 		return messages.format("sureToDelete", userItem.getFullname());
 	}
 	
+    Object onActionFromDelete() {
+    	this.userDAO.remove(this.userItem);
+    	return DashboardAdmin.class;
+    }
 
 
 }
