@@ -1,5 +1,6 @@
 package de.lemo.apps.pages.data;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,10 +25,15 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
@@ -40,22 +46,23 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
-import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
- * Visualisation for the performance test for the user 
+ * Visualisation for the cumulative performance
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_usertest.js" })
-public class VisualizationPerformanceUserTest {
-	private static final int THOU = 1000;
+@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart.js" })
+public class VisualizationPerformanceUserTestCumulutive {
 
+	private static final int THOU = 1000;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -158,7 +165,7 @@ public class VisualizationPerformanceUserTest {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
+	private List<Long> selectedUsers, selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -176,10 +183,7 @@ public class VisualizationPerformanceUserTest {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-			if (this.selectedCourses == null) {
-				this.selectedCourses = new ArrayList<Long>();
-				this.selectedCourses.add(this.courseId);
-			}
+
 			return true;
 		} else {
 			return Explorer.class;
@@ -204,7 +208,6 @@ public class VisualizationPerformanceUserTest {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedQuizzes = null;
-		this.selectedCourses = null;
 		this.selectedActivities = null;
 	}
 
@@ -212,7 +215,6 @@ public class VisualizationPerformanceUserTest {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
-
 		this.quizIds = new ArrayList<Long>();
 
 		final List<Long> courseList = new ArrayList<Long>();
@@ -252,8 +254,6 @@ public class VisualizationPerformanceUserTest {
 	}
 
 	public String getQuestionResult() {
-		final List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-
 		if (this.courseId != null) {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
@@ -264,26 +264,17 @@ public class VisualizationPerformanceUserTest {
 			if (this.beginDate != null) {
 				beginStamp = new Long(this.beginDate.getTime() / THOU);
 			}
-			this.resolution = 100;
+
+			if ((this.resolution == null) || (this.resolution < 10)) {
+				this.resolution = 30;
+			}
 			final List<Long> roles = new ArrayList<Long>();
-			final List<Long> courses = new ArrayList<Long>();
-			courses.add(this.courseId);
+			final List<Long> courseList = new ArrayList<Long>();
+			courseList.add(this.courseId);
 
 			// calling dm-server
-			for (int i = 0; i < courses.size(); i++) {
-				this.logger.debug("Courses: " + courses.get(i));
-			}
-
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
-
-			List<Long> courseList = new ArrayList<Long>();
-			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
-				if (!this.selectedCourses.contains(this.courseId)) {
-					this.selectedCourses.add(this.courseId);
-				}
-				courseList = this.selectedCourses;
-			} else {
-				courseList.add(this.courseId);
+			for (int i = 0; i < courseList.size(); i++) {
+				this.logger.debug("Courses: " + courseList.get(i));
 			}
 
 			List<Long> quizzesList = new ArrayList<Long>();
@@ -291,8 +282,8 @@ public class VisualizationPerformanceUserTest {
 			ResultListStringObject quizList = null;
 			try {
 				quizList = this.init.getRatedObjects(courseList);
-			} catch (RestServiceCommunicationException e) {
-				logger.error(e.getMessage());
+			} catch (RestServiceCommunicationException e1) {
+				logger.error(e1.getMessage());
 			}
 
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
@@ -318,60 +309,72 @@ public class VisualizationPerformanceUserTest {
 				quizzesList.addAll(quizzesMap.keySet());
 			}
 
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
+			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution
+					+ " QuizzesAmount:" + quizzesList.size());
 
-			List<Long> results = this.analysis.computePerformanceUserTest(courseList, this.selectedUsers, quizzesList,
-					0L, beginStamp, endStamp);
+			//final String result = this.analysis.computePerformanceBoxplot(courseList, this.selectedUsers, quizzesList, 
+			//																100L, beginStamp,endStamp);
+			final String result = this.analysis.computePerformanceUserTestBoxPlot(courseList, this.selectedUsers, quizzesList, 
+																				100L, beginStamp,endStamp);
+			this.logger.debug("ResultString: "+result);	
+					
 			
-			
-			
-			this.logger.debug("Results for performance histogram:" + results);
+			final JSONArray graphParentArray = new JSONArray();
 
-			final List<List<Long>> preparedResults = CollectionFactory.newList();
+			final ObjectMapper mapper = new ObjectMapper();
+			List<BoxPlot> resultList;
+			BoxPlot singleResult;
+			String resultListString = "";
+			JsonNode jsonObj;
+			try {
+				jsonObj = mapper.readTree(result);
+				final JsonNode elementArray = jsonObj.get("elements");
+				if (elementArray != null) {
+					if (elementArray.isArray()) {
 
-//			if (results != null) {
-//				Integer splitCounter = 0;
-//				Integer quizCounter = 0;
-//				List<Long> currentList = new ArrayList<Long>();
-//				for (Integer i = 0; i < results.size(); i++) {
-//					currentList.add(results.get(i));
-//					splitCounter++;
-//					if (splitCounter == this.resolution) {
-//						quizCounter++;
-//						splitCounter = 0;
-//						preparedResults.add(currentList);
-//						currentList = new ArrayList<Long>();
-//					}
-//
-//				}
-//			}
-//
-//			final JSONArray graphParentArray = new JSONArray();
-//
-//			for (Integer z = 0; z < preparedResults.size(); z++) {
-//				final JSONObject graphDataObject = new JSONObject();
-//				final JSONArray graphDataValues = new JSONArray();
-//				final List<Long> tmpResults = preparedResults.get(z);
-//
-//				if ((tmpResults != null) && (tmpResults.size() > 0)) {
-//					for (Integer j = 0; j < tmpResults.size(); j++) {
-//						final JSONObject graphValue = new JSONObject();
-//
-//						graphValue.put("x", (100 / this.resolution) * j + "-" + (100 / this.resolution) * (j + 1) + "%");
-//						graphValue.put("y", tmpResults.get(j));
-//
-//						graphDataValues.put(graphValue);
-//					}
-//				}
-//
-//				graphDataObject.put("values", graphDataValues);
-//				graphDataObject.put("key", quizzesMap.get(quizzesList.get(z)));
-//				graphParentArray.put(graphDataObject);
-//			}
-//
-//			this.logger.debug(graphParentArray.toString());
-//
-//			return graphParentArray.toString();
+						resultList = mapper.readValue(elementArray.toString(), new TypeReference<List<BoxPlot>>() {
+						});
+
+						this.logger.debug("Entries Size:" + jsonObj.get("elements").size() + " Values:"
+								+ jsonObj.get("elements").toString());
+
+						this.logger.debug("Entries parsed Size: " + resultList.size() + " Values:" + resultList.toString());
+
+//						for (Integer w = 0; w < resultList.size(); w++) {
+//							final Long quizID = Long.parseLong(resultList.get(w).getName());
+//							resultList.get(w).setName(quizzesMap.get(quizID));
+//						}
+
+						resultListString = mapper.writeValueAsString(resultList);
+
+						this.logger.debug("Entries JSON Output: " + resultListString);
+					} else {
+						singleResult = mapper.readValue(elementArray.toString(), new TypeReference<BoxPlot>() {
+						});
+
+						this.logger.debug("Entries: " + jsonObj.get("elements").toString());
+
+						this.logger.debug("Entries parsed: " + singleResult.toString());
+
+//						final Long quizID = Long.parseLong(singleResult.getName());
+//						singleResult.setName(quizzesMap.get(quizID));
+
+						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
+						tmpResultList.add(singleResult);
+
+						resultListString = mapper.writeValueAsString(tmpResultList);
+
+					}
+				}
+			} catch (final JsonProcessingException e) {
+				logger.error(e.getMessage());
+			} catch (final IOException e) {
+				logger.error(e.getMessage());
+			}
+
+			this.logger.debug("Cumulative result: " + result);
+			return resultListString;
+
 		}
 		return "";
 	}

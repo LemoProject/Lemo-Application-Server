@@ -256,7 +256,7 @@
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationPerformanceUserTest" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>Performance User Test</b> </t:pagelink>
+			    				<t:pagelink page="data/visualizationPerformanceUserTestCumulutive" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Performance User Test</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 <!--		    				<div class="span2" align="center">-->
