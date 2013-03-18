@@ -50,7 +50,6 @@ public class AnalysisImpl implements Analysis {
 	@Override
 	public Map<Long, ResultListLongObject> computeCourseActivity(
 			final List<Long> courses,
-			final List<Long> roles,
 			final List<Long> users,
 			final Long starttime,
 			final Long endtime,
@@ -65,7 +64,7 @@ public class AnalysisImpl implements Analysis {
 						AnalysisImpl.QUESTIONS_BASE_URL);
 				if (qcourseActivity != null) {
 
-					final String resultString = qcourseActivity.compute(courses, roles, users, starttime, endtime,
+					final String resultString = qcourseActivity.compute(courses, users, starttime, endtime,
 							resolution,
 							resourceTypes);
 

@@ -264,7 +264,7 @@
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationCircleGraph" context="${CurrentCourse?.id}"><img src="${circleGraphIcon}" height="50px" width="85px" /><br /><br /><b>Circle Graph [ALPHA]</b> </t:pagelink>
+			    				<t:pagelink page="data/visualizationCircleGraph" context="${CurrentCourse?.id}"><img src="${circleGraphIcon}" height="50px" width="60px" /><br /><br /><b>Circle Graph [ALPHA]</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 			    			
