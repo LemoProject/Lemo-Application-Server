@@ -81,6 +81,12 @@ public class Explorer {
 	@Component(parameters = { "dataItems=usageAnalysis" })
 	private JqPlotLine chart1;
 
+	
+	@Inject
+	@Path("../../images/icons/Circle_Graph_Icon.png")
+	@Property
+	private Asset circleGraphIcon;
+	
 	@Inject
 	@Path("../../images/icons/UsageAnalysis2_Icon.png")
 	@Property
