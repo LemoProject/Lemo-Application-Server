@@ -8,13 +8,13 @@ package de.lemo.apps.restws.entities;
 public enum EResourceType {
 
 	ASSIGNMENT,
-	COURSE,
+	//COURSE,
 	FORUM,
 	QUESTION,
 	QUIZ,
 	RESOURCE,
 	SCORM,
 	WIKI,
-	UNKNOWN,
+	
 
 }

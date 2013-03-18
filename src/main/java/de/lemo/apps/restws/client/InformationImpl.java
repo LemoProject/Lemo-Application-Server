@@ -7,6 +7,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.slf4j.Logger;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
+import de.lemo.apps.restws.entities.ResultListCourseObject;
+import de.lemo.apps.restws.proxies.service.ServiceCourseTitleSearch;
 import de.lemo.apps.restws.proxies.service.ServiceVersion;
 
 /**
@@ -73,6 +75,31 @@ public class InformationImpl implements Information {
 		return "";
 		
 	}
+	
+	public ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) throws RestServiceCommunicationException {
+		
+		try {
+
+				if (init.defaultConnectionCheck()){
+					final ServiceCourseTitleSearch serviceProxy = ProxyFactory.create(ServiceCourseTitleSearch.class, InitialisationImpl.SERVICE_PREFIX_URL);
+					if (serviceProxy != null) {
+						
+						return serviceProxy.getCoursesByText(text, count, offset);
+					}
+				}
+
+		} catch (final Exception e) {
+				
+				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
+
+		}
+		
+		
+		logger.info("Courses could not be loaded. Returning empty resultset.");
+		return new ResultListCourseObject();
+		
+	}
+
 	
 
 }
