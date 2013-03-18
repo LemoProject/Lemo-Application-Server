@@ -305,7 +305,7 @@ public class VisualizationNVD3 {
 		
 		this.resolutionComputed = RESOLUTION_MAX;
 		
-		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, null, this.selectedUsers,
+		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
 				beginStamp, endStamp, (long) this.resolutionComputed, types);
 
 		final JSONArray graphParentArray = new JSONArray();

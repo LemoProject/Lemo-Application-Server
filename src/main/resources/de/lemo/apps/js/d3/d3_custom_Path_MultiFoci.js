@@ -294,90 +294,90 @@
 		 	    return (c > 100 ? 100 : c);
 		    })
 	      .style("fill", function(d) { return customColor(d.type); })
-        .on("click", function(d){
-        
-          // on click of a circle highlight the links to and from this circle
-          // display text of the node and its neighbours and assign foci by calling focus(d)
-        		
-        	  force.stop();
-		      var edges = vis.selectAll("line.link"),
-			    clickedEdges = selectArcs(d);
-		
-		      edges.attr("marker-end", null);
-		      edges.style("stroke", function(d) {
-	 		      if(d.value <= 10) return "lightgrey"
-	 		      else if(d.value > 10 && d.value <= 50) return "green"
-	 			    else if(d.value > 50 ) return "darkgreen"
-	 				  else return "lightgrey";
-		      });
-		
-		      clickedEdges.classed("highlightable",false)
-		      clickedEdges.attr("marker-end", "url(#Triangle)");
-		      //clickedEdges.style("stroke", "red");
-		
-		      var neighbours = findNeighbours(d.id,links);
-		      var neighbourSelectString = "";
-		      $.each(neighbours["0"], function(i,v) {
-			      if(neighbourSelectString=="")
-				    neighbourSelectString = neighbourSelectString+"g.gnodeId-"+v.id;
-			      else neighbourSelectString = neighbourSelectString+", g.gnodeId-"+v.id;
-		      });
-		      var neighbourNodes = vis.selectAll(neighbourSelectString);
-		      
-		      //now we select all nodes which are no neighbor
-		      var nonNeighbourSelectString = "";
-		      $.each(neighbours["1"], function(i,v) {
-			      if(nonNeighbourSelectString=="")
-			    	  nonNeighbourSelectString = nonNeighbourSelectString+"circle.nodeId-"+v.id;
-			      else nonNeighbourSelectString = nonNeighbourSelectString+", circle.nodeId-"+v.id;
-		      });
-		      var nonNeighbourNodes = vis.selectAll(nonNeighbourSelectString);
-
-		      
-		      
-		    //now we select all links which are not directly connected
-		      var nonNeighbourLinksSelectString = "";
-		      $.each(neighbours["2"], function(i,v) {
-			      if(nonNeighbourLinksSelectString=="")
-			    	  nonNeighbourLinksSelectString = nonNeighbourLinksSelectString+"line.linkId-"+v.source.id+"-"+v.target.id;
-			      else nonNeighbourLinksSelectString = nonNeighbourLinksSelectString+", line.linkId-"+v.source.id+"-"+v.target.id;
-		      });
-		      var nonNeighbourLinks = vis.selectAll(nonNeighbourLinksSelectString);
-
-		      
-	       	vis.selectAll("text.nametext").remove();
-		
-	       	console.log("NonNeighborNodes: "+nonNeighbourNodes);
-	       	
-	       	nonNeighbourLinks.transition()
-       			.duration(1500)
-       			.style("stroke-width", function(d) {return 0;})
-       			.remove();
-	       	
-	       	nonNeighbourNodes.transition()
-	       		.duration(1500)
-	       		.attr("r", function(d) {return 0;})
-	       		.each("end", function(d) {force.start()})
-	       		.remove();
-	       	
-	       	
-		      neighbourNodes.append("svg:text")
-	          .attr("class", "nametext")
-	          .attr("dx", function(d) {
-              var c = 0;
-						  if(d.value<=5 ) c = 5
-						  else if(d.value>5 && d.value<=20) c = parseInt(d.value);
-						  else if(d.value>20) c = 20 + Math.sqrt(d.value);
-              return (c > 100 ? 100+6 : c+6 );
-							})
-            .attr("dy", "1em")
-	          .text(function(d) { return d.name; });
-
-		      focus(d);
-		      
-		     
-		      
-		    })
+//        .on("click", function(d){
+//        
+//          // on click of a circle highlight the links to and from this circle
+//          // display text of the node and its neighbours and assign foci by calling focus(d)
+//        		
+//        	  force.stop();
+//		      var edges = vis.selectAll("line.link"),
+//			    clickedEdges = selectArcs(d);
+//		
+//		      edges.attr("marker-end", null);
+//		      edges.style("stroke", function(d) {
+//	 		      if(d.value <= 10) return "lightgrey"
+//	 		      else if(d.value > 10 && d.value <= 50) return "green"
+//	 			    else if(d.value > 50 ) return "darkgreen"
+//	 				  else return "lightgrey";
+//		      });
+//		
+//		      clickedEdges.classed("highlightable",false)
+//		      clickedEdges.attr("marker-end", "url(#Triangle)");
+//		      //clickedEdges.style("stroke", "red");
+//		
+//		      var neighbours = findNeighbours(d.id,links);
+//		      var neighbourSelectString = "";
+//		      $.each(neighbours["0"], function(i,v) {
+//			      if(neighbourSelectString=="")
+//				    neighbourSelectString = neighbourSelectString+"g.gnodeId-"+v.id;
+//			      else neighbourSelectString = neighbourSelectString+", g.gnodeId-"+v.id;
+//		      });
+//		      var neighbourNodes = vis.selectAll(neighbourSelectString);
+//		      
+//		      //now we select all nodes which are no neighbor
+//		      var nonNeighbourSelectString = "";
+//		      $.each(neighbours["1"], function(i,v) {
+//			      if(nonNeighbourSelectString=="")
+//			    	  nonNeighbourSelectString = nonNeighbourSelectString+"circle.nodeId-"+v.id;
+//			      else nonNeighbourSelectString = nonNeighbourSelectString+", circle.nodeId-"+v.id;
+//		      });
+//		      var nonNeighbourNodes = vis.selectAll(nonNeighbourSelectString);
+//
+//		      
+//		      
+//		    //now we select all links which are not directly connected
+//		      var nonNeighbourLinksSelectString = "";
+//		      $.each(neighbours["2"], function(i,v) {
+//			      if(nonNeighbourLinksSelectString=="")
+//			    	  nonNeighbourLinksSelectString = nonNeighbourLinksSelectString+"line.linkId-"+v.source.id+"-"+v.target.id;
+//			      else nonNeighbourLinksSelectString = nonNeighbourLinksSelectString+", line.linkId-"+v.source.id+"-"+v.target.id;
+//		      });
+//		      var nonNeighbourLinks = vis.selectAll(nonNeighbourLinksSelectString);
+//
+//		      
+//	       	vis.selectAll("text.nametext").remove();
+//		
+//	       	console.log("NonNeighborNodes: "+nonNeighbourNodes);
+//	       	
+//	       	nonNeighbourLinks.transition()
+//       			.duration(1500)
+//       			.style("stroke-width", function(d) {return 0;})
+//       			.remove();
+//	       	
+//	       	nonNeighbourNodes.transition()
+//	       		.duration(1500)
+//	       		.attr("r", function(d) {return 0;})
+//	       		.each("end", function(d) {force.start()})
+//	       		.remove();
+//	       	
+//	       	
+//		      neighbourNodes.append("svg:text")
+//	          .attr("class", "nametext")
+//	          .attr("dx", function(d) {
+//              var c = 0;
+//						  if(d.value<=5 ) c = 5
+//						  else if(d.value>5 && d.value<=20) c = parseInt(d.value);
+//						  else if(d.value>20) c = 20 + Math.sqrt(d.value);
+//              return (c > 100 ? 100+6 : c+6 );
+//							})
+//            .attr("dy", "1em")
+//	          .text(function(d) { return d.name; });
+//
+//		      focus(d);
+//		      
+//		     
+//		      
+//		    })
 		    
 	      .on("mouseout", function(d) {
 	      

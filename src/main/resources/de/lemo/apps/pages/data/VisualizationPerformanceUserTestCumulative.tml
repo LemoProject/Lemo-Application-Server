@@ -1,13 +1,6 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-    
-    <style>
-
-		#viz svg {
-		height: 500px;
-		}
-	</style>
      
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
@@ -24,9 +17,8 @@
 		  
     	<div class="span9">
         	<div id="viz">
-			      <canvas id="background"></canvas>
-			      <canvas id="foreground"></canvas>
-        		  <svg><!-- d3js visualization --></svg>
+<!--        		<button>Hour view</button>-->
+        		<!-- d3js visualization -->
         	</div>
     	</div>
       
@@ -97,8 +89,8 @@
 <!--		            		  </div>-->
 <!--			              </div>-->
 <!--                  </div>-->
-                  
-                <!--  Quizzes -->
+                
+                <!-- Quizzes -->  
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
@@ -137,38 +129,8 @@
 			      </div>
 			      
 			       
-			       
-			      <!-- Advanced-->
-<!--                  <div class="accordion-group">-->
-<!--                    <div class="accordion-heading">-->
-<!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">-->
-<!--                       Advanced <b class="caret"></b>-->
-<!--                      </a>-->
-<!--                    </div>   -->
-<!--			        <div id="collapseFour" class="accordion-body collapse">  -->
-<!--			        	<div class="accordion-inner">  -->
-<!--			        	-->
-<!--			        			-->
-<!--			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>-->
-<!--  			                	<div class="slider" id="supportSlider"></div><br />-->
-<!--  			                	<br />-->
-<!--  			                	-->
-<!--             -->
-<!--                        -->
-<!--	                            <label class="control-label" id="chargeslider-label"></label>-->
-<!--  			                	<div class="slider" id="chargesupportSlider"></div><br />-->
-<!--  			                	<br/>-->
-<!--  			                	-->
-<!--  			                	<label class="control-label" id="distanceslider-label"></label>-->
-<!--  			                	<div class="slider" id="distancesupportSlider"></div><br />-->
-<!--  			                	<br/>-->
-<!--  			                	-->
-<!--  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   -->
-<!--                       -->
-<!--                     	 </div>-->
-<!--			        </div>-->
-<!--			      </div>  -->
-<!--			            -->
+
+			            
 			 </div><!-- accordion -->
   			   		
   			   		<input t:type="submit" value="Update" class="btn btn-primary" />

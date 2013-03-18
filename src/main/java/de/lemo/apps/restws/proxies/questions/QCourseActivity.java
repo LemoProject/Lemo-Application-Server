@@ -25,7 +25,6 @@ public interface QCourseActivity {
 	@Produces(MediaType.APPLICATION_JSON)
 	ResultListHashMapObject compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courses,
-			@FormParam(MetaParam.ROLE_IDS) List<Long> roles,
 			@FormParam(MetaParam.USER_IDS) List<Long> users,
 			@FormParam(MetaParam.START_TIME) Long starttime,
 			@FormParam(MetaParam.END_TIME) Long endtime,

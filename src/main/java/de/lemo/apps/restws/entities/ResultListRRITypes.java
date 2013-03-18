@@ -113,9 +113,9 @@ public class ResultListRRITypes {
 			return this.forums;
 		}
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.COURSE)) {
-			return this.courses;
-		}
+//		if ((resourceType != null) && resourceType.equals(EResourceType.COURSE)) {
+//			return this.courses;
+//		}
 
 		if ((resourceType != null) && resourceType.equals(EResourceType.QUESTION)) {
 			return this.questions;

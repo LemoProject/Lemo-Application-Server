@@ -14,7 +14,6 @@ public interface Analysis {
 
 	Map<Long, ResultListLongObject> computeCourseActivity(
 			List<Long> courses,
-			List<Long> roles,
 			List<Long> users,
 			Long starttime,
 			Long endtime,

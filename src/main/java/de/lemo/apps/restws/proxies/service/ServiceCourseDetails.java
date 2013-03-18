@@ -18,7 +18,7 @@ import de.lemo.apps.restws.entities.ResultListCourseObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
- * @author johndoe
+ * @author Andreas Pursian
  */
 public interface ServiceCourseDetails {
 

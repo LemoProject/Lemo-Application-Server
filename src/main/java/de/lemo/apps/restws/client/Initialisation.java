@@ -25,5 +25,5 @@ public interface Initialisation {
 	ResultListLongObject getUserCourses(Long userId) throws RestServiceCommunicationException;
 	
 	ResultListCourseObject getUserCourses(Long userId, Long amount, Long offset) throws RestServiceCommunicationException;
-
+	
 }

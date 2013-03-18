@@ -297,7 +297,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				}
 			}
 
-			final List<Long> roles = new ArrayList<Long>();
+			
 			final List<Long> courses = new ArrayList<Long>();
 			courses.add(course.getCourseId());
 
@@ -306,7 +306,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
-			final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courses, roles, null,
+			final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courses, null,
 					beginStamp, endStamp, resolution, resourceTypesNames);
 			ResultListLongObject uniqueResult = null;
 
