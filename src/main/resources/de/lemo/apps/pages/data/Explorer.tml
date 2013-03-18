@@ -250,15 +250,25 @@
 			    				<br /><br />
 			    			</div>
 			    			
+			    			<div class="span1">
+			    			</div>	
+			    		</div>
+			    		<div class="row-fluid">
+		    				
+		    				<div class="span1">
+		    				</div>
+			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationCircleGraph" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>Circle Graph</b> </t:pagelink>
+			    				<t:pagelink page="data/visualizationPerformanceUserTestCumulative" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Performance User Test</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="data/visualizationPerformanceUserTestCumulutive" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>Performance User Test</b> </t:pagelink>
+			    				<t:pagelink page="data/visualizationCircleGraph" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>Circle Graph [ALPHA]</b> </t:pagelink>
 			    				<br /><br />
 			    			</div>
+			    			
+			    			
 <!--		    				<div class="span2" align="center">-->
 <!--			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysisTime} (OLD) </b> </t:pagelink>-->
 <!--			    				<br /><br />-->
