@@ -29,7 +29,7 @@ public interface ServiceCourseDetails {
 			@PathParam("cid") Long id);
 
 	@GET
-	// @Path("courses")
+	@Path("multi")
 	@Produces(MediaType.APPLICATION_JSON)
 	ResultListCourseObject getCoursesDetails(
 			@QueryParam(MetaParam.COURSE_IDS) List<Long> courseIds);

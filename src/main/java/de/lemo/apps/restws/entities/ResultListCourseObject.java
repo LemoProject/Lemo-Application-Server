@@ -24,11 +24,7 @@ public class ResultListCourseObject {
 	public List<CourseObject> getElements() {
 		return this.elements;
 	}
-
-	/**
-	 * @param elements
-	 *            the elements to set
-	 */
+	
 	public void setElements(final List<CourseObject> elements) {
 		this.elements = elements;
 	}

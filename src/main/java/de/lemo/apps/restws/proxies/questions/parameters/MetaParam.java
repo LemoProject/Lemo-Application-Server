@@ -34,4 +34,7 @@ public interface MetaParam {
 	String MAX_INTERVAL = "max_interval";
 	String MAX_WHOLE_INTERVAL = "max_whole_interval";
 	String MIN_WHOLE_INTERVAL = "min_whole_interval";
+	String SEARCH_TEXT = "stext";
+	String RESULT_AMOUNT = "res_amount";
+	String OFFSET = "offset";
 }

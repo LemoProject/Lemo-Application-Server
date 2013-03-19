@@ -26,7 +26,7 @@
 	  
 	  //Seperating days per week and hours per day results and calculating Min and Max Values for domain setup
 	  $.each(data.elements, function(i,v) {
-		  if(counter<7){
+		 // if(counter<28){
 			  console.log("DaysMin: "+daysMin+" DaysMax: "+daysMax+ " UW: "+v.upperWhisker+ " LW: "+v.lowerWhisker);
 			  // "+" Prefix on strings make JS recognize them as numbers  
 			  if(v.lowerWhisker){
@@ -39,19 +39,20 @@
 			  if(!v.upperQuartil) v.upperQuartil=0;
 			  if(!v.median) v.median=0;
 			  days.push(v);
-		  } else {
+	   
+	  //} else {
 			  // "+" Prefix on strings make JS recognize them as numbers  
-			  if(v.lowerWhisker){
-				   if(+v.lowerWhisker < +hoursMin) hoursMin = v.lowerWhisker;
-			  } else v.lowerWhisker=0;
-			  if(v.upperWhisker) {
-				  if(+v.upperWhisker > +hoursMax) hoursMax = v.upperWhisker;
-			  } else v.upperWhisker=0;
-			  if(!v.lowerQuartil) v.lowerQuartil=0;
-			  if(!v.upperQuartil) v.upperQuartil=0;
-			  if(!v.median) v.median=0;
-			  hours.push(v);
-		  }
+//			  if(v.lowerWhisker){
+//				   if(+v.lowerWhisker < +hoursMin) hoursMin = v.lowerWhisker;
+//			  } else v.lowerWhisker=0;
+//			  if(v.upperWhisker) {
+//				  if(+v.upperWhisker > +hoursMax) hoursMax = v.upperWhisker;
+//			  } else v.upperWhisker=0;
+//			  if(!v.lowerQuartil) v.lowerQuartil=0;
+//			  if(!v.upperQuartil) v.upperQuartil=0;
+//			  if(!v.median) v.median=0;
+//			  hours.push(v);
+//		  }
 		  counter++;
 	  });
 	  

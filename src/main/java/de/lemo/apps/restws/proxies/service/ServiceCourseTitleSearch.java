@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
+import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;;
 
 /**
  * @author Andreas Pursian
@@ -22,8 +23,8 @@ public interface ServiceCourseTitleSearch {
 	@Path("coursesbytext")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResultListCourseObject getCoursesByText(
-			@QueryParam("search_text") final String text,
-			@QueryParam("course_count") final Long count,
-			@QueryParam("course_offset") final Long offset );
+			@QueryParam(MetaParam.SEARCH_TEXT) final String text,
+			@QueryParam(MetaParam.RESULT_AMOUNT) final Long count,
+			@QueryParam(MetaParam.OFFSET) final Long offset );
 
 }

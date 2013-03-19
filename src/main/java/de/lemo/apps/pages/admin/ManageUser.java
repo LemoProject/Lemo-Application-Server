@@ -32,6 +32,7 @@ import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.data.DashboardAdmin;
+import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
@@ -46,6 +47,9 @@ public class ManageUser {
 	
 	@Inject
 	private Initialisation init;
+	
+	@Inject
+	private Information info;
 	
 	@Inject
 	private Logger logger;
@@ -132,37 +136,47 @@ public class ManageUser {
 	
 	Object onSelectedFromSearch() {
 		if(courseString!=null) {
-		searchCoursesList = new ArrayList<Course>();
-		ResultListCourseObject rs = new ResultListCourseObject();
-		CourseObject co = new CourseObject();
-		if (courseString.matches("[0-9]+")) {
-			Long l = Long.parseLong(courseString);
-			ArrayList<Long> lA = new ArrayList<Long>();
-			lA.add(l);
-			try {
-				co = this.init.getCourseDetails(l);
-			} catch (RestServiceCommunicationException e) {
-				e.printStackTrace();
+			searchCoursesList = new ArrayList<Course>();
+			ResultListCourseObject rs = new ResultListCourseObject();
+			courseString = courseString.trim();
+			courseString = courseString.replaceAll(" +"," ");
+			
+			if (courseString.matches("[0-9 ]+")) {
+				String[] idList = courseString.split(" ", 100);
+				ArrayList<Long> lA = new ArrayList<Long>();
+				Long l = -1L;
+				for (String idString : idList) {
+					logger.debug("Search String is : "+idString);
+					l = Long.parseLong(idString);
+					lA.add(l);
+				}
+				try {
+					rs = this.init.getCoursesDetails(lA);
+				} catch (RestServiceCommunicationException e) {
+					e.printStackTrace();
+				}
 			}
-		}
-		else {
-//			try {
-//			} catch (RestServiceCommunicationException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		}
-		
-		searchCoursesList.add(new Course(co));
-		
-//		if (rs!=null) {
-//			List<CourseObject> cd = rs.getElements();
-//			if (cd!=null) {
-//				for (CourseObject co : cd) {
-//					searchCoursesList.add(new Course(co));
-//				}
-//			}
-//		}
+			else {
+				logger.debug("Search String is NOT Numeric: "+ courseString);
+				try {
+					rs = info.getCoursesByTitle(courseString, 100L, 0L);
+				} catch (RestServiceCommunicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (rs!=null) {
+				logger.debug("Result object is NOT null");
+				List<CourseObject> cd = rs.getElements();
+				if (cd!=null) {
+					logger.debug("Course result List is NOT null ... results: "+ cd.size());
+					for (CourseObject co : cd) {
+						logger.debug("Adding search reult to List ... "+ co.getDescription());
+						searchCoursesList.add(new Course(co));
+					}
+				} else {logger.debug("Course result List is null");}
+			} else {logger.debug("Result object is null");}
 		}
 		return request.isXHR() ? formZone.getBody() : null;
 	}

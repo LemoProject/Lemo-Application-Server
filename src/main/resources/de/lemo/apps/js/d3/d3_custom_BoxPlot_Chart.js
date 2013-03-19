@@ -18,7 +18,7 @@
 	  
 	  var width = 800,
 	  	 height = 500,
-	  		days = [],
+	  	  days = [],
 	  	  hours = [],
 	  	  counter = 0,
 	  	  daysMin = 0,
@@ -68,8 +68,6 @@
    
    users.splice(0,0,' ');
    
-   //users.push([""]); //empty
-  // users.push(['_']);
  
  
   var xScale = d3.scale.ordinal()
@@ -111,11 +109,14 @@
 	  
 	  
 	  svgBox.append("g")
-	      .attr("class","x axis")
+	      .attr("class","x axis grid")
 	      .attr("transform", "translate("+marginViz.left+"," + height +")")
-	      .call(xAxis)    
+	      .call(make_x_axis()
+            .tickSize(-height, 0, 0)
+            .tickFormat(""))
+	      .call(xAxis) 
 	    .selectAll("text")  
-	    	.attr("class", function(d){return "boxId-"+d;})
+	    	.attr("class", function(d){return "boxId-"+d.replace(" ","_");})
             .style("text-anchor", "end")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
@@ -124,9 +125,12 @@
                 })
           
 	  svgBox.append("g")
-	      .attr("class", "y axis")
+	      .attr("class", "y axis grid")
 	      .attr("transform", "translate("+marginViz.left+", 0)")
-	      .call(yAxis)
+	      .call(make_y_axis()
+            .tickSize(-width, 0, 0)
+            .tickFormat(""))
+          .call(yAxis)
 	    .append("text")
 	      .attr("transform", "translate(-50, 0) rotate(-90)")
 	      .attr("y", 6)
@@ -147,24 +151,39 @@
 	   var gBox = svgBox.selectAll("g.box")
 	    	.data(quizzes, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} )
 	     .enter().append("g")
-    		.attr("class", function(d) {return "box gbox-"+d.name;})
+    		.attr("class", function(d) {return "box gbox-"+d.name.replace(" ","_");})
     		.attr("transform", function (d,i) {return "translate(" + (xScale(d.name)+marginViz.left-14)+",0)"; })
     		.attr("width", w + marginPlot.left + marginPlot.right)
     		.attr("height", h + marginViz.bottom + marginViz.top)
     		.on("mouseover",function(d) {	
-    				gBox.selectAll("text.boxText-"+d.name).style("fill","#0000") 
-    				svgBox.selectAll("text.boxId-"+d.name).style("fill","red") 
+    				gBox.selectAll("text.boxText-"+d.name.replace(" ","_")).style("fill","#0000") 
+    				svgBox.selectAll("text.boxId-"+d.name.replace(" ","_")).style("fill","red") 
     		})
     		.on("mouseout",function(d) {
-    				gBox.selectAll("text.boxText-"+d.name).style("fill","none") 
-    				svgBox.selectAll("text.boxId-"+d.name).style("fill","#0000") 
+    				gBox.selectAll("text.boxText-"+d.name.replace(" ","_")).style("fill","none") 
+    				svgBox.selectAll("text.boxId-"+d.name.replace(" ","_")).style("fill","#0000") 
     		})
     		
   
 	  gBox.append("g")
 		.attr("transform", "translate(" + marginPlot.left + "," + marginPlot.top + ")")
 		.call(box);
-	  
+	 
+	   
+	   //Adding helper grid lines for x-axis
+	   function make_x_axis() {        
+		    return d3.svg.axis()
+		         .scale(xScale)
+		         .orient("bottom")
+		         .ticks(5)
+		}
+	   //Adding helper grid lines for y-axis
+		function make_y_axis() {        
+		    return d3.svg.axis()
+		        .scale(yScale)
+		        .orient("left")
+		        .ticks(5)
+		}   
 
 	// Returns a function to compute the interquartile range.
       function iqr(k) {

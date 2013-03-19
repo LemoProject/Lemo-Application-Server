@@ -252,31 +252,5 @@ public class InitialisationImpl implements Initialisation {
 		return new ResultListCourseObject();
 		
 	}
-	
-	
-	public ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) throws RestServiceCommunicationException {
-		
-		try {
-
-				if (defaultConnectionCheck()){
-					final ServiceCourseTitleSearch serviceProxy = ProxyFactory.create(ServiceCourseTitleSearch.class, InitialisationImpl.SERVICE_PREFIX_URL);
-					if (serviceProxy != null) {
-						
-						return serviceProxy.getCoursesByText(text, count, offset);
-					}
-				}
-
-		} catch (final Exception e) {
-				
-				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
-
-		}
-		
-		
-		logger.info("Courses could not be loaded. Returning empty resultset.");
-		return new ResultListCourseObject();
-		
-	}
-
 
 }

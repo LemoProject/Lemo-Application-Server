@@ -96,6 +96,15 @@ text.shadow {
   stroke-opacity: .8;
 }
 
+// custom grid lines 
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.3;
+}
+.grid path {
+      stroke-width: 1;
+}
+
 
 /**
 * Tipsy Tooltip for D3.js Custom css
