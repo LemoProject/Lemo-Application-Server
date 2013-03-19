@@ -9,7 +9,6 @@
 package de.lemo.apps.pages.admin;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -19,8 +18,10 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
@@ -79,6 +80,20 @@ public class ManageUser {
 	@Property
 	@Persist
 	private List<Course> searchCoursesList;
+	
+	@Property
+	@Persist
+	private String courseString;
+	
+	
+	@Component
+	private Zone formZone;
+	 
+	@Inject
+	private Request request;
+
+	@Component
+	private Form ajaxForm;
 
 	
     Boolean onActivate(User user){
@@ -113,22 +128,31 @@ public class ManageUser {
 	}
 	
 	Object onActionFromDelete() {
-	    	this.userDAO.remove(this.userItem);
-	    	return DashboardAdmin.class;
+	    this.userDAO.remove(this.userItem);
+	    return DashboardAdmin.class;
 	}
 	
-	void onActionFromSearch() {
-		//input abfragen ob long oder string
+	Object onSelectedFromSearch() {
 		searchCoursesList = new ArrayList<Course>();
-		ArrayList<Long> lA = new ArrayList<Long>();
-		lA.add(112200L);
 		ResultListCourseObject rs = new ResultListCourseObject();
-		try {
-			rs = this.init.getCoursesDetails(lA);
-		} catch (RestServiceCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (courseString.matches("[0-9]+")) {
+			Long l = Long.parseLong(courseString);
+			ArrayList<Long> lA = new ArrayList<Long>();
+			lA.add(l);
+			try {
+				rs = this.init.getCoursesDetails(lA);
+			} catch (RestServiceCommunicationException e) {
+				e.printStackTrace();
+			}
 		}
+		else {
+//			try {
+//			} catch (RestServiceCommunicationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		}
+		
 		if (rs!=null) {
 			List<CourseObject> cd = rs.getElements();
 			if (cd!=null) {
@@ -137,6 +161,7 @@ public class ManageUser {
 				}
 			}
 		}
+		return request.isXHR() ? formZone.getBody() : null;
 	}
 	
 	public List<Course> getSearchCourseList() {
