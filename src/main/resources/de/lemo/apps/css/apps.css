@@ -9,6 +9,11 @@ TABLE.t-data-grid THEAD TR {
 	background-color: #0074cc;
 }
 
+::-webkit-input-placeholder { font-style:italic; }
+::-moz-placeholder { font-style:italic; } /* firefox 19+ */
+:-ms-input-placeholder { font-style:italic; } /* ie */
+input:-moz-placeholder { font-style:italic; }
+
 #draggable {
 	width: 100px;
 	height: 70px;

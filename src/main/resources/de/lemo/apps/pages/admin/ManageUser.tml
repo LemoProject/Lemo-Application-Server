@@ -14,6 +14,16 @@
 				 }
 			}
 			
+			function expandCourseSearch(bool) {
+				var search = document.getElementById("CourseSearch");
+				if (bool) {
+				 	search.classed("collapse",true);
+				 }
+				 else {				 
+				 	search.classed("collapse",false);
+				 }
+			}
+			
 			
 </script>    
      
@@ -113,8 +123,40 @@
 					<div class="span1">
 					</div>
 					<div class="span11">
-						<div class="well">	
-						
+						<div class="well">							
+						 <button class="btn btn-primary pull-left accordion-toggle" data-toggle="collapse" href="#collapseOne">${message:AddCourse}</button>
+						 <br/>
+						 <br/>
+						 <br/>
+						 <div id="collapseOne" class="accordion-body collapse">
+						 <div class="accordion-inner" style="border-top:none">
+							
+							<t:zone t:id="formZone" id="formZone">
+							<form t:id="ajaxForm" t:type="form" t:zone="^" style="margin-bottom:5px;">
+							    <input t:type="TextField" t:id="courseString" class="pull-left" placeholder="course id or name"/>
+							
+						 					 	
+							<div class="pull-left">&nbsp;&nbsp;</div>
+							<t:submit t:id="search" class="btn btn-primary pull-left" type="submit" value="${message:searchCourse}"/>			 	
+							<div class="pull-left">&nbsp;&nbsp;</div>		
+							<button class="btn pull-left accordion-toggle" data-toggle="collapse" href="#collapseOne">${message:cancel}</button>
+						 	
+						 	<br/>				 	
+						 	<br/>
+						 	<br/>
+						 	<br/>
+						 	<p> Searching for ${courseString} </p>
+						 	<t:if test="searchCourses">
+						 	<t:grid source="searchCourseList" row="courseItem" exclude="maxparticipants,needupdate,dataversion" >
+	       						<p:empty>
+	              					<div><p>There are no courses associated with this name/id</p></div>
+	            				</p:empty>
+	        				</t:grid>				 	
+	        				</t:if>	  
+						 	</form>
+						 	</t:zone>
+							</div>
+						 </div>
 						 <t:grid source="userCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" >
 	       							 <p:empty>
 	              						<div><p>There are no courses associated with this user</p></div>

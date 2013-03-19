@@ -2,6 +2,19 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
      
+      <script>
+		function submitform()
+		{
+		    document.forms["accountform"].submit();
+		}	
+		</script>  
+		
+		<style>		
+		input[type="submit"] {
+		-webkit-appearance: normal !important;
+		}
+		</style>
+     
      <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
@@ -37,14 +50,39 @@
 						<div>
 						
 					<form t:id="accountform" class="well  pull-left">
-				    	<t:beaneditor t:id="editor" object="userItem"  />
-				    		
-				    	
+					
+				    	<t:beaneditor t:id="editor" object="userItem">	
+				    		<t:error for="username" ><p class="pull-left">username missing</p></t:error>
+				    		<t:error for="fullname"><p class="pull-left">fullname missing</p></t:error>
+				    		<t:error for="email"><p class="pull-left">email missing</p></t:error>
+				    		<t:error for="password"><p class="pull-left">password missing</p></t:error>
+				    	</t:beaneditor>
 				    	
 				    	<br />
-				    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
-				    	<div class="pull-right">&nbsp;&nbsp;</div>
-				    	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
+				    	
+				    	<div class="btn-group pull-right">
+				    	<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+					    	${message:save}
+					    	<span class="caret"></span>
+					 	</a>
+				    	
+					  	<ul class="dropdown-menu" style="margin-top:5px;">
+					   		<li>
+					   			<a t:type="LinkSubmit" t:id="Dashboard" href="#">${message:BackToDashboard}</a>					   			
+					   		</li>
+					   		<li class="divider"></li>
+					   		<li>
+					   			<a t:type="LinkSubmit" t:id="New" href="#">${message:NewUser}</a>	
+					   		</li>
+					  	</ul>
+					  	</div>
+					  	
+					  	
+					  	<div class="pull-right">&nbsp;&nbsp;</div>
+					  	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
+				    	
+					  	
+				    	
 		            	
 				    </form>	
        						
@@ -69,9 +107,7 @@
 
 	     
      
- <script>
-			
-</script>    
+  
      
 
 </html>

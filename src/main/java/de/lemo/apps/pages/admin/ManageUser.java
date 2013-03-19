@@ -8,7 +8,9 @@
 
 package de.lemo.apps.pages.admin;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.annotations.Component;
@@ -16,18 +18,22 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-
+import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
-
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.data.DashboardAdmin;
+import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.CourseObject;
+import de.lemo.apps.restws.entities.ResultListCourseObject;
 
 
 /**
@@ -36,6 +42,9 @@ import de.lemo.apps.pages.data.DashboardAdmin;
  */
 @RequiresAuthentication
 public class ManageUser {
+	
+	@Inject
+	private Initialisation init;
 	
 	@Inject
 	private Logger logger;
@@ -67,10 +76,29 @@ public class ManageUser {
 	@Property
 	@Persist
 	private Course courseItem;
+	
+	@Property
+	@Persist
+	private List<Course> searchCoursesList;
+	
+	@Property
+	@Persist
+	private String courseString;
+	
+	
+	@Component
+	private Zone formZone;
+	 
+	@Inject
+	private Request request;
+
+	@Component
+	private Form ajaxForm;
 
 	
     Boolean onActivate(User user){
     	this.userItem = user;
+    	searchCoursesList = null;
     	return false;
     }
     
@@ -99,11 +127,54 @@ public class ManageUser {
 		return messages.format("sureToDelete", userItem.getFullname());
 	}
 	
-	 Object onActionFromDelete() {
-	    	this.userDAO.remove(this.userItem);
-	    	return DashboardAdmin.class;
-	    }
+	Object onActionFromDelete() {
+	    this.userDAO.remove(this.userItem);
+	    return DashboardAdmin.class;
+	}
 	
-
+	Object onSelectedFromSearch() {
+		searchCoursesList = new ArrayList<Course>();
+		ResultListCourseObject rs = new ResultListCourseObject();
+		if (courseString.matches("[0-9]+")) {
+			Long l = Long.parseLong(courseString);
+			ArrayList<Long> lA = new ArrayList<Long>();
+			lA.add(l);
+			try {
+				rs = this.init.getCoursesDetails(lA);
+			} catch (RestServiceCommunicationException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+//			try {
+//			} catch (RestServiceCommunicationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		}
+		
+		if (rs!=null) {
+			List<CourseObject> cd = rs.getElements();
+			if (cd!=null) {
+				for (CourseObject co : cd) {
+					searchCoursesList.add(new Course(co));
+				}
+			}
+		}
+		return request.isXHR() ? formZone.getBody() : null;
+	}
+	
+	public List<Course> getSearchCourseList() {
+		return this.searchCoursesList;
+	}
+	
+	public boolean getSearchCourses() {
+		if (searchCoursesList!=null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 }
