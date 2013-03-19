@@ -46,7 +46,7 @@
 <!--        						 <br /> -->
 <!--        						 All users: -->
 
-       						 <t:grid source="alluser" row="userItem" exclude="password" reorder="username,fullname,email" add="view" >
+       						 <t:grid source="alluser" row="userItem" exclude="password" reorder="username,fullname,email" add="view" class="table">
        						 	 <p:viewCell>
        						 	 	<t:pagelink t:page="admin/manageuser" context="useritem.id">
        						 	 		view

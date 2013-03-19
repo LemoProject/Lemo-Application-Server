@@ -9,6 +9,7 @@
 package de.lemo.apps.pages.admin;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -82,9 +83,7 @@ public class ManageUser {
 	private List<Course> searchCoursesList;
 	
 	@Property
-	@Persist
-	private String courseString;
-	
+	private String courseString;	
 	
 	@Component
 	private Zone formZone;
@@ -94,7 +93,6 @@ public class ManageUser {
 
 	@Component
 	private Form ajaxForm;
-
 	
     Boolean onActivate(User user){
     	this.userItem = user;
@@ -133,14 +131,16 @@ public class ManageUser {
 	}
 	
 	Object onSelectedFromSearch() {
+		if(courseString!=null) {
 		searchCoursesList = new ArrayList<Course>();
 		ResultListCourseObject rs = new ResultListCourseObject();
+		CourseObject co = new CourseObject();
 		if (courseString.matches("[0-9]+")) {
 			Long l = Long.parseLong(courseString);
 			ArrayList<Long> lA = new ArrayList<Long>();
 			lA.add(l);
 			try {
-				rs = this.init.getCoursesDetails(lA);
+				co = this.init.getCourseDetails(l);
 			} catch (RestServiceCommunicationException e) {
 				e.printStackTrace();
 			}
@@ -153,13 +153,16 @@ public class ManageUser {
 //			}
 		}
 		
-		if (rs!=null) {
-			List<CourseObject> cd = rs.getElements();
-			if (cd!=null) {
-				for (CourseObject co : cd) {
-					searchCoursesList.add(new Course(co));
-				}
-			}
+		searchCoursesList.add(new Course(co));
+		
+//		if (rs!=null) {
+//			List<CourseObject> cd = rs.getElements();
+//			if (cd!=null) {
+//				for (CourseObject co : cd) {
+//					searchCoursesList.add(new Course(co));
+//				}
+//			}
+//		}
 		}
 		return request.isXHR() ? formZone.getBody() : null;
 	}
@@ -175,6 +178,22 @@ public class ManageUser {
 		else {
 			return false;
 		}
+	}
+	
+	public Object onActionFromDeleteCourse(Long courseID) {
+		List<Course> courseList = new ArrayList<Course>();
+		courseList = this.courseDAO.findAllByOwner(userItem, false);
+		int index=0;
+		for (int i=0; i<courseList.size();i++) {
+			if (courseList.get(i).getId()==courseID) {
+				index=i;
+				break;
+			}
+		}
+		courseList.remove(index);
+		userItem.setMyCourses(courseList);
+		this.userDAO.update(userItem);
+		return this;
 	}
 
 }
