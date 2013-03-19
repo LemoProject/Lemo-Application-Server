@@ -4,6 +4,7 @@
  */
 package de.lemo.apps.pages.data;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -165,6 +167,9 @@ public class Explorer {
 
 	@Inject
 	private AjaxResponseRenderer ajaxResponseRenderer;
+	
+	@Property
+    private String courseSearch;
 
 	/**
 	 * Preparing the Grid Model for the
@@ -188,6 +193,7 @@ public class Explorer {
 		}
 		return true;
 	}
+	
 
 	/**
 	 * Inserting a some js to deal with tab changes (e.g. Summary, Last Month, etc.) after the page rendering is
@@ -280,6 +286,24 @@ public class Explorer {
 			return null;
 		}
 	}
+	
+	
+	@OnEvent(value = "provideCompletions")
+    public List<String> autoComplete(String start)
+    {
+        List<String> strings = new ArrayList<String>();
+        
+        if (start != null)
+        {	List<Course> courseList = getCourses();
+        	
+            for(Course value : courseList){
+                if(value.getCourseDescription().toUpperCase().startsWith(start.toUpperCase())) 
+                    strings.add(value.getCourseDescription());
+            }
+        }
+        
+        return strings;
+    }
 
 	public Long getAverageRequest(final List<List<XYDateDataItem>> dataItemList) {
 		return this.statisticWorker.getAverageRequest(dataItemList);

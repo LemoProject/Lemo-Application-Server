@@ -33,15 +33,16 @@
 		              <p>${message:noCourses}</p>
 		            </p:empty>
         		</t:grid>
-        		<form class="form-search">
+        		<t:form class="form-search">
         		<div class="">
-    				<input type="text" class="input-large search-query"/>
-    				<br />
-    				<br />
-    				<button type="submit" class="btn pull-left">${message:search}</button>
+        		
+        			<div class="input-append">
+						      <input t:type="TextField" t:id="courseSearch" t:mixins="jquery/Autocomplete" class="pull-left " placeholder="Course name"></input>
+						      <span class="add-on"><a t:type="ActionLink" t:id="search" href="#"><i class="icon-search icon-black"></i></a></span>
+					</div>
     				<br />
     			</div>
-    			</form>
+    			</t:form>
     		</div>
     	</div>
     	
