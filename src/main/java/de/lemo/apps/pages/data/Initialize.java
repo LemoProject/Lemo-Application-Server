@@ -71,11 +71,9 @@ public class Initialize {
 
 		// Sleep 2 seconds to simulate a long-running operation
 		this.sleep(THOU);
-//		if (user.getRoles().contains(Roles.ADMIN)){
-//			return DashboardAdmin.class;
-//		} else return Dashboard.class;
+
 		return user.getRoles().contains(Roles.ADMIN) ? DashboardAdmin.class : Dashboard.class;
-	//	return Dashboard.class;
+
 	}
 
 	public String getStatusBar() {
