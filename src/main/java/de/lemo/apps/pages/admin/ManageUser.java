@@ -195,8 +195,7 @@ public class ManageUser {
 	}
 	
 	public Object onActionFromDeleteCourse(Long courseID) {
-		List<Course> courseList = new ArrayList<Course>();
-		courseList = this.courseDAO.findAllByOwner(userItem, false);
+		List<Course> courseList =  this.courseDAO.findAllByOwner(userItem, false);
 		int index=0;
 		for (int i=0; i<courseList.size();i++) {
 			if (courseList.get(i).getId()==courseID) {
@@ -206,6 +205,37 @@ public class ManageUser {
 		}
 		courseList.remove(index);
 		userItem.setMyCourses(courseList);
+		this.userDAO.update(userItem);
+		return this;
+	}
+	
+	public Object onActionFromAdd(Long courseID) {
+		List<Course> courseList = this.courseDAO.findAll();
+		List<Course> userCourses = this.courseDAO.findAllByOwner(userItem, false);
+		int index=0;
+		boolean exists = false;
+		for (int i=0; i<courseList.size();i++) {
+			if (courseList.get(i).getId()==courseID) {
+				index=i;
+				exists=true;
+				break;
+			}
+		}
+		if(exists) {
+			userCourses.add(courseList.get(index));
+		}
+		else {
+			CourseObject co = new CourseObject();
+			try {
+				co = this.init.getCourseDetails(courseID);
+			} catch (RestServiceCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return this;
+			}
+			userCourses.add(new Course(co));
+		}
+		userItem.setMyCourses(userCourses);
 		this.userDAO.update(userItem);
 		return this;
 	}

@@ -133,19 +133,23 @@
 						    </div>
 						  </div>
 						  </div>	
-						 	<br/>	
+						 	<br/>
+						 	<br/>
+						 	<br/>
+						 	<div class="row-fuild">	
 						 	<t:if test="searchCourses">
-						 	<h4 class="pull-left" > Result List: </h4>
+						 	<h4 class="pull-left" > Result List:    </h4>
 						 	<t:grid source="searchCourseList" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="add" class="table">
 						 		<p:addCell>
-						 			<t:actionlink t:id="add" class="btn btn-primary"><i class="icon-plus icon-white"></i></t:actionlink>
+						 			<t:actionlink t:id="add" context="courseItem.id" class="btn btn-primary"><i class="icon-plus icon-white"></i></t:actionlink>
 						 		</p:addCell>
 	       						<p:empty>
-	              					<div><p>There are no courses associated with this name/id</p></div>
+	              					<div><p>  There are no courses associated with this name/id</p></div>
 	            				</p:empty>
-	        				</t:grid>		
+	        				</t:grid>	
 						 	<hr style="border-top:1px solid #bbbbbb;border-bottom:1px solid #dddddd"/>
 	        				</t:if>	  
+	        				</div>	
 						 	</form>
 						 	</t:zone>
 							</div>
