@@ -268,7 +268,7 @@ public class VisualizationPerformanceCumulative {
 			if ((this.resolution == null) || (this.resolution < 10)) {
 				this.resolution = 30;
 			}
-			final List<Long> roles = new ArrayList<Long>();
+			
 			final List<Long> courseList = new ArrayList<Long>();
 			courseList.add(this.courseId);
 
@@ -314,7 +314,7 @@ public class VisualizationPerformanceCumulative {
 
 			final String result = this.analysis.computePerformanceBoxplot(courseList, this.selectedUsers, quizzesList, 
 																			100L, beginStamp,endStamp);
-		
+			this.logger.debug("ResultString RAW: "+result);	
 			
 			final JSONArray graphParentArray = new JSONArray();
 

@@ -116,7 +116,7 @@
             .tickFormat(""))
 	      .call(xAxis) 
 	    .selectAll("text")  
-	    	.attr("class", function(d){return "boxId-"+d.replace(" ","_");})
+	    	.attr("class", function(d){return "boxId-"+d.replace(new RegExp("[\W :]","g"),"_");})
             .style("text-anchor", "end")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
@@ -151,17 +151,17 @@
 	   var gBox = svgBox.selectAll("g.box")
 	    	.data(quizzes, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} )
 	     .enter().append("g")
-    		.attr("class", function(d) {return "box gbox-"+d.name.replace(" ","_");})
+    		.attr("class", function(d) {return "box gbox-"+d.name.replace(new RegExp("[\W :]","g"),"_");})
     		.attr("transform", function (d,i) {return "translate(" + (xScale(d.name)+marginViz.left-14)+",0)"; })
     		.attr("width", w + marginPlot.left + marginPlot.right)
     		.attr("height", h + marginViz.bottom + marginViz.top)
     		.on("mouseover",function(d) {	
-    				gBox.selectAll("text.boxText-"+d.name.replace(" ","_")).style("fill","#0000") 
-    				svgBox.selectAll("text.boxId-"+d.name.replace(" ","_")).style("fill","red") 
+    				gBox.selectAll("text.boxText-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","#0000") 
+    				svgBox.selectAll("text.boxId-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","red") 
     		})
     		.on("mouseout",function(d) {
-    				gBox.selectAll("text.boxText-"+d.name.replace(" ","_")).style("fill","none") 
-    				svgBox.selectAll("text.boxId-"+d.name.replace(" ","_")).style("fill","#0000") 
+    				gBox.selectAll("text.boxText-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","none") 
+    				svgBox.selectAll("text.boxId-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","#0000") 
     		})
     		
   
