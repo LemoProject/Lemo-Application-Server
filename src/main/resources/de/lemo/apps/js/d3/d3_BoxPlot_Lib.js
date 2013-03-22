@@ -196,7 +196,7 @@ d3.box = function() {
           .data(quartileData);
 
       boxTick.enter().append("text")
-          .attr("class", function(d,i) {return "box boxText-"+name.replace(" ","_")})
+          .attr("class", function(d,i) {return "box boxText-"+name.replace(new RegExp("[\W :]","g"),"_")})
           .attr("dy", ".3em")
           .attr("dx", function(d, i) { return i & 1 ? 6 : -6 })
           .attr("x", function(d, i) { return i & 1 ? width : 0 })

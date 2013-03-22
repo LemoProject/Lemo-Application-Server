@@ -6,6 +6,7 @@
 	 */
 package de.lemo.apps.pages.data;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -28,10 +30,15 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
@@ -42,6 +49,7 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
@@ -89,6 +97,9 @@ public class VisualizationCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
+	
+	@Inject
+	private ComponentResources coRes;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -252,8 +263,57 @@ public class VisualizationCumulative {
 
 			final String result = this.analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp);
 
-			this.logger.debug("Cumulative result: " + result);
-			return result;
+			this.logger.debug("ResultString RAW: "+result);	
+			
+
+			final ObjectMapper mapper = new ObjectMapper();
+			List<BoxPlot> resultList;
+			BoxPlot singleResult;
+			String resultListString = "";
+			JsonNode jsonObj;
+			try {
+				jsonObj = mapper.readTree(result);
+				final JsonNode elementArray = jsonObj.get("elements");
+				if (elementArray != null) {
+					if (elementArray.isArray()) {
+
+						resultList = mapper.readValue(elementArray.toString(), new TypeReference<List<BoxPlot>>() {
+						});
+
+						this.logger.debug("Entries Size:" + jsonObj.get("elements").size() + " Values:"
+								+ jsonObj.get("elements").toString());
+
+						this.logger.debug("Entries parsed Size: " + resultList.size() + " Values:" + resultList.toString());
+
+
+						resultListString = mapper.writeValueAsString(resultList);
+
+						this.logger.debug("Entries JSON Output: " + resultListString);
+					} else {
+						singleResult = mapper.readValue(elementArray.toString(), new TypeReference<BoxPlot>() {
+						});
+
+						this.logger.debug("Entries: " + jsonObj.get("elements").toString());
+
+						this.logger.debug("Entries parsed: " + singleResult.toString());
+
+						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
+						tmpResultList.add(singleResult);
+
+						resultListString = mapper.writeValueAsString(tmpResultList);
+
+					}
+				}
+			} catch (final JsonProcessingException e) {
+				logger.error(e.getMessage());
+			} catch (final IOException e) {
+				logger.error(e.getMessage());
+			}
+			
+			
+			
+			this.logger.debug("Cumulative result: " + resultListString);
+			return resultListString;
 
 		}
 		return "";
