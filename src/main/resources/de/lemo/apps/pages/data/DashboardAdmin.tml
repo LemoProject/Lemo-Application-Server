@@ -60,7 +60,7 @@
 	   							<br />
 	   							
 					    		
-	    						<t:pagelink page="admin/createuser" class="btn btn-primary pull-left">Add user</t:pagelink>
+	    						<t:pagelink page="admin/createuser" class="btn btn-primary pull-left">${message:addUser}</t:pagelink>
 	    						<br />
 	   							<br />
 	   							
