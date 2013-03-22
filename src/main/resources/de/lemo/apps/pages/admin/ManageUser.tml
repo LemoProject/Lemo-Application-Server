@@ -14,6 +14,18 @@
 				 }
 			}
 			
+			function setConfirmation2(bool, int) {
+				 var confirm = document.getElementById("deleteCourseConfirmation");
+				 if (bool) {
+				 	confirm.style.visibility="visible";
+				 }
+				 else {				 
+				 	confirm.style.visibility="hidden";
+				 }
+				 var button = document.getElementById("deleteCourseButton");
+				 button.setAttribute("href","/beuth/apps/de/admin/manageuser.deletecourse/"+int);
+			}
+			
 			function expandCourseSearch(bool) {
 				var search = document.getElementById("searchField");
 				if (bool) {
@@ -23,6 +35,15 @@
 				 	search.style.display="hidden";
 				 }
 			}
+			
+			$('#searchButton').keypress(function (e) {                                       
+			       if (e.which == 13) {
+			            e.preventDefault();
+			            //do something   
+			       }
+			       return false;
+			});
+																				
 			
 			
 </script>    
@@ -105,7 +126,20 @@
 								<button class="btn btn-primary pull-right" onclick="setConfirmation(false);">${message:No}</button>
 							</div>
 						</div>
-					</div>	
+					</div>
+					
+					<div class="span4" id="deleteCourseConfirmation" style="visibility:hidden">
+					 	<div class="alert alert-error pull-left" style="padding-right:14px;margin-top:78px;">
+					 		<div class="pull-left">
+								<br/>
+								<p class="pull-left">${message:sureToDeleteCourse}</p>
+								<br/>
+								<t:actionlink t:id="deleteCourse" context="courseItem.id" class="btn btn-danger pull-right" id="deleteCourseButton">${message:Yes}</t:actionlink>
+								<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
+								<button class="btn btn-primary pull-right" onclick="setConfirmation2(false);">${message:No}</button>
+							</div>
+						</div>
+					</div>		
 									
 					
 				</div>
@@ -126,8 +160,8 @@
 							<form t:id="ajaxForm" t:type="form" t:zone="^" style="margin-bottom:5px;">						
 								<div class="controls row-fluid">
 						    		<div class="input-append">
-						      			<input t:type="TextField" t:id="courseString" class="pull-left" placeholder="${message:nameOrId}"></input>
-						      			<span class="add-on"><a t:type="LinkSubmit" t:id="search" href="#"><i class="icon-search"></i></a></span>
+						      			<input  onkeyup="inputKeyUp(event)" id="courseString" t:type="TextField" t:id="courseString" class="pull-left" placeholder="${message:nameOrId}"></input>
+						      			<span class="add-on"><a t:type="LinkSubmit" t:id="search" href="#" id="searchButton"><i class="icon-search"></i></a></span>
 						    		</div>						    	
 						    </div>
 						 	<t:if test="searchCourses">
@@ -157,7 +191,7 @@
 						 	<div class="row-fluid" style="margin-top:10px">
 						    	<t:grid source="userCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="delete" class="table">
 						 			<p:deleteCell>
-						 				<t:actionlink t:id="deleteCourse" context="courseItem.id" class="btn btn-danger"><i class="icon-trash icon-white"></i></t:actionlink>
+						 				<p class="btn btn-danger pull-right" onclick="setConfirmation2(true,${courseItem.id});"><i class="icon-trash icon-white"></i></p>
 						 			</p:deleteCell>
 						 			<p:empty>
 	              						<div><p>There are no courses associated with this user</p></div>
@@ -165,13 +199,6 @@
 	        			  		</t:grid>
 	        				</div>		
 						</div>
-					</div>
-					<div class="span1">
-					
-					
-						
-						
-						
 					</div>
 				</div>
 			</div>

@@ -9,20 +9,22 @@
 package de.lemo.apps.pages.admin;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
@@ -44,6 +46,9 @@ import de.lemo.apps.restws.entities.ResultListCourseObject;
  */
 @RequiresAuthentication
 public class ManageUser {
+	
+	@Environmental
+	private JavaScriptSupport JSSupport;
 	
 	@Inject
 	private Initialisation init;
@@ -97,7 +102,7 @@ public class ManageUser {
 	private Request request;
 
 	@Component
-	private Form ajaxForm;
+	private Form ajaxForm;	
 	
     Boolean onActivate(User user){
     	this.userItem = user;
@@ -218,7 +223,7 @@ public class ManageUser {
 		List<Course> courseList =  this.courseDAO.findAllByOwner(userItem, false);
 		int index=0;
 		for (int i=0; i<courseList.size();i++) {
-			if (courseList.get(i).getId()==courseID) {
+			if (courseList.get(i).getId().equals(courseID)) {
 				index=i;
 				break;
 			}
