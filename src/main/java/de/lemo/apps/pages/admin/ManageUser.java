@@ -83,10 +83,11 @@ public class ManageUser {
 	private Course courseItem;
 	
 	@Property
-	@Persist
+	@Persist("FLASH")
 	private List<Course> searchCoursesList;
 	
 	@Property
+	@Persist("FLASH")
 	private String courseString;	
 	
 	@Component
@@ -100,8 +101,13 @@ public class ManageUser {
 	
     Boolean onActivate(User user){
     	this.userItem = user;
-    	searchCoursesList = null;
+    	this.searchCoursesList = null;
     	return false;
+    }
+    
+    void cleanUpRender() {
+    	this.searchCoursesList = null;
+    	form.clearErrors();
     }
     
 //    Object onActivate(){
@@ -170,14 +176,28 @@ public class ManageUser {
 				logger.debug("Result object is NOT null");
 				List<CourseObject> cd = rs.getElements();
 				if (cd!=null) {
+					List<Course> userCourses = userItem.getMyCourses();
 					logger.debug("Course result List is NOT null ... results: "+ cd.size());
+					Long index = 0L;
 					for (CourseObject co : cd) {
-						logger.debug("Adding search reult to List ... "+ co.getDescription());
-						searchCoursesList.add(new Course(co));
+						Course c = new Course(co);
+						boolean exists = false;
+						for (Course blub : userCourses) {
+							if(blub.getCourseId().equals(c.getCourseId())) {
+								exists=true;
+							}
+						}
+						if (!exists) {	
+							c.setId(index);						
+							logger.debug("Adding search result to List ... "+ co.getDescription());
+							searchCoursesList.add(c);
+							index++;
+						}
 					}
 				} else {logger.debug("Course result List is null");}
 			} else {logger.debug("Result object is null");}
 		}
+		
 		return request.isXHR() ? formZone.getBody() : null;
 	}
 	
@@ -211,30 +231,24 @@ public class ManageUser {
 	
 	public Object onActionFromAdd(Long courseID) {
 		List<Course> courseList = this.courseDAO.findAll();
-		List<Course> userCourses = this.courseDAO.findAllByOwner(userItem, false);
-		int index=0;
-		boolean exists = false;
-		for (int i=0; i<courseList.size();i++) {
-			if (courseList.get(i).getId()==courseID) {
-				index=i;
+		List<Course> userCourses = userItem.getMyCourses();
+		Course c = searchCoursesList.get(courseID.intValue());
+		boolean exists= false;
+		for (Course blub : courseList) {
+			logger.info("c.courseName: "+c.getCourseName()+"c.getCourseId: "+c.getCourseId()+"////blub.courseName: "+blub.getCourseName()+"blub.getCourseId :"+blub.getCourseId());
+			if(blub.getCourseId().equals(c.getCourseId())) {
+				c =blub;
 				exists=true;
-				break;
 			}
 		}
-		if(exists) {
-			userCourses.add(courseList.get(index));
+		if (exists) {
+			userCourses.add(c);
 		}
 		else {
-			CourseObject co = new CourseObject();
-			try {
-				co = this.init.getCourseDetails(courseID);
-			} catch (RestServiceCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return this;
-			}
-			userCourses.add(new Course(co));
-		}
+			c.setId(0);
+			this.courseDAO.save(c);
+			userCourses.add(c);
+		}		
 		userItem.setMyCourses(userCourses);
 		this.userDAO.update(userItem);
 		return this;

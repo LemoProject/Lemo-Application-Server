@@ -15,12 +15,12 @@
 			}
 			
 			function expandCourseSearch(bool) {
-				var search = document.getElementById("CourseSearch");
+				var search = document.getElementById("searchField");
 				if (bool) {
-				 	search.classed("collapse",true);
+				 	search.style.display="block";
 				 }
-				 else {				 
-				 	search.classed("collapse",false);
+				 else {	
+				 	search.style.display="hidden";
 				 }
 			}
 			
@@ -116,54 +116,54 @@
 					</div>
 					<div class="span11">
 						<div class="well">
-						<div class="span2 pull-left" style="margin-left:0px;margin-bottom:10px">							
-						 <button class="btn btn-primary pull-left accordion-toggle" data-toggle="collapse" href="#collapseOne"><i class="icon-plus icon-white"></i> ${message:AddCourse}</button>
-						 </div>
-						 <div id="collapseOne" class="accordion-body collapse">
-						 <div class="accordion-inner" style="border-top:none; padding-top:0px;padding-left:0px">
-							
+						<div class="row-fluid accordion" id="accordion2">
+							<div class="row-fluid pull-left accordion-heading" style="margin-left:0px">							
+						 	<button class="btn btn-primary pull-left accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="padding:4px 10px 4px 10px;"><i class="icon-plus icon-white"></i> ${message:AddCourse}</button>
+						 	</div>							 						
+						 	<div class="row-fluid pull-left" style="margin-top:10px">	
+						 	<div id="collapseOne" class="accordion-body collapse">				 	
 							<t:zone t:id="formZone" id="formZone">
-							<form t:id="ajaxForm" t:type="form" t:zone="^" style="margin-bottom:5px;">							
-							<div class="pull-left">&nbsp;&nbsp;</div>
-							<div class="span5 pull-left">
-							<div class="controls">
-						    <div class="input-append">
-						      <input t:type="TextField" t:id="courseString" class="pull-left" placeholder="course id or name"></input>
-						      <span class="add-on"><a t:type="LinkSubmit" t:id="search" href="#"><i class="icon-search icon-white"></i></a></span>
+							<form t:id="ajaxForm" t:type="form" t:zone="^" style="margin-bottom:5px;">						
+								<div class="controls row-fluid">
+						    		<div class="input-append">
+						      			<input t:type="TextField" t:id="courseString" class="pull-left" placeholder="${message:nameOrId}"></input>
+						      			<span class="add-on"><a t:type="LinkSubmit" t:id="search" href="#"><i class="icon-search"></i></a></span>
+						    		</div>						    	
 						    </div>
-						  </div>
-						  </div>	
-						 	<br/>
-						 	<br/>
-						 	<br/>
-						 	<div class="row-fuild">	
 						 	<t:if test="searchCourses">
-						 	<h4 class="pull-left" > Result List:    </h4>
-						 	<t:grid source="searchCourseList" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="add" class="table">
-						 		<p:addCell>
-						 			<t:actionlink t:id="add" context="courseItem.id" class="btn btn-primary"><i class="icon-plus icon-white"></i></t:actionlink>
-						 		</p:addCell>
-	       						<p:empty>
-	              					<div><p>  There are no courses associated with this name/id</p></div>
-	            				</p:empty>
-	        				</t:grid>	
-						 	<hr style="border-top:1px solid #bbbbbb;border-bottom:1px solid #dddddd"/>
-	        				</t:if>	  
-	        				</div>	
+	       							<div class="row-fluid">
+						 		<h4 class="pull-left"> ${message:resultList}   </h4>
+	       							</div>
+						 		<t:grid source="searchCourseList" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="add" class="table" inplace="true">
+						 			<p:addCell>
+						 				<t:actionlink t:id="add" context="courseItem.id" class="btn btn-primary"><i class="icon-plus icon-white"></i></t:actionlink>
+						 			</p:addCell>
+	       							<p:empty>
+	       							<div class="row-fluid">
+	       							<p>  ${message:noCoursesMatching}</p>
+	       							</div>
+	            					</p:empty>
+	        					</t:grid>	
+						 		<hr style="border-top:1px solid #bbbbbb;border-bottom:1px solid #dddddd"/>						 	
+	        				</t:if>	 
 						 	</form>
 						 	</t:zone>
-							</div>
-						 </div>
-						 
-						  <t:grid source="userCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="delete" class="table">
+						 	</div>
+						 	</div>
+						 	</div>
+						 	<div class="row-fluid">
+						 		<h4 class="pull-left"> ${message:yourCourses}    </h4>
+	       							</div>
+						 	<div class="row-fluid" style="margin-top:10px">
+						    	<t:grid source="userCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="delete" class="table">
 						 			<p:deleteCell>
 						 				<t:actionlink t:id="deleteCourse" context="courseItem.id" class="btn btn-danger"><i class="icon-trash icon-white"></i></t:actionlink>
 						 			</p:deleteCell>
 						 			<p:empty>
 	              						<div><p>There are no courses associated with this user</p></div>
 	            					</p:empty>
-	        					</t:grid>
-	        					
+	        			  		</t:grid>
+	        				</div>		
 						</div>
 					</div>
 					<div class="span1">
