@@ -134,7 +134,7 @@
 								<br/>
 								<p class="pull-left">${message:sureToDeleteCourse}</p>
 								<br/>
-								<t:actionlink t:id="deleteCourse" context="courseItem.id" class="btn btn-danger pull-right" id="deleteCourseButton">${message:Yes}</t:actionlink>
+								<t:actionlink t:id="deleteCourse" class="btn btn-danger pull-right" id="deleteCourseButton">${message:Yes}</t:actionlink>
 								<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
 								<button class="btn btn-primary pull-right" onclick="setConfirmation2(false);">${message:No}</button>
 							</div>
