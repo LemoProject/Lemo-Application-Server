@@ -6,15 +6,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import de.lemo.apps.restws.entities.ResultListBoxPlot;
-import de.lemo.apps.restws.entities.ResultListLongObject;
+import org.jboss.resteasy.client.ClientResponse;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
-
-
-
 public interface QPerformanceUserTestBoxPlot {
-	
+
 	/**
 	 * @param courses
 	 *            (optional) List of course-ids that shall be included
@@ -31,11 +27,11 @@ public interface QPerformanceUserTestBoxPlot {
 	 *            (mandatory)
 	 * @return
 	 */
-	
-	 @POST
-	 @Path("performanceUserTestBoxPlot")
-	 @Produces(MediaType.APPLICATION_JSON)
-	 String compute(
+
+	@POST
+	@Path("performanceUserTestBoxPlot")
+	@Produces(MediaType.APPLICATION_JSON)
+	ClientResponse<String> compute(
 			@FormParam(MetaParam.COURSE_IDS) final List<Long> courses,
 			@FormParam(MetaParam.USER_IDS) final List<Long> users,
 			@FormParam(MetaParam.QUIZ_IDS) final List<Long> quizzes,
@@ -43,5 +39,4 @@ public interface QPerformanceUserTestBoxPlot {
 			@FormParam(MetaParam.START_TIME) final Long startTime,
 			@FormParam(MetaParam.END_TIME) final Long endTime);
 
-		
 }
