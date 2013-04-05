@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ProxyFactory;
+import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.slf4j.Logger;
 import de.lemo.apps.application.config.ServerConfiguration;
-import de.lemo.apps.restws.entities.BoxPlot;
-import de.lemo.apps.restws.entities.ResultListBoxPlot;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -47,6 +50,53 @@ public class AnalysisImpl implements Analysis {
 
 	private static final String QUESTIONS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl() + "/questions";
 
+	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
+	// TODO set better pool size
+	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
+	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
+
+	private QCourseActivityString qcourseActivity =
+			ProxyFactory.create(QCourseActivityString.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QActivityResourceType qActivityResourceType =
+			ProxyFactory.create(QActivityResourceType.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QActivityResourceTypeResolution qActivityResourceTypeResolution =
+			ProxyFactory.create(QActivityResourceTypeResolution.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QLearningObjectUsage qLOUsage =
+			ProxyFactory.create(QLearningObjectUsage.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QCourseUsers courseUsers =
+			ProxyFactory.create(QCourseUsers.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QUserPathAnalysis userPathAnalysis =
+			ProxyFactory.create(QUserPathAnalysis.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QCourseUserPaths qUserPath =
+			ProxyFactory.create(QCourseUserPaths.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QFrequentPathsBIDE qFrequentPathBide =
+			ProxyFactory.create(QFrequentPathsBIDE.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QFrequentPathsViger qFrequentPathViger =
+			ProxyFactory.create(QFrequentPathsViger.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QCumulativeUserAccess qCumulativeAnalysis =
+			ProxyFactory.create(QCumulativeUserAccess.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QPerformanceHistogram qPerformanceHistogram =
+			ProxyFactory.create(QPerformanceHistogram.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QPerformanceBoxPlot qPerformanceBoxPlot =
+			ProxyFactory.create(QPerformanceBoxPlot.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QPerformanceUserTest qPerformanceUserTest =
+			ProxyFactory.create(QPerformanceUserTest.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QPerformanceUserTestBoxPlot qPerformanceUserTestBoxPlot =
+			ProxyFactory.create(QPerformanceUserTestBoxPlot.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
 	@Override
 	public Map<Long, ResultListLongObject> computeCourseActivity(
 			final List<Long> courses,
@@ -60,16 +110,11 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QCourseActivityString qcourseActivity = ProxyFactory.create(QCourseActivityString.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qcourseActivity != null) {
+				String result = qcourseActivity.compute(courses, users, starttime, endtime,
+						resolution, resourceTypes);
 
-					final String resultString = qcourseActivity.compute(courses, users, starttime, endtime,
-							resolution,
-							resourceTypes);
+				return datahelper.convertJSONStringToResultListHashMap(result);
 
-					return datahelper.convertJSONStringToResultListHashMap(resultString);
-				}
 			}
 
 		} catch (final Exception e) {
@@ -87,17 +132,9 @@ public class AnalysisImpl implements Analysis {
 		try {
 
 			if (init.defaultConnectionCheck()) {
-
-				final QActivityResourceType qActivityResourceType = ProxyFactory.create(QActivityResourceType.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qActivityResourceType != null) {
-
-					final ResultListResourceRequestInfo result = qActivityResourceType.compute(courses, startTime,
-							endTime,
-							resourceTypes);
-
-					return result;
-				}
+				ResultListResourceRequestInfo result = qActivityResourceType.compute(
+						courses, startTime, endTime, resourceTypes);
+				return result;
 			}
 
 		} catch (final Exception e) {
@@ -115,25 +152,19 @@ public class AnalysisImpl implements Analysis {
 		try {
 			if (init.defaultConnectionCheck()) {
 
-				final QActivityResourceTypeResolution qActivityResourceType = ProxyFactory
-						.create(QActivityResourceTypeResolution.class,
-								AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qActivityResourceType != null) {
-
-					if ((resourceTypes != null) && (resourceTypes.size() > 0)) {
-						for (int i = 0; i < resourceTypes.size(); i++) {
-							this.logger.info("Course Activity Request - CA Selection: " + resourceTypes.get(i));
-						}
-					} else {
-						this.logger.info("Course Activity Request - CA Selection: NO Items selected ");
+				if ((resourceTypes != null) && (resourceTypes.size() > 0)) {
+					for (int i = 0; i < resourceTypes.size(); i++) {
+						this.logger.info("Course Activity Request - CA Selection: " + resourceTypes.get(i));
 					}
-
-					final ResultListRRITypes result = qActivityResourceType.compute(courses, startTime, endTime,
-							resolution,
-							resourceTypes);
-
-					return result;
+				} else {
+					this.logger.info("Course Activity Request - CA Selection: NO Items selected ");
 				}
+
+				ResultListRRITypes result = qActivityResourceTypeResolution.compute(courses,
+						startTime, endTime, resolution, resourceTypes);
+
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -152,21 +183,19 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QLearningObjectUsage qLOUsage = ProxyFactory.create(QLearningObjectUsage.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qLOUsage != null) {
-					if ((types != null) && (types.size() > 0)) {
-						for (int i = 0; i < types.size(); i++) {
-							this.logger.debug("LO Request - LO Selection: " + types.get(i));
-						}
-					} else {
-						this.logger.debug("LO Request - LO Selection: NO Items selected ");
+				if ((types != null) && (types.size() > 0)) {
+					for (int i = 0; i < types.size(); i++) {
+						this.logger.debug("LO Request - LO Selection: " + types.get(i));
 					}
-
-					final ResultListResourceRequestInfo result = qLOUsage.compute(courseIds, userIds, types, startTime,
-							endTime);
-					return result;
+				} else {
+					this.logger.debug("LO Request - LO Selection: NO Items selected ");
 				}
+
+				ResultListResourceRequestInfo result = qLOUsage.compute(courseIds, userIds, types, startTime,
+						endTime);
+
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -182,11 +211,11 @@ public class AnalysisImpl implements Analysis {
 			final Long startTime,
 			final Long endTime) {
 		ResultListLongObject result = null;
-		final QCourseUsers analysis = ProxyFactory.create(QCourseUsers.class, AnalysisImpl.QUESTIONS_BASE_URL);
-		if (analysis != null) {
-			result = analysis.compute(courseIds, startTime, endTime);
-		}
+
+		result = courseUsers.compute(courseIds, startTime, endTime);
+
 		if (result == null) {
+			// TODO can it even be null?
 			result = new ResultListLongObject();
 		}
 		return result;
@@ -201,14 +230,8 @@ public class AnalysisImpl implements Analysis {
 			final Long startTime,
 			final Long endTime) {
 
-		final QUserPathAnalysis analysis = ProxyFactory
-				.create(QUserPathAnalysis.class, AnalysisImpl.QUESTIONS_BASE_URL);
-		if (analysis != null) {
-			final String result = analysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
-			logger.info("PATH result: " + result);
-			return result;
-		}
-		return "{}";
+		String result = userPathAnalysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
+		return result;
 	}
 
 	@Override
@@ -217,12 +240,8 @@ public class AnalysisImpl implements Analysis {
 		try {
 
 			if (init.defaultConnectionCheck()) {
-
-				final QCourseUserPaths qUserPath = ProxyFactory.create(QCourseUserPaths.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qUserPath != null) {
-					return qUserPath.compute(courseIds, startTime, endTime);
-				}
+				String result = qUserPath.compute(courseIds, startTime, endTime);
+				return result;
 			}
 
 		} catch (final Exception e) {
@@ -248,15 +267,11 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qFrequentPath != null) {
-					final String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength,
-							minSup,
-							sessionWise, startTime, endTime);
-					logger.info("BIDE result: " + result);
-					return result;
-				}
+				String result = qFrequentPathBide.compute(courseIds, userIds, types, minLength,
+						maxLength, minSup, sessionWise, startTime, endTime);
+
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -282,15 +297,12 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QFrequentPathsViger qFrequentPath = ProxyFactory.create(QFrequentPathsViger.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qFrequentPath != null) {
-					final String result = qFrequentPath.compute(courseIds, userIds, types, minLength, maxLength,
-							minSup,
-							sessionWise, startTime, endTime);
-					logger.info("BIDE result: " + result);
-					return result;
-				}
+				String result = qFrequentPathViger.compute(courseIds, userIds, types, minLength,
+						maxLength, minSup, sessionWise, startTime, endTime);
+				logger.info("BIDE result: " + result);
+
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -313,14 +325,13 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QCumulativeUserAccess qCumulativeAnalysis = ProxyFactory.create(QCumulativeUserAccess.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qCumulativeAnalysis != null) {
-					final String result = qCumulativeAnalysis.compute(courseIds, types, departments, degrees,
-							startTime, endTime);
-					this.logger.debug("CumulativeUserAnalysis result: " + result);
-					return result;
-				}
+				String result = qCumulativeAnalysis.compute(courseIds, types, departments, degrees, startTime,
+						endTime);
+
+				this.logger.debug("CumulativeUserAnalysis result: " + result);
+
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -343,20 +354,17 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QPerformanceHistogram qPerformanceHistogram = ProxyFactory.create(QPerformanceHistogram.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qPerformanceHistogram != null) {
-					List<Long> result;
-					final ResultListLongObject tmpresult = qPerformanceHistogram.compute(courses, users, quizzes,
-							resolution,
-							startTime, endTime);
-					if (tmpresult == null) {
-						result = new ArrayList<Long>();
-					} else {
-						result = tmpresult.getElements();
-					}
-					return result;
+				List<Long> result;
+				ResultListLongObject response = qPerformanceHistogram.compute(courses, users,
+						quizzes, resolution, startTime, endTime);
+				if (response == null) {
+					result = new ArrayList<Long>();
+				} else {
+					result = response.getElements();
 				}
+
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -379,14 +387,13 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QPerformanceBoxPlot qPerformanceBoxPlot = ProxyFactory
-						.create(QPerformanceBoxPlot.class, AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qPerformanceBoxPlot != null) {
-					final String result = qPerformanceBoxPlot.compute(courses, users, quizzes, resolution, startTime,
-							endTime);
-					this.logger.debug("Performance Cumulative result: " + result);
-					return result;
-				}
+				String result = qPerformanceBoxPlot.compute(courses, users, quizzes, resolution, startTime,
+						endTime);
+
+				this.logger.debug("Performance Cumulative result: " + result);
+
+				return result;
+
 			}
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
@@ -394,8 +401,7 @@ public class AnalysisImpl implements Analysis {
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return "{}";
 	}
-	
-	
+
 	@Override
 	public List<Long> computePerformanceUserTest(
 			final List<Long> courses,
@@ -409,20 +415,16 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QPerformanceUserTest qPerformanceUserTest = ProxyFactory.create(QPerformanceUserTest.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qPerformanceUserTest != null) {
-					List<Long> result;
-					final ResultListLongObject tmpresult = qPerformanceUserTest.compute(courses, users, quizzes,
-							resolution,
-							startTime, endTime);
-					if (tmpresult == null) {
-						result = new ArrayList<Long>();
-					} else {
-						result = tmpresult.getElements();
-					}
-					return result;
+				List<Long> result;
+				ResultListLongObject response = qPerformanceUserTest.compute(courses, users, quizzes, resolution,
+						startTime, endTime);
+				if (response == null) {
+					result = new ArrayList<Long>();
+				} else {
+					result = response.getElements();
 				}
+
+				return result;
 			}
 
 		} catch (final Exception e) {
@@ -432,8 +434,6 @@ public class AnalysisImpl implements Analysis {
 		return new ArrayList<Long>();
 	}
 
-	
-	
 	@Override
 	public String computePerformanceUserTestBoxPlot(
 			final List<Long> courses,
@@ -447,20 +447,14 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final QPerformanceUserTestBoxPlot qPerformanceUserTestBoxPlot = ProxyFactory.create(QPerformanceUserTestBoxPlot.class,
-						AnalysisImpl.QUESTIONS_BASE_URL);
-				if (qPerformanceUserTestBoxPlot != null) {
-					String result = "";
-					final String tmpresult = qPerformanceUserTestBoxPlot.compute(courses, users, quizzes,
-							resolution,
-							startTime, endTime);
-					if (tmpresult == null ) {
-						
-					} else {
-						result = tmpresult;
-					}
-					return result;
+				String result = qPerformanceUserTestBoxPlot.compute(courses, users,
+						quizzes, resolution, startTime, endTime);
+
+				if (result == null) {
+					result = "";
 				}
+				return result;
+
 			}
 
 		} catch (final Exception e) {
@@ -469,8 +463,5 @@ public class AnalysisImpl implements Analysis {
 		this.logger.debug("Error while during communication with DMS. Empty resultset returned");
 		return "";
 	}
-
-	
-	
 
 }

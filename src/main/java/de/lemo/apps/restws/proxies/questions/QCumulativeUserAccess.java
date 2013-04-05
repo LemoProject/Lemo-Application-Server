@@ -1,27 +1,22 @@
 /**
-	 * File  QCumulativeUserAccess .java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * 
-	 * @param starttime
-	 *            min time for the data
-	 * @param endtime
-	 *            max time for the data
-	 * @param types
-	 *            list with learning objects to compute
-	 * @param departments
-	 *            departments for the request
-	 * @param degrees
-	 *            degrees for the request
-	 * @param courses
-	 *            courses for the request
-	 * @return a list with the cumulative user access to the learning objects
-	 * @throws SQLException
-	 * @throws JSONException
-	 */
+ * File QCumulativeUserAccess .java
+ * Date Feb 14, 2013
+ * 
+ * @param starttime
+ *            min time for the data
+ * @param endtime
+ *            max time for the data
+ * @param types
+ *            list with learning objects to compute
+ * @param departments
+ *            departments for the request
+ * @param degrees
+ *            degrees for the request
+ * @param courses
+ *            courses for the request
+ * @return a list with the cumulative user access to the learning objects
+ */
 package de.lemo.apps.restws.proxies.questions;
-
 
 import java.util.List;
 import javax.ws.rs.FormParam;

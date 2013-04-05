@@ -1,9 +1,7 @@
 /**
-	 * File QActivityResourceType.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File QActivityResourceType.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
  * Checks which resources are used in certain courses
- * 
  */
 public interface QActivityResourceType {
 

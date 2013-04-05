@@ -1,9 +1,7 @@
 /**
-	 * File QUserPathAnalysis.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File QUserPathAnalysis.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
@@ -16,7 +14,6 @@ import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
  * Generates a list of Nodes and edges, representing the user-navigation
- * 
  */
 public interface QUserPathAnalysis {
 
