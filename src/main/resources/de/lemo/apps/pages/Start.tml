@@ -6,7 +6,12 @@
     <div class="row">
     	<div class="span8">
     		<h2>${message:lemo}</h2>
-    		<p>${message:lemoDesc}</p>
+    		 <div class="row">
+	    		<div class="span6">
+	    			<p>${message:lemoDesc}</p>
+	    		</div>
+	    		<div class="span6" />
+    		</div>
     	</div>
     	
     	<div class="span4">
@@ -126,29 +131,18 @@
 	      <!-- Example row of columns -->
 	      <div class="row">
 	        <div class="span6">
-	          <h2>Heading</h2>
-	           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. 
-	           Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. 
-	           Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-	          <p><a class="btn" href="#">View details &raquo;</a></p>
+	          <h2>${message:theMethodHead}</h2>
+	           <p>${message:theMethodText}</p><p><a class="btn" href="#">${message:viewDetails} &raquo;</a></p>
 	
 	        </div>
 	        <div class="span6">
-	          <h2>Heading</h2>
-	           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-	           Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. 
-	           Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.  </p>
-	          <p><a class="btn" href="#">View details &raquo;</a></p>
+	          <h2>${message:theApproachHead}</h2>
+	           <p>${message:theApproachText}</p><p><a class="btn" href="#">${message:viewDetails} &raquo;</a></p>
 	       </div>
-	        <div class="span12">
+	        <div class="span6">
 	
-	          <h2>Heading</h2>
-	          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-	          Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-	          Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. 
-	          Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. 
-	          </p>
-	          <p><a class="btn" href="#">View details &raquo;</a></p>
+	          <h2>${message:theBenefitHead}</h2>
+	           <p>${message:theBenefitText}</p><p><a class="btn" href="#">${message:viewDetails} &raquo;</a></p>
 	        </div>
 	      </div>
 	</section>
