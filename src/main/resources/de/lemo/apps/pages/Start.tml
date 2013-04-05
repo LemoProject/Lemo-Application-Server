@@ -50,16 +50,16 @@
 		    
 		    <h3>${message:news}</h3>
 		   		<br />
-		    	<p> ${message:newsHeadOne}<br/>
-		    		${message:newsOne}
+		    	<p> <h4>${message:newsHeadOne}</h4><br/>
+		    		${message:newsOne} ...
 					<a href="#">${message:readOn}</a>
 				</p>
 		    	
-		    	<p>At vero eos et accusam et justo duo dolores et ea rebum ...
-				<a href="#">${message:readOn}</a></p>
+		    	<p> <h4>${message:newsHeadTwo}</h4><br/>
+		    		${message:newsTwo} ...
+					<a href="#">${message:readOn}</a>
+				</p>
 				
-				<p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh ...
-				<a href="#">${message:readOn}</a></p>
 		</div>
 		
 		

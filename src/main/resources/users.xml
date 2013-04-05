@@ -12,7 +12,7 @@
   roles="teacher"
   email="user@example.com"
   fullname="Teacher"
-  courses="12591 1482 112100 11476 112200 113905 137666"/>
+  courses="12591 1482 112100 11476 112200 113905 137666 221 222 223 224 225 226 227"/>
   
   <user name="global"
   password="lemolemo"
