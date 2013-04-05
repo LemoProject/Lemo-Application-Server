@@ -36,9 +36,26 @@
 	  
    var color = d3.scale.category20();
 
-    vis = d3.select("#viz").append("svg:svg")
+   var outer = d3.select("#viz").append("svg:svg")
       .attr("width", w)
-      .attr("height", h);
+      .attr("height", h)
+      .attr("pointer-events", "all");
+    
+   //adding zoom / drag layer   
+   var vis = outer.append('svg:g')
+    	.call(d3.behavior.zoom()
+    			.scaleExtent([0.1,2])
+    			.on("zoom", rescale))
+      	.on("dblclick.zoom", null)
+    .append('svg:g')
+      .on("mousedown", mousedown)
+      .on("touchstart", mousedown);
+    
+   vis.append('svg:rect')
+		.attr("class", "parent")
+		.attr('width', w)
+		.attr('height', h)
+		 .on("click", function(d){drawGraph();});
     
     vis.append("svg:defs")
     .append("svg:marker")
@@ -498,7 +515,27 @@ function focus(d) {
         function selectNodes(d) {
       	   return vis.selectAll( "line.to-" + d.index +
                                    ",line.from-" + d.index)
-         }       
+         }     
+        
+        
+      function rescale() {
+      	  trans=d3.event.translate;
+      	  scale=d3.event.scale;
+      	  current_scale= scale;
+      	  scroll= vis.attr("transform",
+      	      	"translate(" + trans + ")"
+      	      	+ " scale(" + scale + ")");
+      	  console.log("SCALE: "+ scale + " TRANS: "+ trans);
+
+      }
+      
+      function mousedown() {
+      	
+      	    // allow panning if nothing is selected
+      	    vis.call(d3.behavior.zoom().on("zoom"), rescale);
+      	    return;
+      	  
+      	}
         
       
       $('nodetitle').parent().tipsy({ 

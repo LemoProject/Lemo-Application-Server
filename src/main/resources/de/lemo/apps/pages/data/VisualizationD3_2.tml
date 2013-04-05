@@ -1,13 +1,6 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-    
-    <style>
-
-		#viz svg {
-		height: 500px;
-		}
-	</style>
      
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
@@ -23,16 +16,14 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        	<div id="viz">
-        		<svg><!-- d3js visualization --></svg>
-        	</div>
-         
+        <div id="viz">
+        	
+        	<!-- d3js visualization -->
+        
+        </div>
     	</div>
       
     	<div class="span3">
-    		<t:zone t:id="formZone" id="formZone">
-    		</t:zone> 
-      		<t:form t:type="form" t:id="customizeForm" class="pull-left">
     		<div class="row-fluid">
       		<div class="span12">
       			<div class="well">
@@ -42,23 +33,15 @@
       				<br />
       				<br />
       				${message:range}: ${resolution} ${message:days}
-      				<br />
-      				<ul class="nav nav-list">
- 
-					  <li class="divider"></li>
-					
-					</ul>
-      				
-      				<span t:type="submit" value="Update" class="btn btn-primary pull-left" /><span class="btn export-button pull-right">Export to CSV</span>
-      				
-      				<br />
       			</div>
       		</div>
       		</div>
 			<div class="row-fluid">
     		<div class="span12">
         			
-    			
+    			<t:zone t:id="formZone" id="formZone">
+    			</t:zone> 
+      			<t:form t:type="form" t:id="customizeForm" class="pull-left">
       				<t:errors/>
         			<div class="accordion" id="accordion2">
 			            
@@ -77,6 +60,7 @@
         							<label class="control-label">${message:begin}:</label>
       						   		<div class="controls">
                             			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+      						    			
       						    	</div>
         						</div>
         						<div class="control-group">
@@ -112,7 +96,7 @@
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                       ${message:userOption} <b class="caret"></b>
+                        ${message:userOption} <b class="caret"></b>
                       </a>
                     </div>   
 			        <div id="collapseThree" class="accordion-body collapse">  
@@ -130,41 +114,40 @@
 			       
 			       
 			      <!-- Advanced-->
-<!--                  <div class="accordion-group">-->
-<!--                    <div class="accordion-heading">-->
-<!--                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">-->
-<!--                       Advanced <b class="caret"></b>-->
-<!--                      </a>-->
-<!--                    </div>   -->
-<!--			        <div id="collapseFour" class="accordion-body collapse">  -->
-<!--			        	<div class="accordion-inner">  -->
-<!--			        	-->
-<!--			        			-->
-<!--			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>-->
-<!--  			                	<div class="slider" id="supportSlider"></div><br />-->
-<!--  			                	<br />-->
-<!--  			                	-->
-<!--             -->
-<!--                        -->
-<!--	                            <label class="control-label" id="chargeslider-label"></label>-->
-<!--  			                	<div class="slider" id="chargesupportSlider"></div><br />-->
-<!--  			                	<br/>-->
-<!--  			                	-->
-<!--  			                	<label class="control-label" id="distanceslider-label"></label>-->
-<!--  			                	<div class="slider" id="distancesupportSlider"></div><br />-->
-<!--  			                	<br/>-->
-<!--  			                	-->
-<!--  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   -->
-<!--                       -->
-<!--                     	 </div>-->
-<!--			        </div>-->
-<!--			      </div>  -->
-<!--			            -->
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                        ${message:advancedOption} <b class="caret"></b>
+                      </a>
+                    </div>   
+			        <div id="collapseFour" class="accordion-body collapse">  
+			        	<div class="accordion-inner">  
+			        	
+			        			
+			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
+  			                	<div class="slider" id="supportSlider"></div><br />
+  			                	<br />
+  			                
+                        
+	                            <label class="control-label" id="chargeslider-label"></label>
+  			                	<div class="slider" id="chargesupportSlider"></div><br />
+  			                	<br/>
+  			                	
+  			                	<label class="control-label" id="distanceslider-label"></label>
+  			                	<div class="slider" id="distancesupportSlider"></div><br />
+  			                	<br/>
+  			                	
+  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   
+                       
+                     	 </div>
+			        </div>
+			      </div>  
+			            
 			 </div><!-- accordion -->
   			   		
-  			   		
+  			   		<input t:type="submit" value="Update" class="btn btn-primary" />
 
-           
+            </t:form>	
        
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
@@ -172,17 +155,20 @@
 <!--    		</div> THUMBNAIL-->
     		</div> <!--span12-->
     		</div> <!--row fluid-->
-    		 </t:form>	
     	</div>
     	
     
   </div>
   <script type="text/javascript">
+	  
     (function(d3custom, $, undefined) {
-    
+
+        
       var q2result = ${questionResult};
+		
       
-      d3custom.data = q2result;
+      d3custom.nodes = q2result.nodes;
+      d3custom.links = q2result.links;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
   </script>
