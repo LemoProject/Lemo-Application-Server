@@ -3,6 +3,7 @@ package de.lemo.apps.restws.client;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -32,14 +33,30 @@ public class InitialisationImpl implements Initialisation {
 
 	public static final String DMS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl();
 	private static final String SERVICE_BASE_URL = "/services";
-	public static final String SERVICE_PREFIX_URL = InitialisationImpl.DMS_BASE_URL
-			+ InitialisationImpl.SERVICE_BASE_URL;
-	private static final String SERVICE_STARTTIME_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/starttime";
-	private static final String SERVICE_COURSE_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/courses";
-	private static final String SERVICE_RATED_OBJECTS_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/ratedobjects";
-	private static final String SERVICE_AUTH_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/authentification";
-	private static final String SERVICE_USER_COURSES_URL = InitialisationImpl.SERVICE_PREFIX_URL + "/teachercourses";
-	private static final int STATUS_ID = 200;
+	public static final String SERVICE_PREFIX_URL = DMS_BASE_URL + SERVICE_BASE_URL;
+	private static final String SERVICE_STARTTIME_URL = SERVICE_PREFIX_URL + "/starttime";
+	private static final String SERVICE_COURSE_URL = SERVICE_PREFIX_URL + "/courses";
+	private static final String SERVICE_RATED_OBJECTS_URL = SERVICE_PREFIX_URL + "/ratedobjects";
+	private static final String SERVICE_AUTH_URL = SERVICE_PREFIX_URL + "/authentification";
+	private static final String SERVICE_USER_COURSES_URL = SERVICE_PREFIX_URL + "/teachercourses";
+
+	private ServiceCourseDetails courseDetailsList =
+			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
+
+	private ServiceCourseDetails courseDetails =
+			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
+
+	private ServiceRatedObjects ratedObjects =
+			ProxyFactory.create(ServiceRatedObjects.class, InitialisationImpl.SERVICE_RATED_OBJECTS_URL);
+
+	private ServiceLoginAuthentification loginAuth =
+			ProxyFactory.create(ServiceLoginAuthentification.class, InitialisationImpl.SERVICE_AUTH_URL);
+
+	private ServiceTeacherCourses teacherCourses =
+			ProxyFactory.create(ServiceTeacherCourses.class, InitialisationImpl.SERVICE_USER_COURSES_URL);
+
+	private ServiceUserInformation userInfo =
+			ProxyFactory.create(ServiceUserInformation.class, InitialisationImpl.SERVICE_PREFIX_URL);
 
 	private Logger logger;
 
@@ -50,18 +67,19 @@ public class InitialisationImpl implements Initialisation {
 		RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
 	}
 
-	private static ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
+	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
 	// TODO set better pool size
-	private static HttpClient httpClient = new DefaultHttpClient(connectionManager);
-	private static ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
+	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
+	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
 	public Boolean defaultConnectionCheck() throws RestServiceCommunicationException {
 
 		try {
+			// not a proxy object because we want to get the http status
 			ClientRequest request = new ClientRequest(InitialisationImpl.SERVICE_STARTTIME_URL, clientExecutor);
 			ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
 
-			if (response.getStatus() != STATUS_ID) {
+			if (response.getStatus() != HttpStatus.SC_OK) {
 				throw new ClientProtocolException("Default Connection Check: Failed : HTTP error code : "
 						+ response.getStatus());
 			}
@@ -76,15 +94,14 @@ public class InitialisationImpl implements Initialisation {
 	public Date getStartTime() throws RestServiceCommunicationException {
 
 		try {
+			// TODO we could use a proxy object here, just as everywhere else
 			final ClientRequest request = new ClientRequest(InitialisationImpl.SERVICE_STARTTIME_URL);
-
 			ClientResponse<ServiceStartTime> response = request.get(ServiceStartTime.class);
 
-			if (response.getStatus() != STATUS_ID) {
-				throw new RuntimeException("Failed : HTTP error code : "
-						+ response.getStatus());
+			if (response.getStatus() != HttpStatus.SC_OK) {
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
-
+			// / XXX this seems like a duplication of the request above!
 			final ServiceStartTime serviceProxy = ProxyFactory.create(ServiceStartTime.class,
 					InitialisationImpl.SERVICE_STARTTIME_URL);
 			response.releaseConnection();
@@ -107,12 +124,9 @@ public class InitialisationImpl implements Initialisation {
 		try {
 
 			if (defaultConnectionCheck()) {
-				final ServiceCourseDetails serviceProxy = ProxyFactory.create(ServiceCourseDetails.class,
-						InitialisationImpl.SERVICE_COURSE_URL);
-				if (serviceProxy != null) {
-					ResultListCourseObject result = serviceProxy.getCoursesDetails(ids);
-				}
+				return courseDetailsList.getCoursesDetails(ids);
 			}
+			// XXX wrong message? May should be "no connection"
 			logger.info("No course details found. Returning empty resultset.");
 			return new ResultListCourseObject();
 		} catch (final Exception e) {
@@ -125,13 +139,9 @@ public class InitialisationImpl implements Initialisation {
 		try {
 
 			if (defaultConnectionCheck()) {
-				final ServiceCourseDetails serviceProxy = ProxyFactory.create(ServiceCourseDetails.class,
-						InitialisationImpl.SERVICE_COURSE_URL);
-				if (serviceProxy != null) {
 
-					return serviceProxy.getCourseDetails(id);
+				return courseDetails.getCourseDetails(id);
 
-				}
 			}
 
 			logger.info("No course details found. Returning empty resultset.");
@@ -147,13 +157,9 @@ public class InitialisationImpl implements Initialisation {
 		try {
 
 			if (defaultConnectionCheck()) {
-				final ServiceRatedObjects serviceProxy = ProxyFactory
-						.create(ServiceRatedObjects.class, InitialisationImpl.SERVICE_RATED_OBJECTS_URL);
-				if (serviceProxy != null) {
 
-					return serviceProxy.getRatedObjects(courseIds);
+				return ratedObjects.getRatedObjects(courseIds);
 
-				}
 			}
 			logger.info("No Rated objects found. Returning empty resultset.");
 			return new ResultListStringObject();
@@ -167,11 +173,7 @@ public class InitialisationImpl implements Initialisation {
 		try {
 
 			if (defaultConnectionCheck()) {
-				final ServiceLoginAuthentification serviceProxy = ProxyFactory.create(
-						ServiceLoginAuthentification.class, InitialisationImpl.SERVICE_AUTH_URL);
-				if (serviceProxy != null) {
-					return serviceProxy.authentificateUser(login);
-				}
+				return loginAuth.authentificateUser(login);
 			}
 
 		} catch (final Exception e) {
@@ -190,11 +192,7 @@ public class InitialisationImpl implements Initialisation {
 		try {
 
 			if (defaultConnectionCheck()) {
-				final ServiceTeacherCourses serviceProxy = ProxyFactory.create(ServiceTeacherCourses.class,
-						InitialisationImpl.SERVICE_USER_COURSES_URL);
-				if (serviceProxy != null) {
-					return serviceProxy.getTeachersCourses(userId);
-				}
+				return teacherCourses.getTeachersCourses(userId);
 			}
 
 		} catch (final Exception e) {
@@ -212,11 +210,7 @@ public class InitialisationImpl implements Initialisation {
 		try {
 
 			if (defaultConnectionCheck()) {
-				final ServiceUserInformation serviceProxy = ProxyFactory.create(ServiceUserInformation.class,
-						InitialisationImpl.SERVICE_PREFIX_URL);
-				if (serviceProxy != null) {
-					return serviceProxy.getCoursesByUser(userId, amount, offset);
-				}
+				return userInfo.getCoursesByUser(userId, amount, offset);
 			}
 
 		} catch (final Exception e) {
