@@ -1,9 +1,7 @@
 /**
-	 * File QActivityResourceType.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File QActivityResourceType.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
@@ -12,21 +10,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
  * Checks which resources are used in certain courses
- * 
  */
 public interface QActivityResourceType {
 
 	@POST
 	@Path("activityresourcetype")
 	@Produces(MediaType.APPLICATION_JSON)
-	ClientResponse<ResultListResourceRequestInfo> compute(
+	ResultListResourceRequestInfo compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courses,
 			@FormParam(MetaParam.START_TIME) Long startTime,
 			@FormParam(MetaParam.END_TIME) Long endTime,

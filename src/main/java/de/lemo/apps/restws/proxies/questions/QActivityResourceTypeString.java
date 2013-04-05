@@ -10,7 +10,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.jboss.resteasy.client.ClientResponse;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
@@ -21,7 +20,7 @@ public interface QActivityResourceTypeString {
 	@POST
 	@Path("activityresourcetype")
 	@Produces(MediaType.APPLICATION_JSON)
-	ClientResponse<String> compute(
+	String compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courses,
 			@FormParam(MetaParam.START_TIME) Long startTime,
 			@FormParam(MetaParam.END_TIME) Long endTime,

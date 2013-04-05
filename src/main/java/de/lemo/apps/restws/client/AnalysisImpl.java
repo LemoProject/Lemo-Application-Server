@@ -12,7 +12,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.slf4j.Logger;
@@ -72,10 +71,8 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				final ClientResponse<String> response = qcourseActivity.compute(courses, users, starttime, endtime,
+				String result = qcourseActivity.compute(courses, users, starttime, endtime,
 						resolution, resourceTypes);
-
-				String result = response.getEntity();
 
 				return datahelper.convertJSONStringToResultListHashMap(result);
 
@@ -101,10 +98,8 @@ public class AnalysisImpl implements Analysis {
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qActivityResourceType != null) {
 
-					final ClientResponse<ResultListResourceRequestInfo> response = qActivityResourceType.compute(
+					ResultListResourceRequestInfo result = qActivityResourceType.compute(
 							courses, startTime, endTime, resourceTypes);
-					ResultListResourceRequestInfo result = response.getEntity();
-
 					return result;
 				}
 			}
@@ -136,10 +131,8 @@ public class AnalysisImpl implements Analysis {
 						this.logger.info("Course Activity Request - CA Selection: NO Items selected ");
 					}
 
-					final ClientResponse<ResultListRRITypes> response = qActivityResourceType.compute(courses,
-							startTime, endTime,
-							resolution, resourceTypes);
-					ResultListRRITypes result = response.getEntity();
+					ResultListRRITypes result = qActivityResourceType.compute(courses,
+							startTime, endTime, resolution, resourceTypes);
 
 					return result;
 				}
@@ -172,10 +165,8 @@ public class AnalysisImpl implements Analysis {
 						this.logger.debug("LO Request - LO Selection: NO Items selected ");
 					}
 
-					final ClientResponse<ResultListResourceRequestInfo> response = qLOUsage.compute(courseIds, userIds,
-							types, startTime,
+					ResultListResourceRequestInfo result = qLOUsage.compute(courseIds, userIds, types, startTime,
 							endTime);
-					ResultListResourceRequestInfo result = response.getEntity();
 
 					return result;
 				}
@@ -198,19 +189,11 @@ public class AnalysisImpl implements Analysis {
 		final QCourseUsers analysis = ProxyFactory.create(QCourseUsers.class, AnalysisImpl.QUESTIONS_BASE_URL,
 				clientExecutor);
 		if (analysis != null) {
-			ClientResponse<ResultListLongObject> response = analysis.compute(courseIds, startTime, endTime);
-			result = response.getEntity();
-			try {
-
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-
+			result = analysis.compute(courseIds, startTime, endTime);
 		}
 		if (result == null) {
 			result = new ResultListLongObject();
 		}
-
 		return result;
 	}
 
@@ -226,15 +209,7 @@ public class AnalysisImpl implements Analysis {
 		final QUserPathAnalysis analysis = ProxyFactory.create(QUserPathAnalysis.class,
 				AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 		if (analysis != null) {
-			final ClientResponse<String> response = analysis.compute(courseIds, userIds, types, considerLogouts,
-					startTime, endTime);
-			String result = response.getEntity();
-			try {
-
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-
+			String result = analysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
 			return result;
 		}
 		return "{}";
@@ -250,8 +225,7 @@ public class AnalysisImpl implements Analysis {
 				final QCourseUserPaths qUserPath = ProxyFactory.create(QCourseUserPaths.class,
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
-				ClientResponse<String> response = qUserPath.compute(courseIds, startTime, endTime);
-				String result = response.getEntity();
+				String result = qUserPath.compute(courseIds, startTime, endTime);
 
 				return result;
 			}
@@ -282,9 +256,8 @@ public class AnalysisImpl implements Analysis {
 				final QFrequentPathsBIDE qFrequentPath = ProxyFactory.create(QFrequentPathsBIDE.class,
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qFrequentPath != null) {
-					final ClientResponse<String> response = qFrequentPath.compute(courseIds, userIds, types, minLength,
+					String result = qFrequentPath.compute(courseIds, userIds, types, minLength,
 							maxLength, minSup, sessionWise, startTime, endTime);
-					String result = response.getEntity();
 
 					return result;
 				}
@@ -316,9 +289,8 @@ public class AnalysisImpl implements Analysis {
 				final QFrequentPathsViger qFrequentPath = ProxyFactory.create(QFrequentPathsViger.class,
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qFrequentPath != null) {
-					final ClientResponse<String> response = qFrequentPath.compute(courseIds, userIds, types, minLength,
+					String result = qFrequentPath.compute(courseIds, userIds, types, minLength,
 							maxLength, minSup, sessionWise, startTime, endTime);
-					String result = response.getEntity();
 					logger.info("BIDE result: " + result);
 
 					return result;
@@ -348,11 +320,9 @@ public class AnalysisImpl implements Analysis {
 				final QCumulativeUserAccess qCumulativeAnalysis = ProxyFactory.create(QCumulativeUserAccess.class,
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qCumulativeAnalysis != null) {
-					final ClientResponse<String> response = qCumulativeAnalysis.compute(courseIds, types, departments,
-							degrees,
-							startTime, endTime);
+					String result = qCumulativeAnalysis.compute(courseIds, types, departments, degrees, startTime,
+							endTime);
 
-					String result = response.getEntity();
 					this.logger.debug("CumulativeUserAnalysis result: " + result);
 
 					return result;
@@ -383,12 +353,12 @@ public class AnalysisImpl implements Analysis {
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qPerformanceHistogram != null) {
 					List<Long> result;
-					final ClientResponse<ResultListLongObject> response = qPerformanceHistogram.compute(courses, users,
+					ResultListLongObject response = qPerformanceHistogram.compute(courses, users,
 							quizzes, resolution, startTime, endTime);
 					if (response == null) {
 						result = new ArrayList<Long>();
 					} else {
-						result = response.getEntity().getElements();
+						result = response.getElements();
 					}
 
 					return result;
@@ -418,9 +388,8 @@ public class AnalysisImpl implements Analysis {
 				final QPerformanceBoxPlot qPerformanceBoxPlot = ProxyFactory.create(QPerformanceBoxPlot.class,
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qPerformanceBoxPlot != null) {
-					final ClientResponse<String> response = qPerformanceBoxPlot.compute(courses, users, quizzes,
-							resolution, startTime, endTime);
-					String result = response.getEntity();
+					String result = qPerformanceBoxPlot.compute(courses, users, quizzes, resolution, startTime,
+							endTime);
 
 					this.logger.debug("Performance Cumulative result: " + result);
 
@@ -451,12 +420,12 @@ public class AnalysisImpl implements Analysis {
 						AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qPerformanceUserTest != null) {
 					List<Long> result;
-					final ClientResponse<ResultListLongObject> response = qPerformanceUserTest.compute(courses, users,
-							quizzes, resolution, startTime, endTime);
+					ResultListLongObject response = qPerformanceUserTest.compute(courses, users, quizzes, resolution,
+							startTime, endTime);
 					if (response == null) {
 						result = new ArrayList<Long>();
 					} else {
-						result = response.getEntity().getElements();
+						result = response.getElements();
 					}
 
 					return result;
@@ -486,16 +455,12 @@ public class AnalysisImpl implements Analysis {
 				final QPerformanceUserTestBoxPlot qPerformanceUserTestBoxPlot = ProxyFactory.create(
 						QPerformanceUserTestBoxPlot.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 				if (qPerformanceUserTestBoxPlot != null) {
-					String result;
-					final ClientResponse<String> response = qPerformanceUserTestBoxPlot.compute(courses, users,
+					String result = qPerformanceUserTestBoxPlot.compute(courses, users,
 							quizzes, resolution, startTime, endTime);
 
-					if (response == null) {
+					if (result == null) {
 						result = "";
-					} else {
-						result = response.getEntity();
 					}
-
 					return result;
 				}
 			}
