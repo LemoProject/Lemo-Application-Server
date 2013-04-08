@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
 /**
- * Helper to converts Maps
+ * Helper to converts Maps and other JSON data formats 
  */
 public class DataHelperImpl implements DataHelper{
 	

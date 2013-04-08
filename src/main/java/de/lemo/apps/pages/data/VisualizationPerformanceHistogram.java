@@ -210,39 +210,7 @@ public class VisualizationPerformanceHistogram {
 		this.selectedActivities = null;
 	}
 
-	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		this.courseModel = new CourseIdSelectModel(courses);
-		this.userIds = this.getUsers();
 
-		this.quizIds = new ArrayList<Long>();
-
-		final List<Long> courseList = new ArrayList<Long>();
-		courseList.add(this.courseId);
-		ResultListStringObject quizList = null;
-		try {
-			quizList = this.init.getRatedObjects(courseList);
-		} catch (RestServiceCommunicationException e) {
-			logger.error(e.getMessage());
-		}
-
-		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
-		final List<String> quizzesTitles = new ArrayList<String>();
-
-		if ((quizList != null) && (quizList.getElements() != null)) {
-			this.logger.debug(quizList.getElements().toString());
-			final List<String> quizStringList = quizList.getElements();
-			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-				quizzesTitles.add(quizStringList.get(x + 2));
-				this.quizIds.add(combinedQuizId);
-			}
-
-		} else {
-			this.logger.debug("No rated Objetcs found");
-		}
-	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
 		return this.courseValueEncoder.create(Course.class);
@@ -313,12 +281,13 @@ public class VisualizationPerformanceHistogram {
 				this.logger.debug("No rated Objetcs found");
 			}
 
-			if (this.selectedQuizzes != null) {
+			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
 				quizzesList = this.selectedQuizzes;
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
+				logger.debug("Adding QuizzesMap");
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
-			}
+			} 
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
@@ -344,7 +313,7 @@ public class VisualizationPerformanceHistogram {
 
 				}
 			}
-
+			
 			final JSONArray graphParentArray = new JSONArray();
 
 			for (Integer z = 0; z < preparedResults.size(); z++) {
