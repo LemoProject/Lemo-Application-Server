@@ -90,7 +90,7 @@
 		  currentDistance=-1;
 		  minCharge=0,
 		  //maxCharge=10,
-		  maxCharge=10000,
+		  maxCharge=20000,
 		  currentCharge=-1;
     
    //Calculation of the optimal value for d3 Charge between nodes 
@@ -112,7 +112,7 @@
     var force = d3.layout.force()
     .on("tick",function (e) {tick(e)})
     //.distance(optDistance)
-    .distance(100)
+    .distance(300)
     .charge(-optCharge)
     .friction(.9)
     .gravity(300 * k)
