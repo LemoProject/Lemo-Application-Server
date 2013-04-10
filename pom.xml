@@ -68,6 +68,16 @@
 				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
+		
+		<profile>
+			<id>generated</id>
+			<properties>
+				<lemo-system-name>generated</lemo-system-name>
+				<lemo-display-name>Generated</lemo-display-name>
+				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+			</properties>
+		</profile>
 
 		<profile>
 			<id>chem</id>

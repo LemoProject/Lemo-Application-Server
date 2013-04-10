@@ -208,7 +208,7 @@ public class VisualizationPerformanceHistogramAvg {
 		this.selectedCourses = null;
 		this.selectedActivities = null;
 	}
-
+	
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -242,6 +242,7 @@ public class VisualizationPerformanceHistogramAvg {
 			this.logger.debug("No rated Objetcs found");
 		}
 	}
+
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
 		return this.courseValueEncoder.create(Course.class);
@@ -313,7 +314,7 @@ public class VisualizationPerformanceHistogramAvg {
 				this.logger.debug("No rated Objetcs found");
 			}
 
-			if (this.selectedQuizzes != null) {
+			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
 				quizzesList = this.selectedQuizzes;
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				quizzesList = new ArrayList<Long>();

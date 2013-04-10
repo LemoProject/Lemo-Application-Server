@@ -1,11 +1,8 @@
 /**
-	 * File QActivityResourceTypeResolution.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File QActivityResourceTypeResolution.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.restws.proxies.questions;
-
 
 import java.util.List;
 import javax.ws.rs.FormParam;

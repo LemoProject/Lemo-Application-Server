@@ -1,6 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <config>
   <apps name="Lemo Apps">
+    
+    <users>
+
+      <user name="admin"
+      password="lemolemo"
+      roles="admin global"
+      email="lemo@example.com"
+      fullname="Administrator"/>
+      
+      <user name="user"
+      password="lemolemo"
+      roles="teacher"
+      email="user@example.com"
+      fullname="Teacher"
+      courses="221 222 223 224 225 226 227"/>
+      
+      <user name="global"
+      password="lemolemo"
+      roles="GLOBAL"
+      email="lemo@example.com"
+      fullname="Global user"/>
+    
+    </users>
+
     <database>
       <!-- Maven replacement variables -->
       <property name="hibernate.connection.url">${apps-hibernate-url}</property>

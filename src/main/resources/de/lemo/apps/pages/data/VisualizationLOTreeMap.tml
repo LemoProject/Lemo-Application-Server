@@ -22,6 +22,9 @@
     	</div>
       
     	<div class="span3">
+    		<t:zone t:id="formZone" id="formZone">
+    		</t:zone> 
+      		<t:form t:type="form" t:id="customizeForm" class="pull-left">
     		<div class="row-fluid">
       		<div class="span12">
       			<div class="well">
@@ -31,15 +34,23 @@
       				<br />
       				<br />
       				${message:range}: ${resolution} ${message:days}
+      				<br />
+      				<ul class="nav nav-list">
+ 
+					  <li class="divider"></li>
+					
+					</ul>
+      				
+      				<span t:type="submit" value="Update" class="btn btn-primary pull-left" />
+      				
+      				<br />
       			</div>
       		</div>
       		</div>
 			<div class="row-fluid">
     		<div class="span12">
         			
-    			<t:zone t:id="formZone" id="formZone">
-    			</t:zone> 
-      			<t:form t:type="form" t:id="customizeForm" class="pull-left">
+    			
       				<t:errors/>
         			<div class="accordion" id="accordion2">
 			            
@@ -143,9 +154,9 @@
 			            
 			 </div><!-- accordion -->
   			   		
-  			   		<input t:type="submit" value="Update" class="btn btn-primary" />
+  			   	
 
-            </t:form>	
+           
        
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
@@ -153,6 +164,7 @@
 <!--    		</div> THUMBNAIL-->
     		</div> <!--span12-->
     		</div> <!--row fluid-->
+    		</t:form>	
     	</div>
     	
     

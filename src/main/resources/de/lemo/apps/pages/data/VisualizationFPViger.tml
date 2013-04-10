@@ -68,6 +68,7 @@ text.shadow {
 		</div>
       
     	<div class="span3">
+    		<t:form t:type="form" t:id="customizeForm" class="pull-left">
     		<div class="row-fluid">
       		<div class="span12">
       			<div class="well">
@@ -80,6 +81,17 @@ text.shadow {
       				<br />
       				<br />
       				${message:support}: ${supportValue}
+      				<br />
+      				<ul class="nav nav-list">
+ 
+					  <li class="divider"></li>
+					
+					</ul>
+      				
+      				<input t:type="submit" value="Update" onClick="spin_start();"  class="btn btn-primary" />
+
+      				
+      				<br />
       			</div>
       		</div>
 			</div>
@@ -89,7 +101,7 @@ text.shadow {
 <!--    			<t:zone t:id="formZone" id="formZone">-->
 <!--				<t:zone t:id="formZone" id="formZone">-->
 <!--    			</t:zone> -->
-      			<t:form t:type="form" t:id="customizeForm" class="pull-left">
+      			
         			<div class="accordion" id="accordion2">
 			            
 			            <!-- Dates -->
@@ -186,9 +198,9 @@ text.shadow {
 			            
 			        </div><!-- accordion -->
   			   		
-  			   		<input t:type="submit" value="Update" onClick="spin_start();" class="btn btn-primary" />
+  			   		
 
-            </t:form>	
+           
 <!--          </t:zone> -->
         			
 <!--    				<input type="text" class="input-large search-query"/>-->
@@ -196,6 +208,7 @@ text.shadow {
 <!--    		</div> THUMBNAIL-->
     		</div> <!--span12-->
     		</div> <!--row fluid-->
+    		</t:form>	
     	</div>
     	
     

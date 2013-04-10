@@ -313,12 +313,13 @@ public class VisualizationPerformanceHistogram {
 				this.logger.debug("No rated Objetcs found");
 			}
 
-			if (this.selectedQuizzes != null) {
+			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
 				quizzesList = this.selectedQuizzes;
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
+				logger.debug("Adding QuizzesMap");
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
-			}
+			} 
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
@@ -344,7 +345,7 @@ public class VisualizationPerformanceHistogram {
 
 				}
 			}
-
+			
 			final JSONArray graphParentArray = new JSONArray();
 
 			for (Integer z = 0; z < preparedResults.size(); z++) {

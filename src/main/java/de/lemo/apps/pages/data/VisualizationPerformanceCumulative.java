@@ -212,6 +212,7 @@ public class VisualizationPerformanceCumulative {
 	}
 
 	void onPrepareForRender() {
+		logger.debug("bin im onPrepareForRender");
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
@@ -238,7 +239,7 @@ public class VisualizationPerformanceCumulative {
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
 			}
-
+			this.logger.debug("Rated Objetcs found");
 		} else {
 			this.logger.debug("No rated Objetcs found");
 		}

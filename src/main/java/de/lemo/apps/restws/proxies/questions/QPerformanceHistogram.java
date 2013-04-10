@@ -1,27 +1,22 @@
 /**
-	 * File QPerformanceHistogram.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 * 
-	 * @param starttime
-	 *            min time for the data
-	 * @param endtime
-	 *            max time for the data
-	 * @param users
-	 *            users for the request
-	 * @param resolution
-	 *            resolution for the request
-	 * @param quiz
-	 *            quiz for the request
-	 * @param courses
-	 *            courses for the request
-	 * @return a list with the cumulative user access to the learning objects
-	 * @throws SQLException
-	 * @throws JSONException
-	 */
+ * File QPerformanceHistogram.java
+ * Date Feb 14, 2013
+ * 
+ * @param starttime
+ *            min time for the data
+ * @param endtime
+ *            max time for the data
+ * @param users
+ *            users for the request
+ * @param resolution
+ *            resolution for the request
+ * @param quiz
+ *            quiz for the request
+ * @param courses
+ *            courses for the request
+ * @return a list with the cumulative user access to the learning objects
+ */
 package de.lemo.apps.restws.proxies.questions;
-
 
 import java.util.List;
 import javax.ws.rs.FormParam;
