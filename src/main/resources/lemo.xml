@@ -9,15 +9,12 @@
 			<property name="hibernate.connection.password">${apps-hibernate-password}</property>
 			<!-- config -->
 			<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-			<property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8
-			</property>
+			<property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
 			<property name="hibernate.show_sql">false</property>
 			<property name="hibernate.format_sql">true</property>
 			<property name="hibernate.hbm2ddl.auto">create</property>
-			<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider
-			</property>
-			<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider
-			</property>
+			<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
+			<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 			<property name="hibernate.c3p0.acquire_increment">3</property>
 			<property name="hibernate.c3p0.min_size">3</property>
 			<property name="hibernate.c3p0.timeout">60</property>

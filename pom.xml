@@ -68,7 +68,7 @@
 				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>generated</id>
 			<properties>
