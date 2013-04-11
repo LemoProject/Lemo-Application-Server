@@ -37,7 +37,9 @@
 			<property name="hibernate.connection.autoReconnectForPools">true</property>
 			<property name="hibernate.connection.autoReconnect">true</property>
 		</database>
-
+		<!-- TODO Bug wenn users vor anderen Einträgen steht, welche durch mvn ersetzt werden -->
+		<dms-url>${lemo-dms-url}</dms-url>
+		
 		<users>
 
 			<user name="admin" password="lemolemo" roles="admin global"
@@ -50,8 +52,6 @@
 				fullname="Global user" />
 
 		</users>
-
-		<dms-url>${lemo-dms-url}</dms-url>
 	</apps>
 	<dms name="Lemo DMS">
 		<!-- You may ignore this element, it just ensures that there's no conflict 
