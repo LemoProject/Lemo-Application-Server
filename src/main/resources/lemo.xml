@@ -1,69 +1,61 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <config>
-  <apps name="Lemo Apps">
-    
-    <users>
+	<apps name="Lemo Apps">
 
-      <user name="admin"
-      password="lemolemo"
-      roles="admin global"
-      email="lemo@example.com"
-      fullname="Administrator"/>
-      
-      <user name="user"
-      password="lemolemo"
-      roles="teacher"
-      email="user@example.com"
-      fullname="Teacher"
-      courses="221 222 223 224 225 226 227"/>
-      
-      <user name="global"
-      password="lemolemo"
-      roles="GLOBAL"
-      email="lemo@example.com"
-      fullname="Global user"/>
-    
-    </users>
+		<database>
+			<!-- Maven replacement variables -->
+			<property name="hibernate.connection.url">${apps-hibernate-url}</property>
+			<property name="hibernate.connection.username">${apps-hibernate-username}</property>
+			<property name="hibernate.connection.password">${apps-hibernate-password}</property>
+			<!-- config -->
+			<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+			<property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8
+			</property>
+			<property name="hibernate.show_sql">false</property>
+			<property name="hibernate.format_sql">true</property>
+			<property name="hibernate.hbm2ddl.auto">create</property>
+			<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider
+			</property>
+			<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider
+			</property>
+			<property name="hibernate.c3p0.acquire_increment">3</property>
+			<property name="hibernate.c3p0.min_size">3</property>
+			<property name="hibernate.c3p0.timeout">60</property>
+			<property name="hibernate.c3p0.max_size">100</property>
+			<property name="hibernate.c3p0.idleConnectionTestPeriod">100</property>
+			<property name="hibernate.c3p0.max_statements">0</property>
+			<property name="hibernate.c3p0.propertyCycle">2</property>
+			<property name="hibernate.c3p0.autoCommitOnClose ">false</property>
+			<property name="hibernate.c3p0.numHelperThreads">3</property>
+			<property name="hibernate.c3p0.validate">true</property>
+			<property name="hibernate.c3p0.acquireRetryAttempts">50</property>
+			<property name="hibernate.c3p0.acquireRetryDelay">1000</property>
+			<property name="hibernate.c3p0.maxConnectionAge">120</property>
+			<property name="hibernate.c3p0.automaticTestTable">connection_test_table</property>
+			<property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+			<property name="hibernate.connection.shutdown">false</property>
+			<property name="hibernate.connection.autoReconnectForPools">true</property>
+			<property name="hibernate.connection.autoReconnect">true</property>
+		</database>
 
-    <database>
-      <!-- Maven replacement variables -->
-      <property name="hibernate.connection.url">${apps-hibernate-url}</property>
-      <property name="hibernate.connection.username">${apps-hibernate-username}</property>
-      <property name="hibernate.connection.password">${apps-hibernate-password}</property>
-      <!-- config-->
-      <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-      <property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
-      <property name="hibernate.show_sql">false</property>
-      <property name="hibernate.format_sql">true</property>
-      <property name="hibernate.hbm2ddl.auto">create</property>
-      <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
-      <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-      <property name="hibernate.c3p0.acquire_increment">3</property>
-      <property name="hibernate.c3p0.min_size">3</property>
-      <property name="hibernate.c3p0.timeout">60</property>
-      <property name="hibernate.c3p0.max_size">100</property>
-      <property name="hibernate.c3p0.idleConnectionTestPeriod">100</property>
-      <property name="hibernate.c3p0.max_statements">0</property>
-      <property name="hibernate.c3p0.propertyCycle">2</property>
-      <property name="hibernate.c3p0.autoCommitOnClose ">false</property>
-      <property name="hibernate.c3p0.numHelperThreads">3</property>
-      <property name="hibernate.c3p0.validate">true</property>
-      <property name="hibernate.c3p0.acquireRetryAttempts">50</property>
-      <property name="hibernate.c3p0.acquireRetryDelay">1000</property>
-      <property name="hibernate.c3p0.maxConnectionAge">120</property>
-      <property name="hibernate.c3p0.automaticTestTable">connection_test_table</property>
-      <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
-      <property name="hibernate.connection.shutdown">false</property>
-      <property name="hibernate.connection.autoReconnectForPools">true</property>
-      <property name="hibernate.connection.autoReconnect">true</property>
-    </database>
-    <dms-url>${lemo-dms-url}</dms-url>
-  </apps>
-  <dms name="Lemo DMS">
-    <!--
-    You may ignore this element, it just ensures that there's
-    no conflict when mixing dms and apps config in the same file.
-    -->
-  </dms>
+		<users>
+
+			<user name="admin" password="lemolemo" roles="admin global"
+				email="lemo@example.com" fullname="Administrator" />
+
+			<user name="user" password="lemolemo" roles="teacher" email="user@example.com"
+				fullname="Teacher" courses="221 222 223 224 225 226 227" />
+
+			<user name="global" password="lemolemo" roles="GLOBAL" email="lemo@example.com"
+				fullname="Global user" />
+
+		</users>
+
+		<dms-url>${lemo-dms-url}</dms-url>
+	</apps>
+	<dms name="Lemo DMS">
+		<!-- You may ignore this element, it just ensures that there's no conflict 
+			when mixing dms and apps config in the same file. -->
+	</dms>
 
 </config>
