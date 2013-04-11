@@ -3,7 +3,6 @@
 
   <apps name="Lemo Apps">
 
-
 	
  	<users>
  		  <!-- Attention: Maven can't handle unescaped at-signs! Otherwise the replacement of hibernate variables during deployment will break. Therefore 
@@ -62,8 +61,7 @@
     </database>
     
     <dms-url>${lemo-dms-url}</dms-url>
-    
-   
+
     
   </apps>
   <dms name="Lemo DMS">
