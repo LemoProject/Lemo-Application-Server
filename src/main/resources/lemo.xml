@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <config>
-	<apps name="Lemo Apps">
+
+  <apps name="Lemo Apps">
 
 		<database>
 			<!-- Maven replacement variables -->
@@ -36,23 +37,36 @@
 		</database>
 		<!-- TODO Bug wenn users vor anderen Einträgen steht, welche durch mvn ersetzt werden -->
 		<dms-url>${lemo-dms-url}</dms-url>
-		
-		<users>
+    
+    <users>
 
-			<user name="admin" password="lemolemo" roles="admin global"
-				email="lemo@example.com" fullname="Administrator" />
-
-			<user name="user" password="lemolemo" roles="teacher" email="user@example.com"
-				fullname="Teacher" courses="221 222 223 224 225 226 227" />
-
-			<user name="global" password="lemolemo" roles="GLOBAL" email="lemo@example.com"
-				fullname="Global user" />
-
-		</users>
-	</apps>
-	<dms name="Lemo DMS">
-		<!-- You may ignore this element, it just ensures that there's no conflict 
-			when mixing dms and apps config in the same file. -->
-	</dms>
+	      <user name="admin"
+	      password="lemolemo"
+	      roles="admin global"
+	      email="lemo@example.com"
+	      fullname="Administrator"/>
+	      
+	      <user name="user"
+	      password="lemolemo"
+	      roles="teacher"
+	      email="user@example.com"
+	      fullname="Teacher"
+	      courses="212591 1482 112100 11476 112200 113905 137666 221 222 223 224 225 226 227"/>
+	      
+	      <user name="global"
+	      password="lemolemo"
+	      roles="global"
+	      email="lemo@example.com"
+	      fullname="Global user"/>
+    
+    </users>
+    
+  </apps>
+  <dms name="Lemo DMS">
+    <!--
+    You may ignore this element, it just ensures that there's
+    no conflict when mixing dms and apps config in the same file.
+    -->
+  </dms>
 
 </config>
