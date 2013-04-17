@@ -22,9 +22,13 @@
 	    colNames=[],
 	    rowNum,
 	    colNum,
-	    color = d3.interpolateRgb("#fff", "#37c"),
+	    //color = d3.interpolateRgb("#fff", "#37c"),
 	    width=$('#heatmap').width(),
-	    height=595;
+	    height=595; 
+ 		
+	    color = d3.scale.sqrt()
+		  .interpolate(d3.interpolateRgb)
+		  .range(["#ffffff", "#3377cc"]);
  
 		$(window).resize(function() {
 			console.log("resized");
@@ -68,7 +72,7 @@
 	    var min = 0;
 	    var max = 0;
 	    var l;
-
+	    
 	    for (var rowNum = 0; rowNum < cells.length; rowNum++) {
 	        for (var col = 0; col < colNum; col++) {
 	            l = cells[rowNum][col].clicks;
