@@ -160,7 +160,12 @@ text {
 rect {
     stroke: #FFFFFF;
 }
+
+rect {
+    stroke: #FFFFFF;
+}
 rect.parent, .grandparent rect {
+	fill:none;
     stroke-width: 2px;
 }
 .grandparent rect {
