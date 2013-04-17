@@ -23,9 +23,18 @@
 	    rowNum,
 	    colNum,
 	    color = d3.interpolateRgb("#fff", "#37c"),
-	    width=1200,
+	    width=$('#heatmap').width(),
 	    height=595;
  
+		$(window).resize(function() {
+			console.log("resized");
+			console.log($('#heatmap').width());
+			width = $('#heatmap').width();
+			d3.select("svg")
+       			.remove();
+			createHeatchart();
+		});
+ 	
 	    var calculateCells = function() {
 	        var index=0;
 	        rowNum = data.length;
@@ -52,7 +61,7 @@
 	                cells[i][colNames.indexOf(data[i].values[j][0])].col=colNames.indexOf(data[i].values[j][0]);
 	            }
 	        }
-	    } 
+	    }    
 
 	    var createHeatchart = function() {
 
