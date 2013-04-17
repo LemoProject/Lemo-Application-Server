@@ -1,12 +1,5 @@
-/**
-	 * File VisualizationCumulative.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
 package de.lemo.apps.pages.data;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -30,38 +22,28 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
-import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
-/**
- * Visualisation for cumulative user access by week and days
- */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart2.js" })
-public class VisualizationCumulative {
+@Import(library = { "../../js/d3/d3_custom_Path_MultiFoci.js" })
+public class VisualizationD3_2 {
 
 	private static final int THOU = 1000;
 	
@@ -73,9 +55,6 @@ public class VisualizationCumulative {
 
 	@Inject
 	private DateWorker dateWorker;
-
-	@Inject
-	private AnalysisWorker analysisWorker;
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
@@ -97,9 +76,6 @@ public class VisualizationCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
-	
-	@Inject
-	private ComponentResources coRes;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -138,7 +114,7 @@ public class VisualizationCumulative {
 
 	@Property
 	@Persist
-	Integer resolution;
+	private Integer resolution;
 
 	@Property
 	@Persist
@@ -210,6 +186,8 @@ public class VisualizationCumulative {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedActivities = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
@@ -228,95 +206,33 @@ public class VisualizationCumulative {
 	}
 
 	public String getQuestionResult() {
-		if (this.courseId != null) {
-			Long endStamp = 0L;
-			Long beginStamp = 0L;
-			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / THOU);
+		final ArrayList<Long> courseIds = new ArrayList<Long>();
+		courseIds.add(this.courseId);
+
+		final boolean considerLogouts = true;
+
+		ArrayList<String> types = null;
+		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
+			types = new ArrayList<String>();
+			for (final EResourceType resourceType : this.selectedActivities) {
+				types.add(resourceType.name().toLowerCase());
 			}
-
-			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / THOU);
-			}
-
-			if ((this.resolution == null) || (this.resolution < 10)) {
-				this.resolution = 30;
-			}
-			final List<Long> roles = new ArrayList<Long>();
-			final List<Long> courses = new ArrayList<Long>();
-			courses.add(this.courseId);
-
-			// calling dm-server
-			for (int i = 0; i < courses.size(); i++) {
-				this.logger.debug("Courses: " + courses.get(i));
-			}
-
-			List<String> types = null;
-			if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-				types = new ArrayList<String>();
-				for (final EResourceType resourceType : this.selectedActivities) {
-					types.add(resourceType.name().toLowerCase());
-				}
-			}
-
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
-
-			final String result = this.analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp);
-
-			this.logger.debug("ResultString RAW: "+result);	
-			
-
-			final ObjectMapper mapper = new ObjectMapper();
-			List<BoxPlot> resultList;
-			BoxPlot singleResult;
-			String resultListString = "";
-			JsonNode jsonObj;
-			try {
-				jsonObj = mapper.readTree(result);
-				final JsonNode elementArray = jsonObj.get("elements");
-				if (elementArray != null) {
-					if (elementArray.isArray()) {
-
-						resultList = mapper.readValue(elementArray.toString(), new TypeReference<List<BoxPlot>>() {
-						});
-
-						this.logger.debug("Entries Size:" + jsonObj.get("elements").size() + " Values:"
-								+ jsonObj.get("elements").toString());
-
-						this.logger.debug("Entries parsed Size: " + resultList.size() + " Values:" + resultList.toString());
-
-
-						resultListString = mapper.writeValueAsString(resultList);
-
-						this.logger.debug("Entries JSON Output: " + resultListString);
-					} else {
-						singleResult = mapper.readValue(elementArray.toString(), new TypeReference<BoxPlot>() {
-						});
-
-						this.logger.debug("Entries: " + jsonObj.get("elements").toString());
-
-						this.logger.debug("Entries parsed: " + singleResult.toString());
-
-						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
-						tmpResultList.add(singleResult);
-
-						resultListString = mapper.writeValueAsString(tmpResultList);
-
-					}
-				}
-			} catch (final JsonProcessingException e) {
-				logger.error(e.getMessage());
-			} catch (final IOException e) {
-				logger.error(e.getMessage());
-			}
-			
-			
-			
-			this.logger.debug("Cumulative result: " + resultListString);
-			return resultListString;
-
 		}
-		return "";
+
+		Long endStamp = 0L;
+		Long beginStamp = 0L;
+		if (this.beginDate != null) {
+			beginStamp = new Long(this.beginDate.getTime() / THOU);
+		}
+		if (this.endDate != null) {
+			endStamp = new Long(this.endDate.getTime() / THOU);
+		}
+		
+		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp, endStamp); 
+		
+		this.logger.debug("ResultString: "+result);
+		
+		return result;
 	}
 
 	void setupRender() {

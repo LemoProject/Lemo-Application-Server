@@ -1,9 +1,7 @@
 /**
-	 * File QCourseActivity.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File QCourseActivity.java
+ * Date Feb 14, 2013
+ */
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;

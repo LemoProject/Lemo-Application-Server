@@ -9,13 +9,11 @@ import javax.ws.rs.core.MediaType;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
-
-
 /**
  * Gathers and returns all all test results for every student and every test in a course
  */
 public interface QPerformanceUserTest {
-	
+
 	/**
 	 * @param courses
 	 *            (optional) List of course-ids that shall be included
@@ -32,11 +30,11 @@ public interface QPerformanceUserTest {
 	 *            (mandatory)
 	 * @return
 	 */
-	
-	 @POST
-	 @Path("performanceUserTest")
-	 @Produces(MediaType.APPLICATION_JSON)
-	 ResultListLongObject compute(
+
+	@POST
+	@Path("performanceUserTest")
+	@Produces(MediaType.APPLICATION_JSON)
+	ResultListLongObject compute(
 			@FormParam(MetaParam.COURSE_IDS) final List<Long> courses,
 			@FormParam(MetaParam.USER_IDS) final List<Long> users,
 			@FormParam(MetaParam.QUIZ_IDS) final List<Long> quizzes,
@@ -44,5 +42,4 @@ public interface QPerformanceUserTest {
 			@FormParam(MetaParam.START_TIME) final Long startTime,
 			@FormParam(MetaParam.END_TIME) final Long endTime);
 
-		
 }

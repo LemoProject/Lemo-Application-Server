@@ -1,6 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <config>
+
   <apps name="Lemo Apps">
+
+	
+ 	<users>
+ 		  <!-- Attention: Maven can't handle unescaped at-signs! Otherwise the replacement of hibernate variables during deployment will break. Therefore 
+ 		  	   user eMail addresses must incorperate html encodes at-signs: &#64; -->	
+	      <user name="admin" 
+	      		password="lemolemo" 
+	      		email="lemo&#64;example.com" 
+	      		roles="admin global" 
+	      		fullname="Administrator" />
+	      		
+	      <user name="user" 
+	      		password="lemolemo" 
+	      		roles="teacher" 
+	      		email="user&#64;example.com" 
+	      		fullname="Teacher" 
+	      		courses="212591 1482 112100 11476 112200 113905 137666 221 222 223 224 225 226 227"/>
+	      		
+ 	      <user name="global" 
+ 	      		password="lemolemo" 
+ 	      		roles="global" 
+ 	      		email="lemo&#64;example.com" 
+ 	      		fullname="Global user"/>  
+    </users>
+	
     <database>
       <!-- Maven replacement variables -->
       <property name="hibernate.connection.url">${apps-hibernate-url}</property>
@@ -33,7 +59,10 @@
       <property name="hibernate.connection.autoReconnectForPools">true</property>
       <property name="hibernate.connection.autoReconnect">true</property>
     </database>
+    
     <dms-url>${lemo-dms-url}</dms-url>
+
+    
   </apps>
   <dms name="Lemo DMS">
     <!--

@@ -27,8 +27,6 @@ public enum ServerConfiguration {
 
 	INSTANCE;
 
-	private static final String USER_FILE = "users.xml";
-
 	private final Logger logger = Logger.getLogger(this.getClass());
 	private String serverName;
 	private Map<String, String> dbConfig;
@@ -69,50 +67,32 @@ public enum ServerConfiguration {
 			this.dbConfig.put(property.key, property.value);
 		}
 
-		LemoUserConfig userConfigurations = this.readUserFile();
-		this.userImports = this.createUsers(userConfigurations);
+		this.userImports = this.createUsers(lemoConfig.applicationServer.users);
 	}
 
-	private List<User> createUsers(final LemoUserConfig userConfigurations) {
+	private List<User> createUsers(List<UserConfig> userConfigurations) {
 		final List<User> users = Lists.newArrayList();
-		if (userConfigurations.users == null || userConfigurations.users.isEmpty()) {
-			this.logger.warn(ServerConfiguration.USER_FILE + " loaded but no users elements were found.");
-		} else {
-			for (final UserConfig userConfig : userConfigurations.users) {
-				User user = new User(userConfig.fullName, userConfig.name, userConfig.email, userConfig.password);
 
-				if (userConfig.roles != null) {
-					for (String role : userConfig.roles) {
-						user.getRoles().add(Roles.valueOf(role.toUpperCase()));
-					}
+		for (UserConfig userConfig : userConfigurations) {
+			User user = new User(userConfig.fullName, userConfig.name, userConfig.email, userConfig.password);
+
+			if (userConfig.roles != null) {
+				for (String role : userConfig.roles) {
+					user.getRoles().add(Roles.valueOf(role.toUpperCase()));
 				}
-				if (userConfig.courses != null) {
-					List<Course> courses =  new ArrayList<Course>(); 
-					for (Long courseId : userConfig.courses) {
-						courses.add(new Course(courseId));
-					}
-					user.setMyCourses(courses);
-				}
-				logger.debug("User from config: " + user.getUsername() + " " + user.getRoles() + user.getMyCourseIds());
-				users.add(user);
 			}
+			if (userConfig.courses != null) {
+				List<Course> courses = new ArrayList<Course>();
+				for (Long courseId : userConfig.courses) {
+					courses.add(new Course(courseId));
+				}
+				user.setMyCourses(courses);
+			}
+			logger.debug("User from config: " + user.getUsername() + " " + user.getRoles() + user.getMyCourseIds());
+			users.add(user);
 		}
+
 		return users;
-	}
-
-	private LemoUserConfig readUserFile() {
-		try {
-			final Unmarshaller jaxbUnmarshaller = JAXBContext.newInstance(LemoUserConfig.class).createUnmarshaller();
-			final InputStream in = this.getClass().getResourceAsStream("/" + ServerConfiguration.USER_FILE);
-			if (in == null) {
-				return null;
-			}
-			this.logger.info("Loading user file: " + ServerConfiguration.USER_FILE);
-			return (LemoUserConfig) jaxbUnmarshaller.unmarshal(in);
-		} catch (final JAXBException e) {
-			// no way to recover, re-throw at runtime
-			throw new RuntimeException(e);
-		}
 	}
 
 	private LemoConfig readConfigFiles(String contextPath) {

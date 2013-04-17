@@ -27,4 +27,9 @@ class ApplicationServer {
 	@XmlElementWrapper(name = "database", required = true)
 	@XmlElement(name = "property", required = true)
 	public List<PropertyConfig> appDbConfig = Lists.newArrayList();
+	
+	@XmlElementWrapper(name = "users", required = true)
+	@XmlElement(name = "user", required = true)
+	public List<UserConfig> users = Lists.newArrayList();
+	
 }

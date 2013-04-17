@@ -1,9 +1,7 @@
 /**
-	 * File QCourseUserPaths.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
+ * File QCourseUserPaths.java
+ * Date Feb 14, 2013
+ */
 
 package de.lemo.apps.restws.proxies.questions;
 
@@ -17,7 +15,6 @@ import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
  * Computes paths for users
-
  */
 public interface QCourseUserPaths {
 
