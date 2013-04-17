@@ -180,6 +180,7 @@ public class ManageUser {
 			if (rs!=null) {
 				logger.debug("Result object is NOT null");
 				List<CourseObject> cd = rs.getElements();
+				logger.debug("rs: "+rs);
 				if (cd!=null) {
 					List<Course> userCourses = userItem.getMyCourses();
 					logger.debug("Course result List is NOT null ... results: "+ cd.size());
@@ -187,8 +188,8 @@ public class ManageUser {
 					for (CourseObject co : cd) {
 						Course c = new Course(co);
 						boolean exists = false;
-						for (Course blub : userCourses) {
-							if(blub.getCourseId().equals(c.getCourseId())) {
+						for (Course userC : userCourses) {
+							if(userC.getCourseId().equals(c.getCourseId())) {
 								exists=true;
 							}
 						}
@@ -237,22 +238,22 @@ public class ManageUser {
 	public Object onActionFromAdd(Long courseID) {
 		List<Course> courseList = this.courseDAO.findAll();
 		List<Course> userCourses = userItem.getMyCourses();
-		Course c = searchCoursesList.get(courseID.intValue());
+		Course courseToAdd = searchCoursesList.get(courseID.intValue());
 		boolean exists= false;
-		for (Course blub : courseList) {
-			logger.info("c.courseName: "+c.getCourseName()+"c.getCourseId: "+c.getCourseId()+"////blub.courseName: "+blub.getCourseName()+"blub.getCourseId :"+blub.getCourseId());
-			if(blub.getCourseId().equals(c.getCourseId())) {
-				c =blub;
+		for (Course c : courseList) {
+			logger.info("courseToAdd.courseName: "+courseToAdd.getCourseName()+"courseToAdd.getCourseId: "+courseToAdd.getCourseId()+"////c.courseName: "+c.getCourseName()+"c.getCourseId :"+c.getCourseId());
+			if(c.getCourseId().equals(courseToAdd.getCourseId())) {
+				courseToAdd = c;
 				exists=true;
 			}
 		}
 		if (exists) {
-			userCourses.add(c);
+			userCourses.add(courseToAdd);
 		}
 		else {
-			c.setId(0);
-			this.courseDAO.save(c);
-			userCourses.add(c);
+			courseToAdd.setId(0);
+			this.courseDAO.save(courseToAdd);
+			userCourses.add(courseToAdd);
 		}		
 		userItem.setMyCourses(userCourses);
 		this.userDAO.update(userItem);

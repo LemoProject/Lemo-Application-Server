@@ -23,8 +23,7 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        	<div id="viz">
-        		<svg><!-- d3js visualization --></svg>
+        	<div id="heatmap">
         	</div>
         	
         	<br />
