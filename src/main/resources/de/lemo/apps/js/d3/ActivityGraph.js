@@ -5,12 +5,19 @@
   d3custom.run = function() {
 	  
 	  
-	  var w = 960, 
+	  var w=$('#viz').width(), 
       h = 700,
       fill = d3.scale.category20(),
       selectedNodes,
   	  vis,
   	  root;
+	  
+	  $(window).resize(function() {
+			width = $('#viz').width();
+			d3.select("svg")
+     			.remove();
+			drawChart();
+		});
   
 	  var startDistance = 200;
 	  
@@ -33,6 +40,12 @@
 		  return "#17becf";
 		  return "#e377c2";
 		}
+	
+   
+	
+	  
+var drawChart = function() {  
+	  
 	  
    var color = d3.scale.category20();
 
@@ -54,8 +67,7 @@
    vis.append('svg:rect')
 		.attr("class", "parent")
 		.attr('width', w)
-		.attr('height', h)
-		 .on("click", function(d){drawGraph();});
+		.attr('height', h);
     
     vis.append("svg:defs")
     .append("svg:marker")
@@ -622,7 +634,11 @@ function focus(d) {
       
       
       
-    
+   } //drawChart
+	  
+	  
+	  drawChart();
+   
   };
   
 })(window.d3custom = window.d3custom || {}, jQuery);

@@ -18,7 +18,9 @@
       d3.select('#viz svg').datum(data).transition().duration(500).call(chart);
 
       dataExport.lineWithFocusChartButton('.export-button', d3.select('#viz svg').data(), chart);
-
+      
+      nv.utils.windowResize(chart.update);
+      
       return chart;
     });
 
