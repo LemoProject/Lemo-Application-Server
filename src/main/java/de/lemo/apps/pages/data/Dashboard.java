@@ -34,6 +34,7 @@ import de.lemo.apps.application.StatisticWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.Roles;
 import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
@@ -144,6 +145,16 @@ public class Dashboard {
 
 	private Course widgetCourse3;
 
+	
+	Object onActivate(){
+		// check if user role is admin. If true the user will be redirected to the admin dashboard
+		if(userWorker.getCurrentUser().getRoles().contains(Roles.ADMIN)){
+			return DashboardAdmin.class;
+		}
+		return true;
+	}
+	
+	
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel1 = new CourseIdSelectModel(courses);

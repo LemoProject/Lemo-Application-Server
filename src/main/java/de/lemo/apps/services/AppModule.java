@@ -55,6 +55,9 @@ import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.CourseIdValueEncoderWorker;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoderWorker;
+import de.lemo.apps.services.internal.QuizValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoderWorker;
+
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -74,6 +77,9 @@ public class AppModule {
 		// Encoder
 		binder.bind(CourseIdValueEncoder.class, CourseIdValueEncoderWorker.class);
 		binder.bind(LongValueEncoder.class, LongValueEncoderWorker.class);
+		binder.bind(QuizValueEncoder.class, QuizValueEncoderWorker.class);
+		
+		
 
 		// Facade Worker
 		binder.bind(UserWorker.class, UserWorkerImpl.class);
