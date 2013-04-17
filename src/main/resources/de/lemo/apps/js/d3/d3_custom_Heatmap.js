@@ -28,8 +28,10 @@
  
 		$(window).resize(function() {
 			console.log("resized");
-			console.log($('#heatmap').width());
+			console.log("width:  "+$('#heatmap').width());
+			
 			width = $('#heatmap').width();
+			
 			d3.select("svg")
        			.remove();
 			createHeatchart();
