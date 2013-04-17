@@ -99,6 +99,20 @@ public class CourseDAOImpl implements CourseDAO {
 		}
 		return true;
 	}
+	
+	public List<Course> searchCourses(final List<String> searchStrings) {
+		Criteria criteria = this.session.createCriteria(Course.class);
+		criteria.add(Restrictions.disjunction()
+				.add(Restrictions.in("coursename", searchStrings))
+				.add(Restrictions.in("courseId", searchStrings))
+				.add(Restrictions.in("courseDescription", searchStrings))
+		);
+		final List<Course> results = criteria.list();
+		if (results.size() == 0) {
+			return new ArrayList<Course>();
+		}
+		return results;
+	}
 
 	public Course getCourse(final String coursename) {
 		Criteria criteria = this.session.createCriteria(Course.class);

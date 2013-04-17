@@ -28,6 +28,8 @@ public interface CourseDAO {
 	boolean doExistByForeignCourseId(Long courseId);
 	
 	boolean courseNeedsUpdate(final Long courseId);
+	
+	List<Course> searchCourses(final List<String> searchStrings);
 
 	Course getCourse(String coursename);
 

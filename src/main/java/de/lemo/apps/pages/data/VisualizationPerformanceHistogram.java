@@ -27,6 +27,7 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -37,6 +38,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
@@ -47,6 +49,7 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
@@ -93,6 +96,12 @@ public class VisualizationPerformanceHistogram {
 
 	@Inject
 	private TypeCoercer coercer;
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
+	
+	@Property
+	private SelectModel quizSelectModel;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -152,7 +161,11 @@ public class VisualizationPerformanceHistogram {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private LongValueEncoder userIdEncoder;
+	
+	@Inject
+	@Property
+	private QuizValueEncoder quizEncoder;
 
 	@Property
 	@Persist
@@ -196,6 +209,31 @@ public class VisualizationPerformanceHistogram {
 	public Course onPassivate() {
 		return this.course;
 	}
+	
+	void setupRender() {
+		this.logger.debug(" ----- Bin in Setup Render");
+
+		final ArrayList<Long> courseList = new ArrayList<Long>();
+		courseList.add(this.course.getCourseId());
+
+		if (this.endDate == null) {
+			this.endDate = this.course.getLastRequestDate();
+		} else {
+			this.selectedUsers = null;
+			this.userIds = this.getUsers();
+		}
+		if (this.beginDate == null) {
+			this.beginDate = this.course.getFirstRequestDate();
+		} else {
+			this.selectedUsers = null;
+			this.userIds = this.getUsers();
+		}
+		final Calendar beginCal = Calendar.getInstance();
+		final Calendar endCal = Calendar.getInstance();
+		beginCal.setTime(this.beginDate);
+		endCal.setTime(this.endDate);
+		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
+	}
 
 	void cleanupRender() {
 		this.customizeForm.clearErrors();
@@ -228,20 +266,29 @@ public class VisualizationPerformanceHistogram {
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 		final List<String> quizzesTitles = new ArrayList<String>();
-
+		final List<Quiz> quizzesList = new ArrayList<Quiz>();
+		
+		
 		if ((quizList != null) && (quizList.getElements() != null)) {
-			this.logger.debug(quizList.getElements().toString());
+			this.logger.debug(" QuizList Elements "+quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
 			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
 				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
+				quizzesList.add(new Quiz(quizStringList.get(x + 2),combinedQuizId));
 				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
+				this.logger.debug("Quiz item:"+combinedQuizId+ " -- " + quizStringList.get(x + 2));
 			}
+			
+			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
 		} else {
 			this.logger.debug("No rated Objetcs found");
-		}
+			}
+		
+		
+		
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -376,30 +423,7 @@ public class VisualizationPerformanceHistogram {
 		return "";
 	}
 
-	void setupRender() {
-		this.logger.debug(" ----- Bin in Setup Render");
-
-		final ArrayList<Long> courseList = new ArrayList<Long>();
-		courseList.add(this.course.getCourseId());
-
-		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
-		} else {
-			this.selectedUsers = null;
-			this.userIds = this.getUsers();
-		}
-		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
-		} else {
-			this.selectedUsers = null;
-			this.userIds = this.getUsers();
-		}
-		final Calendar beginCal = Calendar.getInstance();
-		final Calendar endCal = Calendar.getInstance();
-		beginCal.setTime(this.beginDate);
-		endCal.setTime(this.endDate);
-		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-	}
+	
 
 	@AfterRender
 	public void afterRender() {
