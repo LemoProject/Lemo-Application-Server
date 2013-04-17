@@ -276,6 +276,11 @@
 			    				<br /><br />
 			    			</div>
 			    			
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="data/visualizationHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="60px" /><br /><br /><b>Heatmap [ALPHA]</b> </t:pagelink>
+			    				<br /><br />
+			    			</div>
+			    			
 			    			
 <!--		    				<div class="span2" align="center">-->
 <!--			    				<t:pagelink page="data/visualization" context="${CurrentCourse.courseid}"><img src="${usageAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:usageAnalysisTime} (OLD) </b> </t:pagelink>-->

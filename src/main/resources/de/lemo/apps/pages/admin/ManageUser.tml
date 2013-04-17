@@ -36,8 +36,9 @@
 				 }
 			}
 			
-			$('#searchButton').keypress(function (e) {                                       
+			$('#courseString').keypress(function (e) {                                       
 			       if (e.which == 13) {
+			       alert();
 			            e.preventDefault();
 			            //do something   
 			       }
@@ -160,8 +161,8 @@
 							<form t:id="ajaxForm" t:type="form" t:zone="^" style="margin-bottom:5px;">						
 								<div class="controls row-fluid">
 						    		<div class="input-append">
-						      			<input  onkeyup="inputKeyUp(event)" id="courseString" t:type="TextField" t:id="courseString" class="pull-left" placeholder="${message:nameOrId}"></input>
-						      			<span class="add-on"><a t:type="LinkSubmit" t:id="search" href="#" id="searchButton"><i class="icon-search"></i></a></span>
+						      			<input id="courseString" t:type="TextField" t:id="courseString" class="pull-left" placeholder="${message:nameOrId}"></input>
+						      			<span class="add-on"><a t:type="LinkSubmit" t:id="search" href="#" ><i class="icon-search"></i></a></span>
 						    		</div>						    	
 						    </div>
 						 	<t:if test="searchCourses">
@@ -174,7 +175,8 @@
 						 			</p:addCell>
 	       							<p:empty>
 	       							<div class="row-fluid">
-	       							<p>  ${message:noCoursesMatching}</p>
+	       							<br/>
+	       							<p>${message:noCoursesMatching}</p>
 	       							</div>
 	            					</p:empty>
 	        					</t:grid>	

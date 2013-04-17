@@ -118,6 +118,11 @@ public class Explorer {
 	@Path("../../images/icons/CumulativeUserAnalysis_Icon.png")
 	@Property
 	private Asset cumulativeUserAnalysisIcon;
+	
+	@Inject
+	@Path("../../images/Nutzungsanalyse.png")
+	@Property
+	private Asset heatMapAnalysisIcon;
 
 	@Inject
 	private CourseDAO courseDAO;

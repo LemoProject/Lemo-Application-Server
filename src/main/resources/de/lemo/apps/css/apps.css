@@ -158,7 +158,6 @@ text {
     font-weight: bold;
 }
 rect {
-    fill: none;
     stroke: #FFFFFF;
 }
 rect.parent, .grandparent rect {
