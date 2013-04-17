@@ -1,12 +1,14 @@
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Set;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
@@ -37,26 +39,26 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
-import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.EResourceType;
-import de.lemo.apps.restws.entities.ResultListStringObject;
+import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
- * Visualisation for the performance histogram with avg data
+ * Visualisation for the treemap diagram
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })
-public class VisualizationPerformanceHistogramAvg {
+@Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
+public class VisualizationLOTreeMap {
 
+	private static final int THOU = 1000;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -68,9 +70,6 @@ public class VisualizationPerformanceHistogramAvg {
 
 	@Inject
 	private AnalysisWorker analysisWorker;
-
-	@Inject
-	private Initialisation init;
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
@@ -151,21 +150,21 @@ public class VisualizationPerformanceHistogramAvg {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private LongValueEncoder userIdEncoder;
 
 	@Property
 	@Persist
-	private List<Long> userIds, quizIds;
+	private List<Long> userIds;
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
+	private List<Long> selectedUsers;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -177,10 +176,7 @@ public class VisualizationPerformanceHistogramAvg {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-			if (this.selectedCourses == null) {
-				this.selectedCourses = new ArrayList<Long>();
-				this.selectedCourses.add(this.courseId);
-			}
+
 			return true;
 		} else {
 			return Explorer.class;
@@ -204,45 +200,14 @@ public class VisualizationPerformanceHistogramAvg {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
-		this.selectedQuizzes = null;
-		this.selectedCourses = null;
 		this.selectedActivities = null;
 	}
-	
+
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
-
-		this.quizIds = new ArrayList<Long>();
-
-		final List<Long> courseList = new ArrayList<Long>();
-		courseList.add(this.courseId);
-		ResultListStringObject quizList = null;
-		try {
-			quizList = this.init.getRatedObjects(courseList);
-		} catch (RestServiceCommunicationException e) {
-			logger.error(e.getMessage());
-		}
-
-		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
-		final List<String> quizzesTitles = new ArrayList<String>();
-
-		if ((quizList != null) && (quizList.getElements() != null)) {
-			this.logger.debug(quizList.getElements().toString());
-			final List<String> quizStringList = quizList.getElements();
-			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-				quizzesTitles.add(quizStringList.get(x + 2));
-				this.quizIds.add(combinedQuizId);
-			}
-
-		} else {
-			this.logger.debug("No rated Objetcs found");
-		}
 	}
-
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
 		return this.courseValueEncoder.create(Course.class);
@@ -255,18 +220,22 @@ public class VisualizationPerformanceHistogramAvg {
 
 	public String getQuestionResult() {
 		final List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
-
+		final List<TextValueDataItem> list1 = CollectionFactory.newList();
+		final List<TextValueDataItem> list2 = CollectionFactory.newList();
 		if (this.courseId != null) {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
 			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / 1000);
+				endStamp = new Long(this.endDate.getTime() / THOU);
 			}
 
 			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / 1000);
+				beginStamp = new Long(this.beginDate.getTime() / THOU);
 			}
-			this.resolution = 100;
+
+			if ((this.resolution == null) || (this.resolution < 10)) {
+				this.resolution = 30;
+			}
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
 			courses.add(this.courseId);
@@ -278,115 +247,57 @@ public class VisualizationPerformanceHistogramAvg {
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
+			final List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
+					this.selectedUsers, this.selectedActivities);
 
-			List<Long> courseList = new ArrayList<Long>();
-			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
-				if (!this.selectedCourses.contains(this.courseId)) {
-					this.selectedCourses.add(this.courseId);
-				}
-				courseList = this.selectedCourses;
-			} else {
-				courseList.add(this.courseId);
-			}
+			final HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
+			if ((results != null) && (results.size() > 0)) {
+				for (int i = 0; i < results.size(); i++) {
+					final String resType = results.get(i).getResourcetype();
+					List<ResourceRequestInfo> learnObjectList;
+					if (learningObjectTypes.containsKey(resType)) {
+						learnObjectList = learningObjectTypes.get(resType);
+						learnObjectList.add(results.get(i));
+					} else {
+						learnObjectList = new ArrayList<ResourceRequestInfo>();
+						learnObjectList.add(results.get(i));
 
-			List<Long> quizzesList = new ArrayList<Long>();
-
-			ResultListStringObject quizList = null;
-			try {
-				quizList = this.init.getRatedObjects(courseList);
-			} catch (RestServiceCommunicationException e) {
-				logger.error(e.getMessage());
-			}
-
-			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
-			final List<String> quizzesTitles = new ArrayList<String>();
-
-			if ((quizList != null) && (quizList.getElements() != null)) {
-				this.logger.debug(quizList.getElements().toString());
-				final List<String> quizStringList = quizList.getElements();
-				for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-					final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-					quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-					quizzesTitles.add(quizStringList.get(x + 2));
-				}
-
-			} else {
-				this.logger.debug("No rated Objetcs found");
-			}
-
-			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
-				quizzesList = this.selectedQuizzes;
-			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
-				quizzesList = new ArrayList<Long>();
-				quizzesList.addAll(quizzesMap.keySet());
-			}
-
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
-
-			final List<Long> results = this.analysis.computePerformanceHistogram(courseList, this.selectedUsers, quizzesList,
-					(long) this.resolution, beginStamp, endStamp);
-			this.logger.debug("results for performance histogram:" + results);
-
-			final List<Long> preparedResults = CollectionFactory.newList();
-
-			if (results != null) {
-				Integer splitCounter = 0;
-				Integer quizCounter = 0;
-				Long avgCounter = 0L;
-				Long avgAmount = 0L;
-				List<Long> currentList = new ArrayList<Long>();
-				for (Integer i = 0; i < results.size(); i++) {
-					currentList.add(results.get(i));
-					avgAmount = avgAmount + results.get(i) * splitCounter;
-					if ((results.get(i) != null) && (results.get(i) > 0)) {
-						avgCounter = avgCounter + results.get(i);
 					}
-
-					splitCounter++;
-					if (splitCounter == this.resolution) {
-
-						final List<Long> avgResult = new ArrayList<Long>();
-						if (avgCounter != 0) {
-							preparedResults.add(avgAmount / avgCounter);
-							this.logger.debug("Result for " + quizzesMap.get(quizzesList.get(quizCounter)) + " : "
-									+ avgAmount / avgCounter);
-						} else {
-							preparedResults.add(0L);
-						}
-						quizCounter++;
-						splitCounter = 0;
-						avgAmount = 0L;
-						avgCounter = 0L;
-						currentList = new ArrayList<Long>();
-					}
-
+					learningObjectTypes.put(resType, learnObjectList);
 				}
+			} else {
+				return "";
 			}
 
-			final JSONArray graphParentArray = new JSONArray();
-			final JSONObject graphDataObject = new JSONObject();
-			final JSONArray graphDataValues = new JSONArray();
-			final List<Long> tmpResults = preparedResults;
+			final JSONObject graphRootObject = new JSONObject();
+			final JSONArray graphDataRootArray = new JSONArray();
 
-			if ((tmpResults != null) && (tmpResults.size() > 0)) {
-				for (Integer j = 0; j < tmpResults.size(); j++) {
-					final JSONObject graphValue = new JSONObject();
-
-					graphValue.put("x", quizzesMap.get(quizzesList.get(j)));
-					graphValue.put("y", tmpResults.get(j));
-
-					graphDataValues.put(graphValue);
+			final Set<String> keySet = learningObjectTypes.keySet();
+			final Iterator<String> it = keySet.iterator();
+			while (it.hasNext()) {
+				final String learnObjectTypeName = it.next();
+				final JSONObject graphLOTypeObject = new JSONObject();
+				final JSONArray graphLOTypeChildreenArray = new JSONArray();
+				graphLOTypeObject.put("name", learnObjectTypeName);
+				for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size(); i++) {
+					final JSONObject graphLOObject = new JSONObject();
+					final ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
+					graphLOObject.put("name", learnObject.getTitle());
+					graphLOObject.put("requests", learnObject.getRequests());
+					graphLOObject.put("user", learnObject.getUsers());
+					graphLOObject.put("value", learnObject.getRequests());
+					graphLOTypeChildreenArray.put(graphLOObject);
 				}
+				graphLOTypeObject.put("children", graphLOTypeChildreenArray);
+				graphDataRootArray.put(graphLOTypeObject);
 			}
 
-			graphDataObject.put("values", graphDataValues);
-			graphDataObject.put("key", "Performance");
+			graphRootObject.put("name", "root");
+			graphRootObject.put("children", graphDataRootArray);
 
-			graphParentArray.put(graphDataObject);
+			this.logger.debug(graphRootObject.toString());
 
-			this.logger.debug(graphParentArray.toString());
-
-			return graphParentArray.toString();
+			return graphRootObject.toString();
 		}
 		return "";
 	}

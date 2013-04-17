@@ -1,4 +1,4 @@
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

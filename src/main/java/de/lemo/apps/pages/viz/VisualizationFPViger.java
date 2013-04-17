@@ -1,4 +1,4 @@
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,26 +13,24 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
-import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
@@ -40,16 +38,14 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
-import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
-import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/nvd3_custom_LO_Bar_Chart.js" })
-public class VisualizationLONVD3 {
+@Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
+public class VisualizationFPViger {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -59,9 +55,6 @@ public class VisualizationLONVD3 {
 
 	@Inject
 	private DateWorker dateWorker;
-
-	@Inject
-	private AnalysisWorker analysisWorker;
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
@@ -84,11 +77,11 @@ public class VisualizationLONVD3 {
 	@Inject
 	private TypeCoercer coercer;
 
+	@Inject
+	private Request request;
+
 	@Property
 	private BreadCrumbInfo breadCrumb;
-
-	@InjectComponent
-	private Zone formZone;
 
 	@Component(id = "customizeForm")
 	private Form customizeForm;
@@ -168,6 +161,25 @@ public class VisualizationLONVD3 {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
+			if (this.endDate == null) {
+				this.endDate = course.getLastRequestDate();
+			} else {
+				this.selectedUsers = null;
+				this.userIds = this.getUsers();
+			}
+
+			if (this.beginDate == null) {
+				this.beginDate = course.getFirstRequestDate();
+			} else {
+				this.selectedUsers = null;
+				this.userIds = this.getUsers();
+			}
+			final Calendar beginCal = Calendar.getInstance();
+			final Calendar endCal = Calendar.getInstance();
+			beginCal.setTime(this.beginDate);
+			endCal.setTime(this.endDate);
+			this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
+			this.logger.debug("MinSup:" + this.minSup);
 
 			return true;
 		} else {
@@ -193,11 +205,15 @@ public class VisualizationLONVD3 {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedActivities = null;
+		this.minSup = 1;
+		this.pathLengthMin = null;
+		this.pathLengthMax = null;
 	}
 
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
+
 		this.userIds = this.getUsers();
 	}
 
@@ -205,86 +221,126 @@ public class VisualizationLONVD3 {
 		return this.courseValueEncoder.create(Course.class);
 	}
 
+	@Property
+	@Persist
+	Integer val;
+
+	@Property
+	Long max, min;
+
+	@Property
+	@Persist
+	Integer minSup;
+
+	@Property
+	@Persist
+	Long pathLengthMin;
+
+	@Property
+	@Persist
+	Long pathLengthMax;
+
+	@Property
+	private JSONObject minSupParams,
+					pathLengthParams,
+					minValue,
+					maxValue;
+
+	// Seting up paramaters for jquery sliders
+	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
+	public void initSlider() {
+
+		if (this.minSup == null) {
+			this.minSup = 1;
+		}
+
+		this.minSupParams = new JSONObject();
+
+		this.minSupParams.put("min", 1);
+		this.minSupParams.put("max", 10);
+		this.minSupParams.put("value", this.minSup);
+
+		this.pathLengthParams = new JSONObject();
+		this.max = 200L;
+		this.min = 1L;
+
+		if (this.pathLengthMax != null) {
+			this.max = this.pathLengthMax;
+		}
+		if (this.pathLengthMin != null) {
+			this.min = this.pathLengthMin;
+		}
+		this.pathLengthParams.put("min", 1);
+		this.pathLengthParams.put("max", 200);
+		this.pathLengthParams.put("range", true);
+		this.pathLengthParams.put("values", new JSONArray(this.min, this.max));
+	}
+
 	// returns datepicker params
 	public JSONLiteral getDatePickerParams() {
 		return this.dateWorker.getDatePickerParams(this.currentlocale);
 	}
 
+	@Property
+	private double minSupDouble;
+
+	private Double minSupValue;
+
 	public String getQuestionResult() {
-		final List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
+		final ArrayList<Long> courseIds = new ArrayList<Long>();
+		courseIds.add(this.courseId);
 
-		if (this.courseId != null) {
-			Long endStamp = 0L;
-			Long beginStamp = 0L;
-			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / 1000);
+		final boolean considerLogouts = false;
+
+		ArrayList<String> types = null;
+		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
+			types = new ArrayList<String>();
+			for (final EResourceType resourceType : this.selectedActivities) {
+				types.add(resourceType.name().toUpperCase());
 			}
-
-			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / 1000);
-			}
-
-			if ((this.resolution == null) || (this.resolution < 10)) {
-				this.resolution = 30;
-			}
-			final List<Long> roles = new ArrayList<Long>();
-			final List<Long> courses = new ArrayList<Long>();
-			courses.add(this.courseId);
-
-			// calling dm-server
-			for (int i = 0; i < courses.size(); i++) {
-				this.logger.debug("Courses: " + courses.get(i));
-			}
-
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
-
-			@SuppressWarnings("unchecked")
-			final
-			List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
-					this.selectedUsers, this.selectedActivities);
-
-			final JSONArray graphParentArray = new JSONArray();
-			final JSONObject graphDataObject = new JSONObject();
-			final JSONArray graphDataValues = new JSONArray();
-
-			if ((results != null) && (results.size() > 0)) {
-				for (Integer j = 0; j < results.size(); j++) {
-					final JSONObject graphValue = new JSONObject();
-
-					graphValue.put("x", results.get(j).getTitle());
-					graphValue.put("y", results.get(j).getRequests());
-
-					graphDataValues.put(graphValue);
-				}
-			}
-
-			graphDataObject.put("values", graphDataValues);
-			graphDataObject.put("key", "Activities");
-
-			final JSONObject graphDataObject2 = new JSONObject();
-			final JSONArray graphDataValues2 = new JSONArray();
-
-			if ((results != null) && (results.size() > 0)) {
-				for (Integer i = 0; i < results.size(); i++) {
-					final JSONObject graphValue2 = new JSONObject();
-
-					graphValue2.put("x", results.get(i).getTitle());
-					graphValue2.put("y", results.get(i).getUsers());
-
-					graphDataValues2.put(graphValue2);
-				}
-			}
-			graphDataObject2.put("values", graphDataValues2);
-			graphDataObject2.put("key", "User");
-
-			graphParentArray.put(graphDataObject);
-			graphParentArray.put(graphDataObject2);
-
-			this.logger.debug(graphParentArray.toString());
-
-			return graphParentArray.toString();
 		}
-		return "";
+
+		Long endStamp = 0L;
+		Long beginStamp = 0L;
+		if (this.beginDate != null) {
+			beginStamp = new Long(this.beginDate.getTime() / 1000);
+		}
+		if (this.endDate != null) {
+			endStamp = new Long(this.endDate.getTime() / 1000);
+		}
+
+		// Check value for minumim support .. if no value is set it will default to 8 -> 0.8
+		if ((this.minSup == null) || this.minSup.equals(0)) {
+			this.minSup = 1;
+		}
+		this.minSupValue = new Double(this.minSup);
+		this.minSupValue = this.minSupValue / 10;
+		this.logger.debug("MinSupValue:" + this.minSupValue + "  --  " + this.minSupValue.doubleValue());
+		this.minSupDouble = this.minSupValue.doubleValue();
+
+		this.logger.debug("PathLength: " + this.pathLengthMin + "  --  " + this.pathLengthMax);
+
+		return this.analysis.computeQFrequentPathViger(courseIds, this.selectedUsers, types, this.pathLengthMin, this.pathLengthMax,
+				this.minSupDouble, considerLogouts, beginStamp, endStamp);
+	}
+
+	public String getSupportValue() {
+		Double minSupTemp = new Double(this.minSup);
+		minSupTemp = minSupTemp / 10;
+		return minSupTemp.toString();
+	}
+
+	public String getPathLengthValue() {
+		if ((this.pathLengthMin == null) && (this.pathLengthMax == null)) {
+			return "All paths";
+		}
+		if ((this.pathLengthMin == null) && (this.pathLengthMax != null)) {
+			return "1 - " + this.pathLengthMax;
+		}
+		if ((this.pathLengthMin != null) && (this.pathLengthMax == null)) {
+			return this.pathLengthMin + " - 200";
+		}
+		return this.pathLengthMin + " - " + this.pathLengthMax;
 	}
 
 	void setupRender() {
@@ -293,23 +349,13 @@ public class VisualizationLONVD3 {
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
 
-		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
-		} else {
-			this.selectedUsers = null;
-			this.userIds = this.getUsers();
-		}
-		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
-		} else {
-			this.selectedUsers = null;
-			this.userIds = this.getUsers();
-		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
+		this.logger.debug("SetupRender End --- BeginDate:" + this.beginDate + " EndDate: " + this.endDate + " Res: " + this.resolution);
+
 	}
 
 	@AfterRender
@@ -323,7 +369,11 @@ public class VisualizationLONVD3 {
 
 	void onSuccessFromCustomizeForm() {
 		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
-		this.logger.debug("Selected activities: " + this.selectedActivities);
+		final String input = this.request.getParameter("minSup-slider");
+		if (input != null) {
+			this.minSup = Integer.parseInt(input);
+		}
+		this.logger.debug("MinSup Value: " + this.minSup);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 

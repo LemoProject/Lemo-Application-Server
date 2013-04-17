@@ -4,7 +4,7 @@
  * Project Lemo Learning Analytics
  */
 
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,10 +52,10 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  *
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_Circle_graph2.js",
+@BreadCrumb(titleKey = "circleGraph")
+@Import(library = { "../../js/d3/CircleGraph_2.js",
 					"../../js/d3/packages.js"})
-public class VisualizationCircleGraph {
+public class CircleGraph {
 
 	private static final int THOU = 1000;
 	@Environmental

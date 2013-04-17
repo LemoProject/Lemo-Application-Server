@@ -1,4 +1,4 @@
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;

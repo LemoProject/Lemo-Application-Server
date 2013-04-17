@@ -1,13 +1,11 @@
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
@@ -23,43 +21,29 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
-import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
-import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
-import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
-/**
- * Visualisation for the cumulative performance
- */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart.js" })
-public class VisualizationPerformanceCumulative {
+@BreadCrumb(titleKey = "activityGraph")
+@Import(library = { "../../js/d3/ActivityGraph_2.js" })
+public class ActivityGraph_2 {
 
 	private static final int THOU = 1000;
 	
@@ -71,12 +55,6 @@ public class VisualizationPerformanceCumulative {
 
 	@Inject
 	private DateWorker dateWorker;
-
-	@Inject
-	private AnalysisWorker analysisWorker;
-
-	@Inject
-	private Initialisation init;
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
@@ -136,7 +114,7 @@ public class VisualizationPerformanceCumulative {
 
 	@Property
 	@Persist
-	Integer resolution;
+	private Integer resolution;
 
 	@Property
 	@Persist
@@ -157,15 +135,15 @@ public class VisualizationPerformanceCumulative {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private LongValueEncoder userIdEncoder;
 
 	@Property
 	@Persist
-	private List<Long> userIds, quizIds;
+	private List<Long> userIds;
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedQuizzes;
+	private List<Long> selectedUsers;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -207,42 +185,15 @@ public class VisualizationPerformanceCumulative {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
-		this.selectedQuizzes = null;
 		this.selectedActivities = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
-		logger.debug("bin im onPrepareForRender");
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
-		this.quizIds = new ArrayList<Long>();
-
-		final List<Long> courseList = new ArrayList<Long>();
-		courseList.add(this.courseId);
-		ResultListStringObject quizList = null;
-		try {
-			quizList = this.init.getRatedObjects(courseList);
-		} catch (RestServiceCommunicationException e) {
-			logger.error(e.getMessage());
-		}
-
-		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
-		final List<String> quizzesTitles = new ArrayList<String>();
-
-		if ((quizList != null) && (quizList.getElements() != null)) {
-			this.logger.debug(quizList.getElements().toString());
-			final List<String> quizStringList = quizList.getElements();
-			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-				quizzesTitles.add(quizStringList.get(x + 2));
-				this.quizIds.add(combinedQuizId);
-			}
-			this.logger.debug("Rated Objetcs found");
-		} else {
-			this.logger.debug("No rated Objetcs found");
-		}
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -255,126 +206,33 @@ public class VisualizationPerformanceCumulative {
 	}
 
 	public String getQuestionResult() {
-		if (this.courseId != null) {
-			Long endStamp = 0L;
-			Long beginStamp = 0L;
-			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / THOU);
+		final ArrayList<Long> courseIds = new ArrayList<Long>();
+		courseIds.add(this.courseId);
+
+		final boolean considerLogouts = true;
+
+		ArrayList<String> types = null;
+		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
+			types = new ArrayList<String>();
+			for (final EResourceType resourceType : this.selectedActivities) {
+				types.add(resourceType.name().toLowerCase());
 			}
-
-			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / THOU);
-			}
-
-			if ((this.resolution == null) || (this.resolution < 10)) {
-				this.resolution = 30;
-			}
-			
-			final List<Long> courseList = new ArrayList<Long>();
-			courseList.add(this.courseId);
-
-			// calling dm-server
-			for (int i = 0; i < courseList.size(); i++) {
-				this.logger.debug("Courses: " + courseList.get(i));
-			}
-
-			List<Long> quizzesList = new ArrayList<Long>();
-
-			ResultListStringObject quizList = null;
-			try {
-				quizList = this.init.getRatedObjects(courseList);
-			} catch (RestServiceCommunicationException e1) {
-				logger.error(e1.getMessage());
-			}
-
-			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
-			final List<String> quizzesTitles = new ArrayList<String>();
-
-			if ((quizList != null) && (quizList.getElements() != null)) {
-				this.logger.debug(quizList.getElements().toString());
-				final List<String> quizStringList = quizList.getElements();
-				for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-					final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-					quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-					quizzesTitles.add(quizStringList.get(x + 2));
-				}
-
-			} else {
-				this.logger.debug("No rated Objetcs found");
-			}
-
-			if (this.selectedQuizzes != null) {
-				quizzesList = this.selectedQuizzes;
-			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
-				quizzesList = new ArrayList<Long>();
-				quizzesList.addAll(quizzesMap.keySet());
-			}
-
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution
-					+ " QuizzesAmount:" + quizzesList.size());
-
-			final String result = this.analysis.computePerformanceBoxplot(courseList, this.selectedUsers, quizzesList, 
-																			100L, beginStamp,endStamp);
-			this.logger.debug("ResultString RAW: "+result);	
-			
-			final JSONArray graphParentArray = new JSONArray();
-
-			final ObjectMapper mapper = new ObjectMapper();
-			List<BoxPlot> resultList;
-			BoxPlot singleResult;
-			String resultListString = "";
-			JsonNode jsonObj;
-			try {
-				jsonObj = mapper.readTree(result);
-				final JsonNode elementArray = jsonObj.get("elements");
-				if (elementArray != null) {
-					if (elementArray.isArray()) {
-
-						resultList = mapper.readValue(elementArray.toString(), new TypeReference<List<BoxPlot>>() {
-						});
-
-						this.logger.debug("Entries Size:" + jsonObj.get("elements").size() + " Values:"
-								+ jsonObj.get("elements").toString());
-
-						this.logger.debug("Entries parsed Size: " + resultList.size() + " Values:" + resultList.toString());
-
-						for (Integer w = 0; w < resultList.size(); w++) {
-							final Long quizID = Long.parseLong(resultList.get(w).getName());
-							resultList.get(w).setName(quizzesMap.get(quizID));
-						}
-
-						resultListString = mapper.writeValueAsString(resultList);
-
-						this.logger.debug("Entries JSON Output: " + resultListString);
-					} else {
-						singleResult = mapper.readValue(elementArray.toString(), new TypeReference<BoxPlot>() {
-						});
-
-						this.logger.debug("Entries: " + jsonObj.get("elements").toString());
-
-						this.logger.debug("Entries parsed: " + singleResult.toString());
-
-						final Long quizID = Long.parseLong(singleResult.getName());
-						singleResult.setName(quizzesMap.get(quizID));
-
-						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
-						tmpResultList.add(singleResult);
-
-						resultListString = mapper.writeValueAsString(tmpResultList);
-
-					}
-				}
-			} catch (final JsonProcessingException e) {
-				logger.error(e.getMessage());
-			} catch (final IOException e) {
-				logger.error(e.getMessage());
-			}
-
-			this.logger.debug("Cumulative result: " + result);
-			return resultListString;
-
 		}
-		return "";
+
+		Long endStamp = 0L;
+		Long beginStamp = 0L;
+		if (this.beginDate != null) {
+			beginStamp = new Long(this.beginDate.getTime() / THOU);
+		}
+		if (this.endDate != null) {
+			endStamp = new Long(this.endDate.getTime() / THOU);
+		}
+		
+		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp, endStamp); 
+		
+		this.logger.debug("ResultString: "+result);
+		
+		return result;
 	}
 
 	void setupRender() {
