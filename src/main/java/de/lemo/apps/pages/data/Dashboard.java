@@ -39,6 +39,7 @@ import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
+import de.lemo.apps.pages.admin.DashboardAdmin;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.services.internal.CourseIdSelectModel;

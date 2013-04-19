@@ -33,7 +33,6 @@ import de.lemo.apps.entities.User;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
-import de.lemo.apps.pages.data.DashboardAdmin;
 import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.CourseObject;

@@ -4,7 +4,7 @@
 	 * Date Feb 14, 2013 
 	 *
 	 */
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.admin;
 
 import java.util.ArrayList;
 import java.util.Calendar;

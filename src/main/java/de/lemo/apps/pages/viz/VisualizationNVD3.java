@@ -1,29 +1,28 @@
-/**
-	 * File VisualizationCumulative.java
-	 *
-	 * Date Feb 14, 2013 
-	 *
-	 */
-package de.lemo.apps.pages.data;
+package de.lemo.apps.pages.viz;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -32,13 +31,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
@@ -49,22 +46,22 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResourceRequestInfo;
+import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
-/**
- * Visualisation for cumulative user access by week and days
- */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visualizationTitle")
-@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart2.js" })
-public class VisualizationCumulative {
-
-	private static final int THOU = 1000;
+@Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
+public class VisualizationNVD3 {
 	
+	private static final int THOU = 1000;
+	private static final  int RESOLUTION_MAX = 500;
+	static final int RESOLUTION_BASIC_MULTIPLIER = 4;
+
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -75,16 +72,22 @@ public class VisualizationCumulative {
 	private DateWorker dateWorker;
 
 	@Inject
-	private AnalysisWorker analysisWorker;
+	private CourseIdValueEncoder courseValueEncoder;
 
 	@Inject
-	private CourseIdValueEncoder courseValueEncoder;
+	private ComponentResources componentResources;
+
+	@Inject
+	private BeanModelSource beanModelSource;
 
 	@Inject
 	private Analysis analysis;
 
 	@Inject
 	private UserWorker userWorker;
+
+	@Inject
+	private AnalysisWorker analysisWorker;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -97,9 +100,6 @@ public class VisualizationCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
-	
-	@Inject
-	private ComponentResources coRes;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -138,16 +138,31 @@ public class VisualizationCumulative {
 
 	@Property
 	@Persist
-	Integer resolution;
+	Integer resolution, resolutionComputed;
 
 	@Property
 	@Persist
 	private List<Course> courses;
 
+	@Property
+	private ResourceRequestInfo resourceItem;
+
+	@Persist
+	private List<ResourceRequestInfo> showDetailsList;
+
 	// Value Encoder for activity multi-select component
 	@Property(write = false)
 	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
 			EResourceType.class);
+
+	@Property(write = false)
+	@Retain
+	private BeanModel resourceGridModel;
+	{
+		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
+				.getMessages());
+		this.resourceGridModel.include("resourcetype", "title", "requests");
+	}
 
 	// Select Model for activity multi-select component
 	@Property(write = false)
@@ -159,23 +174,41 @@ public class VisualizationCumulative {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder;
+	private LongValueEncoder userIdEncoder, courseIdEncoder;
 
 	@Property
 	@Persist
-	private List<Long> userIds;
+	private List<Long> userIds, courseIds;
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers;
+	private List<Long> selectedUsers, selectedCourses;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
-		this.logger.info("          ----        " + elements);
+		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
+	}
+
+	@Cached
+	public List<ResourceRequestInfo> getResourceList() {
+		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
+
+		List<ResourceRequestInfo> resultList;
+
+		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
+			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+		} else {
+			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
+		}
+		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
+
+		return resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -185,6 +218,10 @@ public class VisualizationCumulative {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
+			if (this.selectedCourses == null) {
+				this.selectedCourses = new ArrayList<Long>();
+				this.selectedCourses.add(this.courseId);
+			}
 
 			return true;
 		} else {
@@ -194,7 +231,7 @@ public class VisualizationCumulative {
 
 	public Object onActivate() {
 		this.logger.debug("--- Bin im zweiten onActivate");
-		return true;
+		return Explorer.class;
 	}
 
 	public Course onPassivate() {
@@ -209,13 +246,17 @@ public class VisualizationCumulative {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
+		this.selectedCourses = null;
 		this.selectedActivities = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
+		this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -228,95 +269,103 @@ public class VisualizationCumulative {
 	}
 
 	public String getQuestionResult() {
-		if (this.courseId != null) {
-			Long endStamp = 0L;
-			Long beginStamp = 0L;
-			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / THOU);
-			}
 
-			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / THOU);
+		List<Long> courseList = new ArrayList<Long>();
+		if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
+			if (!this.selectedCourses.contains(this.courseId)) {
+				this.selectedCourses.add(this.courseId);
 			}
+			courseList = this.selectedCourses;
+		} else {
+			courseList.add(this.courseId);
+		}
 
-			if ((this.resolution == null) || (this.resolution < 10)) {
-				this.resolution = 30;
+		final boolean considerLogouts = true;
+
+		ArrayList<String> types = null;
+		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
+			types = new ArrayList<String>();
+			for (final EResourceType resourceType : this.selectedActivities) {
+				types.add(resourceType.name().toUpperCase());
 			}
-			final List<Long> roles = new ArrayList<Long>();
-			final List<Long> courses = new ArrayList<Long>();
-			courses.add(this.courseId);
+		}
 
-			// calling dm-server
-			for (int i = 0; i < courses.size(); i++) {
-				this.logger.debug("Courses: " + courses.get(i));
-			}
+		Long endStamp = 0L;
+		Long beginStamp = 0L;
+		if (this.beginDate != null) {
+			beginStamp = new Long(this.beginDate.getTime() / THOU);
+		}
+		if (this.endDate != null) {
+			endStamp = new Long(this.endDate.getTime() / THOU);
+		}
 
-			List<String> types = null;
-			if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-				types = new ArrayList<String>();
-				for (final EResourceType resourceType : this.selectedActivities) {
-					types.add(resourceType.name().toLowerCase());
+		
+
+		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
+		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
+		
+		this.resolutionComputed = RESOLUTION_MAX;
+		
+		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
+				beginStamp, endStamp, (long) this.resolutionComputed, types);
+
+		final JSONArray graphParentArray = new JSONArray();
+		JSONObject graphDataObject = new JSONObject();
+		JSONObject graphUserObject = new JSONObject();
+		JSONArray graphDataValues = new JSONArray();
+		JSONArray graphUserValues = new JSONArray();
+
+		if (results != null) {
+			final Set<Long> courseSet = results.keySet();
+			final Iterator<Long> it = courseSet.iterator();
+			while (it.hasNext()) {
+
+				final Long courseId = it.next();
+				final ResultListLongObject resultAllObjects = results.get(courseId);
+				this.logger.debug("ResultList Length: " + resultAllObjects.getElements().size() + " Resolution: "
+						+ this.resolution);
+				final ResultListLongObject resultDataObjects = new ResultListLongObject(resultAllObjects.getElements()
+						.subList(0, this.resolutionComputed - 1));
+				final ResultListLongObject resultUserObjects = new ResultListLongObject(resultAllObjects.getElements()
+						.subList(this.resolutionComputed, resultAllObjects.getElements().size() - 1));
+
+				graphDataObject = new JSONObject();
+				graphUserObject = new JSONObject();
+				graphDataValues = new JSONArray();
+				graphUserValues = new JSONArray();
+
+				Long currentDateStamp = 0L;
+				Double dateResolution = this.resolution.doubleValue() / this.resolutionComputed.doubleValue();
+				
+				for (Integer i = 0; i < resultDataObjects.getElements().size(); i++) {
+					final JSONArray graphDataValue = new JSONArray();
+					final JSONArray graphUserValue = new JSONArray();
+					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * THOU;
+					currentDateStamp = beginStamp * THOU + dateMultiplier.longValue();
+					graphDataValue.put(0, currentDateStamp);
+					graphDataValue.put(1, resultDataObjects.getElements().get(i));
+
+					graphUserValue.put(0, currentDateStamp);
+					graphUserValue.put(1, resultUserObjects.getElements().get(i));
+
+					graphDataValues.put(graphDataValue);
+					graphUserValues.put(graphUserValue);
 				}
+
+				final Course course = this.courseDAO.getCourseByDMSId(courseId);
+				graphDataObject.put("values", graphDataValues);
+				graphDataObject.put("key", course.getCourseName());
+
+				graphUserObject.put("values", graphUserValues);
+				graphUserObject.put("key", course.getCourseName() + "-User");
+
+				graphParentArray.put(graphDataObject);
+				graphParentArray.put(graphUserObject);
+
 			}
-
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
-
-			final String result = this.analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp);
-
-			this.logger.debug("ResultString RAW: "+result);	
-			
-
-			final ObjectMapper mapper = new ObjectMapper();
-			List<BoxPlot> resultList;
-			BoxPlot singleResult;
-			String resultListString = "";
-			JsonNode jsonObj;
-			try {
-				jsonObj = mapper.readTree(result);
-				final JsonNode elementArray = jsonObj.get("elements");
-				if (elementArray != null) {
-					if (elementArray.isArray()) {
-
-						resultList = mapper.readValue(elementArray.toString(), new TypeReference<List<BoxPlot>>() {
-						});
-
-						this.logger.debug("Entries Size:" + jsonObj.get("elements").size() + " Values:"
-								+ jsonObj.get("elements").toString());
-
-						this.logger.debug("Entries parsed Size: " + resultList.size() + " Values:" + resultList.toString());
-
-
-						resultListString = mapper.writeValueAsString(resultList);
-
-						this.logger.debug("Entries JSON Output: " + resultListString);
-					} else {
-						singleResult = mapper.readValue(elementArray.toString(), new TypeReference<BoxPlot>() {
-						});
-
-						this.logger.debug("Entries: " + jsonObj.get("elements").toString());
-
-						this.logger.debug("Entries parsed: " + singleResult.toString());
-
-						final List<BoxPlot> tmpResultList = new ArrayList<BoxPlot>();
-						tmpResultList.add(singleResult);
-
-						resultListString = mapper.writeValueAsString(tmpResultList);
-
-					}
-				}
-			} catch (final JsonProcessingException e) {
-				logger.error(e.getMessage());
-			} catch (final IOException e) {
-				logger.error(e.getMessage());
-			}
-			
-			
-			
-			this.logger.debug("Cumulative result: " + resultListString);
-			return resultListString;
 
 		}
-		return "";
+		return graphParentArray.toString();
 	}
 
 	void setupRender() {
@@ -370,5 +419,13 @@ public class VisualizationCumulative {
 
 	public String getLastRequestDate() {
 		return this.getLocalizedDate(this.endDate);
+	}
+
+	public String getResourceTypeName() {
+		if ((this.resourceItem != null) && (!this.resourceItem.getResourcetype().equals(""))) {
+			return this.messages.get("EResourceType." + this.resourceItem.getResourcetype());
+		} else {
+			return this.messages.get("EResourceType.UNKNOWN");
+		}
 	}
 }

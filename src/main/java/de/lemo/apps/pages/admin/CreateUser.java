@@ -15,7 +15,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
-import de.lemo.apps.pages.data.DashboardAdmin;
 
 
 /**
