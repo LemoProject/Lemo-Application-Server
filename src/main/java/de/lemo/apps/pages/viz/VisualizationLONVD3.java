@@ -155,6 +155,11 @@ public class VisualizationLONVD3 {
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
+		if(beginDate == null)
+			this.beginDate = course.getFirstRequestDate();
+		if(endDate == null)
+			this.endDate = course.getLastRequestDate();
+		
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
 		this.logger.info("          ----        " + elements);
@@ -168,7 +173,7 @@ public class VisualizationLONVD3 {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-
+			
 			return true;
 		} else {
 			return Explorer.class;
@@ -251,7 +256,7 @@ public class VisualizationLONVD3 {
 				for (Integer j = 0; j < results.size(); j++) {
 					final JSONObject graphValue = new JSONObject();
 
-					graphValue.put("x", results.get(j).getTitle());
+					graphValue.put("x", results.get(j).getTitle()+j+"_");
 					graphValue.put("y", results.get(j).getRequests());
 
 					graphDataValues.put(graphValue);
@@ -268,7 +273,7 @@ public class VisualizationLONVD3 {
 				for (Integer i = 0; i < results.size(); i++) {
 					final JSONObject graphValue2 = new JSONObject();
 
-					graphValue2.put("x", results.get(i).getTitle());
+					graphValue2.put("x", results.get(i).getTitle()+i+"_");
 					graphValue2.put("y", results.get(i).getUsers());
 
 					graphDataValues2.put(graphValue2);
@@ -314,7 +319,7 @@ public class VisualizationLONVD3 {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
+		this.javaScriptSupport.addScript("$('#testDate').val('%s');",getBeginDateString());
 	}
 
 	void onPrepareFromCustomizeForm() {
@@ -339,4 +344,10 @@ public class VisualizationLONVD3 {
 	public String getLastRequestDate() {
 		return this.getLocalizedDate(this.endDate);
 	}
+	
+	public String getBeginDateString(){
+		return this.getLocalizedDate(this.beginDate);
+	}
+	
+	
 }

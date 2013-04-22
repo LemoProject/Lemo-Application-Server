@@ -79,7 +79,7 @@
 					  	
 					  	
 					  	<div class="pull-right">&nbsp;&nbsp;</div>
-					  	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
+					  	<t:pagelink page="admin/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
 				    	
 					  	
 				    	

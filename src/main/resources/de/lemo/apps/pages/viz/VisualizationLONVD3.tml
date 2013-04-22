@@ -36,6 +36,7 @@
     		<div class="row-fluid">
       		<div class="span12">
       			<div class="well">
+      				
       				<h4>${course.courseDescription}</h4>
       				<br />
       				${message:available}: ${FirstRequestDate} - ${LastRequestDate}
@@ -50,7 +51,8 @@
 					</ul>
       				
       				<span t:type="submit" value="Update" class="btn btn-primary pull-left" /><span class="btn export-button pull-right">Export to CSV</span>
-      				
+      				<br/>
+      				<span id="sortToggle" class="btn pull-left">SortToggle</span>
       				<br />
       			</div>
       		</div>
@@ -60,6 +62,7 @@
         			
     			
       				<t:errors/>
+        			
         			<div class="accordion" id="accordion2">
 			            
 			            <!-- Dates -->
@@ -76,14 +79,17 @@
   			              		
         							<label class="control-label">${message:begin}:</label>
       						   		<div class="controls">
-                            			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                            			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
       						    	</div>
         						</div>
+        						
+        						 <input type="text" id="testDate" name="testDate" class="input-small" />
+        						
         						<div class="control-group">
         							
         							<label class="control-label">${message:end}:</label>
         						    <div class="controls">
-                            			<input t:id="endDate" class="input-small" t:value="endDate" t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                            			<input t:id="endDate" class="input-small" t:value="endDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
   			                  		</div>
   			                	</div>
   			              	</div>
@@ -179,6 +185,13 @@
   </div>
   <script type="text/javascript">
     (function(d3custom, $, undefined) {
+    	
+    	//var beginDate = ${beginDateString};
+    	console.log("endDate: "+beginDate);
+    	
+    	//$('#beginDate').val('${beginDateString}');
+    	//$('#testDate').val('${beginDateString}');
+	
     
       var q2result = ${questionResult};
       

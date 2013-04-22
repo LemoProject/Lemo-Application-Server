@@ -105,7 +105,7 @@
 							    	<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
 									<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
 							    	<div class="pull-right">&nbsp;&nbsp;</div>		
-							    	<t:pagelink page="data/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>	
+							    	<t:pagelink page="admin/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>	
 							    </form>	
 							 </div>
 							

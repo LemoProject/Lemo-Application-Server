@@ -64,7 +64,7 @@ public class VisualizationNVD3 {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
-
+	
 	@Inject
 	private Logger logger;
 
@@ -361,6 +361,12 @@ public class VisualizationNVD3 {
 
 				graphParentArray.put(graphDataObject);
 				graphParentArray.put(graphUserObject);
+				
+				
+				//adding locale format string for localized date formating
+				JSONObject localeObject = new JSONObject();
+				localeObject.put("locale", messages.get("customD3DateFormat"));
+				graphParentArray.put(localeObject);
 
 			}
 

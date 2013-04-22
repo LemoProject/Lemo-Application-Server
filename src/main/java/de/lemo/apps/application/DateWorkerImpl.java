@@ -105,11 +105,11 @@ public class DateWorkerImpl implements DateWorker {
 				", changeYear: true" +
 				", buttonText: '" + this.messages.get("chooseDate") + "'" +
 				// ", minDate: '01.07.2012'" +
-				// ", maxDate: '"+this.course.getLastRequestDate()+
+				", maxDate: '0'"+
 				", buttonImage: '" + this.calendarIcon.toClientURL() + "'" +
 				", buttonImageOnly: false" +
 				", showButtonPanel: true" +
-				", dateFormat: 'M dd, yy'" +
+				", dateFormat: '"+ this.messages.get("customDateFormat") +"'"+
 				", monthNamesShort: " + monthNamesShort +
 				", showOn: 'both'" +
 				"}");
