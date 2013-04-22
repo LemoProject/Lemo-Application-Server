@@ -2,7 +2,7 @@ describe("Export", function() {
 
   var dataExport = window.dataExport;
 
-  // byte order mark
+  // byte order mark, required for Excel import
   var BOM = '\uFEFF';
 
   describe("to CSV", function() {
@@ -56,18 +56,25 @@ describe("Export", function() {
       expect(csv).toEqual(BOM);
     });
 
-    it("shouldn escape quotes in values", function() {
+    it("should escape quotes in values", function() {
       var csv = dataExport.createCSV({}, 1, [function() {
         return 'some "value" with quotes';
       }]);
       expect(csv).toEqual(BOM + '"some ""value"" with quotes"');
     });
 
-    it("shouldn escape quotes in headers", function() {
+    it("should escape quotes in headers", function() {
       var csv = dataExport.createCSV({}, 0, [], ['some "header" with quotes']);
       expect(csv).toEqual(BOM + '"some ""header"" with quotes"');
     });
 
+    it("should quote values containing a comma", function() {
+      var csv = dataExport.createCSV({}, 1, [function() {
+        return 'some value, with comma';
+      }]);
+      expect(csv).toEqual(BOM + '"some value, with comma"');
+    });
+    
   });
 
 });

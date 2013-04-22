@@ -2,7 +2,7 @@
 
   function csvEscape(value) {
     value = '' + value;
-    if (value.indexOf('"') != -1) {
+    if (value.indexOf('"') != -1 || value.indexOf(',') != -1) {
       // needs escaping
       return '"' + value.replace(/"/g, '""') + '"';
     }
