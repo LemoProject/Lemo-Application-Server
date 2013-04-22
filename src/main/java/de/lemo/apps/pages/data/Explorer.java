@@ -36,6 +36,7 @@ import de.lemo.apps.components.JqPlotLine;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
+import de.lemo.apps.pages.admin.DashboardAdmin;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
@@ -174,6 +175,7 @@ public class Explorer {
 	private AjaxResponseRenderer ajaxResponseRenderer;
 	
 	@Property
+	@Persist
     private String courseSearch;
 
 	/**
@@ -232,7 +234,14 @@ public class Explorer {
 		// TODO Till problem with chart painting and zone updates is not solved, incremental page rendering is off
 		return this;
 	}
-
+	
+	Object onSelectedFromQuickSearch() {
+		this.initCourse = this.courseDAO.getCourse(this.courseSearch);
+		// TODO Till problem with chart painting and zone updates is not solved, incremental page rendering is off
+		return this;
+	}
+	
+	
 	Object onActionFromFavorite(final Long id) {
 		favorite = this.userDAO.toggleFavoriteCourse(id, this.userWorker.getCurrentUser().getId());
 		this.initCourse = this.courseDAO.getCourse(id);

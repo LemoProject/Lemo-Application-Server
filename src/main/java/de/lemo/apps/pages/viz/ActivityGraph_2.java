@@ -41,7 +41,7 @@ import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey = "activityGraph")
+@BreadCrumb(titleKey = "visActivityGraph")
 @Import(library = { "../../js/d3/ActivityGraph_2.js" })
 public class ActivityGraph_2 {
 
@@ -276,7 +276,7 @@ public class ActivityGraph_2 {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

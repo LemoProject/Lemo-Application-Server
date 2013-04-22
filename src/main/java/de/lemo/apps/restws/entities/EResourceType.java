@@ -15,6 +15,7 @@ public enum EResourceType {
 	RESOURCE,
 	SCORM,
 	WIKI,
+	CHAT,
 	
 
 }

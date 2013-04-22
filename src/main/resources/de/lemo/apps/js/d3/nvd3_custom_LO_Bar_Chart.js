@@ -13,7 +13,7 @@
 
     var dataRequests = data[0].values;
     var dataUser = data[1].values;
-    var nameSortToggle = true;
+    var nameSortToggle = false;
     
     var sortData = function(nameToggle){
 
