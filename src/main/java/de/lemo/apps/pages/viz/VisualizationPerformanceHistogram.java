@@ -56,7 +56,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  * Visualisation for the performance histogram
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visPerformance")
 @Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })
 public class VisualizationPerformanceHistogram {
 	private static final int THOU = 1000;
@@ -441,7 +441,7 @@ public class VisualizationPerformanceHistogram {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

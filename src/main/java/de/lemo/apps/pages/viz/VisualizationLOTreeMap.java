@@ -53,7 +53,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  * Visualisation for the treemap diagram
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visActivityLearningObjectTreemap")
 @Import(library = { "../../js/d3/d3_custom_LO_TreeMap_Chart.js" })
 public class VisualizationLOTreeMap {
 
@@ -343,7 +343,7 @@ public class VisualizationLOTreeMap {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

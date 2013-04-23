@@ -1,5 +1,6 @@
 package de.lemo.apps.pages.viz;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,15 +8,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -26,6 +31,7 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -47,7 +53,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visActivityLearningObject")
 @Import(library = { "../../js/d3/nvd3_custom_LO_Bar_Chart.js" })
 public class VisualizationLONVD3 {
 
@@ -77,6 +83,12 @@ public class VisualizationLONVD3 {
 
 	@Inject
 	private Locale currentlocale;
+	
+	@Inject
+	private ComponentResources componentResources;
+
+	@Inject
+	private BeanModelSource beanModelSource;
 
 	@Inject
 	private Messages messages;
@@ -126,6 +138,14 @@ public class VisualizationLONVD3 {
 	@Property
 	@Persist
 	private List<Course> courses;
+	
+	
+	@Property
+	private ResourceRequestInfo resourceItem;
+
+	@Persist
+	private List<ResourceRequestInfo> showDetailsList;
+
 
 	// Value Encoder for activity multi-select component
 	@Property(write = false)
@@ -135,6 +155,17 @@ public class VisualizationLONVD3 {
 	// Select Model for activity multi-select component
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
+	
+	
+	@Property(write = false)
+	@Retain
+	private BeanModel resourceGridModel;
+	{
+		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
+				.getMessages());
+		this.resourceGridModel.include("resourcetype", "title", "requests");
+	}
+
 
 	@Property
 	@Persist
@@ -155,10 +186,34 @@ public class VisualizationLONVD3 {
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
+		if(beginDate == null)
+			this.beginDate = course.getFirstRequestDate();
+		if(endDate == null)
+			this.endDate = course.getLastRequestDate();
+		
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
+	}
+	
+	
+	
+	public List<ResourceRequestInfo> getResourceList() {
+		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
+
+		List<ResourceRequestInfo> resultList;
+
+		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
+			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+		} else {
+			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
+		}
+		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
+
+		return resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -168,7 +223,7 @@ public class VisualizationLONVD3 {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-
+			
 			return true;
 		} else {
 			return Explorer.class;
@@ -251,7 +306,7 @@ public class VisualizationLONVD3 {
 				for (Integer j = 0; j < results.size(); j++) {
 					final JSONObject graphValue = new JSONObject();
 
-					graphValue.put("x", results.get(j).getTitle());
+					graphValue.put("x", results.get(j).getTitle()+"_"+j);
 					graphValue.put("y", results.get(j).getRequests());
 
 					graphDataValues.put(graphValue);
@@ -268,7 +323,7 @@ public class VisualizationLONVD3 {
 				for (Integer i = 0; i < results.size(); i++) {
 					final JSONObject graphValue2 = new JSONObject();
 
-					graphValue2.put("x", results.get(i).getTitle());
+					graphValue2.put("x", results.get(i).getTitle()+"_"+i);
 					graphValue2.put("y", results.get(i).getUsers());
 
 					graphDataValues2.put(graphValue2);
@@ -314,7 +369,7 @@ public class VisualizationLONVD3 {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
+		this.javaScriptSupport.addScript("$('#beginDate').val('%s');",getFirstRequestDate());
 	}
 
 	void onPrepareFromCustomizeForm() {
@@ -328,7 +383,7 @@ public class VisualizationLONVD3 {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 
@@ -339,4 +394,14 @@ public class VisualizationLONVD3 {
 	public String getLastRequestDate() {
 		return this.getLocalizedDate(this.endDate);
 	}
+	
+	public String getResourceTypeName() {
+		if ((this.resourceItem != null) && (!this.resourceItem.getResourcetype().equals(""))) {
+			return this.messages.get("EResourceType." + this.resourceItem.getResourcetype());
+		} else {
+			return this.messages.get("EResourceType.UNKNOWN");
+		}
+	}
+	
+	
 }

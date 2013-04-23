@@ -54,7 +54,7 @@ import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visActivityTime")
 @Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
 public class VisualizationNVD3 {
 	
@@ -64,7 +64,7 @@ public class VisualizationNVD3 {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
-
+	
 	@Inject
 	private Logger logger;
 
@@ -248,8 +248,8 @@ public class VisualizationNVD3 {
 		this.selectedUsers = null;
 		this.selectedCourses = null;
 		this.selectedActivities = null;
-		this.beginDate = null;
-		this.endDate = null;
+//		this.beginDate = null;
+//		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
@@ -361,6 +361,12 @@ public class VisualizationNVD3 {
 
 				graphParentArray.put(graphDataObject);
 				graphParentArray.put(graphUserObject);
+				
+				
+				//adding locale format string for localized date formating
+				JSONObject localeObject = new JSONObject();
+				localeObject.put("locale", messages.get("customD3DateFormat"));
+				graphParentArray.put(localeObject);
 
 			}
 
@@ -409,7 +415,7 @@ public class VisualizationNVD3 {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

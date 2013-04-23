@@ -126,7 +126,7 @@ public class CourseDAOImpl implements CourseDAO {
 
 	public Course getCourse(final String coursename) {
 		Criteria criteria = this.session.createCriteria(Course.class);
-		criteria.add(Restrictions.eq("coursename", coursename));
+		criteria.add(Restrictions.eq("courseDescription", coursename));
 		final List<Course> results = criteria.list();
 		if (results.size() == 0) {
 			return null;

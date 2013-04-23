@@ -3,7 +3,8 @@
   d3custom.run = function() {
 
     var data = d3custom.data;
-
+    var locale = data.pop();
+    
     nv.addGraph(function() {
       var chart = nv.models.lineWithFocusChart().x(function(d) {
         return d[0];
@@ -12,7 +13,8 @@
       }).color(d3.scale.category10().range());
 
       chart.xTickFormat(function(d) {
-        return d3.time.format('%x')(new Date(d))
+    	  console.log("locale:"+locale.locale);
+        return d3.time.format(locale.locale)(new Date(d))
       });
 
       d3.select('#viz svg').datum(data).transition().duration(500).call(chart);

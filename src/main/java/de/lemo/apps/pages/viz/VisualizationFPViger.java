@@ -43,7 +43,7 @@ import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visFrequentPathViger")
 @Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
 public class VisualizationFPViger {
 
@@ -378,7 +378,7 @@ public class VisualizationFPViger {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

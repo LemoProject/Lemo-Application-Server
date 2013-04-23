@@ -57,7 +57,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  * Visualisation for the cumulative performance
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visPerformanceTitle")
 @Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart.js" })
 public class VisualizationPerformanceUserTestCumulative {
 
@@ -420,7 +420,7 @@ public class VisualizationPerformanceUserTestCumulative {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

@@ -59,9 +59,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  * Visualisation for cumulative user access by week and days
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visActivityTimeCumulutive")
 @Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart2.js" })
-public class VisualizationCumulative {
+public class ActivityTimeCumulative {
 
 	private static final int THOU = 1000;
 	
@@ -360,7 +360,7 @@ public class VisualizationCumulative {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 

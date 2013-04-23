@@ -53,7 +53,7 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  * Visualisation for the performance histogram with avg data
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visualizationTitle")
+@BreadCrumb(titleKey = "visPerformanceAvg")
 @Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })
 public class VisualizationPerformanceHistogramAvg {
 
@@ -432,7 +432,7 @@ public class VisualizationPerformanceHistogramAvg {
 	}
 
 	public String getLocalizedDate(final Date inputDate) {
-		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yyyy", this.currentlocale);
+		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);
 	}
 
