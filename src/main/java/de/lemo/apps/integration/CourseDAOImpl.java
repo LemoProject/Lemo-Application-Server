@@ -101,13 +101,23 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 	
 	public List<Course> searchCourses(final List<String> searchStrings) {
+		List<Long> searchLongs = new ArrayList<Long>();
+		for (String s : searchStrings) {
+			try {
+				searchLongs.add(Long.valueOf(s).longValue());
+			}
+			catch (NumberFormatException e){
+				
+			}
+		}
 		Criteria criteria = this.session.createCriteria(Course.class);
 		criteria.add(Restrictions.disjunction()
-				.add(Restrictions.in("coursename", searchStrings))
-				.add(Restrictions.in("courseId", searchStrings))
+				.add(Restrictions.in("courseName", searchStrings))
+				.add(Restrictions.in("courseId", searchLongs))
 				.add(Restrictions.in("courseDescription", searchStrings))
 		);
 		final List<Course> results = criteria.list();
+		logger.info("SIZE::::::::" + results.size());
 		if (results.size() == 0) {
 			return new ArrayList<Course>();
 		}

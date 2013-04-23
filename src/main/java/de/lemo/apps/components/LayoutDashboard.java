@@ -2,6 +2,7 @@ package de.lemo.apps.components;
 
 import java.util.List;
 import java.util.Locale;
+
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.annotations.Cached;
@@ -13,17 +14,21 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.ActionLink;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Session;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.got5.tapestry5.jquery.ImportJQueryUI;
+import org.slf4j.Logger;
 import org.tynamo.security.services.SecurityService;
+
 import de.lemo.apps.annotation.Exclude;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
+import de.lemo.apps.pages.Search;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
 
@@ -87,6 +92,7 @@ public class LayoutDashboard {
 	@Inject
 	private UserWorker userWorker;
 
+
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -94,7 +100,10 @@ public class LayoutDashboard {
 	private String pageName;
 
 	@InjectPage
-	private Start startpage;
+	private Start startpage;	
+	
+	@InjectPage
+	private Search searchPage;
 
 	@InjectPage
 	@Property
@@ -111,9 +120,18 @@ public class LayoutDashboard {
 
 	@Property
 	private Course allCourse;
+	
+	@Property
+	private String searchStringCourse;
 
 	@Component
 	private ActionLink logoutLink;
+	
+	@Component
+	private Form searchForm;
+	
+	@Inject
+	private Logger logger;
 
 	@Inject
 	private PersistentLocale persistentLocaleService;
@@ -158,6 +176,11 @@ public class LayoutDashboard {
 
 		}
 		return this.startpage;
+	}
+	
+	public Object onSelectedFromSearchCourses() {
+		this.searchPage.setSearchQuery(searchStringCourse);
+		return this.searchPage;
 	}
 
 	@Cached

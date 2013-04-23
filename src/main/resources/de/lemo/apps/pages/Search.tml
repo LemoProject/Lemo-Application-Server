@@ -1,0 +1,19 @@
+<html t:type="layoutdashboard" title="LeMo | ${message:searchTitle}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+	<div class="row-fluid">
+	<div class="container">
+        <h2> Result list for ${searchQuery}: </h2>
+        	<div class="well">
+			<t:grid source="allCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" class="table">
+				<p:empty>
+			    	<div class="row-fluid">
+			    		<br/>
+			    		<p>${message:noCoursesMatching}</p>
+			    	</div>
+			    </p:empty>
+			 </t:grid>
+			 </div>
+		</div>
+	</div>
+</html>
