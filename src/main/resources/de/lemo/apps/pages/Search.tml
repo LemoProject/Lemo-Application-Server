@@ -3,7 +3,7 @@
       xmlns:p="tapestry:parameter">
 	<div class="row-fluid">
 	<div class="container">
-        <h2> Result list for ${searchQuery}: </h2>
+        <h2> Result list for '${searchQuery}': </h2>
         	<div class="well">
 			<t:grid source="allCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" class="table">
 				<p:empty>
