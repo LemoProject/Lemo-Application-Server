@@ -20,15 +20,19 @@
       }
 		.icon { width:75px; height:75px; }
 		.ticon { float:left; margin: .3em .5em; width:25px; height:25px; box-shadow:1px 1px 1px #aaa; }
-		.ui-dialog { text-align:left; }
+		.ui-dialocontainerg { text-align:left; }
 		.ui-dialog input[type="text"], .ui-dialog textarea { display:block; width:90%; }
     </style>
 
+    <link rel="stylesheet" href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css"/>
+    
+    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap.js"></script>
+    
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   </head>
 
   <body>
@@ -42,53 +46,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-<!--          <t:pagelink class="brand" page="data/dashboard">LeMo</t:pagelink>-->
+
           <div class="nav-collapse">
             <ul class="nav">
-				
-				
-<!--			<li class="dropdown">-->
-<!--			<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
-<!--				${message:menu}-->
-<!--				<b class="caret"></b>-->
-<!--			</a>-->
-<!--			<ul class="dropdown-menu">-->
-<!--				<li><t:pagelink page="data/explorer">${message:explorerTitle}</t:pagelink></li>-->
-<!--				-->
-<!--			</ul>-->
-<!--			</li>	-->
-				
-				
-           
-<!--              <li class="dropdown"> -->
-<!--              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
-<!--              			${message:myCourses}-->
-<!--              			<b class="caret"></b>							-->
-<!--              		</a>-->
-<!--              		<ul class="dropdown-menu">-->
-<!--					<li t:type="Loop" t:source="allCourses" t:value="allCourse">-->
-<!--						<t:pagelink page="data/visualization" context="allCourse.id">${allCourse.courseDescription}</t:pagelink>-->
-<!--					</li>-->
-<!--					-->
-<!--				-->
-<!--				</ul>-->
-<!--              </li>-->
 			  <li><t:pagelink class="" page="data/dashboard">Dashboard</t:pagelink></li>
 			  <li><t:pagelink class="" page="data/explorer">${message:myCourses}</t:pagelink></li>
-
               <li class="dropdown">	
               		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
               			${message:myFavorites} 
               			<b class="caret"></b>
               		</a>
-	              	<ul class="dropdown-menu">
-						<li t:type="Loop" t:source="favoriteCourses" t:value="favoriteCourse">
-							<t:pagelink page="data/explorer" context="favoriteCourse?.id">${favoriteCourse?.courseDescription}</t:pagelink>
-						</li>
-					
-					</ul>
+                  <ul class="dropdown-menu">
+                    <li t:type="Loop" t:source="favoriteCourses" t:value="favoriteCourse">
+                      <t:pagelink page="data/explorer" context="favoriteCourse?.id">${favoriteCourse?.courseDescription}</t:pagelink>
+                    </li>
+                  
+                  </ul>
               </li>
-         
+         	  
               
             </ul> 
             
@@ -122,14 +97,16 @@
     		  
 
 
-    		  
+    		
+            <ul class="nav pull-right">  
            	<!-- Searchfield-->
-            <form t:type="Form" t:id="searchForm" class="navbar-search pull-right">
-	            <div class="input-append">
-					<a t:type="LinkSubmit" t:id="searchCourses" class="btn btn-inverse pull-right" style="margin-top:0px"><i class="icon-search icon-white"></i></a>		
-	      			<input id="searchStringCourse" t:type="TextField" t:id="searchStringCourse" class="search-query pull-right" placeholder="${message:search}"></input>
+            <form t:type="Form" t:id="searchForm" class="navbar-search">
+	            <div class="input-prepend">
+					<a t:type="LinkSubmit" t:id="searchCourses" class="btn btn-inverse" style="margin-top:0px"><i class="icon-search icon-white"></i></a>		
+	      			<input id="searchStringCourse" t:type="TextField" t:id="searchStringCourse" class="search-query" placeholder="${message:search}"></input>
 	      		</div>
-    		</form> 
+    		</form>
+			</ul>
              
            
           </div><!--/.nav-collapse -->
