@@ -22,6 +22,7 @@ import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListStringObject;
+import de.lemo.apps.restws.proxies.service.ServiceConnectorManager;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
 import de.lemo.apps.restws.proxies.service.ServiceLoginAuthentification;
 import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
@@ -39,6 +40,8 @@ public class InitialisationImpl implements Initialisation {
 	private static final String SERVICE_RATED_OBJECTS_URL = SERVICE_PREFIX_URL + "/ratedobjects";
 	private static final String SERVICE_AUTH_URL = SERVICE_PREFIX_URL + "/authentification";
 	private static final String SERVICE_USER_COURSES_URL = SERVICE_PREFIX_URL + "/teachercourses";
+	private static final String SERVICE_CONNECTOR_MANAGER = SERVICE_PREFIX_URL + "/connectors";
+
 
 	private ServiceCourseDetails courseDetailsList =
 			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
@@ -57,7 +60,11 @@ public class InitialisationImpl implements Initialisation {
 
 	private ServiceUserInformation userInfo =
 			ProxyFactory.create(ServiceUserInformation.class, InitialisationImpl.SERVICE_PREFIX_URL);
+	
+	private ServiceConnectorManager connectorManager =
+			ProxyFactory.create(ServiceConnectorManager.class, InitialisationImpl.SERVICE_CONNECTOR_MANAGER);
 
+	
 	private Logger logger;
 
 	public InitialisationImpl(Logger logger) {
