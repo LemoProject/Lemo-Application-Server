@@ -18,7 +18,8 @@ public interface Analysis {
 			Long starttime,
 			Long endtime,
 			Long resolution,
-			List<String> resourceTypes);
+			List<String> resourceTypes,
+			List<Long> gender);
 
 	ResultListResourceRequestInfo computeCourseActivityExtended(
 			List<Long> courses,

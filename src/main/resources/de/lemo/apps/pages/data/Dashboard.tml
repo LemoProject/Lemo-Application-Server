@@ -90,7 +90,7 @@
 		    					<br />
 		    					<p><b>${message:avgRequests}:</b> <br />  ${getAverageRequest(usageAnalysisWidget1)}<br /> </p> 		    					
 		    					<br />
-		    					<t:pagelink page="viz/visualizationNVD3" context="${widgetCourse1?.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>		    					
+		    					<t:pagelink id="widget1details" page="viz/visualizationNVD3" context="${widgetCourse1?.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>		    					
 		    				</div>
 		    				</div>
 

@@ -13,19 +13,20 @@ public class LoginTest extends SeleniumTestCase {
 
 	@Test
 	public void loginUser() {
+		
 		this.open("start");
 		this.waitForPageToLoad("15");
 		// waitForCondition(getTitle(), "15");
-		this.assertTextPresent("LeMo - Learnprocess Monitoring");
+		this.assertTextPresent("LeMo - Monitoring of Learning processes");
 
 		this.captureScreenshot("/Users/johndoe/git/apps/apps/target/surefire-reports/Selenium Tests Suite/StartPage.png");
 
-		this.clickAndWait("Sign in");
+		this.clickAndWait("signin");
 		this.assertTextPresent("Login or password not correct");
 
-		this.type("username", "johndoe");
-		this.type("password", "john");
-		this.clickAndWait("Sign in");
+		this.type("username", "user");
+		this.type("password", "lemolemo");
+		this.clickAndWait("signin");
 
 		this.assertTitle("LeMo | Initialization");
 

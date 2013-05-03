@@ -307,7 +307,7 @@ public class VisualizationHeatmap {
 		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, types);
+				beginStamp, endStamp, (long) this.resolutionComputed, types, null);
 		
 
 		final JSONArray graphParentArray = new JSONArray();

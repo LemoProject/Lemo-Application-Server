@@ -27,5 +27,6 @@ public interface QCourseActivity {
 			@FormParam(MetaParam.START_TIME) Long starttime,
 			@FormParam(MetaParam.END_TIME) Long endtime,
 			@FormParam(MetaParam.RESOLUTION) Long resolution,
-			@FormParam(MetaParam.TYPES) List<String> resourceTypes);
+			@FormParam(MetaParam.TYPES) List<String> resourceTypes,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 }

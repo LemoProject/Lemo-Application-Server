@@ -114,13 +114,13 @@ public class CourseDAOImpl implements CourseDAO {
 			}
 		}
 		Criteria criteria = this.session.createCriteria(Course.class);
+
 		Junction res = Restrictions.disjunction();
 		for (String s : searchStrings) {
 			res.add(Restrictions.like("courseName", "%"+s+"%"));
 			res.add(Restrictions.like("courseDescription", "%"+s+"%"));
 		}
-		if (searchLongs.size()>0) res
-		.add(Restrictions.in("courseId", searchLongs));
+		if(!searchLongs.isEmpty()) res.add(Restrictions.in("courseId", searchLongs));
 		criteria.add(res);
 		final List<Course> results = criteria.list();
 		logger.info("SIZE::::::::" + results.size());
