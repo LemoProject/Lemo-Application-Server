@@ -43,6 +43,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -154,6 +155,11 @@ public class VisualizationNVD3 {
 	@Property(write = false)
 	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
 			EResourceType.class);
+	
+	// Value Encoder for gender multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+				GenderEnum.class);
 
 	@Property(write = false)
 	@Retain
@@ -168,9 +174,18 @@ public class VisualizationNVD3 {
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
+	// Select Model for gender multi-select component
+	@Property(write = false)
+	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
+
+	
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
+	
+	@Property
+	@Persist
+	private List<GenderEnum> selectedGender;
 
 	@Inject
 	@Property
@@ -248,6 +263,7 @@ public class VisualizationNVD3 {
 		this.selectedUsers = null;
 		this.selectedCourses = null;
 		this.selectedActivities = null;
+		this.selectedGender = null;
 //		this.beginDate = null;
 //		this.endDate = null;
 	}
@@ -289,6 +305,14 @@ public class VisualizationNVD3 {
 				types.add(resourceType.name().toUpperCase());
 			}
 		}
+		
+		ArrayList<Long> gender = null;
+		if ((this.selectedGender != null) && !this.selectedGender.isEmpty()) {
+			gender = new ArrayList<Long>();
+			for (final GenderEnum gen : this.selectedGender) {
+				gender.add(gen.value());
+			}
+		}
 
 		Long endStamp = 0L;
 		Long beginStamp = 0L;
@@ -307,7 +331,7 @@ public class VisualizationNVD3 {
 		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, types);
+				beginStamp, endStamp, (long) this.resolutionComputed, types, gender);
 
 		final JSONArray graphParentArray = new JSONArray();
 		JSONObject graphDataObject = new JSONObject();
@@ -413,7 +437,7 @@ public class VisualizationNVD3 {
 		this.logger.debug("Selected activities: " + this.selectedActivities);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
-
+	// messages.get("customDateFormat")
 	public String getLocalizedDate(final Date inputDate) {
 		final SimpleDateFormat dfDate = new SimpleDateFormat("MMM dd, yy", this.currentlocale);
 		return dfDate.format(inputDate);

@@ -73,11 +73,11 @@
 <!--				-->
 <!--				</ul>-->
 <!--              </li>-->
-			  <li><t:pagelink class="" page="data/dashboard">Dashboard</t:pagelink></li>
-			  <li><t:pagelink class="" page="data/explorer">${message:myCourses}</t:pagelink></li>
+			  <li><t:pagelink id="dashboard" class="" page="data/dashboard">Dashboard</t:pagelink></li>
+			  <li><t:pagelink id="mycourses" class="" page="data/explorer">${message:myCourses}</t:pagelink></li>
 
               <li class="dropdown">	
-              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              		<a href="#" id="myfavorites" class="dropdown-toggle" data-toggle="dropdown">
               			${message:myFavorites} 
               			<b class="caret"></b>
               		</a>
@@ -96,7 +96,7 @@
             <ul class="nav pull-right">
               <t:security.user>
               	<li class="divider-vertical pull-right"></li>
-                <li><t:actionlink t:id="logoutlink" id="logoutLink">${message:logout}</t:actionlink></li>
+                <li><t:actionlink t:id="logoutlink" id="logout">${message:logout}</t:actionlink></li>
 			  </t:security.user>  
 			</ul>
 			

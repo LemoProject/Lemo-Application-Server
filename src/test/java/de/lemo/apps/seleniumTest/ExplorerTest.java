@@ -9,9 +9,9 @@ public class ExplorerTest extends SeleniumTestCase {
 	public void explorer() {
 
 		this.open("start");
-		this.type("username", "johndoe");
-		this.type("password", "john");
-		this.clickAndWait("Sign in");
+		this.type("username", "user");
+		this.type("password", "lemolemo");
+		this.clickAndWait("signin");
 
 		this.assertTitle("LeMo | Initialization");
 

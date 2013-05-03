@@ -17,7 +17,7 @@
 		<div class="span3">
 			<div class="thumbnail">
     		
-				<t:grid class="table" source="courses" model="coursesGridModel" row="course" rowsPerPage="8" t:inPlace="true">
+				<t:grid class="table" source="courses" model="coursesGridModel" row="course" rowsPerPage="12" t:inPlace="true">
 		            <p:courseNameCell>
 		            	<t:actionlink t:id="show" context="course.id" zone="coursezone">${course?.courseDescription}</t:actionlink>		                
 		            </p:courseNameCell>

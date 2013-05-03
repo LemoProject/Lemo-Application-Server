@@ -21,11 +21,11 @@
 			    &nbsp;
 			    <input t:type="PasswordField" t:id="password" class="input-small" placeholder="${message:password}" />
 			    <br /> <br />
-			    <div class="pull-left">
-			    	<a href="#" class="pull-left">${message:signUpNow}</a>
-			    </div>
+<!-- 			    <div class="pull-left"> -->
+<!-- 			    	<a href="#" class="pull-left">${message:signUpNow}</a> -->
+<!-- 			    </div> -->
 			    <div class="pull-right">
-					<button type="submit" class="btn">${message:signIn}</button>
+					<button type="submit" id="signin" class="btn">${message:signIn}</button>
 			    </div>
 		    </form>
     	</div>

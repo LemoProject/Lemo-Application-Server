@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import de.lemo.apps.entities.Course;
@@ -111,11 +112,14 @@ public class CourseDAOImpl implements CourseDAO {
 			}
 		}
 		Criteria criteria = this.session.createCriteria(Course.class);
-		criteria.add(Restrictions.disjunction()
+		
+		Junction res = Restrictions.disjunction()
 				.add(Restrictions.in("courseName", searchStrings))
-				.add(Restrictions.in("courseId", searchLongs))
-				.add(Restrictions.in("courseDescription", searchStrings))
-		);
+				.add(Restrictions.in("courseDescription", searchStrings));
+				
+		if(!searchLongs.isEmpty()) res.add(Restrictions.in("courseId", searchLongs));
+		criteria.add(res);
+		
 		final List<Course> results = criteria.list();
 		logger.info("SIZE::::::::" + results.size());
 		if (results.size() == 0) {

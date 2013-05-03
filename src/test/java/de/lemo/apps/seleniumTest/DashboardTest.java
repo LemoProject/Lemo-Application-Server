@@ -14,9 +14,9 @@ public class DashboardTest extends SeleniumTestCase {
 	@Test
 	public void dashboard() {
 		this.open("start");
-		this.type("username", "johndoe");
-		this.type("password", "john");
-		this.clickAndWait("Sign in");
+		this.type("username", "user");
+		this.type("password", "lemolemo");
+		this.clickAndWait("signin");
 
 		this.assertTitle("LeMo | Initialization");
 
@@ -31,8 +31,17 @@ public class DashboardTest extends SeleniumTestCase {
 
 		this.captureScreenshot("/Users/johndoe/git/apps/apps/target/surefire-reports/Selenium Tests Suite/DashboardPage.png");
 
-		this.clickAndWait("My courses");
+		//goto explorer page and check for content
+		this.clickAndWait("mycourses");
 		this.assertTitle("LeMo | Explorer");
-		this.assertTextPresent("Summary");
+		this.assertTextPresent("Overview");
+		this.assertTextPresent("Last month");
+		this.assertTextPresent("Overall");
+		this.assertTextPresent("Settings");
+		this.assertTextPresent("Please choose your analysis:");
+		
+		//logging out 
+		this.clickAndWait("logout");
+		this.assertTextPresent("LeMo - Monitoring of Learning processes");
 	}
 }

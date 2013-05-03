@@ -307,7 +307,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			}
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
 			final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courses, null,
-					beginStamp, endStamp, resolution, resourceTypesNames);
+					beginStamp, endStamp, resolution, resourceTypesNames, null);
 			ResultListLongObject uniqueResult = null;
 
 			if (results != null) {
