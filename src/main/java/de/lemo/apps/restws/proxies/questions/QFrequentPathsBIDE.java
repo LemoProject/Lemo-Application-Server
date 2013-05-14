@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
@@ -20,7 +21,7 @@ public interface QFrequentPathsBIDE {
 	@POST
 	@Path("frequentPaths")
 	@Produces(MediaType.APPLICATION_JSON)
-	String compute(
+	Response compute(
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courseIds,
 			@FormParam(MetaParam.USER_IDS) List<Long> userIds,
 			@FormParam(MetaParam.TYPES) List<String> types,

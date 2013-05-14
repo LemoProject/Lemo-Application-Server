@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.core.Response;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -268,10 +269,15 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				String result = qFrequentPathBide.compute(courseIds, userIds, types, minLength,
+				Response response = qFrequentPathBide.compute(courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime);
 
-				return result;
+				if (response.getStatus() == 2) {
+					// return the URI of the result for polling
+					// TODO looks unsecure, even though it should always be an escaped url
+					return "{ \"resultPollingUrl\" : " + response.getEntity() + "}";
+				}
+				return "{}";
 
 			}
 
