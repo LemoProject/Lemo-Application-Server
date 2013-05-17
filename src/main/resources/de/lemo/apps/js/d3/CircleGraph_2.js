@@ -35,8 +35,8 @@ var nodes = d3custom.nodes,
   
  
   
- var  w = 960,
-  h = 800,
+ var  w = 700,
+  h = 700,
   rx = w / 2,
   ry = h / 2,
   m0,
@@ -79,9 +79,10 @@ var line = d3.svg.line.radial()
   .angle(function(d) { return d.x / 180 * Math.PI; });
 
 //Chrome 15 bug: &lt;http://code.google.com/p/chromium/issues/detail?id=98951&gt;
-var div = d3.select("#viz");
+var div = d3.select('#viz');
 
-var svg = div.append("svg:svg")
+var svg = div.append('svg:svg')
+.attr("id","vizsvg")
 .attr("width", w)
 .attr("height", h)
 .append("svg:g")
@@ -304,12 +305,12 @@ function sortBy(d) {
 	nodes.sort(sortfunction4);
 	}
  
- $('#viz').remove();
+ $('#vizsvg').remove();
  
- div = d3.select("body").insert("div")
- .attr("id","viz");
+ div = d3.select("#viz");
  
  svg = div.append("svg:svg")
+.attr("id","vizsvg")
 .attr("width", w)
 .attr("height", h)
 .append("svg:g")

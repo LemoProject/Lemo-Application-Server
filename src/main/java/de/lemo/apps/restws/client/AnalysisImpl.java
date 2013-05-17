@@ -10,6 +10,9 @@ import java.util.Map;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpConnectionParams;
+
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ProxyFactory;
@@ -52,7 +55,21 @@ public class AnalysisImpl implements Analysis {
 
 	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
 	// TODO set better pool size
+	
 	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
+	
+	
+	private HttpParams initHttpParams(){
+		
+		HttpParams params = this.httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		HttpConnectionParams.setSoTimeout(params, 20000);
+		
+		return params ;
+	}
+	
+	final HttpParams params = initHttpParams();
+	
 	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
 	private QCourseActivityString qcourseActivity =

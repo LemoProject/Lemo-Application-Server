@@ -56,8 +56,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTime")
-@Import(library = { "../../js/d3/nvd3_custom_Usage_Chart_Viewfinder.js" })
-public class VisualizationNVD3 {
+@Import(library = { "../../js/d3/ActivityTime.js" })
+public class ActivityTime {
 	
 	private static final int THOU = 1000;
 	private static final  int RESOLUTION_MAX = 500;

@@ -70,7 +70,7 @@
   			              		
         							<label class="control-label">${message:begin}:</label>
       						   		<div class="controls">
-                            			<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                            			<input t:id="beginDate" class="input-small" t:value="beginDate"  t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
       						    			
       						    	</div>
         						</div>
@@ -78,7 +78,7 @@
         							
         							<label class="control-label">${message:end}:</label>
         						    <div class="controls">
-                            			<input t:id="endDate" class="input-small" t:value="endDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                            			<input t:id="endDate" class="input-small" t:value="endDate"  t:format="MMM dd, yyyy" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
   			                  		</div>
   			                	</div>
   			              	</div>

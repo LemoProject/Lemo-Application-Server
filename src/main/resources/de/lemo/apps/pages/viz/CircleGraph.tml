@@ -2,6 +2,7 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
   
+  
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
@@ -16,11 +17,11 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        <div id="viz">
-        	
-        	<!-- d3js visualization -->
-        
-        </div>
+	        <div id="viz">
+	        	
+	        	<!-- d3js visualization -->
+	        
+	        </div>
     	</div>
       
     	<div class="span3">

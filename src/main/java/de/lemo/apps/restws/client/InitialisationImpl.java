@@ -8,6 +8,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
@@ -77,6 +79,20 @@ public class InitialisationImpl implements Initialisation {
 	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
 	// TODO set better pool size
 	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
+	
+	
+	private HttpParams initHttpParams(){
+		
+		HttpParams params = this.httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		HttpConnectionParams.setSoTimeout(params, 20000);
+		
+		return params ;
+	}
+	
+	final HttpParams params = initHttpParams();
+	
+	
 	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
 	public Boolean defaultConnectionCheck() throws RestServiceCommunicationException {

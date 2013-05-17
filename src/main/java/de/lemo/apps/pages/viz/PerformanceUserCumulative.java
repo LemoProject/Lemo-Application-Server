@@ -57,9 +57,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  * Visualisation for the cumulative performance
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visPerformanceTitle")
-@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart.js" })
-public class VisualizationPerformanceUserTestCumulative {
+@BreadCrumb(titleKey = "visPerformanceUserCumulative")
+@Import(library = { "../../js/d3/BoxPlot.js" })
+public class PerformanceUserCumulative {
 
 	private static final int THOU = 1000;
 	

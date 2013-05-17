@@ -58,8 +58,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformanceCumulative")
-@Import(library = { "../../js/d3/d3_custom_BoxPlot_Chart.js" })
-public class VisualizationPerformanceCumulative {
+@Import(library = { "../../js/d3/BoxPlot.js" })
+public class PerformanceCumulative {
 
 	private static final int THOU = 1000;
 	

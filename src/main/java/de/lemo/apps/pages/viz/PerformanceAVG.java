@@ -27,7 +27,6 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -38,7 +37,6 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
-import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
@@ -49,17 +47,15 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
-import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
- * Visualisation for the performance histogram
+ * Visualisation for the performance histogram with avg data
  */
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visPerformance")
-@Import(library = { "../../js/d3/nvd3_custom_Histogram.js" })
-public class VisualizationPerformanceHistogram {
-	private static final int THOU = 1000;
+@BreadCrumb(titleKey = "visPerformanceAvg")
+@Import(library = { "../../js/d3/Performance.js" })
+public class PerformanceAVG {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -96,12 +92,6 @@ public class VisualizationPerformanceHistogram {
 
 	@Inject
 	private TypeCoercer coercer;
-	
-	@Inject
-	SelectModelFactory selectModelFactory;
-	
-	@Property
-	private SelectModel quizSelectModel;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -161,11 +151,7 @@ public class VisualizationPerformanceHistogram {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder;
-	
-	@Inject
-	@Property
-	private QuizValueEncoder quizEncoder;
+	private LongValueEncoder userIdEncoder, quizEncoder;
 
 	@Property
 	@Persist
@@ -179,7 +165,7 @@ public class VisualizationPerformanceHistogram {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -209,31 +195,6 @@ public class VisualizationPerformanceHistogram {
 	public Course onPassivate() {
 		return this.course;
 	}
-	
-	void setupRender() {
-		this.logger.debug(" ----- Bin in Setup Render");
-
-		final ArrayList<Long> courseList = new ArrayList<Long>();
-		courseList.add(this.course.getCourseId());
-
-		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
-		} else {
-			this.selectedUsers = null;
-			this.userIds = this.getUsers();
-		}
-		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
-		} else {
-			this.selectedUsers = null;
-			this.userIds = this.getUsers();
-		}
-		final Calendar beginCal = Calendar.getInstance();
-		final Calendar endCal = Calendar.getInstance();
-		beginCal.setTime(this.beginDate);
-		endCal.setTime(this.endDate);
-		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-	}
 
 	void cleanupRender() {
 		this.customizeForm.clearErrors();
@@ -247,7 +208,7 @@ public class VisualizationPerformanceHistogram {
 		this.selectedCourses = null;
 		this.selectedActivities = null;
 	}
-
+	
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
@@ -266,30 +227,22 @@ public class VisualizationPerformanceHistogram {
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 		final List<String> quizzesTitles = new ArrayList<String>();
-		final List<Quiz> quizzesList = new ArrayList<Quiz>();
-		
-		
+
 		if ((quizList != null) && (quizList.getElements() != null)) {
-			this.logger.debug(" QuizList Elements "+quizList.getElements().toString());
+			this.logger.debug(quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
 			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
 				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-				quizzesList.add(new Quiz(quizStringList.get(x + 2),combinedQuizId));
 				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
-				this.logger.debug("Quiz item:"+combinedQuizId+ " -- " + quizStringList.get(x + 2));
 			}
-			
-			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
 		} else {
 			this.logger.debug("No rated Objetcs found");
-			}
-		
-		
-		
+		}
 	}
+
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
 		return this.courseValueEncoder.create(Course.class);
@@ -307,13 +260,13 @@ public class VisualizationPerformanceHistogram {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
 			if (this.endDate != null) {
-				endStamp = new Long(this.endDate.getTime() / THOU);
+				endStamp = new Long(this.endDate.getTime() / 1000);
 			}
 
 			if (this.beginDate != null) {
-				beginStamp = new Long(this.beginDate.getTime() / THOU);
+				beginStamp = new Long(this.beginDate.getTime() / 1000);
 			}
-			this.resolution = 20;
+			this.resolution = 100;
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
 			courses.add(this.courseId);
@@ -324,6 +277,7 @@ public class VisualizationPerformanceHistogram {
 			}
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
+
 
 			List<Long> courseList = new ArrayList<Long>();
 			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
@@ -363,10 +317,9 @@ public class VisualizationPerformanceHistogram {
 			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
 				quizzesList = this.selectedQuizzes;
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
-				logger.debug("Adding QuizzesMap");
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
-			} 
+			}
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
@@ -374,47 +327,62 @@ public class VisualizationPerformanceHistogram {
 					(long) this.resolution, beginStamp, endStamp);
 			this.logger.debug("results for performance histogram:" + results);
 
-			final List<List<Long>> preparedResults = CollectionFactory.newList();
+			final List<Long> preparedResults = CollectionFactory.newList();
 
 			if (results != null) {
 				Integer splitCounter = 0;
 				Integer quizCounter = 0;
+				Long avgCounter = 0L;
+				Long avgAmount = 0L;
 				List<Long> currentList = new ArrayList<Long>();
 				for (Integer i = 0; i < results.size(); i++) {
 					currentList.add(results.get(i));
+					avgAmount = avgAmount + results.get(i) * splitCounter;
+					if ((results.get(i) != null) && (results.get(i) > 0)) {
+						avgCounter = avgCounter + results.get(i);
+					}
+
 					splitCounter++;
 					if (splitCounter == this.resolution) {
+
+						final List<Long> avgResult = new ArrayList<Long>();
+						if (avgCounter != 0) {
+							preparedResults.add(avgAmount / avgCounter);
+							this.logger.debug("Result for " + quizzesMap.get(quizzesList.get(quizCounter)) + " : "
+									+ avgAmount / avgCounter);
+						} else {
+							preparedResults.add(0L);
+						}
 						quizCounter++;
 						splitCounter = 0;
-						preparedResults.add(currentList);
+						avgAmount = 0L;
+						avgCounter = 0L;
 						currentList = new ArrayList<Long>();
 					}
 
 				}
 			}
-			
+
 			final JSONArray graphParentArray = new JSONArray();
+			final JSONObject graphDataObject = new JSONObject();
+			final JSONArray graphDataValues = new JSONArray();
+			final List<Long> tmpResults = preparedResults;
 
-			for (Integer z = 0; z < preparedResults.size(); z++) {
-				final JSONObject graphDataObject = new JSONObject();
-				final JSONArray graphDataValues = new JSONArray();
-				final List<Long> tmpResults = preparedResults.get(z);
+			if ((tmpResults != null) && (tmpResults.size() > 0)) {
+				for (Integer j = 0; j < tmpResults.size(); j++) {
+					final JSONObject graphValue = new JSONObject();
 
-				if ((tmpResults != null) && (tmpResults.size() > 0)) {
-					for (Integer j = 0; j < tmpResults.size(); j++) {
-						final JSONObject graphValue = new JSONObject();
+					graphValue.put("x", quizzesMap.get(quizzesList.get(j)));
+					graphValue.put("y", tmpResults.get(j));
 
-						graphValue.put("x", (100 / this.resolution) * j + "-" + (100 / this.resolution) * (j + 1) + "%");
-						graphValue.put("y", tmpResults.get(j));
-
-						graphDataValues.put(graphValue);
-					}
+					graphDataValues.put(graphValue);
 				}
-
-				graphDataObject.put("values", graphDataValues);
-				graphDataObject.put("key", quizzesMap.get(quizzesList.get(z)));
-				graphParentArray.put(graphDataObject);
 			}
+
+			graphDataObject.put("values", graphDataValues);
+			graphDataObject.put("key", "Performance");
+
+			graphParentArray.put(graphDataObject);
 
 			this.logger.debug(graphParentArray.toString());
 
@@ -423,7 +391,30 @@ public class VisualizationPerformanceHistogram {
 		return "";
 	}
 
-	
+	void setupRender() {
+		this.logger.debug(" ----- Bin in Setup Render");
+
+		final ArrayList<Long> courseList = new ArrayList<Long>();
+		courseList.add(this.course.getCourseId());
+
+		if (this.endDate == null) {
+			this.endDate = this.course.getLastRequestDate();
+		} else {
+			this.selectedUsers = null;
+			this.userIds = this.getUsers();
+		}
+		if (this.beginDate == null) {
+			this.beginDate = this.course.getFirstRequestDate();
+		} else {
+			this.selectedUsers = null;
+			this.userIds = this.getUsers();
+		}
+		final Calendar beginCal = Calendar.getInstance();
+		final Calendar endCal = Calendar.getInstance();
+		beginCal.setTime(this.beginDate);
+		endCal.setTime(this.endDate);
+		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
+	}
 
 	@AfterRender
 	public void afterRender() {

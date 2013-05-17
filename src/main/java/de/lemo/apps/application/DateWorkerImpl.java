@@ -109,7 +109,7 @@ public class DateWorkerImpl implements DateWorker {
 				", buttonImage: '" + this.calendarIcon.toClientURL() + "'" +
 				", buttonImageOnly: false" +
 				", showButtonPanel: true" +
-				", dateFormat: '"+ this.messages.get("customDateFormat") +"'"+
+				", dateFormat: '"+ this.messages.get("customDateFormatDatePicker") +"'"+
 				", monthNamesShort: " + monthNamesShort +
 				", showOn: 'both'" +
 				"}");
