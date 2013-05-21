@@ -10,10 +10,7 @@
 	  if(!data || !data[0]) {
 	    	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
 	    	return;
-	  }
-	  
-	  
-	  
+	  }  
 	  
 	  var  	dataRequests = data[0].values;
 

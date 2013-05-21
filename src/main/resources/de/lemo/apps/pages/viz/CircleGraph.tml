@@ -20,7 +20,14 @@
 	        <div id="viz">
 	        	
 	        	<!-- d3js visualization -->
-	        
+	        	
+			   <div><input class="btn btn-primary" type="button" value="sort by name (alphabetical)" onclick="sortBy(2)"></input></div>
+			   <br/>
+			   <div><input class="btn btn-primary" type="button" value="sort by amount of links" onclick="sortBy(1)"></input></div>
+			   <br/>
+			   <div><input class="btn btn-primary" type="button" value="sort by amount of clicks" onclick="sortBy(3)"></input></div>
+			   <br/>
+			   <div><input class="btn btn-primary" type="button" value="sort by type" onclick="sortBy(4)"></input></div>
 	        </div>
     	</div>
       
