@@ -38,10 +38,13 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.SCConnector;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
@@ -58,90 +61,86 @@ public class DashboardAdmin {
 	private Logger logger;
 
 	@Inject
-	private Locale currentLocale;
-
-	@Inject
-	private DateWorker dateWorker;
-
-	@Inject
-	private StatisticWorker statisticWorker;
-
-	@Inject
-	private AnalysisWorker analysisWorker;
-
-	@Inject
-	@Path("../../images/icons/glyphicons_019_cogwheel.png")
-	@Property
-	private Asset wheel;
-
-	@Inject
-	private CourseDAO courseDAO;
-
-	@Inject
 	private UserDAO userDAO;
 
-	@Inject
-	private UserWorker userWorker;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
 
-	@Inject
-	private SecurityService securityService;
-
-	@Inject
-	private ApplicationStateManager applicationStateManager;
-	
 	@Inject 
 	private BeanModelSource beanModelSource;
 	
 	@Inject
     private Messages messages;
-	
-	@Inject
-	private HttpServletRequest request;
+
 
 	@Inject
-	private Initialisation init;
-
-	@Inject
-	private Analysis analysis;
-	
-
-	@Persist("Flash")
-	private UsageStatisticsContainer usageStatistics;
+	private Information info;
 
 	
-	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-	}
+//	void onPrepareForRender() {
+//		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+//	}
 
 	@Property
 	@Persist
 	private Integer count;
 	
+	@SuppressWarnings("unused")
 	@Property
 	private User userItem;
+	
+	@SuppressWarnings("unused")
+	@Property
+	private SCConnector connectorItem;
+
 
 	@SuppressWarnings("unchecked")
+	@Property
 	private final BeanModel userModel;
     {
     	userModel = beanModelSource.createEditModel(User.class, messages);
+    	userModel.include("username","fullname","email","accountlocked");
+    	userModel.reorder("username","fullname","email");
     	userModel.add("view",null);
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+	@Property
+	private final BeanModel connectorModel;
+    {
+    	connectorModel = beanModelSource.createDisplayModel(SCConnector.class, messages);
+    	connectorModel.include("name","platformId","platformName");
+    	connectorModel.reorder("name","platformId","platformName");
+    	connectorModel.add("view",null);
     }
 	
 	
-	public List<Course> getMyCourses() {
-		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-	}
+//	public List<Course> getMyCourses() {
+//		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+//	}
 	
 	
-	public User getUser(){
-		return userDAO.getUser(this.request.getRemoteUser());
-	}
+//	public User getUser(){
+//		return userDAO.getUser(this.request.getRemoteUser());
+//	}
 	
 	public List<User> getAllUser(){
 		return userDAO.getAllUser();
+	}
+	
+	public List<SCConnector> getAllConnectors(){
+		try {
+			
+			List<SCConnector> connectorList = info.getConnectorList();
+			
+			return connectorList;
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<SCConnector>();
 	}
 	
 

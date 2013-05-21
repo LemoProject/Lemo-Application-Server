@@ -28,7 +28,9 @@
               imports.push(validString(nodes[links[j].target].name));
           }
         }
+        console.log("Node: "+nodes[i].name+" Type: "+nodes[i].type);
         data.push({"name":validString(nodes[i].name),"size":nodes[i].value,"imports":imports,"type":nodes[i].type});
+        console.log("NodeDATA: "+data[i].name+" TypeDATA: "+data[i].type);
       }
     
    var  w = 700,
@@ -299,7 +301,9 @@
     var arcs = svg.selectAll("path")
       .data(nodes)
       .enter().append("path")
-      .attr("fill",function(d,i) { return color(d.type);})
+      .attr("fill",function(d,i) { 
+    	  console.log("Graph Node "+i+" Name:"+d.name+" Type: "+d.type);
+    	  return color(d.type);})
       .attr("d",arc)
       .attr("class","typeArc");;
       

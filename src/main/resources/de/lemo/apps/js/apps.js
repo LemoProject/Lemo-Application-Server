@@ -4,7 +4,9 @@ $(document).ready(function() {
   });
   
   function color(name) {
-     name=name.toLowerCase();
+	 if(name && name != null) {
+		  name=name.toLowerCase();
+	  } else return "#000";
      if (name == "resource")
        return "#ff8f1e ";
      else if (name == "course")

@@ -238,8 +238,13 @@ public class CircleGraph {
 			endStamp = new Long(this.endDate.getTime() / THOU);
 		}
 
-		return this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp,
+		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp,
 				endStamp);
+		
+		logger.debug(result);
+		
+		return result;
+		
 	}
 
 	void setupRender() {

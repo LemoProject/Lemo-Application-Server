@@ -1,14 +1,17 @@
 package de.lemo.apps.restws.entities;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class SCConnectorManagerState {
 
-	private EConnectorManagerState state;
+	private String state;
 	private SCConnector updatingConnector;
 
-	public SCConnectorManagerState(EConnectorManagerState state, SCConnector updatingConnector) {
+	public SCConnectorManagerState(){}
+	
+	public SCConnectorManagerState(String state, SCConnector updatingConnector) {
 		this.state = state;
 		this.updatingConnector = updatingConnector;
 	}
@@ -16,7 +19,8 @@ public class SCConnectorManagerState {
 	/**
 	 * @return the connectorState
 	 */
-	public EConnectorManagerState getState() {
+	@XmlElement(name = "state")
+	public String getState() {
 		return state;
 	}
 
@@ -24,13 +28,14 @@ public class SCConnectorManagerState {
 	 * @param state
 	 *            the state to set
 	 */
-	public void setState(EConnectorManagerState state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 
 	/**
 	 * @return the updatingConnector
 	 */
+	@XmlElement(name = "updatingConnector")
 	public SCConnector getUpdatingConnector() {
 		return updatingConnector;
 	}

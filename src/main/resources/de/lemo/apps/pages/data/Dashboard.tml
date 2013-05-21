@@ -14,41 +14,6 @@
 	</div>
 	
 	
-   <!-- <div class="alert alert-success">
-         <a class="close">&times;</a>
-       	 <h2>${message:welcomeDashboard}</h2>    	 
-    </div>
-	-->
-
-<!--	<div class="row-fluid">-->
-<!--		 <article>-->
-<!--		 	<section>-->
-<!--						<header>-->
-<!--							<h3>Half width columns.</h3>-->
-<!--						</header>-->
-<!--					-->
-<!--						<section class="column half">-->
-<!--							<img class="icon" src="img/icons/abstract10.gif" alt="icon" />-->
-<!--							<h5>1/2 Width column</h5>-->
-<!--							<p>Maecenas ultrices risus et nisl tempor vitae vestibulum arcu molestie. Proin odio risus, eleifend id auctor ut, pretium a dolor. Maecenas faucibus quam vitae erat facilisis porttitor. Aenean risus ligula, dictum sit amet elementum sit amet, dictum ut leo. Nunc convallis, lacus a lobortis ultrices, odio dui mollis mauris, a consequat dolor augue nec nulla. </p>-->
-<!--						</section>-->
-<!--					-->
-<!--						<section class="column half">-->
-<!--							<img class="icon" src="img/icons/arrow.gif" alt="icon" />-->
-<!--							<h5>1/2 Width column</h5>-->
-<!--							<p>Nunc convallis, lacus a lobortis ultrices, odio dui mollis mauris, a consequat dolor augue nec nulla. Vestibulum congue feugiat turpis, id sagittis orci aliquam sit amet. Nunc diam enim, hendrerit a viverra eu, dapibus ut lectus. Sed ullamcorper metus vel est cursus sagittis.</p>-->
-<!--						</section>-->
-<!--					-->
-<!--						<hr />-->
-<!--			</section>-->
-<!--		 </article>-->
-<!--					 End section with half width columns -->
-<!-- 	</div>-->
-
-<!--	<div id="draggable">DASHBOARD-Server-Starttime: ${starttime} </div>-->
-<!--	<div id="draggable2">Drag me too: ${firstquestion}</div>-->
-	
-	
 <!--	<div t:type='zone' t:id="refreshZone" t:mixins='zoneRefresh' t:period='1'>Anything inside </div>-->
 	
  	<div class="row-fluid">
@@ -145,26 +110,8 @@
 					</div>
 				</div>
 				
-			<!--	<img src="http://placehold.it/400x350" alt="" />-->	
 			</div>
    		</div>
-<!--   		<div class="span2">-->
-<!--   		  <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#demo">-->
-<!--    		${message:widgetManager}-->
-<!--    		<span class="caret"></span>-->
-<!--    	</button>-->
-<!--     -->
-<!--    	<div id="demo" class="collapse in"> blub </div>-->
-<!--    	<div class="thumbnail">-->
-<!--    		<div class="tabbable">-->
-<!--					<ul class="nav nav-tabs">-->
-<!--						<li class="active"><a href="#" data-toggle="tab">Dock</a></li>-->
-<!--					</ul>-->
-<!--		    	</div>-->
-<!--			<br />-->
-<!--			<img src="http://placehold.it/150x250" alt="" />-->
-<!--		</div>-->
-<!--   		</div>-->
  
     </div>
     </div>
