@@ -13,28 +13,6 @@
   	    root;
   
     var startDistance = 200;
-
-    // function for unified colors in all visualizations
-	  function customColor(name) {
-		  if (name=="Resource")
-		  return "#ff8f1e ";
-		  else if (name=="Course")
-		  return "#1f77b4";
-		  else if (name=="Forum")
-		  return "#2ca02c";
-		  else if (name=="Question")
-		  return "#9467bd";
-		  else if (name=="Quiz")
-		  return "#d62728";
-		  else if (name=="Assignment")
-		  return "#8c564b";
-		  else if (name=="Scorm")
-		  return "#7f7f7f";
-		  else if (name=="Wiki")
-		  return "#17becf";
-		  return "#e377c2";
-		}
-
 	  
    var outer = d3.select("#viz").append("svg:svg")
       .attr("width", w)
@@ -293,7 +271,7 @@
 		 	    if(d.value>20) c = 20 + Math.sqrt(d.value);
 		 	    return (c > 100 ? 100 : c);
 		    })
-	      .style("fill", function(d) { return customColor(d.type); })
+	      .style("fill", function(d) { return color(d.type); })
 //        .on("click", function(d){
 //        
 //          // on click of a circle highlight the links to and from this circle

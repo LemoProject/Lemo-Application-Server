@@ -62,8 +62,7 @@ DIV.t-palette SELECT { width: 100px; }
 
 path.link {
   fill: none;
-  stroke: #666;
- 
+  stroke: #666; 
 }
 
 marker#click {
@@ -249,6 +248,10 @@ svg .box {}
 
 /* Circle Graph - BEGIN */
 
+path.linkCG {
+	stroke: #1f77b4;
+	fill:none;
+}
 
 path.arc {
   cursor: move;
