@@ -111,18 +111,19 @@ var nodes = cluster.nodes(packages.root(data)),
 
 
 var both = [];
+
 for (var i=0; i<links.length; i++) {
-for (var j=0; j<links.length; j++) {
-if (i!=j) {
-if (links[i].source.name == links[j].target.name && links[i].target.name == links[j].source.name) {
-//console.log(links[i].source.name+"/"+links[j].target.name);
-both.push(links[j]);
-}
-}
-}
+	for (var j=0; j<links.length; j++) {
+		if (i!=j) {
+			if (links[i].source.name == links[j].target.name && links[i].target.name == links[j].source.name) {
+			//console.log(links[i].source.name+"/"+links[j].target.name);
+			both.push(links[j]);
+			}
+		}
+	}
 }
 
-  function calculateAllLinks(d) {
+function calculateAllLinks(d) {
   amt = d.imports.length;
    for (var i=1; i<test.length; i++) {
     for (var j=0; j<test[i].imports.length; j++) {

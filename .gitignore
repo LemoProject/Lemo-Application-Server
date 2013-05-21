@@ -4,6 +4,7 @@
 /apps/target
 /bin
 .gitignore
+.classpath
 .gitignore~
 log.txt
 .project
