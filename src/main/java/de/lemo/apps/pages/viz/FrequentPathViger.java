@@ -44,8 +44,8 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visFrequentPathViger")
-@Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
-public class VisualizationFPViger {
+@Import(library = { "../../js/d3/FrequentPath.js" })
+public class FrequentPathViger {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;

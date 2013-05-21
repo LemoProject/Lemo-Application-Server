@@ -1,5 +1,6 @@
 package de.lemo.apps.pages.viz;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,30 +8,37 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
+import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
@@ -38,17 +46,17 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visFrequentPathBide")
-@Import(library = { "../../js/d3/d3_custom_DM_Vis_M3.js" })
-public class VisualizationFP {
+@BreadCrumb(titleKey = "visActivityLearningObject")
+@Import(library = { "../../js/d3/ActivityLearningObject.js" })
+public class ActivityLearningObject {
 
-	private static final int THOU = 1000;
-	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -57,6 +65,9 @@ public class VisualizationFP {
 
 	@Inject
 	private DateWorker dateWorker;
+
+	@Inject
+	private AnalysisWorker analysisWorker;
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
@@ -72,6 +83,12 @@ public class VisualizationFP {
 
 	@Inject
 	private Locale currentlocale;
+	
+	@Inject
+	private ComponentResources componentResources;
+
+	@Inject
+	private BeanModelSource beanModelSource;
 
 	@Inject
 	private Messages messages;
@@ -79,11 +96,11 @@ public class VisualizationFP {
 	@Inject
 	private TypeCoercer coercer;
 
-	@Inject
-	private Request request;
-
 	@Property
 	private BreadCrumbInfo breadCrumb;
+
+	@InjectComponent
+	private Zone formZone;
 
 	@Component(id = "customizeForm")
 	private Form customizeForm;
@@ -121,6 +138,14 @@ public class VisualizationFP {
 	@Property
 	@Persist
 	private List<Course> courses;
+	
+	
+	@Property
+	private ResourceRequestInfo resourceItem;
+
+	@Persist
+	private List<ResourceRequestInfo> showDetailsList;
+
 
 	// Value Encoder for activity multi-select component
 	@Property(write = false)
@@ -130,6 +155,17 @@ public class VisualizationFP {
 	// Select Model for activity multi-select component
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
+	
+	
+	@Property(write = false)
+	@Retain
+	private BeanModel resourceGridModel;
+	{
+		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
+				.getMessages());
+		this.resourceGridModel.include("resourcetype", "title", "requests");
+	}
+
 
 	@Property
 	@Persist
@@ -150,10 +186,34 @@ public class VisualizationFP {
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
+		if(beginDate == null)
+			this.beginDate = course.getFirstRequestDate();
+		if(endDate == null)
+			this.endDate = course.getLastRequestDate();
+		
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
+	}
+	
+	
+	
+	public List<ResourceRequestInfo> getResourceList() {
+		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
+
+		List<ResourceRequestInfo> resultList;
+
+		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
+			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+		} else {
+			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
+		}
+		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
+
+		return resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -163,26 +223,7 @@ public class VisualizationFP {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-			if (this.endDate == null) {
-				this.endDate = course.getLastRequestDate();
-			} else {
-				this.selectedUsers = null;
-				this.userIds = this.getUsers();
-			}
-
-			if (this.beginDate == null) {
-				this.beginDate = course.getFirstRequestDate();
-			} else {
-				this.selectedUsers = null;
-				this.userIds = this.getUsers();
-			}
-			final Calendar beginCal = Calendar.getInstance();
-			final Calendar endCal = Calendar.getInstance();
-			beginCal.setTime(this.beginDate);
-			endCal.setTime(this.endDate);
-			this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-			this.logger.debug("MinSup:" + this.minSup);
-
+			
 			return true;
 		} else {
 			return Explorer.class;
@@ -207,15 +248,11 @@ public class VisualizationFP {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedActivities = null;
-		this.minSup = 9;
-		this.pathLengthMin = null;
-		this.pathLengthMax = null;
 	}
 
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
-
 		this.userIds = this.getUsers();
 	}
 
@@ -223,126 +260,86 @@ public class VisualizationFP {
 		return this.courseValueEncoder.create(Course.class);
 	}
 
-	@Property
-	@Persist
-	Integer val;
-
-	@Property
-	Long max, min;
-
-	@Property
-	@Persist
-	Integer minSup;
-
-	@Property
-	@Persist
-	Long pathLengthMin;
-
-	@Property
-	@Persist
-	Long pathLengthMax;
-
-	@Property
-	private JSONObject minSupParams,
-					pathLengthParams,
-					minValue,
-					maxValue;
-
-	// Seting up paramaters for jquery sliders
-	@OnEvent(org.apache.tapestry5.EventConstants.ACTIVATE)
-	public void initSlider() {
-
-		if (this.minSup == null) {
-			this.minSup = 9;
-		}
-
-		this.minSupParams = new JSONObject();
-
-		this.minSupParams.put("min", 1);
-		this.minSupParams.put("max", 10);
-		this.minSupParams.put("value", this.minSup);
-
-		this.pathLengthParams = new JSONObject();
-		this.max = 200L;
-		this.min = 1L;
-
-		if (this.pathLengthMax != null) {
-			this.max = this.pathLengthMax;
-		}
-		if (this.pathLengthMin != null) {
-			this.min = this.pathLengthMin;
-		}
-		this.pathLengthParams.put("min", 1);
-		this.pathLengthParams.put("max", 200);
-		this.pathLengthParams.put("range", true);
-		this.pathLengthParams.put("values", new JSONArray(this.min, this.max));
-	}
-
 	// returns datepicker params
 	public JSONLiteral getDatePickerParams() {
 		return this.dateWorker.getDatePickerParams(this.currentlocale);
 	}
 
-	@Property
-	private double minSupDouble;
-
-	private Double minSupValue;
-
 	public String getQuestionResult() {
-		final ArrayList<Long> courseIds = new ArrayList<Long>();
-		courseIds.add(this.courseId);
+		final List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
 
-		final boolean considerLogouts = false;
-
-		ArrayList<String> types = null;
-		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-			types = new ArrayList<String>();
-			for (final EResourceType resourceType : this.selectedActivities) {
-				types.add(resourceType.name().toUpperCase());
+		if (this.courseId != null) {
+			Long endStamp = 0L;
+			Long beginStamp = 0L;
+			if (this.endDate != null) {
+				endStamp = new Long(this.endDate.getTime() / 1000);
 			}
-		}
 
-		Long endStamp = 0L;
-		Long beginStamp = 0L;
-		if (this.beginDate != null) {
-			beginStamp = new Long(this.beginDate.getTime() / THOU);
-		}
-		if (this.endDate != null) {
-			endStamp = new Long(this.endDate.getTime() / THOU);
-		}
+			if (this.beginDate != null) {
+				beginStamp = new Long(this.beginDate.getTime() / 1000);
+			}
 
-		// Check value for minumim support .. if no value is set it will default to 8 -> 0.8
-		if ((this.minSup == null) || this.minSup.equals(0)) {
-			this.minSup = 9;
-		}
-		this.minSupValue = new Double(this.minSup);
-		this.minSupValue = this.minSupValue / 10;
-		this.logger.debug("MinSupValue:" + this.minSupValue + "  --  " + this.minSupValue.doubleValue());
-		this.minSupDouble = this.minSupValue.doubleValue();
+			if ((this.resolution == null) || (this.resolution < 10)) {
+				this.resolution = 30;
+			}
+			final List<Long> roles = new ArrayList<Long>();
+			final List<Long> courses = new ArrayList<Long>();
+			courses.add(this.courseId);
 
-		this.logger.debug("PathLength: " + this.pathLengthMin + "  --  " + this.pathLengthMax);
+			// calling dm-server
+			for (int i = 0; i < courses.size(); i++) {
+				this.logger.debug("Courses: " + courses.get(i));
+			}
 
-		return this.analysis.computeQFrequentPathBIDE(courseIds, this.selectedUsers, types, this.pathLengthMin, this.pathLengthMax,
-				this.minSupDouble, considerLogouts, beginStamp, endStamp);
-	}
+			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
-	public String getSupportValue() {
-		Double minSupTemp = new Double(this.minSup);
-		minSupTemp = minSupTemp / 10;
-		return minSupTemp.toString();
-	}
+			@SuppressWarnings("unchecked")
+			final
+			List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
+					this.selectedUsers, this.selectedActivities);
 
-	public String getPathLengthValue() {
-		if ((this.pathLengthMin == null) && (this.pathLengthMax == null)) {
-			return "All paths";
+			final JSONArray graphParentArray = new JSONArray();
+			final JSONObject graphDataObject = new JSONObject();
+			final JSONArray graphDataValues = new JSONArray();
+
+			if ((results != null) && (results.size() > 0)) {
+				for (Integer j = 0; j < results.size(); j++) {
+					final JSONObject graphValue = new JSONObject();
+
+					graphValue.put("x", results.get(j).getTitle()+"_"+j);
+					graphValue.put("y", results.get(j).getRequests());
+
+					graphDataValues.put(graphValue);
+				}
+			}
+
+			graphDataObject.put("values", graphDataValues);
+			graphDataObject.put("key", "Activities");
+
+			final JSONObject graphDataObject2 = new JSONObject();
+			final JSONArray graphDataValues2 = new JSONArray();
+
+			if ((results != null) && (results.size() > 0)) {
+				for (Integer i = 0; i < results.size(); i++) {
+					final JSONObject graphValue2 = new JSONObject();
+
+					graphValue2.put("x", results.get(i).getTitle()+"_"+i);
+					graphValue2.put("y", results.get(i).getUsers());
+
+					graphDataValues2.put(graphValue2);
+				}
+			}
+			graphDataObject2.put("values", graphDataValues2);
+			graphDataObject2.put("key", "User");
+
+			graphParentArray.put(graphDataObject);
+			graphParentArray.put(graphDataObject2);
+
+			this.logger.debug(graphParentArray.toString());
+
+			return graphParentArray.toString();
 		}
-		if ((this.pathLengthMin == null) && (this.pathLengthMax != null)) {
-			return "1 - " + this.pathLengthMax;
-		}
-		if ((this.pathLengthMin != null) && (this.pathLengthMax == null)) {
-			return this.pathLengthMin + " - 200";
-		}
-		return this.pathLengthMin + " - " + this.pathLengthMax;
+		return "";
 	}
 
 	void setupRender() {
@@ -351,18 +348,28 @@ public class VisualizationFP {
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
 
+		if (this.endDate == null) {
+			this.endDate = this.course.getLastRequestDate();
+		} else {
+			this.selectedUsers = null;
+			this.userIds = this.getUsers();
+		}
+		if (this.beginDate == null) {
+			this.beginDate = this.course.getFirstRequestDate();
+		} else {
+			this.selectedUsers = null;
+			this.userIds = this.getUsers();
+		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
-		this.logger.debug("SetupRender End --- BeginDate:" + this.beginDate + " EndDate: " + this.endDate + " Res: " + this.resolution);
-
 	}
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
+		this.javaScriptSupport.addScript("$('#beginDate').val('%s');",getFirstRequestDate());
 	}
 
 	void onPrepareFromCustomizeForm() {
@@ -371,11 +378,7 @@ public class VisualizationFP {
 
 	void onSuccessFromCustomizeForm() {
 		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
-		final String input = this.request.getParameter("minSup-slider");
-		if (input != null) {
-			this.minSup = Integer.parseInt(input);
-		}
-		this.logger.debug("MinSup Value: " + this.minSup);
+		this.logger.debug("Selected activities: " + this.selectedActivities);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 
@@ -391,4 +394,14 @@ public class VisualizationFP {
 	public String getLastRequestDate() {
 		return this.getLocalizedDate(this.endDate);
 	}
+	
+	public String getResourceTypeName() {
+		if ((this.resourceItem != null) && (!this.resourceItem.getResourcetype().equals(""))) {
+			return this.messages.get("EResourceType." + this.resourceItem.getResourcetype());
+		} else {
+			return this.messages.get("EResourceType.UNKNOWN");
+		}
+	}
+	
+	
 }
