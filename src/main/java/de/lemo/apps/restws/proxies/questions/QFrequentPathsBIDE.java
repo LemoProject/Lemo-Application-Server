@@ -22,6 +22,7 @@ public interface QFrequentPathsBIDE {
 	@Path("frequentPaths")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response compute(
+			@FormParam(MetaParam.LEMO_USER_ID) Long lemoUserId,
 			@FormParam(MetaParam.COURSE_IDS) List<Long> courseIds,
 			@FormParam(MetaParam.USER_IDS) List<Long> userIds,
 			@FormParam(MetaParam.TYPES) List<String> types,

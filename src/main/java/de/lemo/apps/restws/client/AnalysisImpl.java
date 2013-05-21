@@ -11,9 +11,8 @@ import javax.ws.rs.core.Response;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpConnectionParams;
-
+import org.apache.http.params.HttpParams;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ProxyFactory;
@@ -56,21 +55,20 @@ public class AnalysisImpl implements Analysis {
 
 	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
 	// TODO set better pool size
-	
+
 	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
-	
-	
-	private HttpParams initHttpParams(){
-		
+
+	private HttpParams initHttpParams() {
+
 		HttpParams params = this.httpClient.getParams();
 		HttpConnectionParams.setConnectionTimeout(params, 5000);
 		HttpConnectionParams.setSoTimeout(params, 20000);
-		
-		return params ;
+
+		return params;
 	}
-	
+
 	final HttpParams params = initHttpParams();
-	
+
 	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
 	private QCourseActivityString qcourseActivity =
@@ -272,6 +270,7 @@ public class AnalysisImpl implements Analysis {
 
 	@Override
 	public String computeQFrequentPathBIDE(
+			final Long lemoUserId,
 			final List<Long> courseIds,
 			final List<Long> userIds,
 			final List<String> types,
@@ -286,7 +285,7 @@ public class AnalysisImpl implements Analysis {
 
 			if (init.defaultConnectionCheck()) {
 
-				Response response = qFrequentPathBide.compute(courseIds, userIds, types, minLength,
+				Response response = qFrequentPathBide.compute(lemoUserId, courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime);
 
 				if (response.getStatus() == 2) {

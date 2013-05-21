@@ -322,7 +322,7 @@ public class FrequentPathBide {
 
 		this.logger.debug("PathLength: " + this.pathLengthMin + "  --  " + this.pathLengthMax);
 
-		return this.analysis.computeQFrequentPathBIDE(courseIds, this.selectedUsers, types, this.pathLengthMin, this.pathLengthMax,
+		return this.analysis.computeQFrequentPathBIDE(userWorker.getCurrentUser().getId(), courseIds, this.selectedUsers, types, this.pathLengthMin, this.pathLengthMax,
 				this.minSupDouble, considerLogouts, beginStamp, endStamp);
 	}
 

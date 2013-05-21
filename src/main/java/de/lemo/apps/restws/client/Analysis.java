@@ -7,8 +7,7 @@ import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 
 /**
- * Interface for the analysis for the gui 
- *
+ * Interface for the analysis for the gui
  */
 public interface Analysis {
 
@@ -60,6 +59,7 @@ public interface Analysis {
 			Long endTime);
 
 	String computeQFrequentPathBIDE(
+			Long userId,
 			List<Long> courseIds,
 			List<Long> userIds,
 			List<String> types,
@@ -104,7 +104,7 @@ public interface Analysis {
 			Long resolution,
 			Long startTime,
 			Long endTime);
-	
+
 	List<Long> computePerformanceUserTest(
 			List<Long> courses,
 			List<Long> users,
@@ -112,7 +112,7 @@ public interface Analysis {
 			Long resolution,
 			Long startTime,
 			Long endTime);
-	
+
 	String computePerformanceUserTestBoxPlot(
 			final List<Long> courses,
 			final List<Long> users,
