@@ -23,5 +23,7 @@ public interface Information {
 	
 	SCConnectorManagerState getConnectorState() throws RestServiceCommunicationException;
 	
+	Boolean startUpdate(Long connectorId) throws RestServiceCommunicationException;
+	
 
 }

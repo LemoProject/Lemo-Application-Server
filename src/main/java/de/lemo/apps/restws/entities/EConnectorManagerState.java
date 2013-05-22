@@ -36,7 +36,7 @@ public enum EConnectorManagerState {
 
 	@Override
 	public String toString() {
-		return this.name().toLowerCase();
+		return this.name();
 	};
 	
 	public static EConnectorManagerState fromValue(String v) throws EnumValueNotFoundException{ 

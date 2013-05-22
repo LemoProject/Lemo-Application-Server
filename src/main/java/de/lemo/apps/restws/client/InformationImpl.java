@@ -147,7 +147,23 @@ public class InformationImpl implements Information {
 	}
 
 	
-
+	public Boolean startUpdate(Long connectorId) throws RestServiceCommunicationException {
+		
+		try {
+				if (init.defaultConnectionCheck()){
+					final ServiceConnectorManager serviceProxy = ProxyFactory.create(ServiceConnectorManager.class, SERVICE_CONNECTOR_URL);
+					if (serviceProxy != null) {
+						
+						Boolean result = serviceProxy.update(connectorId);
+						if(result != null) return result;
+					}
+				}
+		} catch (final Exception e) {		
+				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
+		}
+		logger.info("Connector information could not be loaded.");
+		return false;
+	}
 
 
 

@@ -83,11 +83,18 @@
 						<div class="well">
 
        						 <t:grid source="allConnectors" row="connectorItem" model="connectorModel" class="table" rowsPerPage="12" t:inPlace="true">
-       						 	 <p:viewCell>
-       						 	 	<t:pagelink t:page="admin/manageuser" context="connectoritem.name">
-       						 	 		${message:viewDetails}
-       						 	 	</t:pagelink>
-       						 	 </p:viewCell>
+       						 	 <p:updateCell>
+       						 	 	
+       						 	 	<t:if test="connectorReady">
+       						 	 		<t:actionLink t:id="startUpdate" context="connectoritem.platformId">
+       						 	 			${message:startUpdate}
+       						 	 		</t:actionLink>
+       						 	 		<p:else>
+                							${message:checkConnectorState}
+            							</p:else>
+        							</t:if>
+       						 	 
+       						 	 </p:updateCell>
        							 <p:empty>
               						<p>${message:noConnectors}</p>
             					</p:empty>
@@ -95,8 +102,17 @@
    							<div>
 	   							<br />
 	   							
-					    		
-	    						<t:pagelink page="admin/createuser" class="btn btn-primary pull-left">${message:addUser}</t:pagelink>
+					    		<b>${message:currentConnectoState}</b>
+					    		&nbsp;
+					    		<t:if test="connectorReady">
+				    				<span class="label label-success">${connectorState}</span>
+				    				 
+				    	 			<p:else>
+                						<span class="label label-important">${connectorState}</span>
+                					
+            						</p:else>
+        						</t:if>
+	    						
 	    						<br />
 	   							<br />
 	   							
