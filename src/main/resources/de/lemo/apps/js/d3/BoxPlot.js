@@ -51,8 +51,8 @@
   
   console.log("Counter:"+counter+" QuizMin: "+quizMin+" QuizMax: "+quizMax);
   
-  var marginViz = {top: 5, right: 10, bottom: 0, left: 50},
-  	marginPlot = {top: 5, right: 10, bottom: 0, left: 10},
+  var marginViz = {top: 5, right: 10, bottom: 50, left: 50},
+  	marginPlot = {top: 5, right: 7, bottom: 0, left: 10},
     w = 30 - marginPlot.left - marginPlot.right,
     h = height - marginViz.top - marginViz.bottom;
 
@@ -71,11 +71,11 @@
  
  
   var xScale = d3.scale.ordinal()
-	  .rangePoints([0, width])
+	  .rangePoints([0, width - marginViz.left -10 ])
 	  .domain(users);
 	
 	var yScale = d3.scale.linear()
-	  .range([height, 0])
+	  .range([h, 0])
 	  .domain([0,100]);
 	
 	var xAxis = d3.svg.axis()
@@ -110,7 +110,7 @@
 	  
 	  svgBox.append("g")
 	      .attr("class","x axis grid")
-	      .attr("transform", "translate("+marginViz.left+"," + height +")")
+	      .attr("transform", "translate("+marginViz.left+"," + h +")")
 	      .call(make_x_axis()
             .tickSize(-height, 0, 0)
             .tickFormat(""))
@@ -126,7 +126,7 @@
           
 	  svgBox.append("g")
 	      .attr("class", "y axis grid")
-	      .attr("transform", "translate("+marginViz.left+", 0)")
+	      .attr("transform", "translate("+marginViz.left+", "+marginViz.top+")")
 	      .call(make_y_axis()
             .tickSize(-width, 0, 0)
             .tickFormat(""))
@@ -141,7 +141,7 @@
 	  
 	  svgBox.selectAll("x axis").append("text")
 	      .attr("class","legend") 	
-	      //.attr("transform", "translate("+marginViz.left+"," + height +")")
+	      .attr("transform", "translate("+marginViz.left+"," + h +")")
 	      .attr("y", 6)
 	      .attr("dy", ".71em")
 	      .style("text-anchor", "middle")
@@ -166,7 +166,7 @@
     		
   
 	  gBox.append("g")
-		.attr("transform", "translate(" + marginPlot.left + "," + marginPlot.top + ")")
+		.attr("transform", "translate(" + marginPlot.left + "," +marginViz.top + ")")
 		.call(box);
 	 
 	   

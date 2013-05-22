@@ -17,7 +17,7 @@
 	  }
 	  
 	  var width = 800,
-	  	 height = 500,
+	  	 height = 600,
 	  	  days = [],
 	  	  hours = [],
 	  	  counter = 0,
@@ -26,7 +26,9 @@
 	  	  hoursMin = 0,
 	  	  hoursMax = 0;
 	  
-	  var dataPerHour, dataPerDay, dataPerQuarterDay, boxPlotData = [],
+	  var dataPerHour, dataPerDay, dataPerQuarterDay, 
+	  	  boxPlotData = [],
+	  	  boxPlotDataPerQuarterDay = [],
   	  counter = 0,
   	  innerCounter = 0;
 	  overAllCounter = 0;
@@ -81,7 +83,8 @@
 			normQuarterV = normalizeBoxPlotData(vQuarter);
 			normQuarterV.id = overAllCounter;
 			
-			boxPlotData.push(normQuarterV); 
+			//
+			boxPlotDataPerQuarterDay.push(normQuarterV); 
 			innerCounter++;
 			
 		}
@@ -92,7 +95,7 @@
   
   console.log("Counter:"+counter+" QuizMin: "+valueMin+" QuizMax: "+valueMax);
   
-  var marginViz = {top: 5, right: 10, bottom: 0, left: 50},
+  var marginViz = {top: 5, right: 0, bottom: 100, left: 50},
   	marginPlot = {top: 5, right: 10, bottom: 0, left: 10},
     w = 30 - marginPlot.left - marginPlot.right,
     h = height - marginViz.top - marginViz.bottom;
@@ -115,11 +118,11 @@
  
  
   var xScale = d3.scale.ordinal()
-	  .rangePoints([0, width])
+	  .rangePoints([0, width - marginViz.left -10 ])
 	  .domain(timeSlots);
 	
 	var yScale = d3.scale.linear()
-	  .range([height, 0])
+	  .range([h, 0])
 	  .domain([0,max]);
 	
 	var xAxis = d3.svg.axis()
@@ -132,10 +135,6 @@
 	var yAxis = d3.svg.axis()
 	  .scale(yScale)
 	  .orient("left");
-	
-	
-	
- 
 	  
       var box = d3.box()
 	    .whiskers(iqr(1.5))
@@ -154,7 +153,7 @@
 	  
 	  svgBox.append("g")
 	      .attr("class","x axis grid")
-	      .attr("transform", "translate("+marginViz.left+"," + height +")")
+	      .attr("transform", "translate("+marginViz.left+"," + h +")")
 	      .call(make_x_axis()
             .tickSize(-height, 0, 0)
             .tickFormat(""))
@@ -170,7 +169,7 @@
           
 	  svgBox.append("g")
 	      .attr("class", "y axis grid")
-	      .attr("transform", "translate("+marginViz.left+", 0)")
+	      .attr("transform", "translate("+marginViz.left+", "+ 0 +")")
 	      .call(make_y_axis()
             .tickSize(-width, 0, 0)
             .tickFormat(""))
@@ -185,11 +184,11 @@
 	  
 	  svgBox.selectAll("x axis").append("text")
 	      .attr("class","legend") 	
-	      //.attr("transform", "translate("+marginViz.left+"," + height +")")
+	      .attr("transform", "translate("+marginViz.left+"," + h +")")
 	      .attr("y", 6)
 	      .attr("dy", ".71em")
 	      .style("text-anchor", "middle")
-	      .text("Nutzer");
+	      .text("Zeitraum");
 	  
 	  
 	   var gBox = svgBox.selectAll("g.box")
@@ -210,7 +209,7 @@
     		
   
 	  gBox.append("g")
-		.attr("transform", "translate(" + marginPlot.left + "," + marginPlot.top + ")")
+		.attr("transform", "translate(" + marginPlot.left + "," + 0 + ")")
 		.call(box);
 	 
 	   
