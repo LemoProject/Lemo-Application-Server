@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.Response;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -15,6 +16,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.jboss.resteasy.client.ClientExecutor;
+import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.slf4j.Logger;
@@ -288,20 +290,35 @@ public class AnalysisImpl implements Analysis {
 				Response response = qFrequentPathBide.compute(lemoUserId, courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime);
 
-				if (response.getStatus() == 2) {
-					// return the URI of the result for polling
-					// TODO looks unsecure, even though it should always be an escaped url
-					return "{ \"resultPollingUrl\" : " + response.getEntity() + "}";
-				}
-				return "{}";
+				if (response.getStatus() == 201) {
+					// 201 created
+					logger.debug("BIDE future result created.");
 
+					// return the id of the result for polling
+					// TODO use some random path instead of insecure user id
+					@SuppressWarnings("unchecked")
+					ClientResponse<String> clientResponse = (ClientResponse<String>) response;
+					String resultPath = clientResponse.getEntity(String.class);
+
+					// XXX why is this even quoted?
+					resultPath = StringUtils.strip(resultPath, "\"");
+
+					// XXX using raw url without encoding looks unsecure
+					String resultUrl = "\"" + ServerConfiguration.getInstance().getDMSBaseUrl() + "/" + resultPath
+							+ "\"";
+					
+					return resultPath;
+				}
+				// TODO do something on failure
+				logger.warn("BIDE invalid response: Status code " + response.getStatus());
+				return "null";
 			}
 
 		} catch (final Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Bide failed", e);
 		}
 		logger.info("Gebe leere Resultlist zurueck");
-		return "{}";
+		return "null";
 	}
 
 	@Override

@@ -210,6 +210,8 @@ text.shadow {
     	    </t:form>	
     	</div>
     	
+      <t:zone t:id="asyncZone"> </t:zone>
+      <a t:type="actionlink" t:id="refreshZone" id="refreshZone" context="${questionResult}" href="#" t:zone="asyncZone">Refresh</a>
     
   </div>
   <script type="text/javascript">
@@ -243,14 +245,11 @@ text.shadow {
 	    spinner.spin(target);  
 	  }  
     (function(d3custom, $, undefined) {
-
+      // TODO the spinner won't work here, the data is placed here on server side
       spin_start();     
-      var q2result = ${questionResult};
+      // d3custom.resultUrl = ;
       spin_stop();     
 
-      d3custom.nodes = q2result.nodes;
-      d3custom.links = q2result.links;
-      
     })(window.d3custom = window.d3custom || {}, jQuery);
   </script>
 </html>

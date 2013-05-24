@@ -18,6 +18,7 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
@@ -37,6 +38,7 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
@@ -223,6 +225,15 @@ public class FrequentPathBide {
 		return this.courseValueEncoder.create(Course.class);
 	}
 
+	@Inject
+	private Initialisation init;
+	
+	@Property
+    private Zone asyncZone;
+    Object onActionFromRefreshZone(String taskId) {
+    	return init.taskResult(taskId);
+    }
+	
 	@Property
 	@Persist
 	Integer val;

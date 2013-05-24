@@ -3,13 +3,17 @@ package de.lemo.apps.restws.client;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import javax.ws.rs.core.Response;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.tapestry5.StreamResponse;
+import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.util.TextStreamResponse;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
@@ -29,6 +33,7 @@ import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
 import de.lemo.apps.restws.proxies.service.ServiceLoginAuthentification;
 import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
+import de.lemo.apps.restws.proxies.service.ServiceTaskManager;
 import de.lemo.apps.restws.proxies.service.ServiceTeacherCourses;
 import de.lemo.apps.restws.proxies.service.ServiceUserInformation;
 
@@ -43,30 +48,52 @@ public class InitialisationImpl implements Initialisation {
 	private static final String SERVICE_AUTH_URL = SERVICE_PREFIX_URL + "/authentification";
 	private static final String SERVICE_USER_COURSES_URL = SERVICE_PREFIX_URL + "/teachercourses";
 	private static final String SERVICE_CONNECTOR_MANAGER = SERVICE_PREFIX_URL + "/connectors";
+	private static final String SERVICE_TASK_MANAGER = SERVICE_PREFIX_URL + "/tasks";
+ 
+	private PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager();
+	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
 
+	private HttpParams initHttpParams() {
+		connectionManager.setDefaultMaxPerRoute(20);
+		HttpParams params = this.httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		HttpConnectionParams.setSoTimeout(params, 5000);
+
+		return params;
+	}
+
+	final HttpParams params = initHttpParams();
+
+	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
 	private ServiceCourseDetails courseDetailsList =
-			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
+			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL, clientExecutor);
 
 	private ServiceCourseDetails courseDetails =
-			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL);
+			ProxyFactory.create(ServiceCourseDetails.class, InitialisationImpl.SERVICE_COURSE_URL, clientExecutor);
 
 	private ServiceRatedObjects ratedObjects =
-			ProxyFactory.create(ServiceRatedObjects.class, InitialisationImpl.SERVICE_RATED_OBJECTS_URL);
+			ProxyFactory
+					.create(ServiceRatedObjects.class, InitialisationImpl.SERVICE_RATED_OBJECTS_URL, clientExecutor);
 
 	private ServiceLoginAuthentification loginAuth =
-			ProxyFactory.create(ServiceLoginAuthentification.class, InitialisationImpl.SERVICE_AUTH_URL);
+			ProxyFactory
+					.create(ServiceLoginAuthentification.class, InitialisationImpl.SERVICE_AUTH_URL, clientExecutor);
 
 	private ServiceTeacherCourses teacherCourses =
-			ProxyFactory.create(ServiceTeacherCourses.class, InitialisationImpl.SERVICE_USER_COURSES_URL);
+			ProxyFactory.create(ServiceTeacherCourses.class, InitialisationImpl.SERVICE_USER_COURSES_URL,
+					clientExecutor);
 
 	private ServiceUserInformation userInfo =
-			ProxyFactory.create(ServiceUserInformation.class, InitialisationImpl.SERVICE_PREFIX_URL);
-	
-	private ServiceConnectorManager connectorManager =
-			ProxyFactory.create(ServiceConnectorManager.class, InitialisationImpl.SERVICE_CONNECTOR_MANAGER);
+			ProxyFactory.create(ServiceUserInformation.class, InitialisationImpl.SERVICE_PREFIX_URL, clientExecutor);
 
-	
+	private ServiceConnectorManager connectorManager =
+			ProxyFactory.create(ServiceConnectorManager.class, InitialisationImpl.SERVICE_CONNECTOR_MANAGER,
+					clientExecutor);
+
+	private ServiceTaskManager taskManager =
+			ProxyFactory.create(ServiceTaskManager.class, InitialisationImpl.SERVICE_TASK_MANAGER, clientExecutor);
+
 	private Logger logger;
 
 	public InitialisationImpl(Logger logger) {
@@ -75,25 +102,6 @@ public class InitialisationImpl implements Initialisation {
 		this.logger.info("Register Rest Service");
 		RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
 	}
-
-	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
-	// TODO set better pool size
-	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
-	
-	
-	private HttpParams initHttpParams(){
-		
-		HttpParams params = this.httpClient.getParams();
-		HttpConnectionParams.setConnectionTimeout(params, 5000);
-		HttpConnectionParams.setSoTimeout(params, 20000);
-		
-		return params ;
-	}
-	
-	final HttpParams params = initHttpParams();
-	
-	
-	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
 	public Boolean defaultConnectionCheck() throws RestServiceCommunicationException {
 
@@ -243,6 +251,27 @@ public class InitialisationImpl implements Initialisation {
 		logger.info("Courses could not be loaded. Returning empty resultset.");
 		return new ResultListCourseObject();
 
+	}
+
+	@Override
+	public StreamResponse  taskResult(String taskId) {
+
+		JSONObject json = new JSONObject();
+		 
+			Response taskResult = taskManager.taskResult(taskId);
+			json.put("status", taskResult.getStatus());
+
+			if (taskResult.getStatus() == 200) {
+				@SuppressWarnings("unchecked")
+				ClientResponse<String> clientResponse = (ClientResponse<String>) taskResult;
+				String analysisResult = clientResponse.getEntity(String.class);
+
+			//	 JSONObject xmlJSONObj = XML.toJSONObject(analysisResult);
+
+				json.put("bideResult", new JSONObject(analysisResult));
+			}
+		 
+		return new TextStreamResponse("application/json", json.toCompactString());
 	}
 
 }
