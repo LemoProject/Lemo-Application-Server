@@ -34,6 +34,8 @@
 	  overAllCounter = 0;
   	  valueMin = 0,
   	  valueMax = 0,
+  	  valueMinQuarter = 0,
+	  valueMaxQuarter = 0,
 	  dataAmount = 0;
 	  
  console.log("DATA LENGTH: "+data.length);	
@@ -49,14 +51,16 @@
 	 
   dataAmount = dataPerDay.length + dataPerQuarterDay.length; 
   
-  function normalizeBoxPlotData(v){
+  function normalizeBoxPlotData(v, dataSwitch){
 
 	// "+" Prefix on strings make JS recognize them as numbers  
 	if(v.lowerWhisker){
-		  if(+v.lowerWhisker < +valueMin) valueMin = v.lowerWhisker;
+		  if(dataSwitch && +v.lowerWhisker < +valueMin) valueMin = v.lowerWhisker;
+		  if(!dataSwitch && +v.lowerWhisker < +valueMinQuarter) valueMinQuarter = v.lowerWhisker;
 	} else v.lowerWhisker = 0;
 	if(v.upperWhisker){
-		  if(+v.upperWhisker > +valueMax) valueMax = v.upperWhisker;
+		  if(dataSwitch && +v.upperWhisker > +valueMax) valueMax = v.upperWhisker;
+		  if(!dataSwitch && +v.upperWhisker > +valueMaxQuarter) valueMaxQuarter = v.upperWhisker;
 	} else v.upperWhisker = 0;
 	if(!v.lowerQuartil) v.lowerQuartil=0;
 	if(!v.upperQuartil) v.upperQuartil=0;
@@ -71,7 +75,7 @@
 	  
 		console.log("OUTERLOOP: Counter: "+counter+" QuizMin: "+valueMin+" QuizMax: "+valueMax+ " UW: "+v.upperWhisker+ " LW: "+v.lowerWhisker);
 		  // "+" Prefix on strings make JS recognize them as numbers  
-		normV = normalizeBoxPlotData(v);
+		normV = normalizeBoxPlotData(v,true);
 		normV.id = overAllCounter;
 		boxPlotData.push(normV); 
 		for (var i = counter*4; i < ((counter+1)*4); i++){
@@ -80,7 +84,7 @@
 			vQuarter = dataPerQuarterDay[i];
 			console.log("INNERLOOP: UW: "+vQuarter.upperWhisker+ " LW: "+vQuarter.lowerWhisker);
 			vQuarter.name = normV.name.slice(0,3)+" "+(innerCounter*6)+"-"+(((innerCounter+1)*6))+"h";
-			normQuarterV = normalizeBoxPlotData(vQuarter);
+			normQuarterV = normalizeBoxPlotData(vQuarter,false);
 			normQuarterV.id = overAllCounter;
 			
 			//
@@ -100,17 +104,17 @@
     w = 30 - marginPlot.left - marginPlot.right,
     h = height - marginViz.top - marginViz.bottom;
 
-  var min = valueMin,
-      max = valueMax;
+  var min = valueMin + valueMinQuarter,
+      max = valueMax + valueMinQuarter;
 
   if(min == 0 && max == 0) {
     	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
     	return;
   }
  
-  redraw(boxPlotData);
+  redraw(boxPlotData, valueMax,  valueMin);
   
-  function redraw(plotData){
+  function redraw(plotData, maxData ,minData){
 	  
   //Generating the tick names for the x-axis
   var timeSlots = plotData.map(function(d){return d.name;}); 	  
@@ -127,7 +131,7 @@
 	
 	var yScale = d3.scale.linear()
 	  .range([h, 0])
-	  .domain([0,max]);
+	  .domain([0,maxData]);
 	
 	var xAxis = d3.svg.axis()
 	  .scale(xScale)
@@ -145,7 +149,7 @@
 	    .width(w)
 	    .height(h);
 
-	  box.domain([min, max]);
+	  box.domain([minData, maxData]);
 	  
 	  var div = d3.select("#viz");
     		
@@ -227,7 +231,7 @@
   		 $('#dayView').addClass("active")
   		 console.log("Dayview call ...")
   		 $('#vizsvg').remove();
-  		 redraw(boxPlotDataPerQuarterDay);
+  		 redraw(boxPlotDataPerQuarterDay, valueMaxQuarter, valueMinQuarter);
   	 }	
   	 
   weekView = function(){
@@ -235,7 +239,7 @@
   		 $('#weekView').addClass("active")
   		  console.log("Weekview call ...")
   		  $('#vizsvg').remove();
-  		 redraw(boxPlotData);
+  		 redraw(boxPlotData, valueMax, valueMin);
   		 
   	 }
   
