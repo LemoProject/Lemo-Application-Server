@@ -112,9 +112,9 @@
     	return;
   }
  
-  redraw(boxPlotData, valueMax,  valueMin);
+  redraw(boxPlotData, valueMax,  valueMin, true);
   
-  function redraw(plotData, maxData ,minData){
+  function redraw(plotData, maxData ,minData, dataSwitch){
 	  
   //Generating the tick names for the x-axis
   var timeSlots = plotData.map(function(d){return d.name;}); 	  
@@ -190,6 +190,35 @@
 	      .style("text-anchor", "end")
 	      .text("Zugriffe");
 	  
+//	 swimlaneBox = svgBox.append("g")
+//	  	.attr("class","swimlane")
+//	  	.attr("transform", "translate("+marginViz.left+", "+ 0 +")")
+	  	
+	   var color = d3.scale.category10();	
+	  
+	  	svgBox.selectAll("g.swimlane")
+	  		.data(plotData, function(d, i) { return d;} )
+	  		.enter().append("g")
+	  			.attr("transform",  function (d,i) {return "translate(" + ((xScale(d.name))+marginViz.left-((xScale(d.name)/(i+1))/2))+",0)";} ) //if dayView
+	  			.attr("class", function(d) {return "swimlane swimG-"+d.name.replace(new RegExp("[\W :]","g"),"_");})
+	  			.attr("width", 50)
+	  			.attr("height", h)
+	  		.append("rect")
+	  			.attr("class", function(d) {return "swimlane swimrect-"+d.name.replace(new RegExp("[\W :]","g"),"_");})
+	  			.attr("width", function(d,i) {
+	  					if(dataSwitch) return xScale(d.name)/(i+1)
+	  					else return xScale(d.name)/(i+1)*4
+	  				})
+	  			.attr("height", h)
+	  			.style("fill",function(d,i){return color(1)})
+	  			.style("opacity",function (d,i){ 
+	  						if(dataSwitch) {
+	  							if (i % 2 == 0) return 0.1; else return 0.00001; //weekview
+	  						} else if (i % 8 == 0) return 0.1; else return 0.00001; //dayview
+	  					
+	  				})
+	  	
+	  	
 	  
 	  svgBox.selectAll("x axis").append("text")
 	      .attr("class","legend") 	
@@ -231,7 +260,7 @@
   		 $('#dayView').addClass("active")
   		 console.log("Dayview call ...")
   		 $('#vizsvg').remove();
-  		 redraw(boxPlotDataPerQuarterDay, valueMaxQuarter, valueMinQuarter);
+  		 redraw(boxPlotDataPerQuarterDay, valueMaxQuarter, valueMinQuarter, false);
   	 }	
   	 
   weekView = function(){
@@ -239,7 +268,7 @@
   		 $('#weekView').addClass("active")
   		  console.log("Weekview call ...")
   		  $('#vizsvg').remove();
-  		 redraw(boxPlotData, valueMax, valueMin);
+  		 redraw(boxPlotData, valueMax, valueMin, true);
   		 
   	 }
   

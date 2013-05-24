@@ -24,7 +24,7 @@
 		  
     	<div class="span9">
         	<div id="viz">
-        		<svg><!-- d3js visualization --></svg>
+        		<svg class="nvd3Svg"><!-- d3js visualization --></svg>
         	</div>
         	
         	
