@@ -41,7 +41,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -68,6 +70,9 @@ public class ActivityLearningObject {
 
 	@Inject
 	private AnalysisWorker analysisWorker;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
@@ -167,9 +172,23 @@ public class ActivityLearningObject {
 	}
 
 
+	// Value Encoder for gender multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+						GenderEnum.class);
+			
+	// Select Model for gender multi-select component
+	@Property(write = false)
+	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
+
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
+		
+	@Property
+	@Persist
+	private List<GenderEnum> selectedGender;
+
 
 	@Inject
 	@Property
@@ -192,7 +211,7 @@ public class ActivityLearningObject {
 			this.endDate = course.getLastRequestDate();
 		
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000, this.visWorker.getGenderIds(this.selectedGender)).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -206,10 +225,10 @@ public class ActivityLearningObject {
 
 		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
 			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities, this.selectedGender);
 		} else {
 			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null, this.selectedGender);
 		}
 		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
 
@@ -247,6 +266,7 @@ public class ActivityLearningObject {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
+		this.selectedGender = null;
 		this.selectedActivities = null;
 	}
 
@@ -296,7 +316,7 @@ public class ActivityLearningObject {
 			@SuppressWarnings("unchecked")
 			final
 			List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
-					this.selectedUsers, this.selectedActivities);
+					this.selectedUsers, this.selectedActivities, this.selectedGender);
 
 			final JSONArray graphParentArray = new JSONArray();
 			final JSONObject graphDataObject = new JSONObject();

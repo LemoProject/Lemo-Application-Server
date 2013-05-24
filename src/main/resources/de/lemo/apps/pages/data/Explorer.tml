@@ -57,7 +57,7 @@
 					    <li class="active"><a href="#summary" data-toggle="tab">${message:courseSummary}</a></li>
 					    <li><a href="#lastmonth" data-toggle="tab">Last month</a></li>
 					    <li><a href="#overall" data-toggle="tab">Overall</a></li>
-					    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+					 
 					</ul>
 				</div>
 			</div>
@@ -78,14 +78,21 @@
 								<p><b>${message:lastRequest}:</b> ${lastRequestDate} <br /> </p>
 								<p><b>${message:courseEnroledParticipants}:</b> ${CurrentCourse?.enroledParticipants}<br /> </p> 
 								
-								<label class="checkbox">
-		              <form t:type="form">
-                    ${message:favoriteOption}
-                    <t:actionlink t:id="favorite" context="${CurrentCourse?.id}">
-                        <input t:type="checkbox" t:value="${favorite}"/>
-                    </t:actionlink>
-								  </form>
-								</label>
+								
+		              
+		                    <p><b>${message:favoriteOption}:&nbsp;</b>
+		                   
+			                    <t:actionlink t:id="favorite" context="${CurrentCourse?.id}">
+			                    	<t:if test="favorite">
+					    				<span class="label label-success">${message:Favorite}</span>
+					    	 			<p:else>
+	                						<span class="label label-important">${message:FavoriteNotSet}</span>
+	            						</p:else>
+	        						</t:if>
+			                   
+			                    </t:actionlink>
+					 		</p>
+								
 								<p><br /><br /><br /></p>
 								
 								<t:pagelink page="viz/ActivityTime" id="${message:viewdetails}" context="${CurrentCourse?.id}" class="btn btn-primary pull-left">${message:viewdetails}</t:pagelink>
@@ -168,7 +175,7 @@
 						
 					</div><!-- tab-pane  overall -->
 				    </div>
-				    <div class="tab-pane" id="settings">${message:notYetImplemented}</div>
+				   
 				</div> <!-- tab-content -->
 				
     		</div> <!-- class=well -->

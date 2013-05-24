@@ -37,7 +37,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
@@ -84,6 +86,9 @@ public class Performance {
 
 	@Inject
 	private UserWorker userWorker;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -155,9 +160,22 @@ public class Performance {
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
+	// Value Encoder for gender multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+					GenderEnum.class);
+		
+	// Select Model for gender multi-select component
+	@Property(write = false)
+	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
+
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
+	
+	@Property
+	@Persist
+	private List<GenderEnum> selectedGender;
 
 	@Inject
 	@Property
@@ -179,7 +197,7 @@ public class Performance {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -246,6 +264,7 @@ public class Performance {
 		this.selectedQuizzes = null;
 		this.selectedCourses = null;
 		this.selectedActivities = null;
+		this.selectedGender = null;
 	}
 
 	void onPrepareForRender() {
@@ -359,6 +378,9 @@ public class Performance {
 			} else {
 				this.logger.debug("No rated Objetcs found");
 			}
+			
+			List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
+
 
 			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
 				quizzesList = this.selectedQuizzes;
@@ -371,7 +393,7 @@ public class Performance {
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
 			final List<Long> results = this.analysis.computePerformanceHistogram(courseList, this.selectedUsers, quizzesList,
-					(long) this.resolution, beginStamp, endStamp);
+					(long) this.resolution, beginStamp, endStamp, gender);
 			this.logger.debug("results for performance histogram:" + results);
 
 			final List<List<Long>> preparedResults = CollectionFactory.newList();

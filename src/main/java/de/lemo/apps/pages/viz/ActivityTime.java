@@ -42,6 +42,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.integration.CourseDAO;
@@ -73,6 +74,7 @@ public class ActivityTime {
 	private DateWorker dateWorker;
 
 	@Inject
+	@Property
 	private CourseIdValueEncoder courseValueEncoder;
 
 	@Inject
@@ -89,6 +91,9 @@ public class ActivityTime {
 
 	@Inject
 	private AnalysisWorker analysisWorker;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -150,6 +155,8 @@ public class ActivityTime {
 
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
+	
+	
 
 	// Value Encoder for activity multi-select component
 	@Property(write = false)
@@ -197,13 +204,17 @@ public class ActivityTime {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses;
+	private List<Long> selectedUsers; //, selectedCourses;
+	
+	@Property
+	@Persist
+	private List<Course> selectedCourse;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
 		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
 	}
@@ -216,10 +227,10 @@ public class ActivityTime {
 
 		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
 			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities, this.selectedGender);
 		} else {
 			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null, this.selectedGender);
 		}
 		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
 
@@ -233,9 +244,13 @@ public class ActivityTime {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-			if (this.selectedCourses == null) {
-				this.selectedCourses = new ArrayList<Long>();
-				this.selectedCourses.add(this.courseId);
+//			if (this.selectedCourses == null) {
+//				this.selectedCourses = new ArrayList<Long>();
+//				this.selectedCourses.add(this.courseId);
+//			}
+			if (this.selectedCourse == null) {
+				this.selectedCourse = new ArrayList<Course>();
+				this.selectedCourse.add(this.course);
 			}
 
 			return true;
@@ -261,7 +276,8 @@ public class ActivityTime {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
-		this.selectedCourses = null;
+		//this.selectedCourses = null;
+		this.selectedCourse = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
 //		this.beginDate = null;
@@ -270,9 +286,10 @@ public class ActivityTime {
 
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		this.courseModel = new CourseIdSelectModel(courses);
+		//this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
-		this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
+		//this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
+		this.courses = this.userWorker.getCurrentUser().getMyCourses();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -287,32 +304,25 @@ public class ActivityTime {
 	public String getQuestionResult() {
 
 		List<Long> courseList = new ArrayList<Long>();
-		if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
-			if (!this.selectedCourses.contains(this.courseId)) {
-				this.selectedCourses.add(this.courseId);
+		if ((this.selectedCourse != null) && !this.selectedCourse.isEmpty()) {
+			if (!this.selectedCourse.contains(this.course)) {
+				this.selectedCourse.add(this.course);
 			}
-			courseList = this.selectedCourses;
+			for(int i = 0;i < selectedCourse.size();i++ ){
+				courseList.add(this.selectedCourse.get(i).getCourseId());
+				logger.info("Course Id added: "+this.selectedCourse.get(i).getCourseId());
+			}
+			
 		} else {
 			courseList.add(this.courseId);
 		}
 
 		final boolean considerLogouts = true;
 
-		ArrayList<String> types = null;
-		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-			types = new ArrayList<String>();
-			for (final EResourceType resourceType : this.selectedActivities) {
-				types.add(resourceType.name().toUpperCase());
-			}
-		}
+		List<String> types = this.visWorker.getActivityIds(this.selectedActivities);
 		
-		ArrayList<Long> gender = null;
-		if ((this.selectedGender != null) && !this.selectedGender.isEmpty()) {
-			gender = new ArrayList<Long>();
-			for (final GenderEnum gen : this.selectedGender) {
-				gender.add(gen.value());
-			}
-		}
+		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
+		
 
 		Long endStamp = 0L;
 		Long beginStamp = 0L;

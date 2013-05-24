@@ -286,4 +286,17 @@ public class Course extends AbstractEntity {
 		this.courseId = courseObject.getId();
 		this.needUpdate = false;
 	}
+	
+	@Override
+	public String toString(){
+		
+		final StringBuilder builder = new StringBuilder();
+		if(this.courseName!=null && !this.courseName.equals("")) builder.append(this.courseName);
+		else if(this.courseDescription!=null && !this.courseDescription.equals("")) builder.append(this.courseDescription.substring(0, 7));
+		builder.append(" (");
+		builder.append(this.courseId);
+		builder.append(")");
+		return builder.toString();
+	}
+	
 }

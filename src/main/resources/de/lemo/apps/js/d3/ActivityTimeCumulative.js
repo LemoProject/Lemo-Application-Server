@@ -107,9 +107,13 @@
     	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
     	return;
   }
+ 
+  redraw(boxPlotData);
   
+  function redraw(plotData){
+	  
   //Generating the tick names for the x-axis
-  var timeSlots = boxPlotData.map(function(d){return d.name;}); 	  
+  var timeSlots = plotData.map(function(d){return d.name;}); 	  
 
    
    //Adding empty slot to shift all entries one step to the left
@@ -147,6 +151,7 @@
     		
     	
 	  var svgBox = div.append("svg:svg")
+	  	.attr("id", "vizsvg")
 	  	.attr("width", width)
 	  	.attr("height", height);
 	  
@@ -154,7 +159,7 @@
 	  svgBox.append("g")
 	      .attr("class","x axis grid")
 	      .attr("transform", "translate("+marginViz.left+"," + h +")")
-	      .call(make_x_axis()
+	      .call(make_x_axis(xScale)
             .tickSize(-height, 0, 0)
             .tickFormat(""))
 	      .call(xAxis) 
@@ -170,7 +175,7 @@
 	  svgBox.append("g")
 	      .attr("class", "y axis grid")
 	      .attr("transform", "translate("+marginViz.left+", "+ 0 +")")
-	      .call(make_y_axis()
+	      .call(make_y_axis(yScale)
             .tickSize(-width, 0, 0)
             .tickFormat(""))
           .call(yAxis)
@@ -192,7 +197,7 @@
 	  
 	  
 	   var gBox = svgBox.selectAll("g.box")
-	    	.data(boxPlotData, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} )
+	    	.data(plotData, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} )
 	     .enter().append("g")
     		.attr("class", function(d) {return "box gbox-"+d.name.replace(new RegExp("[\W :]","g"),"_");})
     		.attr("transform", function (d,i) {return "translate(" + (xScale(d.name)+marginViz.left-14)+",0)"; })
@@ -211,17 +216,38 @@
 	  gBox.append("g")
 		.attr("transform", "translate(" + marginPlot.left + "," + 0 + ")")
 		.call(box);
-	 
-	   
+  } //redraw end	 
+  
+  
+  
+ 
+  
+  dayView = function(){
+  		 $('#weekView').removeClass("active")
+  		 $('#dayView').addClass("active")
+  		 console.log("Dayview call ...")
+  		 $('#vizsvg').remove();
+  		 redraw(boxPlotDataPerQuarterDay);
+  	 }	
+  	 
+  weekView = function(){
+  		 $('#dayView').removeClass("active")
+  		 $('#weekView').addClass("active")
+  		  console.log("Weekview call ...")
+  		  $('#vizsvg').remove();
+  		 redraw(boxPlotData);
+  		 
+  	 }
+  
 	   //Adding helper grid lines for x-axis
-	   function make_x_axis() {        
+	   function make_x_axis(xScale) {        
 		    return d3.svg.axis()
 		         .scale(xScale)
 		         .orient("bottom")
 		         .ticks(5)
 		}
 	   //Adding helper grid lines for y-axis
-		function make_y_axis() {        
+		function make_y_axis(yScale) {        
 		    return d3.svg.axis()
 		        .scale(yScale)
 		        .orient("left")

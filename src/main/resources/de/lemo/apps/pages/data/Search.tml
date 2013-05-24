@@ -5,7 +5,11 @@
 	<div class="container">
         <h2> Result list for '${searchQuery}': </h2>
         	<div class="well">
-			<t:grid source="allCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" class="table">
+			<t:grid source="allCourses" row="courseItem" exclude="maxparticipants,needupdate,dataversion" add="view" class="table">
+				<p:viewCell>
+					<t:pagelink page="data/Explorer" id="${message:viewdetails}" context="${courseItem?.id}" class="btn btn-primary pull-left">view</t:pagelink>
+				</p:viewCell>
+				
 				<p:empty>
 			    	<div class="row-fluid">
 			    		<br/>

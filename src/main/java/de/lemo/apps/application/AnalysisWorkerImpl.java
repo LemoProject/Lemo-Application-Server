@@ -13,6 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.slf4j.Logger;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
@@ -28,13 +29,16 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Inject
 	private DateWorker dateWorker;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private Analysis analysis;
 
 	@Override
 	public List<ResourceRequestInfo> usageAnalysisExtended(final Course course, final Date beginDate,
-			final Date endDate, final List<EResourceType> resourceTypes) {
+			final Date endDate, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -58,6 +62,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					this.logger.debug("Resource Typ: " + resourceTypes.get(i).toString());
 				}
 			}
+			
+			List<Long> gender = this.visWorker.getGenderIds(genderList);
 
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
@@ -72,7 +78,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis");
 			final ResultListResourceRequestInfo results = this.analysis.computeCourseActivityExtended(courses,
 					beginStamp,
-					endStamp, resourceTypesNames);
+					endStamp, resourceTypesNames,gender);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
 					&& (results.getResourceRequestInfos().size() > 0)) {
@@ -89,7 +95,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public List<ResourceRequestInfo> learningObjectUsage(final Course course, final Date beginDate, final Date endDate,
-			final List<Long> selectedUsers, final List<EResourceType> resourceTypes) {
+			final List<Long> selectedUsers, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -113,6 +119,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					this.logger.debug("Resource Typ: " + resourceTypes.get(i).toString());
 				}
 			}
+			
+			List<Long> gender = this.visWorker.getGenderIds(genderList);
 
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
@@ -127,7 +135,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis");
 			final ResultListResourceRequestInfo results = this.analysis.computeLearningObjectUsage(courses,
 					selectedUsers,
-					resourceTypesNames, beginStamp, endStamp);
+					resourceTypesNames, beginStamp, endStamp, gender);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
 					&& (results.getResourceRequestInfos().size() > 0)) {
@@ -144,7 +152,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public ResultListRRITypes usageAnalysisExtendedDetails(final Course course, final Date beginDate,
-			final Date endDate, final Integer resolution, final List<EResourceType> resourceTypes) {
+			final Date endDate, final Integer resolution, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -167,6 +175,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					resourceTypesNames.add(resourceTypes.get(i).toString());
 				}
 			}
+			
+			List<Long> gender = this.visWorker.getGenderIds(genderList);
 
 			final List<Long> roles = new ArrayList<Long>();
 			final List<Long> courses = new ArrayList<Long>();
@@ -181,7 +191,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis Details");
 			final ResultListRRITypes results = this.analysis.computeCourseActivityExtendedDetails(courses, beginStamp,
 					endStamp,
-					resolution.longValue(), resourceTypesNames);
+					resolution.longValue(), resourceTypesNames, gender);
 			this.logger.debug("Extended Analysls Details: " + results);
 			if (results != null) {
 				if (results.getAssignmentRRI() != null) {

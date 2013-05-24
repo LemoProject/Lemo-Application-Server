@@ -29,5 +29,6 @@ public interface QFrequentPathsBIDE {
 			@FormParam(MetaParam.MIN_SUP) Double minSup,
 			@FormParam(MetaParam.SESSION_WISE) Boolean sessionWise,
 			@FormParam(MetaParam.START_TIME) Long startTime,
-			@FormParam(MetaParam.END_TIME) Long endTime);
+			@FormParam(MetaParam.END_TIME) Long endTime,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 }

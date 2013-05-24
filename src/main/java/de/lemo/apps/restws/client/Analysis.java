@@ -25,26 +25,30 @@ public interface Analysis {
 			List<Long> courses,
 			Long startTime,
 			Long endTime,
-			List<String> resourceTypes);
+			List<String> resourceTypes,
+			List<Long> gender);
 
 	ResultListRRITypes computeCourseActivityExtendedDetails(
 			List<Long> courses,
 			Long startTime,
 			Long endTime,
 			Long resolution,
-			List<String> resourceTypes);
+			List<String> resourceTypes,
+			List<Long> gender);
 
 	ResultListResourceRequestInfo computeLearningObjectUsage(
 			List<Long> courseIds,
 			List<Long> userIds,
 			List<String> types,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	String computeCourseUserPaths(
 			List<Long> courseIds,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	String computeUserPathAnalysis(
 			List<Long> courseIds,
@@ -52,12 +56,14 @@ public interface Analysis {
 			List<String> types,
 			Boolean considerLogouts,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	ResultListLongObject computeCourseUsers(
 			List<Long> courseIds,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	String computeQFrequentPathBIDE(
 			List<Long> courseIds,
@@ -68,7 +74,8 @@ public interface Analysis {
 			Double minSup,
 			Boolean sessionWise,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	String computeQFrequentPathViger(
 			List<Long> courseIds,
@@ -79,7 +86,8 @@ public interface Analysis {
 			Double minSup,
 			Boolean sessionWise,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	String computeCumulativeUserAccess(
 			List<Long> courseIds,
@@ -95,7 +103,8 @@ public interface Analysis {
 			List<Long> quizzes,
 			Long resolution,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 
 	String computePerformanceBoxplot(
 			List<Long> courses,
@@ -103,7 +112,8 @@ public interface Analysis {
 			List<Long> quizzes,
 			Long resolution,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 	
 	List<Long> computePerformanceUserTest(
 			List<Long> courses,
@@ -111,14 +121,16 @@ public interface Analysis {
 			List<Long> quizzes,
 			Long resolution,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> gender);
 	
 	String computePerformanceUserTestBoxPlot(
-			final List<Long> courses,
-			final List<Long> users,
-			final List<Long> quizzes,
-			final Long resolution,
-			final Long startTime,
-			final Long endTime);
+			List<Long> courses,
+			List<Long> users,
+			List<Long> quizzes,
+			Long resolution,
+			Long startTime,
+			Long endTime,
+			List<Long> gender);
 
 }

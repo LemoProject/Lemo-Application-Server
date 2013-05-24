@@ -1,5 +1,5 @@
 /**
-	 * File ServiceCourseTitleSearch.java
+ * File ServiceCourseTitleSearch.java
 	 *
 	 * Date Feb 14, 2013 
 	 *

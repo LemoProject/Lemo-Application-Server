@@ -28,9 +28,9 @@ import de.lemo.apps.annotation.Exclude;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
-import de.lemo.apps.pages.Search;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
+import de.lemo.apps.pages.data.Search;
 
 /**
  * Layout for the dashboard

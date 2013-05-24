@@ -40,6 +40,7 @@ public interface QPerformanceUserTest {
 			@FormParam(MetaParam.QUIZ_IDS) final List<Long> quizzes,
 			@FormParam(MetaParam.RESOLUTION) final Long resolution,
 			@FormParam(MetaParam.START_TIME) final Long startTime,
-			@FormParam(MetaParam.END_TIME) final Long endTime);
+			@FormParam(MetaParam.END_TIME) final Long endTime,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 
 }

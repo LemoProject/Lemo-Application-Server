@@ -177,9 +177,9 @@
                         
 	                            <t:jquery.palette
 	                              t:id="courses"
-	                              encoder="courseIdEncoder"
-	                              selected="selectedCourses"
-	                              model="courseIds"/>
+	                              encoder="courseValueEncoder"
+	                              selected="selectedCourse"
+	                              model="courses"/>
                        
                      	 </div>
 			        </div>

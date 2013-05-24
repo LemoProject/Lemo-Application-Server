@@ -13,31 +13,25 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 
 
-public class CourseIdValueEncoderWorker implements ValueEncoder<Course>, ValueEncoderFactory<Course>,
-		CourseIdValueEncoder {
+public class CourseIdValueEncoderWorker implements CourseIdValueEncoder {
 
-	@Inject
+	
 	private CourseDAO courseDAO;
 
-	@Override
+	public CourseIdValueEncoderWorker(CourseDAO courseDAO){
+		this.courseDAO = courseDAO;
+	}
+	
+	
 	public String toClient(final Course value) {
-		// return the given object's ID
 		return String.valueOf(value.getId());
 	}
 
-	@Override
+	
 	public Course toValue(final String id) {
-		// find the color object of the given ID in the database
 		return this.courseDAO.getCourse(Long.parseLong(id));
 	}
 
-	// let this ValueEncoder also serve as a ValueEncoderFactory
-	public ValueEncoder<Course> create(final Class<Course> type, final CourseDAO courseDAO) {
-		this.courseDAO = courseDAO;
-		return this;
-	}
-
-	@Override
 	public ValueEncoder<Course> create(final Class<Course> arg0) {
 		return this;
 	}

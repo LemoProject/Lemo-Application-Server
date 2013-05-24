@@ -45,7 +45,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -79,6 +81,9 @@ public class ActivityTimeCumulative {
 
 	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private Analysis analysis;
@@ -153,9 +158,25 @@ public class ActivityTimeCumulative {
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
+	
+	// Value Encoder for gender multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+						GenderEnum.class);
+			
+	// Select Model for gender multi-select component
+	@Property(write = false)
+	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
+
+	
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
+	
+	@Property
+	@Persist
+	private List<GenderEnum> selectedGender;
+
 
 	@Inject
 	@Property
@@ -173,7 +194,7 @@ public class ActivityTimeCumulative {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -210,6 +231,7 @@ public class ActivityTimeCumulative {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedActivities = null;
+		this.selectedGender = null;
 	}
 
 	void onPrepareForRender() {

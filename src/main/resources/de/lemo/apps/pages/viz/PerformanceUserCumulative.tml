@@ -134,6 +134,14 @@
 	                              encoder="userIdEncoder"
 	                              selected="selectedUsers"
 	                              model="userIds"/>
+	                              
+	                              <br />
+	                              
+	                              <t:jquery.palette
+	                              t:id="gender"
+	                              encoder="genderEncoder"
+	                              selected="selectedGender"
+	                              model="genderModel"/>
                        
                      	 </div>
 			        </div>

@@ -1,4 +1,4 @@
-package de.lemo.apps.pages;
+package de.lemo.apps.pages.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;

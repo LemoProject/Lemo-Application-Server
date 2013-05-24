@@ -33,7 +33,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -64,6 +66,10 @@ public class FrequentPathViger {
 
 	@Inject
 	private UserWorker userWorker;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
+
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -129,9 +135,22 @@ public class FrequentPathViger {
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
+	// Value Encoder for gender multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+					GenderEnum.class);
+		
+	// Select Model for gender multi-select component
+	@Property(write = false)
+	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
+
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
+	
+	@Property
+	@Persist
+	private List<GenderEnum> selectedGender;
 
 	@Inject
 	@Property
@@ -149,7 +168,7 @@ public class FrequentPathViger {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000, this.visWorker.getGenderIds(this.selectedGender)).getElements();
 		this.logger.info("          ----        " + elements);
 		return elements;
 	}
@@ -205,6 +224,7 @@ public class FrequentPathViger {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedActivities = null;
+		this.selectedGender = null;
 		this.minSup = 1;
 		this.pathLengthMin = null;
 		this.pathLengthMax = null;
@@ -292,14 +312,10 @@ public class FrequentPathViger {
 
 		final boolean considerLogouts = false;
 
-		ArrayList<String> types = null;
-		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-			types = new ArrayList<String>();
-			for (final EResourceType resourceType : this.selectedActivities) {
-				types.add(resourceType.name().toUpperCase());
-			}
-		}
-
+		List<String> types = this.visWorker.getActivityIds(this.selectedActivities);
+		
+		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
+		
 		Long endStamp = 0L;
 		Long beginStamp = 0L;
 		if (this.beginDate != null) {
@@ -321,7 +337,7 @@ public class FrequentPathViger {
 		this.logger.debug("PathLength: " + this.pathLengthMin + "  --  " + this.pathLengthMax);
 
 		return this.analysis.computeQFrequentPathViger(courseIds, this.selectedUsers, types, this.pathLengthMin, this.pathLengthMax,
-				this.minSupDouble, considerLogouts, beginStamp, endStamp);
+				this.minSupDouble, considerLogouts, beginStamp, endStamp, gender);
 	}
 
 	public String getSupportValue() {

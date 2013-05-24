@@ -26,6 +26,7 @@ public interface QLearningObjectUsage {
 			@FormParam(MetaParam.USER_IDS) List<Long> userIds,
 			@FormParam(MetaParam.TYPES) List<String> types,
 			@FormParam(MetaParam.START_TIME) Long startTime,
-			@FormParam(MetaParam.END_TIME) Long endTime);
+			@FormParam(MetaParam.END_TIME) Long endTime,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 
 }
