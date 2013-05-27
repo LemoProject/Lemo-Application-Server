@@ -150,11 +150,11 @@
 			        <div id="collapseFive" class="accordion-body collapse">  
 			        	<div class="accordion-inner">               
                         
-	                            <t:jquery.palette
+	                             <t:jquery.palette
 	                              t:id="courses"
-	                              encoder="courseIdEncoder"
+	                              encoder="courseValueEncoder"
 	                              selected="selectedCourses"
-	                              model="courseIds"/>
+	                              model="courses"/>
                        
                      	 </div>
 			        </div>

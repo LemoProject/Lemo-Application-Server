@@ -74,6 +74,7 @@ public class ActivityTimeHeatmap {
 	private DateWorker dateWorker;
 
 	@Inject
+	@Property
 	private CourseIdValueEncoder courseValueEncoder;
 
 	@Inject
@@ -200,7 +201,11 @@ public class ActivityTimeHeatmap {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses;
+	private List<Long> selectedUsers;
+	
+	@Property
+	@Persist
+	private List<Course> selectedCourses;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -237,8 +242,8 @@ public class ActivityTimeHeatmap {
 			this.courseId = course.getCourseId();
 			this.course = course;
 			if (this.selectedCourses == null) {
-				this.selectedCourses = new ArrayList<Long>();
-				this.selectedCourses.add(this.courseId);
+				this.selectedCourses = new ArrayList<Course>();
+				this.selectedCourses.add(this.course);
 			}
 
 			return true;
@@ -272,10 +277,8 @@ public class ActivityTimeHeatmap {
 	}
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		this.courseModel = new CourseIdSelectModel(courses);
+		this.courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.userIds = this.getUsers();
-		this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -291,10 +294,14 @@ public class ActivityTimeHeatmap {
 
 		List<Long> courseList = new ArrayList<Long>();
 		if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
-			if (!this.selectedCourses.contains(this.courseId)) {
-				this.selectedCourses.add(this.courseId);
+			if (!this.selectedCourses.contains(this.course)) {
+				this.selectedCourses.add(this.course);
 			}
-			courseList = this.selectedCourses;
+			for(int i = 0;i < selectedCourses.size();i++ ){
+				courseList.add(this.selectedCourses.get(i).getCourseId());
+				logger.info("Course Id added: "+this.selectedCourses.get(i).getCourseId());
+			}
+			
 		} else {
 			courseList.add(this.courseId);
 		}

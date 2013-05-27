@@ -204,11 +204,11 @@ public class ActivityTime {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers; //, selectedCourses;
+	private List<Long> selectedUsers; 
 	
 	@Property
 	@Persist
-	private List<Course> selectedCourse;
+	private List<Course> selectedCourses;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -244,13 +244,10 @@ public class ActivityTime {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
-//			if (this.selectedCourses == null) {
-//				this.selectedCourses = new ArrayList<Long>();
-//				this.selectedCourses.add(this.courseId);
-//			}
-			if (this.selectedCourse == null) {
-				this.selectedCourse = new ArrayList<Course>();
-				this.selectedCourse.add(this.course);
+
+			if (this.selectedCourses == null) {
+				this.selectedCourses = new ArrayList<Course>();
+				this.selectedCourses.add(this.course);
 			}
 
 			return true;
@@ -277,7 +274,7 @@ public class ActivityTime {
 		this.course = null;
 		this.selectedUsers = null;
 		//this.selectedCourses = null;
-		this.selectedCourse = null;
+		this.selectedCourses = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
 //		this.beginDate = null;
@@ -285,11 +282,8 @@ public class ActivityTime {
 	}
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		//this.courseModel = new CourseIdSelectModel(courses);
+		this.courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.userIds = this.getUsers();
-		//this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
-		this.courses = this.userWorker.getCurrentUser().getMyCourses();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -304,13 +298,13 @@ public class ActivityTime {
 	public String getQuestionResult() {
 
 		List<Long> courseList = new ArrayList<Long>();
-		if ((this.selectedCourse != null) && !this.selectedCourse.isEmpty()) {
-			if (!this.selectedCourse.contains(this.course)) {
-				this.selectedCourse.add(this.course);
+		if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
+			if (!this.selectedCourses.contains(this.course)) {
+				this.selectedCourses.add(this.course);
 			}
-			for(int i = 0;i < selectedCourse.size();i++ ){
-				courseList.add(this.selectedCourse.get(i).getCourseId());
-				logger.info("Course Id added: "+this.selectedCourse.get(i).getCourseId());
+			for(int i = 0;i < selectedCourses.size();i++ ){
+				courseList.add(this.selectedCourses.get(i).getCourseId());
+				logger.info("Course Id added: "+this.selectedCourses.get(i).getCourseId());
 			}
 			
 		} else {

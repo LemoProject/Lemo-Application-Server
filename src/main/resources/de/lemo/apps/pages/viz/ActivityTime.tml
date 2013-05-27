@@ -178,7 +178,7 @@
 	                            <t:jquery.palette
 	                              t:id="courses"
 	                              encoder="courseValueEncoder"
-	                              selected="selectedCourse"
+	                              selected="selectedCourses"
 	                              model="courses"/>
                        
                      	 </div>
