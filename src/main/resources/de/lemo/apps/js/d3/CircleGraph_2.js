@@ -248,7 +248,7 @@
   	return (b.type.localeCompare(a.type));
   }
 
-  function sortBy(d) {
+  sortBy = function(d) {
     cluster = d3.layout.cluster()
     .size([360, ry - 120]);
     
@@ -265,7 +265,7 @@
     cluster.sort(sortfunction4);
     }
 
-    nodes = cluster.nodes(packages.root(classes)),
+    nodes = cluster.nodes(packages.root(data)),
     links = packages.imports(nodes),
     splines = bundle(links);  
 
@@ -284,10 +284,10 @@
           }
         }
         if (bool) {
-          return "link srctar-" + d.source.key + " srctar-" + d.target.key;
+          return "linkCG srctar-" + d.source.key + " srctar-" + d.target.key;
         }
         else
-          return "link source-" + d.source.key + " target-" + d.target.key;})
+          return "linkCG source-" + d.source.key + " target-" + d.target.key;})
       .attr("d", function(d, i) { return line(splines[i]); });
      
 
