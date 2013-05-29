@@ -9,7 +9,16 @@ package de.lemo.apps.pages.data;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.Block;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.EventLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 import org.slf4j.Logger;
 import de.lemo.apps.entities.Roles;
 import de.lemo.apps.entities.User;
@@ -23,7 +32,6 @@ import de.lemo.apps.restws.entities.CourseObject;
 
 @RequiresAuthentication
 public class Initialize {
-	private static final int THOU = 1000;
 	
 	@Inject
 	private Initialisation init;
@@ -37,12 +45,37 @@ public class Initialize {
 	@Inject
 	UserDAO ud;
 	
+	@Inject 
+	ComponentResources compRessources;
+	
+	@Component(parameters = {"event=progress", "id=literal:progress"})
+    private EventLink progress;
+	
 	@Inject
 	Logger logger;
 
+	@Property
+	@Persist
+	private long percentage;
+	
+	@Property
+	@Persist
+	private double multi;
+	
 	public String getUserName() {
+		
 		return this.request.getRemoteUser();
 
+	}
+	
+	void onPrepareForRender() {
+		
+		this.percentage = 0;
+	}
+	
+	void cleanupRender() {
+		this.percentage = 0;
+		this.multi = 0;
 	}
 
 	public Object onProgressiveDisplay() {
@@ -50,9 +83,11 @@ public class Initialize {
 		final User user = this.ud.getUser(this.getUserName());
 
 		final List<Long> userCourses = user.getMyCourseIds();
+		this.multi = 100 / userCourses.size();
+		
 		if (userCourses != null) {
 			for (int i = 0; i < userCourses.size(); i++) {
-				
+				this.percentage = Math.round((i+1)*multi);
 				logger.debug("Looking if course ID:"+userCourses.get(i)+" needs update.");
 				if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
 					CourseObject updateObject = null;
@@ -67,26 +102,27 @@ public class Initialize {
 						this.courseDAO.update(updateObject);
 					}
 				}
+				
 			}
 		}
-
-		// Sleep 2 seconds to simulate a long-running operation
-		this.sleep(THOU);
 
 		return user.getRoles().contains(Roles.ADMIN) ? DashboardAdmin.class : Dashboard.class;
 
 	}
-
-	public String getStatusBar() {
-		return "20%";
+	
+	Object onProgress(){
+		JSONObject progress = new JSONObject();
+		logger.info("Prgress Request, progress:"+this.percentage);
+		progress.append("progress", String.valueOf(this.percentage)+"%");
+		return progress;
+	}
+	
+	public String getProgressEventURI(){
+		return compRessources.createEventLink("Progress").toAbsoluteURI();
 	}
 
-	private void sleep(final long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (final InterruptedException e) {
-			// Ignore
-		}
+	public String getStatusBar() {
+		return String.valueOf(this.percentage)+"%";
 	}
 
 }

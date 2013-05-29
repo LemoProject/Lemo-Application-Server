@@ -9,8 +9,14 @@
     <div class="modal-body">
     
 			
-	    	<t:ProgressiveDisplay t:id="showThings" t:initial="block:loadingBlock" style="margin-left: 10px;">
-			</t:ProgressiveDisplay>
+ 	    	<t:ProgressiveDisplay t:id="showThings" t:initial="block:loadingBlock" style="margin-left: 10px;"> 
+ 			</t:ProgressiveDisplay> 
+
+<!--				<t:progressiveDisplay /> -->
+
+<!-- 	<div class="progress progress-striped active"> -->
+<!-- 	    		<div class="bar" style="width: ${statusbar};"></div> -->
+<!--     </div> -->
 
 
     </div>
@@ -19,10 +25,38 @@
     </div>
 	
 	
+	
+	
 	<t:block t:id="loadingBlock">
 		<div class="progress progress-striped active">
-	    		<div class="bar" style="width: ${statusbar};"></div>
+	    		<div id="loadingbar" class="bar" style="width: ${statusbar};"></div>
 	    </div>
  	</t:block>
+ 	
+ 	<a  t:id="progress"></a>
+ 	
+ 	<script type="text/javascript">
+ 	  console.log("Starting JS : ");
+ 	  $(document).ready(function() {
+ 		 	console.log("Document ready");
+		 	var progressLink = $('#progress').attr("href");
+		 	console.log("Progress Link: "+progressLink);
+		 	
+		 	
+		 	setInterval(function(counter){
+		 		console.log("bin in repeat ..."+counter)
+		 		$.ajax({
+		 			  type: "GET",
+		 			  url: progressLink
+		 			}).done(function( msg ) {
+		 			  console.log("ajax update ... "+msg.progress)	
+		 			  $("#loadingbar").css("width",msg.progress);
+		 			});
+		 	},400)
+ 	  })
+ 	
+ 	
+ 	 
+ 	</script>
       
 </html>

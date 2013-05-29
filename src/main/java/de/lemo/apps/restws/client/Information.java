@@ -17,7 +17,8 @@ public interface Information {
 	
 	String getDMSDBVersion() throws RestServiceCommunicationException;
 	
-	ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) throws RestServiceCommunicationException;
+	ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) 
+										throws RestServiceCommunicationException;
 	
 	List<SCConnector> getConnectorList() throws RestServiceCommunicationException;
 	

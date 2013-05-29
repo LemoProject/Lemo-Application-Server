@@ -21,9 +21,32 @@
 	
 	<t:block t:id="loadingBlock">
 		<div class="progress progress-striped active">
-	    		<div class="bar" style="width: ${statusbar};"></div>
+	    		<div id="loadingbar" class="bar" style="width: ${statusbar};"></div>
 	    </div>
 		 Loading course data .... 
  	</t:block>
+ 	
+ 	<a  t:id="progress"></a>
+ 	
+ 	<script type="text/javascript">
+ 	  console.log("Starting JS : ");
+ 	  $(document).ready(function() {
+		 	var progressLink = $('#progress').attr("href");
+		 	console.log("Progress Link: "+progressLink);
+		 	
+		 	
+		 	setInterval(function(counter){
+		 		$.ajax({
+		 			  type: "GET",
+		 			  url: progressLink
+		 			}).done(function( msg ) {
+		 			  $("#loadingbar").css("width",msg.progress);
+		 			});
+		 	},400)
+ 	  })
+ 	
+ 	
+ 	 
+ 	</script>
       
 </html>

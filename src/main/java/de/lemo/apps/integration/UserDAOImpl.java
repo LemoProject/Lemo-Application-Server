@@ -50,6 +50,16 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return true;
 	}
+	
+	public boolean doExist(final String username) {
+		final Criteria criteria = this.session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("username", username));
+		final List<User> results = criteria.list();
+		if (results.size() == 0) {
+			return false;
+		}
+		return true;
+	}
 
 	public User getUser(final String username) {
 		final Criteria criteria = this.session.createCriteria(User.class);
