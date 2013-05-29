@@ -208,9 +208,15 @@
   
     (function(d3custom, $, undefined) {
     	
-     
+      var beginDate = '${beginDate}';
+      var endDate = '${endDate}';
       
-    
+      $('#endDate').datepicker( "setDate", "-14");
+      
+      $('#beginDate').val(beginDate);
+      
+      
+      
       var q2result = ${questionResult};
       
       d3custom.data = q2result;

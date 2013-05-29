@@ -84,12 +84,14 @@ public class InformationImpl implements Information {
 	}
 	
 
-	public ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) throws RestServiceCommunicationException {
+	public ResultListCourseObject getCoursesByTitle(String text, Long count, Long offset) 
+												throws RestServiceCommunicationException {
 		
 		try {
 
 				if (init.defaultConnectionCheck()){
-					final ServiceCourseTitleSearch serviceProxy = ProxyFactory.create(ServiceCourseTitleSearch.class, InitialisationImpl.SERVICE_PREFIX_URL);
+					final ServiceCourseTitleSearch serviceProxy = ProxyFactory.create(ServiceCourseTitleSearch.class,
+																					  InitialisationImpl.SERVICE_PREFIX_URL);
 					if (serviceProxy != null) {
 						
 						return serviceProxy.getCoursesByText(text, count, offset);

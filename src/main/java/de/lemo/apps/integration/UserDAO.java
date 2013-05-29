@@ -16,6 +16,8 @@ import de.lemo.apps.entities.User;
 public interface UserDAO {
 
 	boolean doExist(User user);
+	
+	boolean doExist(final String username);
 
 	User getUser(String username);
 	

@@ -6,8 +6,13 @@ package de.lemo.apps.pages.data;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.EventLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 import org.slf4j.Logger;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
@@ -33,9 +38,15 @@ public class Register {
 
 	@Inject
 	private HttpServletRequest request;
+	
+	@Inject 
+	ComponentResources compRessources;
 
 	@Inject
 	private Logger logger;
+	
+	@Component(parameters = {"event=progress", "id=literal:progress"})
+    private EventLink progress;
 
 	@Inject
 	UserDAO userDAO;
@@ -45,6 +56,14 @@ public class Register {
 
 	@Persist
 	private String dmsUserName;
+	
+	@Property
+	@Persist
+	private long percentage;
+	
+	@Property
+	@Persist
+	private double multi;
 
 	Object onActivate() {
 		if (dmsUserId == null) {
@@ -53,8 +72,14 @@ public class Register {
 		return true;
 	}
 
+	void onPrepareForRender() {
+		
+		this.percentage = 0;
+	}
+	
 	void cleanupRender() {
-
+		this.percentage = 0;
+		this.multi = 0;
 	}
 
 	public String getUserName() {
@@ -70,15 +95,18 @@ public class Register {
 		try {
 
 			userCourseIds = init.getUserCourses(dmsUserId).getElements();
-
+			logger.info("Course received for user "+dmsUserId+": "+userCourseIds.size());
 		} catch (RestServiceCommunicationException e1) {
 			logger.error(e1.getMessage());
 		}
-
-		if (userCourseIds != null) {
-			logger.debug("Loading  " + userCourseIds.size() + " courses");
-			for (Long courseId : userCourseIds) {
-
+		
+		
+		if (userCourseIds != null && userCourseIds.size() > 0) {
+			this.multi = 100 / userCourseIds.size();
+			logger.info("Loading  " + userCourseIds.size() + " courses");
+			for (int i = 0; i < userCourseIds.size(); i++) {
+				Long courseId =  userCourseIds.get(i);
+				this.percentage = Math.round((i+1)*multi);
 				if (!this.courseDAO.doExistByForeignCourseId(courseId)) {
 					CourseObject courseObject = null;
 					try {
@@ -87,7 +115,7 @@ public class Register {
 						logger.error(e.getMessage());
 					}
 					if (courseObject != null) {
-						logger.debug("New Course with Id: " + courseId + " added.");
+						logger.info("New Course with Id: " + courseId + " added.");
 						Course savedCourse = this.courseDAO.save(courseObject);
 						user.getMyCourses().add(savedCourse);
 						logger.debug("Current sourse Amount: " + user.getMyCourses().size() + " .");
@@ -99,20 +127,31 @@ public class Register {
 					user.getMyCourses().add(this.courseDAO.getCourseByDMSId(courseId));
 				}
 			}
-			userDAO.save(user);
+			
 
 		} else {
-			logger.debug("Could not find any courses for this user.");
+			logger.info("Could not find any courses for this user.");
 		}
-		// Sleep 2 seconds to simulate a long-running operation
-		this.sleep(10000);
-
+		
+		userDAO.save(user);
+		
 		return Start.class;
 
 	}
 
+	public String getProgressEventURI(){
+		return compRessources.createEventLink("Progress").toAbsoluteURI();
+	}
+
 	public String getStatusBar() {
-		return "20%";
+		return String.valueOf(this.percentage)+"%";
+	}
+	
+	Object onProgress(){
+		JSONObject progress = new JSONObject();
+		logger.info("Prgress Request, progress:"+this.percentage);
+		progress.append("progress", String.valueOf(this.percentage)+"%");
+		return progress;
 	}
 
 	/**
