@@ -115,7 +115,6 @@
       var arcs = svg.selectAll("path")
         .data(nodes)
         .enter().append("path")
-        //.attr("fill",function(d,i) { return color(d.type);})
         .attr("d",arc)
         .attr("class","typeArc");
 
@@ -147,17 +146,9 @@
   .attr("class", "node")
   .attr("id", function(d) { return "node-" + d.key; })
   .attr("transform", function(d) { return "rotate(" + (d.x - 90) + "), translate(" + d.y + ")"; })
-
-//  gNode.append("svg:rect")
-//  .attr("class", function(d,i){return "rect-"+i})
-//  .attr("width", function (d,i) { return 15; })
-//  .attr("height", function (d,i) { return i*15; })
-//  .style("fill", function(d,i) { return "red"; })
-//  .on("mouseover",function(d,i){ console.log(i); d3.select("rect.rect-"+i).style("fill","#f000")})
-//  .on("mouseout",function(d,i){ console.log(i); d3.select("rect.rect-"+i).style("fill","red")})
  
   gNode.append("svg:text")
-  .attr("class","text")
+  .attr("class","circletext")
   .attr("dy", ".31em")
   .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
   .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })

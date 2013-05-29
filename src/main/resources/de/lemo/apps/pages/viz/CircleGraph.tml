@@ -1,8 +1,7 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-  
-  
+
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
@@ -17,8 +16,6 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-    		   <p class="pull-left" style="margin-top:4px"> sort by: </p>
-			   <div class="pull-left">&nbsp;</div>
     		   <div class="btn-group btn-group-vertical pull-left" data-toggle="buttons-radio">
 			   <input class="btn" type="button" value="name (alphabetical)" onclick="sortBy(2)"></input>
 			   <input class="btn" type="button" value="amount of links" onclick="sortBy(1)"></input>

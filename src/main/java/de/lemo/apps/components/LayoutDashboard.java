@@ -43,7 +43,7 @@ import de.lemo.apps.pages.data.Search;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/spin.js",
-				"../js/d3/libs/d3.v2.min.js",
+				"../js/d3/libs/d3.v2.js",
 				"../js/d3/libs/BoxPlot_Lib.js",
 				"../js/d3/libs/nv.d3.js",
 				"../js/d3/libs/jquery.tipsy.js",
@@ -65,7 +65,7 @@ import de.lemo.apps.pages.data.Search;
 				"../css/bootstrap.css",
 				"../css/jquery.jqplot.css",
 				"../css/nv.d3.css",
-				// "../css/jquery-ui-1.8.16.bootstrap.css",
+				 "../css/jquery-ui-1.8.16.bootstrap.css",
 				"../css/apps.css"
 		})
 public class LayoutDashboard {
