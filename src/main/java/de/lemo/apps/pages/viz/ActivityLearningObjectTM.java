@@ -204,7 +204,7 @@ public class ActivityLearningObjectTM {
 
 	public Object onActivate() {
 		this.logger.debug("--- Bin im zweiten onActivate");
-		return true;
+		return Explorer.class;
 	}
 
 	public Course onPassivate() {

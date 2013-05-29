@@ -214,15 +214,15 @@ public class Performance {
 				this.selectedCourses.add(this.courseId);
 			}
 			return true;
-		} else {
+			} else {
+				return Explorer.class;
+			}
+		}
+
+		public Object onActivate() {
+			this.logger.debug(" No Course Id provided ...");
 			return Explorer.class;
 		}
-	}
-
-	public Object onActivate() {
-		this.logger.debug("--- Bin im zweiten onActivate");
-		return true;
-	}
 
 	public Course onPassivate() {
 		return this.course;

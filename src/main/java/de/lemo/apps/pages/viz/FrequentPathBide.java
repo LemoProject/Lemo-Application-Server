@@ -209,8 +209,8 @@ public class FrequentPathBide {
 	}
 
 	public Object onActivate() {
-		this.logger.debug("--- Bin im zweiten onActivate");
-		return true;
+		this.logger.debug(" No Course Id provided ...");
+		return Explorer.class;
 	}
 
 	public Course onPassivate() {
