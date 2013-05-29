@@ -20,8 +20,8 @@
     </div>
 
 	<t:block t:id="loadingBlock">
-		<div class="well"> Please wait a bit, your courses will be loaded and your account will be created....</div>
-			<div class="progress progress-striped active">
+		<div class="well"> Please wait a bit, your courses will be loaded and your account will be created.<b>Please contact the LeMo administrator to receive your password!</b></div>
+		<div class="progress progress-striped active">
 	    		<div id="loadingbar" class="bar" style="width: ${statusbar};"></div>
 	    </div>
 	</t:block>

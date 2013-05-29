@@ -95,7 +95,7 @@ public class Register {
 		try {
 
 			userCourseIds = init.getUserCourses(dmsUserId).getElements();
-
+			logger.info("Course received for user "+dmsUserId+": "+userCourseIds.size());
 		} catch (RestServiceCommunicationException e1) {
 			logger.error(e1.getMessage());
 		}
@@ -127,12 +127,14 @@ public class Register {
 					user.getMyCourses().add(this.courseDAO.getCourseByDMSId(courseId));
 				}
 			}
-			userDAO.save(user);
+			
 
 		} else {
 			logger.info("Could not find any courses for this user.");
 		}
-
+		
+		userDAO.save(user);
+		
 		return Start.class;
 
 	}
