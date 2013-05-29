@@ -83,29 +83,31 @@ public class Initialize {
 		final User user = this.ud.getUser(this.getUserName());
 
 		final List<Long> userCourses = user.getMyCourseIds();
-		this.multi = 100 / userCourses.size();
 		
-		if (userCourses != null) {
-			for (int i = 0; i < userCourses.size(); i++) {
-				this.percentage = Math.round((i+1)*multi);
-				logger.debug("Looking if course ID:"+userCourses.get(i)+" needs update.");
-				if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
-					CourseObject updateObject = null;
-					try {
-						updateObject = this.init.getCourseDetails(userCourses.get(i));
-					} catch (RestServiceCommunicationException e) {
-						logger.error(e.getMessage());
+		if (userCourses != null && userCourses.size() > 0) {
+			this.multi = 100 / userCourses.size();
+			
+			if (userCourses != null) {
+				for (int i = 0; i < userCourses.size(); i++) {
+					this.percentage = Math.round((i+1)*multi);
+					logger.debug("Looking if course ID:"+userCourses.get(i)+" needs update.");
+					if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
+						CourseObject updateObject = null;
+						try {
+							updateObject = this.init.getCourseDetails(userCourses.get(i));
+						} catch (RestServiceCommunicationException e) {
+							logger.error(e.getMessage());
+						}
+						if (updateObject != null) {
+							logger.debug("ID of updated object is: "+ updateObject.getId() 
+									+ "  ----  "+updateObject.getTitle()+ "  ----  "+ updateObject.getDescription() );
+							this.courseDAO.update(updateObject);
+						}
 					}
-					if (updateObject != null) {
-						logger.debug("ID of updated object is: "+ updateObject.getId() 
-								+ "  ----  "+updateObject.getTitle()+ "  ----  "+ updateObject.getDescription() );
-						this.courseDAO.update(updateObject);
-					}
+					
 				}
-				
 			}
 		}
-
 		return user.getRoles().contains(Roles.ADMIN) ? DashboardAdmin.class : Dashboard.class;
 
 	}

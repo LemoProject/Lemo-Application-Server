@@ -101,9 +101,9 @@ public class Register {
 		}
 		
 		
-		if (userCourseIds != null) {
+		if (userCourseIds != null && userCourseIds.size() > 0) {
 			this.multi = 100 / userCourseIds.size();
-			logger.debug("Loading  " + userCourseIds.size() + " courses");
+			logger.info("Loading  " + userCourseIds.size() + " courses");
 			for (int i = 0; i < userCourseIds.size(); i++) {
 				Long courseId =  userCourseIds.get(i);
 				this.percentage = Math.round((i+1)*multi);
@@ -115,7 +115,7 @@ public class Register {
 						logger.error(e.getMessage());
 					}
 					if (courseObject != null) {
-						logger.debug("New Course with Id: " + courseId + " added.");
+						logger.info("New Course with Id: " + courseId + " added.");
 						Course savedCourse = this.courseDAO.save(courseObject);
 						user.getMyCourses().add(savedCourse);
 						logger.debug("Current sourse Amount: " + user.getMyCourses().size() + " .");
@@ -130,10 +130,8 @@ public class Register {
 			userDAO.save(user);
 
 		} else {
-			logger.debug("Could not find any courses for this user.");
+			logger.info("Could not find any courses for this user.");
 		}
-		// Sleep 2 seconds to simulate a long-running operation
-		this.sleep(10000);
 
 		return Start.class;
 

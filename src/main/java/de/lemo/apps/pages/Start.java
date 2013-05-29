@@ -145,9 +145,9 @@ public class Start {
 					return registerPage;
 					
 				} else {
-					return null;
+					return Start.class;
 				}
-			}
+			} else return Start.class;
 		} 
 
 		return this.pageService.getSuccessPage();
