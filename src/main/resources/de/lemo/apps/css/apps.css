@@ -309,6 +309,7 @@ text.circletext {
 path.linkCG {
 	stroke: #1f77b4;
 	fill:none;
+	stroke-width: 0.5px;
 }
 
 
