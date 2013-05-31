@@ -134,14 +134,11 @@
 			    <li class="${getActivePage('myaccount')}">
 			    <t:pagelink page="account/myaccount">${message:myAccountTitle}</t:pagelink>
 			    </li>
-			    <li>
-			    <a href="#">${message:myCourses}</a>
-			    </li>
 			    <li class="nav-header">
 			   	${message:administration}
 			    </li>
 			    <li class="${getActivePage('serveradministration')}">
-			     <t:pagelink page="account/serveradministration">DM-Server ${message:administration}</t:pagelink>
+			     <t:pagelink page="account/serveradministration">${message:administration}</t:pagelink>
 			    </li>
 			 </ul>
 		</div>

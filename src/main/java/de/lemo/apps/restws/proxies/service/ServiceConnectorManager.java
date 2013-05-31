@@ -20,12 +20,16 @@ public interface ServiceConnectorManager {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public SCConnectors connectors();
+	public SCConnectors connectorListJson();
+	
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String connectorListHtml();
 
 	@GET
 	@Path("/state")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SCConnectorManagerState managerState();
+	public SCConnectorManagerState state();
 
 	@POST
 	@Path("/update/{id}")

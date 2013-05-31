@@ -108,6 +108,16 @@
 				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
 			</properties>
 		</profile>
+		
+		<profile>
+			<id>htwm</id>
+			<properties>
+				<lemo-system-name>htwm</lemo-system-name>
+				<lemo-display-name>Moodle HTW</lemo-display-name>
+				<tomcat-server>lemo3-tomcat-manager</tomcat-server>
+				<tomcat-url>${lemo3-tomcat-url}</tomcat-url>
+			</properties>
+		</profile>
 
 	</profiles>
 
@@ -230,7 +240,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.14.0</version>
+			<version>2.33.0</version>
 		</dependency>
 
 		<dependency>

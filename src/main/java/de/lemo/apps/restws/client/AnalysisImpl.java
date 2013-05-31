@@ -140,13 +140,14 @@ public class AnalysisImpl implements Analysis {
 	@Override
 	public ResultListResourceRequestInfo computeCourseActivityExtended(final List<Long> courses, final Long startTime,
 			final Long endTime,
-			final List<String> resourceTypes) {
+			final List<String> resourceTypes,
+			final List<Long> gender) {
 
 		try {
 
 			if (init.defaultConnectionCheck()) {
 				ResultListResourceRequestInfo result = qActivityResourceType.compute(
-						courses, startTime, endTime, resourceTypes);
+						courses, startTime, endTime, resourceTypes, gender);
 				return result;
 			}
 
@@ -160,7 +161,8 @@ public class AnalysisImpl implements Analysis {
 	@Override
 	public ResultListRRITypes computeCourseActivityExtendedDetails(final List<Long> courses, final Long startTime,
 			final Long endTime,
-			final Long resolution, final List<String> resourceTypes) {
+			final Long resolution, final List<String> resourceTypes,
+			final List<Long> gender) {
 
 		try {
 			if (init.defaultConnectionCheck()) {
@@ -174,7 +176,7 @@ public class AnalysisImpl implements Analysis {
 				}
 
 				ResultListRRITypes result = qActivityResourceTypeResolution.compute(courses,
-						startTime, endTime, resolution, resourceTypes);
+						startTime, endTime, resolution, resourceTypes, gender);
 
 				return result;
 
@@ -190,7 +192,8 @@ public class AnalysisImpl implements Analysis {
 	@Override
 	public ResultListResourceRequestInfo computeLearningObjectUsage(final List<Long> courseIds,
 			final List<Long> userIds,
-			final List<String> types, final Long startTime, final Long endTime) {
+			final List<String> types, final Long startTime, final Long endTime,
+			final List<Long> gender) {
 
 		try {
 
@@ -205,7 +208,7 @@ public class AnalysisImpl implements Analysis {
 				}
 
 				ResultListResourceRequestInfo result = qLOUsage.compute(courseIds, userIds, types, startTime,
-						endTime);
+						endTime, gender);
 
 				return result;
 
@@ -222,10 +225,11 @@ public class AnalysisImpl implements Analysis {
 	public ResultListLongObject computeCourseUsers(
 			final List<Long> courseIds,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		ResultListLongObject result = null;
 
-		result = courseUsers.compute(courseIds, startTime, endTime);
+		result = courseUsers.compute(courseIds, startTime, endTime, gender);
 
 		if (result == null) {
 			// TODO can it even be null?
@@ -241,19 +245,21 @@ public class AnalysisImpl implements Analysis {
 			final List<String> types,
 			final Boolean considerLogouts,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 
-		String result = userPathAnalysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime);
+		String result = userPathAnalysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime, gender);
 		return result;
 	}
 
 	@Override
-	public String computeCourseUserPaths(final List<Long> courseIds, final Long startTime, final Long endTime) {
+	public String computeCourseUserPaths(final List<Long> courseIds, final Long startTime, final Long endTime,
+										final List<Long> gender) {
 
 		try {
 
 			if (init.defaultConnectionCheck()) {
-				String result = qUserPath.compute(courseIds, startTime, endTime);
+				String result = qUserPath.compute(courseIds, startTime, endTime, gender);
 				return result;
 			}
 
@@ -275,14 +281,15 @@ public class AnalysisImpl implements Analysis {
 			final Double minSup,
 			final Boolean sessionWise,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		logger.info("Starte BIDE Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				Response response = qFrequentPathBide.compute(lemoUserId, courseIds, userIds, types, minLength,
-						maxLength, minSup, sessionWise, startTime, endTime);
+						maxLength, minSup, sessionWise, startTime, endTime, gender);
 
 				if (response.getStatus() == HttpStatus.SC_CREATED) {
 					logger.debug("BIDE future result created.");
@@ -320,14 +327,15 @@ public class AnalysisImpl implements Analysis {
 			final Double minSup,
 			final Boolean sessionWise,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		logger.info("Starte BIDE Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				String result = qFrequentPathViger.compute(courseIds, userIds, types, minLength,
-						maxLength, minSup, sessionWise, startTime, endTime);
+						maxLength, minSup, sessionWise, startTime, endTime, gender);
 				logger.info("BIDE result: " + result);
 
 				return result;
@@ -377,7 +385,8 @@ public class AnalysisImpl implements Analysis {
 			final List<Long> quizzes,
 			final Long resolution,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		this.logger.debug("Starting Performance histogram Analysis ... ");
 		try {
 
@@ -385,7 +394,7 @@ public class AnalysisImpl implements Analysis {
 
 				List<Long> result;
 				ResultListLongObject response = qPerformanceHistogram.compute(courses, users,
-						quizzes, resolution, startTime, endTime);
+						quizzes, resolution, startTime, endTime, gender);
 				if (response == null) {
 					result = new ArrayList<Long>();
 				} else {
@@ -410,14 +419,15 @@ public class AnalysisImpl implements Analysis {
 			final List<Long> quizzes,
 			final Long resolution,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		this.logger.debug("Starting Performance Cumulative Analysis ... ");
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				String result = qPerformanceBoxPlot.compute(courses, users, quizzes, resolution, startTime,
-						endTime);
+						endTime, gender);
 
 				this.logger.debug("Performance Cumulative result: " + result);
 
@@ -438,7 +448,8 @@ public class AnalysisImpl implements Analysis {
 			final List<Long> quizzes,
 			final Long resolution,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		this.logger.debug("Starting Performance user test Analysis ... ");
 		try {
 
@@ -446,7 +457,7 @@ public class AnalysisImpl implements Analysis {
 
 				List<Long> result;
 				ResultListLongObject response = qPerformanceUserTest.compute(courses, users, quizzes, resolution,
-						startTime, endTime);
+						startTime, endTime, gender);
 				if (response == null) {
 					result = new ArrayList<Long>();
 				} else {
@@ -470,14 +481,15 @@ public class AnalysisImpl implements Analysis {
 			final List<Long> quizzes,
 			final Long resolution,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> gender) {
 		this.logger.debug("Starting Performance user test Boxplot Analysis ... ");
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				String result = qPerformanceUserTestBoxPlot.compute(courses, users,
-						quizzes, resolution, startTime, endTime);
+						quizzes, resolution, startTime, endTime, gender);
 
 				if (result == null) {
 					result = "";

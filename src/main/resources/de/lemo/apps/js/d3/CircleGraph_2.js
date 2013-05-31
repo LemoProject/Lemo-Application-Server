@@ -4,7 +4,7 @@
   d3custom.run = function() {	  
 	  
   var nodes = d3custom.nodes,
-    	links = d3custom.links;
+      links = d3custom.links;
     	
   //check if we have values to work with
     if(!nodes || !links) {
@@ -41,15 +41,14 @@
   var splines = [];
 
   var cluster = d3.layout.cluster()
-    .size([360, ry - 120])
-    .sort(function(a, b) { return d3.ascending(a.key, b.key); });
+    .size([360, ry - 120]);
 
   var bundle = d3.layout.bundle();
 
   var line = d3.svg.line.radial()
     .interpolate("bundle")
     .tension(.85)
-    .radius(function(d) { return d.y-5; })
+    .radius(function(d) { return d.y-20; })
     .angle(function(d) { return d.x / 180 * Math.PI; });
 
   //Chrome 15 bug: &lt;http://code.google.com/p/chromium/issues/detail?id=98951&gt;
@@ -63,20 +62,18 @@
   .attr("transform", "translate(" + rx + "," + ry + ")");
 
   svg.append("svg:path")
-  .attr("class", "arc")
-  .attr("d", d3.svg.arc().outerRadius(ry - 20).innerRadius(ry - 110).startAngle(0).endAngle(2 * Math.PI))
-  .attr("fill",function(d,i) { return color("wiki");})
-  .on("mousedown", mousedown);
+    .attr("class", "arc")
+    .attr("d", d3.svg.arc().outerRadius(ry - 120).innerRadius(0).startAngle(0).endAngle(2 * Math.PI));
 
 
     var test =  packages.root(data).children;
-    var types = [];
-    var typeAmt = [];
+    
     test.forEach(function(d) {
   	  if (d.imports!=undefined)
   	  	d.amt=calculateAllLinks(d);
     });
 
+      cluster.sort(sortfunction4);
 
   var nodes = cluster.nodes(packages.root(data)),
     links = packages.imports(nodes),
@@ -105,56 +102,72 @@
       return amt;
     }
     
+    
+    
+    
+    var arc = d3.svg.arc()
+        .innerRadius(ry - 135)
+        .outerRadius(ry - 125)
+        .startAngle(function(d,i) { return (2*Math.PI)/(nodes.length-1)*(i-1)})
+        .endAngle(function(d,i) {return (2*Math.PI)/(nodes.length-1)*(i)});
 
-  d3.select("input[type=range]").on("change", function() {
-    line.tension(this.value / 100);
-    path.attr("d", function(d, i) { return line(splines[i]); });
-  });
 
+      var arcs = svg.selectAll("path")
+        .data(nodes)
+        .enter().append("path")
+        .attr("d",arc)
+        .attr("class","typeArc");
 
-  d3.select(window)
-    .on("mousemove", mousemove)
-    .on("mouseup", mouseup);
+      var arcs2 = svg.selectAll("path.typeArc")
+      //.transition()
+      //.duration(750)
+      .attr("fill",function(d,i) {return color(nodes[0].children[i].type)});
+
+  var path = svg.selectAll("path.linkCG")
+      .data(links)
+    .enter().append("svg:path")
+      .attr("class", function(d) {
+      var bool=false;
+      for(var i=0; i<both.length; i++) {
+      if (both[i].source.name==d.source.name && both[i].target.name==d.target.name) {
+      bool=true;
+      }
+      }
+      if (bool) {
+      return "linkCG srctar-" + d.source.key + " srctar-" + d.target.key;
+      }
+      else
+      return "linkCG source-" + d.source.key + " target-" + d.target.key;})
+      .attr("d", function(d, i) { return line(splines[i]); });
+
+  var gNode = svg.selectAll("g.node")
+  .data(nodes.filter(function(n) { return !n.children; }))
+.enter().append("g")
+  .attr("class", "node")
+  .attr("id", function(d) { return "node-" + d.key; })
+  .attr("transform", function(d) { return "rotate(" + (d.x - 90) + "), translate(" + d.y + ")"; })
+ 
+  gNode.append("svg:text")
+  .attr("class","circletext")
+  .attr("dy", ".31em")
+  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+  .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
+  .attr("font-size",function(d) {return 10+d.amt/10;})
+  .on("mouseover", function(d) {mouseover(d);})
+  .on("mouseout", function(d) {mouseout(d);})
+  .text(function(d) { return d.key; });
+ 
+
+//  d3.select("input[type=range]").on("change", function() {
+//    line.tension(this.value / 100);
+//    path.attr("d", function(d, i) { return line(splines[i]); });
+//  });
+
 
   function mouse(e) {
     return [e.pageX - rx, e.pageY - ry];
   }
 
-
-
-  function mousedown() {
-    m0 = mouse(d3.event);
-    d3.event.preventDefault();
-  }
-
-  function mousemove() {
-    if (m0) {
-      var m1 = mouse(d3.event),
-          dm = Math.atan2(cross(m0, m1), dot(m0, m1)) * 180 / Math.PI;
-      div.style("-webkit-transform", "translate3d(0," + (ry - rx) + "px,0)rotate3d(0,0,0," + dm + "deg)translate3d(0," + (rx - ry) + "px,0)");
-    }
-  }
-
-  function mouseup() {
-    if (m0) {
-      var m1 = mouse(d3.event),
-          dm = Math.atan2(cross(m0, m1), dot(m0, m1)) * 180 / Math.PI;
-
-      rotate += dm;
-      if (rotate > 360) rotate -= 360;
-      else if (rotate < 0) rotate += 360;
-      m0 = null;
-
-      div.style("-webkit-transform", "rotate3d(0,0,0,0deg)");
-
-      svg
-        .attr("transform", "translate(" + rx + "," + ry + ")rotate(" + rotate + ")")
-        .selectAll("g.node text")
-        .attr("dx", function(d) { return (d.x + rotate) % 360 < 180 ? 8 : -8; })
-        .attr("text-anchor", function(d) { return (d.x + rotate) % 360 < 180 ? "start" : "end"; })
-        .attr("transform", function(d) { return (d.x + rotate) % 360 < 180 ? null : "rotate(180)"; });
-    }
-  }
 
   function mouseover(d) {
     svg.selectAll("path.linkCG")
@@ -175,8 +188,6 @@
       .classed("invisible",false)
       .each(updateNodes("srctar", true));
       
-    svg.selectAll("path.typeArc")
-       .classed("invisible",true);
   }
 
   function mouseout(d) {
@@ -195,13 +206,10 @@
       .classed("srctar", false)
       .each(updateNodes("srctar", false));
 
-    svg.selectAll("path.typeArc")
-       .classed("invisible",false);
   }
 
   function updateNodes(name, value) {
   	return function(d) {
-    	if (value) this.parentNode.appendChild(this);
     	if(name=="srctar")
     	svg.select("#node-" + d["target"].key).classed(name, value);
     	else
@@ -238,106 +246,59 @@
   	return (b.type.localeCompare(a.type));
   }
 
-  var sortBy = function(d){
-  	cluster = d3.layout.cluster()
-  	.size([360, ry - 120]);
-  	
-  	if (d==1) {
-  		cluster.sort(sortfunction);
-  	}
-  	else if (d==2) {
-  		cluster.sort(sortfunction2);
-  	}
-  	else if (d==3) {
-  		cluster.sort(sortfunction3);
-  	}
-  	else if (d==4) {
-  		cluster.sort(sortfunction4);
-  	}
-
-  	nodes = cluster.nodes(packages.root(data)),
-  	links = packages.imports(nodes),
-  	splines = bundle(links);
-  	 
-  	if (d==1) {
-  	nodes.sort(sortfunction);
-  	}
-  	else if (d==2) {
-  	nodes.sort(sortfunction2);
-  	}
-  	else if (d==3) {
-  	nodes.sort(sortfunction3);
-  	}
-  	else if (d==4) {
-  	nodes.sort(sortfunction4);
-  	}
-   
-   $('#vizsvg').remove();
-   
-   div = d3.select("#viz");
-   
-   svg = div.append("svg:svg")
-  .attr("id","vizsvg")
-  .attr("width", w)
-  .attr("height", h)
-  .append("svg:g")
-  .attr("transform", "translate(" + rx + "," + ry + ")");
-
-
-
-  svg.append("svg:path")
-  .attr("class", "arc")
-  .attr("d", d3.svg.arc().outerRadius(ry - 125).innerRadius(ry - 115).startAngle(0).endAngle(2 * Math.PI))
-  .on("mousedown", mousedown);
-
-  var arc = d3.svg.arc()
-      .innerRadius(ry - 125)
-      .outerRadius(ry - 115)
-      .startAngle(function(d,i) { return (2*Math.PI)/(nodes.length-1)*(i-1)})
-      .endAngle(function(d,i) {return (2*Math.PI)/(nodes.length-1)*(i)});
-
-    var arcs = svg.selectAll("path")
-      .data(nodes)
-      .enter().append("path")
-      .attr("fill",function(d,i) { return color(d.type);})
-      .attr("d",arc)
-      .attr("class","typeArc");;
-      
-  path = svg.selectAll("path.linkCG")
-    .data(links)
-  .enter().append("svg:path")
-    .attr("class", function(d) {
-    var bool=false;
-    for(var i=0; i<both.length; i++) {
-    if (both[i].source.name==d.source.name && both[i].target.name==d.target.name) {
-    bool=true;
+  sortBy = function(d) {
+    cluster = d3.layout.cluster()
+    .size([360, ry - 120]);
+    
+    if (d==1) {
+    cluster.sort(sortfunction);
     }
+    if (d==2) {
+    cluster.sort(sortfunction2);
     }
-    if (bool) {
-    return "linkCG srctar-" + d.source.key + " srctar-" + d.target.key;
+    if (d==3) {
+    cluster.sort(sortfunction3);
+    }    
+    if (d==4) {
+    cluster.sort(sortfunction4);
     }
-    else
-    return "linkCG source-" + d.source.key + " target-" + d.target.key;})
-    .attr("d", function(d, i) { return line(splines[i]); });
-   
 
-  svg.selectAll("g.node")
-    .data(nodes.filter(function(n) { return !n.children; }))
-  .enter().append("svg:g")
-    .attr("class", "node")
-    .attr("id", function(d) { return "node-" + d.key; })
-    .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-  .append("svg:text")
-    .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
-    .attr("dy", ".31em")
-    .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-    .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-    .attr("font-size",function(d) {return 10+d.amt/10;})
-    .text(function(d) { return d.name; })
-    .on("mouseover", function(d) {mouseover(d);})
-    .on("mouseout", function(d) {mouseout(d);});
-   
-  }
+    nodes = cluster.nodes(packages.root(data)),
+    links = packages.imports(nodes),
+    splines = bundle(links);  
+
+    var arcs2 = svg.selectAll("path.typeArc")
+      .attr("fill",function(d,i) {return color(nodes[0].children[i].type)});
+
+    path = svg.selectAll("path.linkCG")
+      .data(links)
+      .transition()
+      .duration(750)
+      .attr("class", function(d) {
+        var bool=false;
+        for(var i=0; i<both.length; i++) {
+          if (both[i].source.name==d.source.name && both[i].target.name==d.target.name) {
+            bool=true;
+          }
+        }
+        if (bool) {
+          return "linkCG srctar-" + d.source.key + " srctar-" + d.target.key;
+        }
+        else
+          return "linkCG source-" + d.source.key + " target-" + d.target.key;})
+      .attr("d", function(d, i) { return line(splines[i]); });
+     
+
+    svg.selectAll("g.node")
+      .data(nodes.filter(function(n) { return !n.children; }))
+      .transition()
+      .duration(750)
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+    .select("text")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; });
+     
+}
 
 
   function validString(d) {
@@ -363,9 +324,6 @@
   	  }
   	  return output;
   	}
-  	  
-	
-    sortBy(4);
     	  
   	  
     }  

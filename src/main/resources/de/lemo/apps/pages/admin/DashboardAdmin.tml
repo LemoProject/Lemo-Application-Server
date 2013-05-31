@@ -13,12 +13,6 @@
 		</div>
 	</div>
 	
-	
-   <!-- <div class="alert alert-success">
-         <a class="close">&times;</a>
-       	 <h2>${message:welcomeDashboard}</h2>    	 
-    </div>
-	-->
     
     <div class="row-fluid">
     <section class="thumbnails">
@@ -27,7 +21,7 @@
 		    	
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>User Widget</h5></div></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>${message:userAdministration}</h5></div></a></li>
 					</ul>
 		    	</div>
 				<div class="row-fluid">
@@ -35,25 +29,15 @@
 					</div>
 					<div class="span11">
 						<div class="well">
-						
-<!-- 							<br /> -->
-<!-- 							<br /> -->
-<!-- 						    Current user: -->
-<!-- 	    					<t:beandisplay object="user"> -->
-            			
-<!--        						 </t:beandisplay> -->
-<!--        						 <br /> -->
-<!--        						 <br /> -->
-<!--        						 All users: -->
 
-       						 <t:grid source="alluser" row="userItem" exclude="password" reorder="username,fullname,email" add="view" class="table">
+       						 <t:grid source="alluser" row="userItem" model="userModel" class="table" rowsPerPage="12" t:inPlace="true">
        						 	 <p:viewCell>
        						 	 	<t:pagelink t:page="admin/manageuser" context="useritem.id">
-       						 	 		view
+       						 	 		${message:viewDetails}
        						 	 	</t:pagelink>
        						 	 </p:viewCell>
        							 <p:empty>
-              						<p>There are no users to display</p>
+              						<p>${message:noUsers}</p>
             					</p:empty>
         					</t:grid>
    							<div>
@@ -68,10 +52,7 @@
     					</div>
 					</div>
 					<div class="span1">
-					
-					
-						
-						
+
 						
 					</div>
 				</div>	
@@ -80,13 +61,77 @@
 
  
    </section>
-  </div>  
+  </div>   
+  
+  
+  
+  
+  <div class="row-fluid">
+    <section class="thumbnails">
+    	<div class="span12">
+    		<div class="thumbnail">
+		    	
+		    	<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget2"><h5>${message:dataAdministration}</h5></div></a></li>
+					</ul>
+		    	</div>
+				<div class="row-fluid">
+					<div class="span1">
+					</div>
+					<div class="span11">
+						<div class="well">
 
-	     
-     
- <script>
-			
-</script>    
+       						 <t:grid source="allConnectors" row="connectorItem" model="connectorModel" class="table" rowsPerPage="12" t:inPlace="true">
+       						 	 <p:updateCell>
+       						 	 	
+       						 	 	<t:if test="connectorReady">
+       						 	 		<t:actionLink t:id="startUpdate" context="connectoritem.platformId">
+       						 	 			${message:startUpdate}
+       						 	 		</t:actionLink>
+       						 	 		<p:else>
+                							${message:checkConnectorState}
+            							</p:else>
+        							</t:if>
+       						 	 
+       						 	 </p:updateCell>
+       							 <p:empty>
+              						<p>${message:noConnectors}</p>
+            					</p:empty>
+        					</t:grid>
+   							<div>
+	   							<br />
+	   							
+					    		<b>${message:currentConnectoState}</b>
+					    		&nbsp;
+					    		<t:if test="connectorReady">
+				    				<span class="label label-success">${connectorState}</span>
+				    				 
+				    	 			<p:else>
+                						<span class="label label-important">${connectorState}</span>
+                					
+            						</p:else>
+        						</t:if>
+	    						
+	    						<br />
+	   							<br />
+	   							
+    						</div>
+    					</div>
+					</div>
+					<div class="span1">
+
+						
+					</div>
+				</div>	
+			</div>
+   		</div>
+
+ 
+   </section>
+  </div>   
+  
+  
      
 
 </html>

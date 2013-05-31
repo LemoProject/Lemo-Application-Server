@@ -1,8 +1,7 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-  
-  
+
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
@@ -17,17 +16,19 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
+    		   <div class="btn-group btn-group-vertical pull-left" data-toggle="buttons-radio">
+			   <input class="btn" type="button" value="name (alphabetical)" onclick="sortBy(2)"></input>
+			   <input class="btn" type="button" value="amount of links" onclick="sortBy(1)"></input>
+			   <input class="btn" type="button" value="amount of clicks" onclick="sortBy(3)"></input>
+			   <input class="btn active" type="button" value="resource type" onclick="sortBy(4)"></input>
+			   </div>
+			   <br/>
+			   <br/>
 	        <div id="viz">
 	        	
 	        	<!-- d3js visualization -->
 	        	
-			   <div><input class="btn btn-primary" type="button" value="sort by name (alphabetical)" onclick="sortBy(2)"></input></div>
-			   <br/>
-			   <div><input class="btn btn-primary" type="button" value="sort by amount of links" onclick="sortBy(1)"></input></div>
-			   <br/>
-			   <div><input class="btn btn-primary" type="button" value="sort by amount of clicks" onclick="sortBy(3)"></input></div>
-			   <br/>
-			   <div><input class="btn btn-primary" type="button" value="sort by type" onclick="sortBy(4)"></input></div>
+			   
 	        </div>
     	</div>
       
@@ -125,7 +126,14 @@
 	                              encoder="userIdEncoder"
 	                              selected="selectedUsers"
 	                              model="userIds"/>
-                       
+                       			
+                       			<br />
+	                              
+	                              <t:jquery.palette
+	                              t:id="gender"
+	                              encoder="genderEncoder"
+	                              selected="selectedGender"
+	                              model="genderModel"/>
                      	 </div>
 			        </div>
 			      </div>
@@ -180,6 +188,15 @@
   <script type="text/javascript">
 	  
     (function(d3custom, $, undefined) {
+    
+    
+    $('body').mousemove(function (e) {
+
+	var details = e.target; // can e.something return what element the mouse cursor is over?
+	
+	console.log(details);
+	
+	});
 
         
       var q2result = ${questionResult};

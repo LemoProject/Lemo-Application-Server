@@ -38,10 +38,16 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.UsageStatisticsContainer;
 import de.lemo.apps.entities.User;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.EConnectorManagerState;
+import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.SCConnector;
+import de.lemo.apps.restws.entities.SCConnectorManagerState;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 
@@ -58,90 +64,131 @@ public class DashboardAdmin {
 	private Logger logger;
 
 	@Inject
-	private Locale currentLocale;
-
-	@Inject
-	private DateWorker dateWorker;
-
-	@Inject
-	private StatisticWorker statisticWorker;
-
-	@Inject
-	private AnalysisWorker analysisWorker;
-
-	@Inject
-	@Path("../../images/icons/glyphicons_019_cogwheel.png")
-	@Property
-	private Asset wheel;
-
-	@Inject
-	private CourseDAO courseDAO;
-
-	@Inject
 	private UserDAO userDAO;
 
-	@Inject
-	private UserWorker userWorker;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
 
-	@Inject
-	private SecurityService securityService;
-
-	@Inject
-	private ApplicationStateManager applicationStateManager;
-	
 	@Inject 
 	private BeanModelSource beanModelSource;
 	
 	@Inject
     private Messages messages;
-	
-	@Inject
-	private HttpServletRequest request;
+
 
 	@Inject
-	private Initialisation init;
-
-	@Inject
-	private Analysis analysis;
-	
-
-	@Persist("Flash")
-	private UsageStatisticsContainer usageStatistics;
+	private Information info;
 
 	
-	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+	void setupRender() {
+
+		this.connectorManagerState = getConnectorManagerState();
+		if(this.connectorManagerState!= null && this.connectorManagerState.getState() != null)
+			this.connectorState = this.connectorManagerState.getState();
+		else this.connectorState = "UNDEFINED";
+				
+		if(this.connectorManagerState!= null && this.connectorManagerState.getUpdatingConnector() != null)
+			this.updatingConnector = this.connectorManagerState.getUpdatingConnector().getName();
+		else this.updatingConnector = "UNDEFINED";
 	}
 
-	@Property
+	
 	@Persist
-	private Integer count;
+	private SCConnectorManagerState connectorManagerState;
 	
 	@Property
+	@Persist
+	private String connectorState;
+	
+	@Property
+	@Persist
+	private String updatingConnector;
+	
+	
+	@SuppressWarnings("unused")
+	@Property
 	private User userItem;
+	
+	@SuppressWarnings("unused")
+	@Property
+	private SCConnector connectorItem;
+
 
 	@SuppressWarnings("unchecked")
+	@Property
 	private final BeanModel userModel;
     {
     	userModel = beanModelSource.createEditModel(User.class, messages);
+    	userModel.include("username","fullname","email","accountlocked");
+    	userModel.reorder("username","fullname","email");
     	userModel.add("view",null);
     }
-	
-	
-	public List<Course> getMyCourses() {
-		return this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-	}
-	
-	
-	public User getUser(){
-		return userDAO.getUser(this.request.getRemoteUser());
-	}
+    
+    
+    @SuppressWarnings("unchecked")
+	@Property
+	private final BeanModel connectorModel;
+    {
+    	connectorModel = beanModelSource.createDisplayModel(SCConnector.class, messages);
+    	connectorModel.include("name","platformId","platformName");
+    	connectorModel.reorder("name","platformId","platformName");
+    	connectorModel.add("update",null);
+    }
 	
 	public List<User> getAllUser(){
 		return userDAO.getAllUser();
+	}
+	
+	@Cached
+	public List<SCConnector> getAllConnectors(){
+		try {
+			
+			List<SCConnector> connectorList = info.getConnectorList();
+			
+			return connectorList;
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<SCConnector>();
+	}
+	
+	public Object onActionFromStartUpdate(Long connectorId){
+		if (connectorId != null){
+			try {
+				info.startUpdate(connectorId);
+			} catch (RestServiceCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return this;
+	}
+	
+	
+	public SCConnector getUpdatingConnector(){
+		return  getConnectorManagerState().getUpdatingConnector();
+	}
+	
+	
+	public Boolean getConnectorReady(){
+		if(this.connectorState.equals(EConnectorManagerState.READY.toString()) )
+			return true;
+		else return false;
+	}
+	
+	public SCConnectorManagerState getConnectorManagerState(){
+		SCConnectorManagerState state;
+		try {
+			state = info.getConnectorState();
+			logger.debug("State: "+ state.getState());
+			return state;
+		} catch (RestServiceCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new SCConnectorManagerState();
 	}
 	
 

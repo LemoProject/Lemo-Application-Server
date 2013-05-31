@@ -16,10 +16,15 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        	<div id="viz">
-<!--        		<button>Hour view</button>-->
-        		<!-- d3js visualization -->
-        	</div>
+    			<div class="btn-group">
+        			<input class="btn active" type="button" id="weekView" onClick="weekView();" value="${message:weekView}"></input>
+        			<input class="btn " type="button" id="dayView"  onClick="dayView();" value="${message:dayView}" ></input>
+				</div>
+				<br />
+	        	<div id="viz">
+	        		
+	        		<!-- d3js visualization -->
+	        	</div>
     	</div>
       
     	<div class="span3">
@@ -122,9 +127,31 @@
     
   </div>
   <script type="text/javascript">
+//   function dayView(){
+// 		 $('#weekView').removeClass("active")
+// 		 $('#dayView').addClass("active")
+// 		 console.log("Dayview call ...")
+// 	 }	
+	 
+// 	function weekView(){
+// 		 $('#dayView').removeClass("active")
+// 		 $('#weekView').addClass("active")
+// 		  console.log("Weekview call ...")	 
+// 	 }
+  
+  
+  
     (function(d3custom, $, undefined) {
+    	
+//     	$(document).ready(function() {
+//     		  $('#weekView').on('click',weekView());
+//     		  $('#dayView').on('click',dayView());
+//     	  })   
     
       var q2result = ${questionResult};
+      
+      
+ 
       
       d3custom.data = q2result;
       

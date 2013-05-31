@@ -26,8 +26,6 @@
 
     <link rel="stylesheet" href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css"/>
     
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap.js"></script>
-    
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -125,7 +123,9 @@
      
 
       <footer>
-        <p>&copy; LeMo Project 2012</p>
+      	<br />
+      	<br />
+        <p>&copy; <a href="http://www.lemo-projekt.de" target="_blank">LeMo Project 2013</a></p>
       </footer>
 
     </div> <!-- /container -->

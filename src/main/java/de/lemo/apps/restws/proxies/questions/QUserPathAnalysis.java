@@ -26,6 +26,7 @@ public interface QUserPathAnalysis {
 			@FormParam(MetaParam.TYPES) List<String> types,
 			@FormParam(MetaParam.LOGOUT_FLAG) Boolean considerLogouts,
 			@FormParam(MetaParam.START_TIME) Long startTime,
-			@FormParam(MetaParam.END_TIME) Long endTime);
+			@FormParam(MetaParam.END_TIME) Long endTime,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 
 }

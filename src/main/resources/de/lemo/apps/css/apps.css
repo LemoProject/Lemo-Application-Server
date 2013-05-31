@@ -94,6 +94,7 @@ text {
   text-align: center;
 }
 
+
 text.shadow {
   stroke: #fff;
   stroke-width: 3px;
@@ -108,6 +109,7 @@ text.shadow {
 .grid path {
       stroke-width: 1;
 }
+
 
 
 /**
@@ -155,9 +157,9 @@ text.shadow {
   text-indent: 2px;
 }
 
-text {
-    pointer-events: none;
-}
+/* text { */
+/*     pointer-events: none; */
+/* } */
 .grandparent text {
     font-weight: bold;
 }
@@ -248,13 +250,7 @@ svg .box {}
 
 /* Circle Graph - BEGIN */
 
-path.linkCG {
-	stroke: #1f77b4;
-	fill:none;
-}
-
 path.arc {
-  cursor: move;
   fill: #fff;
 }
 
@@ -266,14 +262,14 @@ path.arc {
   fill: #1f77b4;
 }
 
-path.circle {
+.linkCG {
   fill: none;
   stroke: #1f77b4;
   stroke-opacity: .4;
   pointer-events: none;
 }
 
-.link.source, .link.target, .link.srctar {
+.linkCG.source, .linkCG.target, .linkCG.srctar {
   stroke-opacity: 1;
   stroke-width: 2px;
 }
@@ -282,7 +278,7 @@ path.circle {
   fill: #d62728 !important;
 }
 
-.link.source {
+.linkCG.source {
   stroke: #d62728;
 }
 
@@ -290,20 +286,30 @@ path.circle {
   fill: #2ca02c;
 }
 
-.link.target {
-  stroke: #2ca02c;
-}
-
 .node.srctar {
 fill: #FF6103
 }
 
-.link.srctar {
+.linkCG.srctar {
 stroke: #FF6103
 }
 
-.link.invisible {
-opacity: 0;
+.linkCG.target {
+  stroke: #2ca02c;
+}
+
+text.circletext {
+   pointer-events: all !important;
+}
+
+.invisible {
+	opacity: 0;
+}
+
+path.linkCG {
+	stroke: #1f77b4;
+	fill:none;
+	stroke-width: 0.5px;
 }
 
 

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.tynamo.security.services.PageService;
 import org.tynamo.security.services.SecurityService;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
+import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.data.Register;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.ResultListLongObject;
@@ -58,6 +59,8 @@ public class Start {
 	
 	@Inject
 	private Initialisation init;
+	
+	@Inject UserDAO userDAO;
 	
 	@InjectPage
 	private Register registerPage;
@@ -120,29 +123,31 @@ public class Start {
 			/*
 			 * If user authentification fails we will start a lookup to check whether this username is known by the dms
 			 */
-			ResultListLongObject result = null;
-			try {
+			if (!userDAO.doExist(this.username)) {
+				ResultListLongObject result = null;
+				try {
+					
+						result = init.identifyUserName(this.username);
 				
-					result = init.identifyUserName(this.username);
+				} catch (RestServiceCommunicationException e) {
+					logger.error(e.getMessage());
+				}
+				
+				if (result != null && result.getElements()!=null && result.getElements().size() > 0) {
+					
+					Long dmsUserId = result.getElements().get(result.getElements().size()-1); 
 			
-			} catch (RestServiceCommunicationException e) {
-				logger.error(e.getMessage());
-			}
+					logger.debug("Corresponding LeMo user ID : "+dmsUserId);
+					
+					registerPage.setDmsUserId(dmsUserId);
+					registerPage.setDmsUserName(this.username);
 			
-			if (result != null && result.getElements()!=null && result.getElements().size() > 0) {
-				
-				Long dmsUserId = result.getElements().get(result.getElements().size()-1); 
-		
-				logger.debug("Corresponding LeMo user ID : "+dmsUserId);
-				
-				registerPage.setDmsUserId(dmsUserId);
-				registerPage.setDmsUserName(this.username);
-		
-				return registerPage;
-				
-			} else {
-				return null;
-			}
+					return registerPage;
+					
+				} else {
+					return Start.class;
+				}
+			} else return Start.class;
 		} 
 
 		return this.pageService.getSuccessPage();

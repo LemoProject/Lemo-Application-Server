@@ -41,6 +41,7 @@ public interface QPerformanceHistogram {
 			@FormParam(MetaParam.QUIZ_IDS) List<Long> quizzes,
 			@FormParam(MetaParam.RESOLUTION) Long resolution,
 			@FormParam(MetaParam.START_TIME) Long startTime,
-			@FormParam(MetaParam.END_TIME) Long endTime);
+			@FormParam(MetaParam.END_TIME) Long endTime,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 
 }

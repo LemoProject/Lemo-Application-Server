@@ -37,7 +37,7 @@ import de.lemo.apps.pages.data.Dashboard;
 
 				"../js/excanvas.js",
 				"../js/apps.js",
-				"../js/d3/jquery.tipsy.js",	
+				"../js/d3/libs/jquery.tipsy.js",	
 				"../js/bootstrap-transition.js",
 				"../js/bootstrap-modal.js",
 				"../js/bootstrap-dropdown.js",
@@ -55,7 +55,7 @@ stylesheet = { "../css/bootstrap-responsive.css",
 						"../css/bootstrap.css",
 						"../css/jquery.jqplot.css",
 						// "../css/jquery-ui-1.8.16.bootstrap.css",
-		"../css/apps.css" })
+				"../css/apps.css" })
 
 public class LayoutDashboardAdmin {
 

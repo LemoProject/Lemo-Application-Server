@@ -24,7 +24,7 @@
 		  
     	<div class="span9">
         	<div id="viz">
-        		<svg><!-- d3js visualization --></svg>
+        		<svg class="nvd3Svg"><!-- d3js visualization --></svg>
         	</div>
         	
         	<br />
@@ -177,9 +177,9 @@
                         
 	                            <t:jquery.palette
 	                              t:id="courses"
-	                              encoder="courseIdEncoder"
+	                              encoder="courseValueEncoder"
 	                              selected="selectedCourses"
-	                              model="courseIds"/>
+	                              model="courses"/>
                        
                      	 </div>
 			        </div>
@@ -208,9 +208,15 @@
   
     (function(d3custom, $, undefined) {
     	
-     
+      var beginDate = '${beginDate}';
+      var endDate = '${endDate}';
       
-    
+      $('#endDate').datepicker( "setDate", "-14");
+      
+      $('#beginDate').val(beginDate);
+      
+      
+      
       var q2result = ${questionResult};
       
       d3custom.data = q2result;

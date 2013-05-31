@@ -28,9 +28,9 @@ import de.lemo.apps.annotation.Exclude;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
-import de.lemo.apps.pages.Search;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
+import de.lemo.apps.pages.data.Search;
 
 /**
  * Layout for the dashboard
@@ -43,7 +43,7 @@ import de.lemo.apps.pages.data.Dashboard;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/spin.js",
-				"../js/d3/libs/d3.v2.min.js",
+				"../js/d3/libs/d3.v2.js",
 				"../js/d3/libs/BoxPlot_Lib.js",
 				"../js/d3/libs/nv.d3.js",
 				"../js/d3/libs/jquery.tipsy.js",
@@ -65,7 +65,7 @@ import de.lemo.apps.pages.data.Dashboard;
 				"../css/bootstrap.css",
 				"../css/jquery.jqplot.css",
 				"../css/nv.d3.css",
-				// "../css/jquery-ui-1.8.16.bootstrap.css",
+				 "../css/jquery-ui-1.8.16.bootstrap.css",
 				"../css/apps.css"
 		})
 public class LayoutDashboard {

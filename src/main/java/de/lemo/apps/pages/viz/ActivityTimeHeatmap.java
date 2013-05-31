@@ -42,7 +42,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
+import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
@@ -72,6 +74,7 @@ public class ActivityTimeHeatmap {
 	private DateWorker dateWorker;
 
 	@Inject
+	@Property
 	private CourseIdValueEncoder courseValueEncoder;
 
 	@Inject
@@ -88,6 +91,9 @@ public class ActivityTimeHeatmap {
 
 	@Inject
 	private AnalysisWorker analysisWorker;
+	
+	@Inject
+	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -168,9 +174,22 @@ public class ActivityTimeHeatmap {
 	@Property(write = false)
 	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
+	// Value Encoder for gender multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+						GenderEnum.class);
+			
+	// Select Model for gender multi-select component
+	@Property(write = false)
+	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
+
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
+		
+	@Property
+	@Persist
+	private List<GenderEnum> selectedGender;
 
 	@Inject
 	@Property
@@ -182,13 +201,17 @@ public class ActivityTimeHeatmap {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses;
+	private List<Long> selectedUsers;
+	
+	@Property
+	@Persist
+	private List<Course> selectedCourses;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
-				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU).getElements();
+				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
 		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
 	}
@@ -201,10 +224,10 @@ public class ActivityTimeHeatmap {
 
 		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
 			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities,this.selectedGender);
 		} else {
 			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null);
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null, this.selectedGender);
 		}
 		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
 
@@ -219,8 +242,8 @@ public class ActivityTimeHeatmap {
 			this.courseId = course.getCourseId();
 			this.course = course;
 			if (this.selectedCourses == null) {
-				this.selectedCourses = new ArrayList<Long>();
-				this.selectedCourses.add(this.courseId);
+				this.selectedCourses = new ArrayList<Course>();
+				this.selectedCourses.add(this.course);
 			}
 
 			return true;
@@ -248,15 +271,14 @@ public class ActivityTimeHeatmap {
 		this.selectedUsers = null;
 		this.selectedCourses = null;
 		this.selectedActivities = null;
+		this.selectedGender = null;
 		this.beginDate = null;
 		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		this.courseModel = new CourseIdSelectModel(courses);
+		this.courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.userIds = this.getUsers();
-		this.courseIds = this.userWorker.getCurrentUser().getMyCourseIds();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -272,10 +294,14 @@ public class ActivityTimeHeatmap {
 
 		List<Long> courseList = new ArrayList<Long>();
 		if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
-			if (!this.selectedCourses.contains(this.courseId)) {
-				this.selectedCourses.add(this.courseId);
+			if (!this.selectedCourses.contains(this.course)) {
+				this.selectedCourses.add(this.course);
 			}
-			courseList = this.selectedCourses;
+			for(int i = 0;i < selectedCourses.size();i++ ){
+				courseList.add(this.selectedCourses.get(i).getCourseId());
+				logger.info("Course Id added: "+this.selectedCourses.get(i).getCourseId());
+			}
+			
 		} else {
 			courseList.add(this.courseId);
 		}

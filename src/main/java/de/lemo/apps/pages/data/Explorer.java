@@ -195,9 +195,9 @@ public class Explorer {
 	}
 
 	public Object onActivate(final Course course) {
-		if (course != null) {
+		if (course != null && getCourses().contains(course)) {
 			this.initCourse = course;
-		}
+		} else return Dashboard.class;
 		return true;
 	}
 	
@@ -243,6 +243,7 @@ public class Explorer {
 	
 	
 	Object onActionFromFavorite(final Long id) {
+		logger.info("Setting Favorite course for Id: "+id);
 		favorite = this.userDAO.toggleFavoriteCourse(id, this.userWorker.getCurrentUser().getId());
 		this.initCourse = this.courseDAO.getCourse(id);
 		return this;

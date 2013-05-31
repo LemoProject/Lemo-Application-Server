@@ -128,6 +128,13 @@
 	                              selected="selectedUsers"
 	                              model="userIds"/>
                        
+                       			 <br />
+	                              
+	                              <t:jquery.palette
+	                              t:id="gender"
+	                              encoder="genderEncoder"
+	                              selected="selectedGender"
+	                              model="genderModel"/>
                      	 </div>
 			        </div>
 			      </div>
@@ -143,11 +150,11 @@
 			        <div id="collapseFive" class="accordion-body collapse">  
 			        	<div class="accordion-inner">               
                         
-	                            <t:jquery.palette
+	                             <t:jquery.palette
 	                              t:id="courses"
-	                              encoder="courseIdEncoder"
+	                              encoder="courseValueEncoder"
 	                              selected="selectedCourses"
-	                              model="courseIds"/>
+	                              model="courses"/>
                        
                      	 </div>
 			        </div>

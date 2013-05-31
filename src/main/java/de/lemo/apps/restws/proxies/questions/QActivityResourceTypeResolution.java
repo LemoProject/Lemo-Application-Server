@@ -27,6 +27,7 @@ public interface QActivityResourceTypeResolution {
 			@FormParam(MetaParam.START_TIME) Long startTime,
 			@FormParam(MetaParam.END_TIME) Long endTime,
 			@FormParam(MetaParam.RESOLUTION) Long resolution,
-			@FormParam(MetaParam.TYPES) List<String> resourceTypes);
+			@FormParam(MetaParam.TYPES) List<String> resourceTypes,
+			@FormParam(MetaParam.GENDER) List<Long> gender);
 
 }
