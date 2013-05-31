@@ -262,14 +262,14 @@ path.arc {
   fill: #1f77b4;
 }
 
-.link {
+.linkCG {
   fill: none;
   stroke: #1f77b4;
   stroke-opacity: .4;
   pointer-events: none;
 }
 
-.link.source, .link.target, .link.srctar {
+.linkCG.source, .linkCG.target, .linkCG.srctar {
   stroke-opacity: 1;
   stroke-width: 2px;
 }
@@ -278,7 +278,7 @@ path.arc {
   fill: #d62728 !important;
 }
 
-.link.source {
+.linkCG.source {
   stroke: #d62728;
 }
 
@@ -290,11 +290,11 @@ path.arc {
 fill: #FF6103
 }
 
-.link.srctar {
+.linkCG.srctar {
 stroke: #FF6103
 }
 
-.link.target {
+.linkCG.target {
   stroke: #2ca02c;
 }
 
