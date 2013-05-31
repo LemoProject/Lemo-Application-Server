@@ -55,6 +55,7 @@ text.shadow {
 	<div class="row-fluid">
 		  
     	<div class="span9">
+      
         	<div id="viz">
 	        	<div id="loading">  
 	        		<!-- spin.js loading animation -->
@@ -88,7 +89,7 @@ text.shadow {
 					
 					</ul>
       				
-      				<input t:type="submit" value="Update" onClick="spin_start();"  class="btn btn-primary" />
+      				<input t:type="submit" value="Update" onClick="d3custom.spinner.start();"  class="btn btn-primary" />
 
       				
       				<br />
@@ -210,9 +211,12 @@ text.shadow {
     	    </t:form>	
     	</div>
     	
-      <t:zone t:id="asyncZone"> </t:zone>
-      <a t:type="actionlink" t:id="refreshZone" id="refreshZone" context="${questionResult}" href="#" t:zone="asyncZone">Refresh</a>
-    
+      <t:zone t:id="asyncZone">
+        <!-- this zone is used for ajax communication to poll the result -->
+      </t:zone>
+          
+      <a t:type="actionlink" t:id="refreshZone" context="${questionResult}" href="#" t:zone="asyncZone" class="hidden">Refresh</a>
+       
   </div>
   <script type="text/javascript">
   var opts = {
@@ -235,21 +239,8 @@ text.shadow {
 	var target = document.getElementById('loading');
 	var spinner = new Spinner(opts).spin(target);
 
-	function spin_stop()  
-	  {  
-	    spinner.stop();  
-	  } 
-
-	function spin_start()  
-	  {  
-	    spinner.spin(target);  
-	  }  
-    (function(d3custom, $, undefined) {
-      // TODO the spinner won't work here, the data is placed here on server side
-      spin_start();     
-      // d3custom.resultUrl = ;
-      spin_stop();     
-
-    })(window.d3custom = window.d3custom || {}, jQuery);
+  (function(d3custom, $, undefined) {
+    d3custom.spinner = spinner;
+  })(window.d3custom = window.d3custom || {}, jQuery);
   </script>
 </html>

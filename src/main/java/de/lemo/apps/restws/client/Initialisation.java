@@ -3,6 +3,7 @@ package de.lemo.apps.restws.client;
 import java.util.Date;
 import java.util.List;
 import org.apache.tapestry5.StreamResponse;
+import org.apache.tapestry5.json.JSONObject;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListCourseObject;
@@ -28,6 +29,6 @@ public interface Initialisation {
 	ResultListCourseObject getUserCourses(Long userId, Long amount, Long offset)
 			throws RestServiceCommunicationException;
 
-	StreamResponse  taskResult(String taskId);
+	JSONObject  taskResult(String taskId);
 
 }

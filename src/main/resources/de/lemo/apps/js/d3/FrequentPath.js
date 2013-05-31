@@ -4,23 +4,27 @@
 
   d3custom.run = function() {
 
+    // get the zone update url to communicate with tapestry
     var resultUrl = $('#refreshZone').attr('href');
-
+    
     var pollResult = function() {
       console.log("polling result from ", resultUrl);
       $.ajax({
         url : resultUrl,
         error : function(xhr, textStatus, errorThrown) {
+          // TODO show some error
           console.log(textStatus, xhr);
+          
         },
         success : function(data) {
           console.log("status", data.status);
-          if(data.status == 202) {
-                // 202 accepted
+          if(data.status != 200) {
+                // 202 accepted or some error?
                 console.log("result not yet ready");
                 // try again later
                 setTimeout(pollResult, pollingIntervall);
           } else {
+            d3custom.spinner.stop();
             drawGraph(data.bideResult);
           }
         }

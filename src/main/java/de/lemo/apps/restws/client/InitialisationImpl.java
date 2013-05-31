@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ConnectionPoolTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.HttpConnectionParams;
@@ -49,7 +50,7 @@ public class InitialisationImpl implements Initialisation {
 	private static final String SERVICE_USER_COURSES_URL = SERVICE_PREFIX_URL + "/teachercourses";
 	private static final String SERVICE_CONNECTOR_MANAGER = SERVICE_PREFIX_URL + "/connectors";
 	private static final String SERVICE_TASK_MANAGER = SERVICE_PREFIX_URL + "/tasks";
- 
+
 	private PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager();
 	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
 
@@ -254,24 +255,35 @@ public class InitialisationImpl implements Initialisation {
 	}
 
 	@Override
-	public StreamResponse  taskResult(String taskId) {
+	public JSONObject taskResult(String taskId) {
 
 		JSONObject json = new JSONObject();
-		 
-			Response taskResult = taskManager.taskResult(taskId);
-			json.put("status", taskResult.getStatus());
-
-			if (taskResult.getStatus() == 200) {
-				@SuppressWarnings("unchecked")
-				ClientResponse<String> clientResponse = (ClientResponse<String>) taskResult;
-				String analysisResult = clientResponse.getEntity(String.class);
-
-			//	 JSONObject xmlJSONObj = XML.toJSONObject(analysisResult);
-
-				json.put("bideResult", new JSONObject(analysisResult));
+		Response taskResult = null;
+		try {
+			taskResult = taskManager.taskResult(taskId);
+		} catch (RuntimeException e) {
+			if (!e.getCause().getClass().equals(ConnectionPoolTimeoutException.class)) {
+				// ignore ConnectionPoolTimeoutException, rethrow anything else
+				//throw e;
 			}
-		 
-		return new TextStreamResponse("application/json", json.toCompactString());
+		}
+
+		int status = (taskResult == null) ? HttpStatus.SC_GATEWAY_TIMEOUT : taskResult.getStatus();
+
+		if (status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+			// DMS error (maybe a processing timeout)
+			json.put("status", HttpStatus.SC_BAD_GATEWAY);
+		} else {
+			json.put("status", status);
+		}
+
+		if (status == HttpStatus.SC_OK) {
+			@SuppressWarnings("unchecked")
+			ClientResponse<String> clientResponse = (ClientResponse<String>) taskResult;
+			String analysisResult = clientResponse.getEntity(String.class);
+			json.put("bideResult", new JSONObject(analysisResult));
+		}
+		return json;
 	}
 
 }

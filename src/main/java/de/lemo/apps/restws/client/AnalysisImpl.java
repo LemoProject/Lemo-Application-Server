@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.Response;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -55,21 +57,13 @@ public class AnalysisImpl implements Analysis {
 
 	private static final String QUESTIONS_BASE_URL = ServerConfiguration.getInstance().getDMSBaseUrl() + "/questions";
 
-	private ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
-	// TODO set better pool size
-
+	private PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager();
 	private HttpClient httpClient = new DefaultHttpClient(connectionManager);
-
-	private HttpParams initHttpParams() {
-
+	{
 		HttpParams params = this.httpClient.getParams();
 		HttpConnectionParams.setConnectionTimeout(params, 5000);
 		HttpConnectionParams.setSoTimeout(params, 20000);
-
-		return params;
 	}
-
-	final HttpParams params = initHttpParams();
 
 	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
 
@@ -290,8 +284,7 @@ public class AnalysisImpl implements Analysis {
 				Response response = qFrequentPathBide.compute(lemoUserId, courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime);
 
-				if (response.getStatus() == 201) {
-					// 201 created
+				if (response.getStatus() == HttpStatus.SC_CREATED) {
 					logger.debug("BIDE future result created.");
 
 					// return the id of the result for polling
@@ -303,12 +296,8 @@ public class AnalysisImpl implements Analysis {
 					// XXX why is this even quoted?
 					resultPath = StringUtils.strip(resultPath, "\"");
 
-					// XXX using raw url without encoding looks unsecure
-					String resultUrl = "\"" + ServerConfiguration.getInstance().getDMSBaseUrl() + "/" + resultPath
-							+ "\"";
-					
 					return resultPath;
-				}
+				} 
 				// TODO do something on failure
 				logger.warn("BIDE invalid response: Status code " + response.getStatus());
 				return "null";

@@ -18,7 +18,6 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
@@ -228,8 +227,6 @@ public class FrequentPathBide {
 	@Inject
 	private Initialisation init;
 	
-	@Property
-    private Zone asyncZone;
     Object onActionFromRefreshZone(String taskId) {
     	return init.taskResult(taskId);
     }
