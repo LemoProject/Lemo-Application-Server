@@ -188,8 +188,6 @@
       .classed("invisible",false)
       .each(updateNodes("srctar", true));
       
-    svg.selectAll("path.typeArc")
-       .classed("invisible",true);
   }
 
   function mouseout(d) {
@@ -208,8 +206,6 @@
       .classed("srctar", false)
       .each(updateNodes("srctar", false));
 
-    svg.selectAll("path.typeArc")
-       .classed("invisible",false);
   }
 
   function updateNodes(name, value) {
