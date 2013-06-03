@@ -3,7 +3,9 @@
   var pollingIntervall = 3000;
 
   d3custom.run = function() {
-
+    
+    $("#pagination").hide();
+    
     // get the zone update url to communicate with tapestry
     var resultUrl = $('#refreshZone').attr('href');
     
@@ -73,12 +75,13 @@
 
     $("#pages").html('' + page + "/" + pages);
 
+    if (pages > 1)
+      $("#pagination").show();
     if (page == 1)
       $("#prev").hide();
     if (page == pages)
       $("#next").hide();
-    if (pages == 1)
-      $("#pagination").hide();
+
 
     function init() {
       console.log("Bin im Init - Starting Node Init");
