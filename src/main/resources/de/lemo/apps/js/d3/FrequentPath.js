@@ -24,6 +24,7 @@
                 // try again later
                 setTimeout(pollResult, pollingIntervall);
           } else {
+            console.log("data", data);
             d3custom.spinner.stop();
             drawGraph(data.bideResult);
           }
@@ -53,7 +54,7 @@
 
     // check if we have values to work with
     if (!_nodes || !_links) {
-      $("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
+       $("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
       return;
     }
 
@@ -76,7 +77,8 @@
       $("#prev").hide();
     if (page == pages)
       $("#next").hide();
-
+    if (pages == 1)
+      $("#pagination").hide();
 
     function init() {
       console.log("Bin im Init - Starting Node Init");
@@ -118,7 +120,7 @@
       });
       console.log("Bin im Init - Finished Node Init, starting Link Init " + _links.length);
 
-      if (_links.length) {
+      if ($.isArray(_links)) {
         console.log("Handle Links as Array");
         $.each(_links, function(i, v) {
           if (v.pathId < (page - 1) * amt + amt + 1 && v.pathId >= (page - 1) * amt + 1) {
