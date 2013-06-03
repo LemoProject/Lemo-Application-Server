@@ -141,6 +141,7 @@
           }
         });
       } else {
+        // TODO maybe some old, dead code
         console.log("Handle Links as Object");
         links.push({
           "source" : nodes[_links.source],
@@ -276,19 +277,24 @@
             }
           });
 
-
+          var nameMaxLength = 40;
+          
           d3.selectAll("g.node text").text(function(o, i) {
             if (o.selected) {
 
               if (!o.nameprepared) {
-                if (o.name.length < 40) {
+                if (o.name.length < nameMaxLength) {
                   if (o.pid % amt > amt / 2) {
-                    while (o.displayname.length < 40) {
-                      o.displayname = "_".concat(o.displayname)
+                    // last row on page
+                    while (o.displayname.length < nameMaxLength) {
+                      // prepend with en-space (space with the size half of an em)
+                      // TODO very inaccurate, better use text anchor/align instead
+                      o.displayname = "\u2002".concat(o.displayname);
                     }
                   }
                 } else {
-                  o.displayname = o.displayname.slice(0, 40).concat(" ...");
+                  // truncate long names with ellipsis
+                  o.displayname = o.displayname.slice(0, nameMaxLength).concat(" …");
                 }
 
                 o.nameprepared = true;
@@ -332,6 +338,7 @@
       }).style("stroke-width", 1.5);
 
       nodeEnter.append("svg:text").attr("class", "nodetext").attr("dx", function(d) {
+        // TODO add some comments about what's happening here
         return d.pid - (amt * (page - 1)) - 1 >= amt / 2 ? -40 * 6.5 : "1.5em";
       }).attr("dy", ".3em").text(function(d) {
         return ""
