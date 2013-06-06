@@ -3,39 +3,51 @@
   var pollingIntervall = 3000;
 
   d3custom.run = function() {
-    
-    $("#pagination").hide();
-    
-    // get the zone update url to communicate with tapestry
-    var resultUrl = $('#refreshZone').attr('href');
-    
-    var pollResult = function() {
-      console.log("polling result from ", resultUrl);
-      $.ajax({
-        url : resultUrl,
-        error : function(xhr, textStatus, errorThrown) {
-          // TODO show some error
-          console.log(textStatus, xhr);
-          
-        },
-        success : function(data) {
-          console.log("status", data.status);
-          if(data.status != 200) {
-                // 202 accepted or some error?
-                console.log("result not yet ready");
-                // try again later
-                setTimeout(pollResult, pollingIntervall);
-          } else {
-            console.log("data", data);
-            d3custom.spinner.stop();
-            drawGraph(data.bideResult);
+
+    if (d3custom.pathType == "viger") {
+      console.log("viger analysis");
+      drawGraph(d3custom.resultData);
+      
+    } else if (d3custom.pathType == "bide") {
+      console.log("bide analysis");
+      $("#pagination").hide();
+
+      // get the zone update url to communicate with tapestry
+      var resultUrl = $('#refreshZone').attr('href');
+
+      var pollResult = function() {
+        console.log("polling result from ", resultUrl);
+        $.ajax({
+          url : resultUrl,
+          error : function(xhr, textStatus, errorThrown) {
+            // TODO show some error
+            console.log(textStatus, xhr);
+
+          },
+          success : function(data) {
+            console.log("status", data.status);
+            if (data.status != 200) {
+              // 202 accepted or some error?
+              console.log("result not yet ready");
+              // try again later
+              setTimeout(pollResult, pollingIntervall);
+            } else {
+              console.log("data", data);
+              d3custom.spinner.stop();
+              drawGraph(data.bideResult);
+            }
           }
-        }
-      });
+        });
+      }
+      setTimeout(pollResult, pollingIntervall);
+    } else {
+      console.log("pathType is invalid: ", d3custom.pathType);
     }
-    setTimeout(pollResult, pollingIntervall);
   }
 
+  /**
+   * Same implementation for bide and viger.
+   */
   function drawGraph(data) {
     var w = 920, h = 500, amt = 800, maxPos = 11, fill = d3.scale.category20(), nodes = [], links = [], foci = [];
     var page = 1, pages = 1;
@@ -56,7 +68,7 @@
 
     // check if we have values to work with
     if (!_nodes || !_links) {
-       $("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
+      $("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
       return;
     }
 
@@ -278,7 +290,7 @@
           });
 
           var nameMaxLength = 40;
-          
+
           d3.selectAll("g.node text").text(function(o, i) {
             if (o.selected) {
 
@@ -287,8 +299,10 @@
                   if (o.pid % amt > amt / 2) {
                     // last row on page
                     while (o.displayname.length < nameMaxLength) {
-                      // prepend with en-space (space with the size half of an em)
-                      // TODO very inaccurate, better use text anchor/align instead
+                      // prepend with en-space (space with the size half of an
+                      // em)
+                      // TODO very inaccurate, better use text anchor/align
+                      // instead
                       o.displayname = "\u2002".concat(o.displayname);
                     }
                   }

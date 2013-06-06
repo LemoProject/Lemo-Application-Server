@@ -118,7 +118,7 @@ text.shadow {
   			               		<div class="control-group">
         						    	<label class="control-label">${message:begin}:</label>
       						    	  	<div class="controls">
-                           				 	<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
+                           		<input t:id="beginDate" class="input-small" t:value="beginDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
 	
       						    	  	</div>
         						</div>
@@ -249,7 +249,8 @@ text.shadow {
 	var target = document.getElementById('loading');
 	var spinner = new Spinner(opts).spin(target);
 
-  (function(d3custom, $, undefined) {
+  (function(d3custom, $) {
+    d3custom.pathType = "bide";
     d3custom.spinner = spinner;
   })(window.d3custom = window.d3custom || {}, jQuery);
   </script>

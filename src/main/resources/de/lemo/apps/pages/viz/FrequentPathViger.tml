@@ -254,12 +254,15 @@ text.shadow {
 	  }  
     (function(d3custom, $, undefined) {
 
-      spin_start();     
+      // TODO the spinner most likely doesn't work as 'expected' at this point, the result is placed here on server side!
+      spin_start();
       var q2result = ${questionResult};
-      spin_stop();     
-
-      d3custom.nodes = q2result.nodes;
-      d3custom.links = q2result.links;
+      spin_stop();
+      
+      d3custom.pathType = "viger";
+      d3custom.resultData = {};
+      d3custom.resultData.nodes = q2result.nodes;
+      d3custom.resultData.links = q2result.links;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
   </script>
