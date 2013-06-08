@@ -24,8 +24,6 @@
 	   
 var drawChart = function() {  
 	  
-	  
-   var color = d3.scale.category20();
 
    var outer = d3.select("#viz").append("svg:svg")
       .attr("width", w)

@@ -42,33 +42,34 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <t:pagelink class="brand" page="data/dashboard">LeMo</t:pagelink>
+
           <div class="nav-collapse">
             <ul class="nav">
-				
-				
-<!--			<li class="dropdown">-->
-<!--			<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
-<!--				${message:menu}-->
-<!--				<b class="caret"></b>-->
-<!--			</a>-->
-<!--			<ul class="dropdown-menu">-->
-<!--				<li><t:pagelink page="data/explorer">${message:explorerTitle}</t:pagelink></li>-->
-<!--				-->
-<!--			</ul>-->
-<!--			</li>	-->
-				
-				
-           
-             
-              <li><t:pagelink class="btn-primary" page="data/dashboard">${message:dashBoardTitle}</t:pagelink></li>
+            
+			  <li><t:pagelink class="" page="data/dashboard">Dashboard</t:pagelink></li>
+			  <li><t:pagelink class="" page="data/explorer">${message:myCourses}</t:pagelink></li>
+
+              <li class="dropdown">	
+              		<a href="#" id="myfavorites" class="dropdown-toggle" data-toggle="dropdown">
+              			${message:myFavorites} 
+              			<b class="caret"></b>
+              		</a>
+                  <ul class="dropdown-menu">
+                    <li t:type="Loop" t:source="favoriteCourses" t:value="favoriteCourse">
+                      <t:pagelink page="data/explorer" context="favoriteCourse?.id">${favoriteCourse?.courseDescription}</t:pagelink>
+                    </li>
+                  
+                  </ul>
+              </li>
+         	  
+              
             </ul> 
             
             <!-- Logout Button-->
             <ul class="nav pull-right">
               <t:security.user>
               	<li class="divider-vertical pull-right"></li>
-                <li><t:actionlink t:id="logoutlink" id="logoutLink">${message:logout}</t:actionlink></li>
+                <li><t:actionlink t:id="logoutlink" id="logout">${message:logout}</t:actionlink></li>
 			  </t:security.user>  
 			</ul>
 			
@@ -94,11 +95,19 @@
     		  
 
 
-    		  
+    
+            <ul class="nav pull-right">  
            	<!-- Searchfield-->
-            <form class="navbar-search pull-right">
-    			<input type="text" class="search-query pull-right" placeholder="${message:search}" />
-    		</form> 
+            <form t:type="Form" t:id="searchForm" class="navbar-search">
+	            <div class="input-prepend">
+					<a t:type="LinkSubmit" t:id="searchCourses" class="btn btn-inverse" style="margin-top:0px"><i class="icon-search icon-white"></i></a>		
+	      			<input id="searchStringCourse" t:type="TextField" t:id="searchStringCourse" class="search-query" placeholder="${message:search}"></input>
+	      		</div>
+    		</form>
+			</ul>
+			
+             
+           <t:pagelink class="btn btn-inverse pull-right" page="data/help"><i class="icon-question-sign icon-white"></i> ${message:help}</t:pagelink>
              
            
           </div><!--/.nav-collapse -->

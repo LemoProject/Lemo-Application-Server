@@ -17,10 +17,10 @@
 		  
     	<div class="span9">
     		   <div class="btn-group btn-group-vertical pull-left" data-toggle="buttons-radio">
-			   <input class="btn" type="button" value="name (alphabetical)" onclick="sortBy(2)"></input>
-			   <input class="btn" type="button" value="amount of links" onclick="sortBy(1)"></input>
-			   <input class="btn" type="button" value="amount of clicks" onclick="sortBy(3)"></input>
-			   <input class="btn active" type="button" value="resource type" onclick="sortBy(4)"></input>
+			   <input class="btn" type="button" value="${message:sortByName}" onclick="sortBy(2)"></input>
+			   <input class="btn" type="button" value="${message:sortByLinks}" onclick="sortBy(1)"></input>
+			   <input class="btn" type="button" value="${message:sortByClicks}" onclick="sortBy(3)"></input>
+			   <input class="btn active" type="button" value="${message:sortByType}" onclick="sortBy(4)"></input>
 			   </div>
 			   <br/>
 			   <br/>
@@ -52,12 +52,74 @@
 					
 					</ul>
       				
-      				<span t:type="submit" value="Update" class="btn btn-primary pull-left" />
+      				<span t:type="submit" value="${message:update}" class="btn btn-primary pull-left" />
+      				<span class="pull-left"> &nbsp; </span>
+      				<a href="#myModal" role="button" class="btn pull-left" data-toggle="modal">${message:help}</a>
+      				
+      				<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-header">
+					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					    <h3 id="myModalLabel">Help for Heatmap</h3>
+					  </div>
+					  <div class="modal-body">
+					    <p>You can use this to see course activity</p>
+					  </div>
+					</div>
       				
       				<br />
       			</div>
       		</div>
       		</div>
+      		
+      		<!-- Legend -->
+      		
+			<div class="row-fluid">
+    		<div class="span12">
+    		<div class="accordion" id="accordion2">
+			  <div class="accordion-group">
+			    <div class="accordion-heading">
+			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+			        ${message:legend}
+			      </a>
+			    </div>
+			    <div id="collapseOne" class="accordion-body collapse">
+			      <div class="accordion-inner">
+			        <div class="row-fluid">
+    					<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.RESOURCE}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend course pull-left"></span> <span class="pull-left"><p>${message:EResourceType.COURSE}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.FORUM}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend question pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUESTION}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend quiz pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUIZ}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend assignment pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSIGNMENT}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend scorm pull-left"></span> <span class="pull-left"><p>${message:EResourceType.SCORM}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend wiki pull-left"></span> <span class="pull-left"><p>${message:EResourceType.WIKI}</p></span>
+    				</div>
+    				<div class="row-fluid">
+    					<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN}</p></span>
+    				</div>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+      		</div>
+      		</div>
+      		<br/>
+      		
+      		
 			<div class="row-fluid">
     		<div class="span12">
         			

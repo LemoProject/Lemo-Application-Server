@@ -47,7 +47,19 @@
 					
 					</ul>
       				
-      				<span t:type="submit" value="Update" class="btn btn-primary pull-left" />
+      				<span t:type="submit" value="${message:update}" class="btn btn-primary pull-left" />
+      				<span class="pull-left"> &nbsp; </span>
+      				<a href="#myModal" role="button" class="btn pull-left" data-toggle="modal">${message:help}</a>
+      				
+      				<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-header">
+					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					    <h3 id="myModalLabel">Help for Heatmap</h3>
+					  </div>
+					  <div class="modal-body">
+					    <p>You can use this to see course activity</p>
+					  </div>
+					</div>
       				
       				<br />
       			</div>

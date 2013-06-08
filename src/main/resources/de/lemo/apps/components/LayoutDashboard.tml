@@ -107,6 +107,9 @@
 	      		</div>
     		</form>
 			</ul>
+			
+			
+			<t:pagelink class="btn btn-inverse pull-right" page="data/help"><i class="icon-question-sign icon-white"></i> ${message:help}</t:pagelink>
              
            
           </div><!--/.nav-collapse -->

@@ -305,6 +305,7 @@ public class Performance {
 		} else {
 			this.logger.debug("No rated Objetcs found");
 			}
+		this.logger.debug(" ----- Verlasse Prepare Render");
 		
 		
 		

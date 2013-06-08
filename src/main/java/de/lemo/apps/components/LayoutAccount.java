@@ -7,6 +7,7 @@ import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.ActionLink;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
 import org.apache.tapestry5.services.Request;
@@ -20,6 +21,7 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.Start;
 import de.lemo.apps.pages.data.Dashboard;
+import de.lemo.apps.pages.data.Search;
 
 /**
  * Layout for the account site
@@ -86,6 +88,9 @@ public class LayoutAccount {
 	@Property
 	private Dashboard dashboard;
 
+	@InjectPage
+	private Search searchPage;
+
 	@Inject
 	private SecurityService securityService;
 
@@ -103,6 +108,12 @@ public class LayoutAccount {
 
 	@Component
 	private ActionLink logoutLink;
+
+	@Property
+	private String searchStringCourse;
+	
+	@Component
+	private Form searchForm;	
 
 	@Inject
 	private PersistentLocale persistentLocaleService;
@@ -151,7 +162,7 @@ public class LayoutAccount {
 
 	@Cached
 	public List<Course> getFavoriteCourses() {
-		return this.courseDAO.findFavoritesByOwner(this.userWorker.getCurrentUser());
+		return this.userWorker.getCurrentUser().getFavoriteCourses();
 	}
 
 	@Cached
@@ -179,6 +190,11 @@ public class LayoutAccount {
 		} else {
 			return "not-active";
 		}
+	}
+	
+	public Object onSelectedFromSearchCourses() {
+		this.searchPage.setSearchQuery(searchStringCourse);
+		return this.searchPage;
 	}
 
 }

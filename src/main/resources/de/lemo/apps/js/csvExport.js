@@ -69,8 +69,8 @@
     // TODO Use better file name, like course + current date
     var button = $(selector);
     var exportModal = $('<div class="modal hide fade">' + '<div class="modal-header"><h3>CSV Export</h3></div>'
-        + '<div class="modal-body">' + '<p>Choose the data to download as CSV file.</p>'
-        + '<a download="data.csv" id="data-export-visible" class="btn">Currently visible data</a><br/>'
+        + '<div class="modal-body">' + '<p>Choose the data to download as CSV file.</p><br/>'
+        + '<a download="data.csv" id="data-export-visible" class="btn">Currently visible data</a><br/><br/>'
         + '<a download="data.csv" id="data-export-all" class="btn">All loaded data</a>' + '</div>'
         + '<div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a></div>' + '</div>');
     exportModal.insertAfter(button);
