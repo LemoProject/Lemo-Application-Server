@@ -112,7 +112,7 @@
       function name(d) {
     	  var alreadyIn = false;
     	  if ((node == root)) {
-    		  for (var i=0; i<objTypes.length;i++) {
+    		  /*for (var i=0; i<objTypes.length;i++) {
     			  if (d.parent.name==objTypes[i]){
     				  alreadyIn=true;
     				  return "";
@@ -125,7 +125,8 @@
         			  return d.parent.name;
         			} else return "";
     			  
-    		  }
+    		  }*/
+    	  	  return "";
     	  }
     	  else
     		  return d.name;

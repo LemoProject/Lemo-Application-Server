@@ -27,6 +27,7 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -39,6 +40,7 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
+import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
@@ -97,6 +99,12 @@ public class PerformanceAVG {
 
 	@Inject
 	private TypeCoercer coercer;
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
+	
+	@Property
+	private SelectModel quizSelectModel;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -246,16 +254,20 @@ public class PerformanceAVG {
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 		final List<String> quizzesTitles = new ArrayList<String>();
+		final List<Quiz> quizzesList = new ArrayList<Quiz>();
 
 		if ((quizList != null) && (quizList.getElements() != null)) {
 			this.logger.debug(quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
 			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
 				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
+				quizzesList.add(new Quiz(quizStringList.get(x + 2),combinedQuizId));
 				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
 			}
+
+			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
 		} else {
 			this.logger.debug("No rated Objetcs found");

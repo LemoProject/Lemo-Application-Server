@@ -18,9 +18,25 @@
     	<div class="span9">
         <div id="viz">
         	
-        	<!-- d3js visualization -->
+        	<!-- d3js visualization -->        
         
         </div>
+        
+        <br/>
+        	
+        	<!-- Legend -->
+      		<div>
+      			<span class="pull-left"><h5>${message:legend}:</h5></span>
+    			<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.RESOURCE} </p></span>
+    			<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.FORUM} </p></span>
+    			<span class="legend question pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUESTION} </p></span>
+    			<span class="legend quiz pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUIZ} </p></span>
+    			<span class="legend assignment pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSIGNMENT} </p></span>
+    			<span class="legend scorm pull-left"></span> <span class="pull-left"><p>${message:EResourceType.SCORM} </p></span>
+    			<span class="legend wiki pull-left"></span> <span class="pull-left"><p>${message:EResourceType.WIKI} </p></span>
+    			<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN} </p></span>
+    		
+			 </div>
     	</div>
       
     	<div class="span3">
@@ -62,54 +78,7 @@
       		</div>
       		</div>
       		
-      		<!-- Legend -->
-      		
-			<div class="row-fluid">
-    		<div class="span12">
-    		<div class="accordion" id="accordion2">
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-			        ${message:legend}
-			      </a>
-			    </div>
-			    <div id="collapseOne" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			        <div class="row-fluid">
-    					<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.RESOURCE}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend course pull-left"></span> <span class="pull-left"><p>${message:EResourceType.COURSE}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.FORUM}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend question pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUESTION}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend quiz pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUIZ}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend assignment pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSIGNMENT}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend scorm pull-left"></span> <span class="pull-left"><p>${message:EResourceType.SCORM}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend wiki pull-left"></span> <span class="pull-left"><p>${message:EResourceType.WIKI}</p></span>
-    				</div>
-    				<div class="row-fluid">
-    					<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN}</p></span>
-    				</div>
-			      </div>
-			    </div>
-			  </div>
-			 </div>
-      		</div>
-      		</div>
-      		<br/>
-      		
+      		      		
 			<div class="row-fluid">
     		<div class="span12">
         			

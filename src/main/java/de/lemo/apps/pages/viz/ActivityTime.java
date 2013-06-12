@@ -174,7 +174,7 @@ public class ActivityTime {
 	{
 		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
 				.getMessages());
-		this.resourceGridModel.include("resourcetype", "title", "requests");
+		this.resourceGridModel.include("resourcetype", "title", "requests", "users");
 	}
 
 	// Select Model for activity multi-select component

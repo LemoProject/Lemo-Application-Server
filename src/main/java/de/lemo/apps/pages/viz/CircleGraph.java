@@ -243,6 +243,8 @@ public class CircleGraph {
 
 		List<String> types = this.visWorker.getActivityIds(this.selectedActivities);
 		
+		logger.debug("TYPES: "+types);
+		
 		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
 
 		Long endStamp = 0L;

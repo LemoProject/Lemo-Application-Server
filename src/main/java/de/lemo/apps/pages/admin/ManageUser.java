@@ -192,10 +192,12 @@ public class ManageUser {
 							}
 						}
 						if (!exists) {	
-							c.setId(index);						
-							logger.debug("Adding search result to List ... "+ co.getDescription());
-							searchCoursesList.add(c);
-							index++;
+							c.setId(index);
+							if (co.getDescription()!=null)  {
+								logger.debug("Adding search result to List ... "+ co.getDescription());
+								searchCoursesList.add(c);
+								index++;
+							}
 						}
 					}
 				} else {logger.debug("Course result List is null");}

@@ -168,7 +168,7 @@ public class ActivityLearningObject {
 	{
 		this.resourceGridModel = this.beanModelSource.createDisplayModel(ResourceRequestInfo.class, this.componentResources
 				.getMessages());
-		this.resourceGridModel.include("resourcetype", "title", "requests");
+		this.resourceGridModel.include("resourcetype", "title", "requests", "users");
 	}
 
 
