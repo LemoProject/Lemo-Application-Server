@@ -90,7 +90,7 @@ text.shadow {
 					
 					</ul>
       				
-      				<input t:type="submit" value="${message:update}" onClick="d3custom.spinner.start();"  class="btn btn-primary" />
+      				<input t:type="submit" value="${message:update}" onClick="d3custom.spinner.start();"  class="btn btn-primary pull-left" />
       				<span class="pull-left"> &nbsp; </span>
       				<a href="#myModal" role="button" class="btn pull-left" data-toggle="modal">${message:help}</a>
       				

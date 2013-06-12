@@ -11,3 +11,4 @@ log.txt
 .settings/
 /src/main/resources/hibernate.cfg.xml
 /target
+.classpath
