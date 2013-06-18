@@ -49,7 +49,7 @@
    * Same implementation for bide and viger.
    */
   function drawGraph(data) {
-    var w = 920, h = 500, amt = 800, maxPos = 11, fill = d3.scale.category20(), nodes = [], links = [], foci = [];
+    var w = $("#viz").width(), h = 500, amt = 800, maxPos = 11, fill = d3.scale.category20(), nodes = [], links = [], foci = [];
     var page = 1, pages = 1;
 
 

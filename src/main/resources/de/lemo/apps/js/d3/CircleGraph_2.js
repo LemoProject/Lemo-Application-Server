@@ -31,9 +31,9 @@
         data.push({"name":validString(nodes[i].name),"size":nodes[i].value,"imports":imports,"type":nodes[i].type});
       }
     
-   var  w = 700,
+   var  w = $("#viz").width(),
     h = 700,
-    rx = w / 2,
+    rx = w / 2 - 50,
     ry = h / 2,
     m0,
     rotate = 0;

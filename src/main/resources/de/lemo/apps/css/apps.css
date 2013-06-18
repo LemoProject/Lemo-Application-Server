@@ -264,7 +264,7 @@ path.arc {
 
 .linkCG {
   fill: none;
-  stroke: #1f77b4;
+  stroke: #0d0d0d;
   stroke-opacity: .4;
   pointer-events: none;
 }
@@ -275,7 +275,7 @@ path.arc {
 }
 
 .node.target {
-  fill: #d62728 !important;
+  fill: #d62728;
 }
 
 .linkCG.source {
@@ -286,16 +286,16 @@ path.arc {
   fill: #2ca02c;
 }
 
+.linkCG.target {
+  stroke: #2ca02c;
+}
+
 .node.srctar {
-fill: #FF6103
+fill: #1f77b4
 }
 
 .linkCG.srctar {
-stroke: #FF6103
-}
-
-.linkCG.target {
-  stroke: #2ca02c;
+stroke: #1f77b4
 }
 
 text.circletext {
@@ -307,7 +307,7 @@ text.circletext {
 }
 
 path.linkCG {
-	stroke: #1f77b4;
+	stroke: #0d0d0d;
 	fill:none;
 	stroke-width: 0.5px;
 }
@@ -458,3 +458,27 @@ right:10px;
  .legend.unknown {
  background-color:#e377c2;
  }
+ 
+.legend.source {
+  background-color: #d62728;
+}
+
+.legend.srctar {
+background-color: #1f77b4
+}
+
+.legend.target {
+  background-color: #2ca02c;
+}
+
+#viz {
+width:100%;
+}
+
+#loading {
+width:100%;
+height:10px;
+}
+#loading {
+width:100%;
+}
