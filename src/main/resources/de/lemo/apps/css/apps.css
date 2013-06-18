@@ -479,6 +479,30 @@ width:100%;
 width:100%;
 height:10px;
 }
-#loading {
+
+@media screen and (max-width: 1400px) {
+.t-palette-available {
+  width: 38%;
+}
+.t-palette-controls {
+  width: 18%;
+}
+.t-palette-selected {
+  width: 38%;
+}
+
+.accordion-inner {
+padding:4px;
+}
+
+DIV.t-palette SELECT {
 width:100%;
+}
+DIV.t-palette-controls BUTTON {
+width:100%;
+}
+
+DIV.t-palette-controls img {
+width:100%;
+}
 }
