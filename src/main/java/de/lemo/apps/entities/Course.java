@@ -282,7 +282,6 @@ public class Course extends AbstractEntity {
 					* DateWorkerImpl.MILLISEC_MULTIPLIER);
 		}
 		this.enroledParticipants = courseObject.getParticipants();
-		this.enroledParticipants = 1L;
 		this.courseId = courseObject.getId();
 		this.needUpdate = false;
 	}

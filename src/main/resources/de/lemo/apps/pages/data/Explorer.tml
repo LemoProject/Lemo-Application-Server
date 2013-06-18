@@ -76,7 +76,7 @@
 								</header>
 								<p><b>${message:firstRequest}:</b> ${firstRequestDate} <br /> </p>
 								<p><b>${message:lastRequest}:</b> ${lastRequestDate} <br /> </p>
-								<p><b>${message:courseEnroledParticipants}:</b> ${CurrentCourse?.enroledParticipants}<br /> </p> 
+								<p><b>${message:courseEnroledParticipants}:</b> ${enroledParticipants}<br /> </p> 
 								
 								
 		              

@@ -249,6 +249,15 @@ public class Explorer {
 		return this;
 	}
 
+	public String getEnroledParticipants() {
+		if (this.getCurrentCourse() != null) {
+			return this.getCurrentCourse().getEnroledParticipants() + "";
+		}
+		else {
+			return null;
+		}
+	}
+	
 	public String getFirstRequestDate() {
 		if (this.getCurrentCourse() != null) {
 			return this.dateWorker.getLocalizedDateTime(this.getCurrentCourse().
