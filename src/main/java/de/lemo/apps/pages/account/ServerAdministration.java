@@ -60,6 +60,7 @@ public class ServerAdministration {
 	
 	public String getDMSVersion(){
 		try {
+			System.out.println("?????????????????????????" + info.getDMSVersion());
 			return info.getDMSVersion();
 		} catch (RestServiceCommunicationException e) {
 			return "Information not available!";

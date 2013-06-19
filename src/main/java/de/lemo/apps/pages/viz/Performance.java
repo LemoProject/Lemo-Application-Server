@@ -426,8 +426,7 @@ public class Performance {
 				if ((tmpResults != null) && (tmpResults.size() > 0)) {
 					for (Integer j = 0; j < tmpResults.size(); j++) {
 						final JSONObject graphValue = new JSONObject();
-
-						graphValue.put("x", (100 / this.resolution) * j + "-" + (100 / this.resolution) * (j + 1) + "%");
+						graphValue.put("x", (100 / this.resolution) * j + "-" + (100 / this.resolution) * (j + 1) +  "%");
 						graphValue.put("y", tmpResults.get(j));
 
 						graphDataValues.put(graphValue);

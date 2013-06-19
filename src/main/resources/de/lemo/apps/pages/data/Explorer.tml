@@ -55,8 +55,8 @@
 	    		    <ul id="summaryTab" class="nav nav-tabs">
 	    		    
 					    <li class="active"><a href="#summary" data-toggle="tab">${message:courseSummary}</a></li>
-					    <li><a href="#lastmonth" data-toggle="tab">Last month</a></li>
-					    <li><a href="#overall" data-toggle="tab">Overall</a></li>
+					    <li><a href="#lastmonth" data-toggle="tab">${message:courseLastMonth}</a></li>
+					    <li><a href="#overall" data-toggle="tab">${message:courseAll}</a></li>
 					 
 					</ul>
 				</div>

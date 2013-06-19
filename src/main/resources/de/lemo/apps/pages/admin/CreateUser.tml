@@ -40,7 +40,7 @@
 		    	
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>Create User</h5></div></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>${message:createUser}</h5></div></a></li>
 					</ul>
 		    	</div>
 				<div class="row-fluid">

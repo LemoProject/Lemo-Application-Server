@@ -385,7 +385,7 @@ public class ActivityTime {
 				graphDataObject.put("key", course.getCourseName());
 
 				graphUserObject.put("values", graphUserValues);
-				graphUserObject.put("key", course.getCourseName() + "-User");
+				graphUserObject.put("key", course.getCourseName() + " - " + messages.get("userOption"));
 
 				graphParentArray.put(graphDataObject);
 				graphParentArray.put(graphUserObject);
