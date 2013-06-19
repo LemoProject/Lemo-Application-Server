@@ -5,7 +5,7 @@
   d3custom.run = function() {
 	  
 	  
-	  var w=$('#viz').width(), 
+	  var w= $('#viz').width(), 
       h = 700,
       fill = d3.scale.category20(),
       selectedNodes,

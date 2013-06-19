@@ -16,7 +16,7 @@
 	    	return;
 	  }
 	  
-	  var width = 800,
+	  var width = $('#viz').width(),
 	  	 height = 500,
 	  	  days = [],
 	  	  hours = [],

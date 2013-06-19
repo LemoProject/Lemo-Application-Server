@@ -34,7 +34,7 @@
 	        <br/>
         	
         	<!-- Legend -->
-      		<div>
+      		<div class="row-fluid">
       			<span class="pull-left"><h5>${message:legend}:</h5></span>
     			<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.RESOURCE} </p></span>
     			<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.FORUM} </p></span>
@@ -46,6 +46,13 @@
     			<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN} </p></span>
     		
 			 </div>
+			 
+			 <div class="row-fluid">
+      			<span class="pull-left"><h5>${message:linksNodes}:</h5></span>
+			 	<span class="legend target pull-left"></span> <span class="pull-left"><p>${message:incoming} </p></span>
+    			<span class="legend source pull-left"></span> <span class="pull-left"><p>${message:outgoing} </p></span>
+    			<span class="legend srctar pull-left"></span> <span class="pull-left"><p>${message:both} </p></span>
+    			</div>
 	        
     	</div>
       
@@ -221,13 +228,6 @@
     (function(d3custom, $, undefined) {
     
     
-    $('body').mousemove(function (e) {
-
-	var details = e.target; // can e.something return what element the mouse cursor is over?
-	
-	console.log(details);
-	
-	});
 
         
       var q2result = ${questionResult};

@@ -5,7 +5,7 @@
   d3custom.run = function() {
 	  
 
-    var w = 960,
+    var w = $("#viz").width(),
         h = 700,
         selectedNodes,
         centerNodeId = null,
