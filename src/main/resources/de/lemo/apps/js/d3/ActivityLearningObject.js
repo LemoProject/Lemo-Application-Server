@@ -14,6 +14,9 @@
     var dataRequests = data[0].values;
     var dataUser = data[1].values;
     var nameSortToggle = false;
+    var perPage = 30,
+    page = 1,
+    pages = 0;
     
     var sortData = function(nameToggle){
 
@@ -63,13 +66,27 @@
     //sorting data
     sortData(nameSortToggle);
     
+    pages = Math.ceil(data[0].values.length/perPage);
+    realData = jQuery.extend(true, [], data);
+    realData[0].values = realData[0].values.slice((page-1)*perPage,page*perPage);
+	realData[1].values = realData[1].values.slice((page-1)*perPage,page*perPage);
+    
+    $("#pages").html('' + page + "/" + pages);
+
+    if (pages > 1)
+      $("#pagination").show();
+    if (page == 1)
+      $("#prev").hide();
+    if (page == pages)
+      $("#next").hide();
+    
     nv.addGraph(function() {
       chart = nv.models.multiBarChart().showControls(false).reduceXTicks(false);
 
   
       chart.yAxis.tickFormat(d3.format('d'));
-
-      d3.select('#viz svg').datum(data).transition().duration(500).call(chart);
+	  console.log(data);
+      d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
       d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
 
       nv.utils.windowResize(chart.update);
@@ -100,6 +117,31 @@
       
       return chart;
     });
+    
+      next = function(bool) {
+      if (bool) {
+        page++;
+      } else {
+        page--;
+      }
+      if (page == 1)
+        $("#prev").hide();
+      else
+        $("#prev").show();
+      if (page == pages)
+        $("#next").hide();
+      else
+        $("#next").show();
+      $("#pages").html('' + page + "/" + pages);      
+      
+      realData = jQuery.extend(true, [], data);
+      realData[0].values = realData[0].values.slice((page-1)*perPage,page*perPage);
+	  realData[1].values = realData[1].values.slice((page-1)*perPage,page*perPage);
+      
+      d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
+      d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
+      
+      }
 
 
   };
