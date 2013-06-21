@@ -42,23 +42,13 @@
 		    <div class="well">
 		    	<p>
 			    	<p>${message:lemoDesc}</p>	
-			    	<a href="#learnMore" class="btn btn-primary btn-large">
-						${message:learnMore}
-					</a>
 				</p>
 		    </div>
+		    <br/>
+		    <br/>
+		    <br/>
+		    <a href="http://www.lemo-projekt.de/" target="_blank" class="btn btn-primary btn-large">${message:news}</a>
 		    
-		    <h3>${message:news}</h3>
-		   		<br />
-		    	<p> <h4>${message:newsHeadOne}</h4><br/>
-		    		${message:newsOne} ...
-					<a href="#">${message:readOn}</a>
-				</p>
-		    	
-		    	<p> <h4>${message:newsHeadTwo}</h4><br/>
-		    		${message:newsTwo} ...
-					<a href="#">${message:readOn}</a>
-				</p>
 				
 		</div>
 		
@@ -90,6 +80,9 @@
        
 	</div>
   </div>
+  
+  
+  
   <div class="row">	
     
     <div class="span12">
@@ -126,24 +119,21 @@
   <div class="row">	  
 	<div class="span12">
 	<section id="learnMore">
-	  	<div class="page-header">
-	    	<h1>${message:lemo} <small>what we can do for you</small></h1>
-	  	</div>
 	      <!-- Example row of columns -->
 	      <div class="row">
-	        <div class="span6">
+	        <div class="span4">
 	          <h2>${message:theMethodHead}</h2>
-	           <p>${message:theMethodText}</p><p><a class="btn" href="#">${message:viewDetails} &raquo;</a></p>
+	           <p>${message:theMethodText}</p>
 	
 	        </div>
-	        <div class="span6">
+	        <div class="span4">
 	          <h2>${message:theApproachHead}</h2>
-	           <p>${message:theApproachText}</p><p><a class="btn" href="#">${message:viewDetails} &raquo;</a></p>
+	           <p>${message:theApproachText}</p>
 	       </div>
-	        <div class="span6">
+	        <div class="span4">
 	
 	          <h2>${message:theBenefitHead}</h2>
-	           <p>${message:theBenefitText}</p><p><a class="btn" href="#">${message:viewDetails} &raquo;</a></p>
+	           <p>${message:theBenefitText}</p>
 	        </div>
 	      </div>
 	</section>

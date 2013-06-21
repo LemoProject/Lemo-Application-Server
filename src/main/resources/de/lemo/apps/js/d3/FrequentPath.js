@@ -330,17 +330,17 @@
           var p = d.pid - (amt * (page - 1)) - 1;
           if (p >= amt / 2) {
             for ( var i = 0; i < p; i++) {
-              foci[i].x = 20 + 660 / (amt - 1) * i;
+              foci[i].x = 20 + (w - 240) / (amt - 1) * (i);
             }
             for ( var i = p; i < amt; i++) {
-              foci[i].x = 280 + 660 / (amt - 1) * i;
+              foci[i].x = 20 + (w - 240) / (amt - 1) * (i) + 200;
             }
           } else {
             for ( var i = 0; i < p + 1; i++) {
-              foci[i].x = 20 + 660 / (amt - 1) * i;
+              foci[i].x = 20 + (w - 240) / (amt - 1) * (i);
             }
             for ( var i = p + 1; i < amt; i++) {
-              foci[i].x = 280 + 660 / (amt - 1) * i;
+              foci[i].x = 20 + (w - 240) / (amt - 1) * (i) + 200;
             }
           }
           force.start();

@@ -172,6 +172,12 @@
   function mouseover(d) {
     svg.selectAll("path.linkCG")
     .classed("invisible",true);
+    
+    svg.selectAll("text")
+    .classed("invisible",true);
+    
+    svg.select("#node-"+d.name).select("text")
+    .classed("invisible",false);
 
     svg.selectAll("path.linkCG.target-" + d.key)
       .classed("target", true)
@@ -193,6 +199,9 @@
   function mouseout(d) {
     svg.selectAll("path.linkCG")
     .classed("invisible",false);
+    
+    svg.selectAll("text")
+    .classed("invisible",false);
 
     svg.selectAll("path.linkCG.source-" + d.key)
       .classed("source", false)
@@ -210,10 +219,14 @@
 
   function updateNodes(name, value) {
   	return function(d) {
-    	if(name=="srctar")
-    	svg.select("#node-" + d["target"].key).classed(name, value);
-    	else
-    	svg.select("#node-" + d[name].key).classed(name, value);
+    	if(name=="srctar") {
+    	var node = svg.select("#node-" + d["target"].key).classed(name, value);
+    	node.select("text").classed("invisible", false);
+    	}
+    	else {
+    	var node = svg.select("#node-" + d[name].key).classed(name, value);
+    	node.select("text").classed("invisible", false);
+    	}
     	};
   	}
 

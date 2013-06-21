@@ -108,6 +108,21 @@
     		</form>
 			</ul>
 			
+			<script>
+			$("input").keypress(function (e) {
+			if (e.which == 13) {
+				e.preventDefault();
+				if ($(':focus')[0]!==undefined) {
+					if ($(':focus')[0].id!==undefined) {
+						if($(':focus')[0].id=="searchStringCourse") {
+							$("#searchCourses").click();
+							console.log("submitted");
+						}
+					}
+				}
+			}
+			});
+			</script>
 			
 			<t:pagelink class="btn btn-inverse pull-right" page="data/help"><i class="icon-question-sign icon-white"></i> ${message:help}</t:pagelink>
              

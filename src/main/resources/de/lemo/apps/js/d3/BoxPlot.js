@@ -30,7 +30,7 @@
   	  counter = 0,
   	  quizMin = 0,
   	  quizMax = 0
-  	  perPage = 15,
+  	  perPage = 30,
   	  page = 1,
   	  pages = 0;
   

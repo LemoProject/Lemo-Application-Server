@@ -15,16 +15,17 @@
 	    	return;
 	  }
 
-      var w = 980 - 80,
-      h = 800 - 180,
+      var w = 980 - 80;
+      if ($("#viz").width() < 920)
+      	w=$("#viz").width();
+      var h = 800 - 180,
       x = d3.scale.linear().range([0, w]),
       y = d3.scale.linear().range([0, h]),
       textLengthMulti = 4.5,
       root,
       node;
       
-      if ($("#viz").width() < 920)
-      	w=$("#viz").width()
+     
       
       var treemap = d3.layout.treemap()
       	.round(false)
@@ -76,7 +77,7 @@
     	  	.attr("class","tspan1")
     	  	.attr("text-anchor", "middle")
     	  	.attr("x", function(d) { return d.dx / 2; })
-    	  	.text(function(d) { if (!d.requests==0){ d.w = d.name.length*textLengthMulti; return d.dx > d.w ? name(d) : d.name.slice(0,name(d).length/2); }})
+    	  	.text(function(d) { return name(d,true); })
     	  	.style("opacity", function(d) {return getOpacity(d);});
     	  
     	  textEnter.append("tspan")
@@ -84,7 +85,7 @@
     	  	.attr("text-anchor", "middle")
     	  	.attr("x", function(d) { return d.dx / 2; })
     	  	.attr("dy", "1em")
-    	    .text(function(d) { if (!d.requests==0){ if(!(node==root)) {d.w = d.name.length*textLengthMulti; return d.dx > d.w ? "" : d.name.slice(d.name.length/2,d.name.length)};} })
+    	    .text(function(d) { return name(d,false); })
     	    .style("opacity", function(d) {return getOpacity(d);});
                 
     	 // objTypes=[];
@@ -112,7 +113,7 @@
 
       //});
       
-      function name(d) {
+      function name(d, tspan1) {
     	  var alreadyIn = false;
     	  if ((node == root)) {
     	      console.log(data);
@@ -122,13 +123,26 @@
     		  	  biggest=false;
     		  	}
     		  }
-    		  if (biggest)
-    		  	return Math.round(d.parent.value/data.value*100*10)/10+" %";
-    		  else
-    		  	return "";
+    		  if (biggest) {
+    		    if (tspan1)
+    		  		return d.parent.name;
+    		  	else 
+    		  		return "activites: "+d.parent.value+" / "+Math.round(d.parent.value/data.value*100*10)/10+" %";
+    		  }
     	  }
-    	  else
-    		  return d.name;
+    	  else {
+    	  	if ( d.dx > d.name.length*textLengthMulti) {
+    			if (tspan1)
+    		  		return d.name.slice(0,d.name.length/2);
+    		  	else
+    		  		return d.name.slice(d.name.length/2,d.name.length);
+    		}
+    		else
+    			if (tspan1)
+    		   		return d.name;
+    		  	
+    	  }
+    	  return "";
       	}
       
       	function user(d) {
@@ -164,13 +178,13 @@
       
       		textEnter.select(".tspan1")
       			.attr("x", function(d) { return kx * d.dx / 2; })
-      			.text(function(d) {  if(!(node==root)) {d.w = d.name.length*textLengthMulti; return d.dx > d.w ? name(d) : d.name.slice(0,d.name.length/2)} else return name(d);})
+      			.text(function(d) {  return name(d,true); })
       			.style("opacity", function(d) { return getOpacity(d);});
              
       		textEnter.select(".tspan2")
       			.attr("x", function(d) { return kx * d.dx / 2; })
       			.attr("dy", "1em")
-      			.text(function(d) { if(!(node==root)) {d.w = d.name.length*textLengthMulti; return d.dx > d.w ? "" : d.name.slice(d.name.length/2,d.name.length)} else return ""; })
+      			.text(function(d) { return name(d,false); })
       			.style("opacity", function(d) { return getOpacity(d); });
                
       		objTypes=[];
