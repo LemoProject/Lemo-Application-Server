@@ -11,22 +11,22 @@ d3.box = function() {
       quartiles = boxQuartiles,
       tickFormat = null;
 
-  // For each small multipleÉ
+  // For each small multipleï¿½
   function box(g) {
     g.each(function(d, i) {
       //d = d.map(value).sort(d3.ascending);
-      console.log("d Value in Box Function Start: "+d);
+      //console.log("d Value in Box Function Start: "+d);
       var g = d3.select(this),
           //n = d.length,
           min = d.lowerWhisker,
           max = d.upperWhisker
           name = d.name;
       	
-      	console.log(" Min: "+min+" Max: "+max)
+      	//console.log(" Min: "+min+" Max: "+max)
       
       // Compute quartiles. Must return exactly 3 elements.
       var quartileData = d.quartiles = [d.lowerQuartil,d.median,d.upperQuartil];//quartiles(d);
-      console.log("d QuartileData: "+quartileData);
+      //console.log("d QuartileData: "+quartileData);
 
       // Compute whiskers. Must return exactly 2 elements, or null.
       var whiskerIndices = [0,5],//whiskers && whiskers.call(this, d, i),

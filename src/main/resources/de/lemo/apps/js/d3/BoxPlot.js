@@ -29,12 +29,15 @@
 	  var quizzes = [],
   	  counter = 0,
   	  quizMin = 0,
-  	  quizMax = 0;
+  	  quizMax = 0
+  	  perPage = 15,
+  	  page = 1,
+  	  pages = 0;
   
   //Seperating days per week and hours per day results and calculating Min and Max Values for domain setup
   $.each(data, function(i,v) {
 	  
-		console.log("QuizMin: "+quizMin+" QuizMax: "+quizMax+ " UW: "+v.upperWhisker+ " LW: "+v.lowerWhisker);
+		//console.log("QuizMin: "+quizMin+" QuizMax: "+quizMax+ " UW: "+v.upperWhisker+ " LW: "+v.lowerWhisker);
 		  // "+" Prefix on strings make JS recognize them as numbers  
 		if(v.lowerWhisker){
 			  if(+v.lowerWhisker < +quizMin) quizMin = v.lowerWhisker;
@@ -49,7 +52,26 @@
 	    counter++;
   });
   
-  console.log("Counter:"+counter+" QuizMin: "+quizMin+" QuizMax: "+quizMax);
+  console.log(quizzes);
+  
+  pages = Math.ceil(quizzes.length/perPage);
+  
+  console.log(pages);
+  
+  quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
+  
+  console.log(quizzes_page);
+  
+  $("#pages").html('' + page + "/" + pages);
+
+    if (pages > 1)
+      $("#pagination").show();
+    if (page == 1)
+      $("#prev").hide();
+    if (page == pages)
+      $("#next").hide();
+  
+  //console.log("Counter:"+counter+" QuizMin: "+quizMin+" QuizMax: "+quizMax);
   
   var marginViz = {top: 5, right: 10, bottom: 50, left: 50},
   	marginPlot = {top: 5, right: 7, bottom: 0, left: 10},
@@ -64,12 +86,10 @@
     	return;
   }
   
-   var users = data.map(function(d){return d.name;}); 
+   var users = quizzes_page.map(function(d){return d.name;}); 
    
    users.splice(0,0,' ');
-   
- 
- 
+    
   var xScale = d3.scale.ordinal()
 	  .rangePoints([0, width - marginViz.left -10 ])
 	  .domain(users);
@@ -81,17 +101,14 @@
 	var xAxis = d3.svg.axis()
 	  .scale(xScale)
 	  .orient("bottom")
-	  .ticks(data.length,function(d, i) {
+	  .ticks(perPage,function(d, i) {
         return d.name;
       });
+      
 	
 	var yAxis = d3.svg.axis()
 	  .scale(yScale)
-	  .orient("left");
-	
-	
-	
- 
+	  .orient("left"); 
 	  
       var box = d3.box()
 	    .whiskers(iqr(1.5))
@@ -149,7 +166,7 @@
 	  
 	  
 	   var gBox = svgBox.selectAll("g.box")
-	    	.data(quizzes, function(d, i) { console.log("Name: "+d.name+" UW: "+d.upperWhisker); return d;} )
+	    	.data(quizzes_page, function(d, i) {  return d;} )
 	     .enter().append("g")
     		.attr("class", function(d) {return "box gbox-"+d.name.replace(new RegExp("[\W :]","g"),"_");})
     		.attr("transform", function (d,i) {return "translate(" + (xScale(d.name)+marginViz.left-14)+",0)"; })
@@ -197,6 +214,51 @@
           while (d[--j] > q3 + iqr);
           return [i, j];
         };
+      }
+      
+      next = function(bool) {
+      if (bool) {
+        page++;
+      } else {
+        page--;
+      }
+      if (page == 1)
+        $("#prev").hide();
+      else
+        $("#prev").show();
+      if (page == pages)
+        $("#next").hide();
+      else
+        $("#next").show();
+      $("#pages").html('' + page + "/" + pages);
+      
+      quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
+      
+      console.log(quizzes_page);
+      
+      svgBox.selectAll("g.box").remove();
+      
+      var gBox = svgBox.selectAll("g.box")
+	    	.data(quizzes_page, function(d, i) {  return d;} )
+	     .enter().append("g")
+    		.attr("class", function(d) {return "box gbox-"+d.name.replace(new RegExp("[\W :]","g"),"_");})
+    		.attr("transform", function (d,i) {return "translate(" + (xScale(d.name)+marginViz.left-14)+",0)"; })
+    		.attr("width", w + marginPlot.left + marginPlot.right)
+    		.attr("height", h + marginViz.bottom + marginViz.top)
+    		.on("mouseover",function(d) {	
+    				gBox.selectAll("text.boxText-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","#0000") 
+    				svgBox.selectAll("text.boxId-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","red") 
+    		})
+    		.on("mouseout",function(d) {
+    				gBox.selectAll("text.boxText-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","none") 
+    				svgBox.selectAll("text.boxId-"+d.name.replace(new RegExp("[\W :]","g"),"_")).style("fill","#0000") 
+    		})
+    		
+  
+	  gBox.append("g")
+		.attr("transform", "translate(" + marginPlot.left + "," +marginViz.top + ")")
+		.call(box);
+      
       }
       
   };
