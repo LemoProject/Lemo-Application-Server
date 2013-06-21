@@ -232,10 +232,45 @@
         $("#next").show();
       $("#pages").html('' + page + "/" + pages);
       
-      quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
+	  quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
       
       console.log(quizzes_page);
+    		
+      users = quizzes_page.map(function(d){return d.name;}); 
       
+      console.log(users);
+   
+   	  users.splice(0,0,' ');
+   	  
+   	  svgBox.select(".x.axis.grid").remove();
+      
+      var xScale = d3.scale.ordinal()
+	  .rangePoints([0, width - marginViz.left -10 ])
+	  .domain(users);
+	  
+	  var xAxis = d3.svg.axis()
+	  .scale(xScale)
+	  .orient("bottom")
+	  .ticks(perPage,function(d, i) {
+        return d.name;
+      });
+      
+      svgBox.append("g")
+	      .attr("class","x axis grid")
+	      .attr("transform", "translate("+marginViz.left+"," + h +")")
+	      .call(make_x_axis()
+            .tickSize(-height, 0, 0)
+            .tickFormat(""))
+	      .call(xAxis) 
+	    .selectAll("text")  
+	    	.attr("class", function(d){return "boxId-"+d.replace(new RegExp("[\W :]","g"),"_");})
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)" 
+                });
+                  
       svgBox.selectAll("g.box").remove();
       
       var gBox = svgBox.selectAll("g.box")
@@ -260,6 +295,7 @@
 		.call(box);
       
       }
+      
       
   };
 
