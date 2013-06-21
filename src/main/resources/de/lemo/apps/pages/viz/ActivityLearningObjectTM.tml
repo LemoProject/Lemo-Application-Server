@@ -63,6 +63,7 @@
       				<span t:type="submit" value="${message:update}" class="btn btn-primary pull-left" />
       				<span class="pull-left"> &nbsp; </span>
       				<a href="#myModal" role="button" class="btn pull-left" data-toggle="modal">${message:help}</a>
+      				<span class="btn export-button pull-right">${message:exportCSV}</span>
       				
       				<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					  <div class="modal-header">

@@ -23,6 +23,9 @@
       root,
       node;
       
+      if ($("#viz").width() < 920)
+      	w=$("#viz").width()
+      
       var treemap = d3.layout.treemap()
       	.round(false)
       	.size([w, h])
@@ -62,7 +65,7 @@
     	  	.style("fill", function(d) { return color(d.parent.name); });
     	  
     	  cell.append("squaretitle")
-			.text(function(d) { return "<b>"+d.name+"</b>: <br /> Activities: "+d.requests+"<br /> User: "+d.user;});
+			.text(function(d) { return "<b>"+d.name+"</b>: <br /> Activities: "+d.requests+"<br /> User: "+d.user+" </br>"+Math.round(d.value/data.value*100*10)/10+" %";});
 
       
     	  var textEnter = cell.append("svg:text")
@@ -73,7 +76,7 @@
     	  	.attr("class","tspan1")
     	  	.attr("text-anchor", "middle")
     	  	.attr("x", function(d) { return d.dx / 2; })
-    	  	.text(function(d) { d.w = d.name.length*textLengthMulti; return d.dx > d.w ? name(d) : d.name.slice(0,name(d).length/2); })
+    	  	.text(function(d) { if (!d.requests==0){ d.w = d.name.length*textLengthMulti; return d.dx > d.w ? name(d) : d.name.slice(0,name(d).length/2); }})
     	  	.style("opacity", function(d) {return getOpacity(d);});
     	  
     	  textEnter.append("tspan")
@@ -81,7 +84,7 @@
     	  	.attr("text-anchor", "middle")
     	  	.attr("x", function(d) { return d.dx / 2; })
     	  	.attr("dy", "1em")
-    	    .text(function(d) { if(!(node==root)) {d.w = d.name.length*textLengthMulti; return d.dx > d.w ? "" : d.name.slice(d.name.length/2,d.name.length)}; })
+    	    .text(function(d) { if (!d.requests==0){ if(!(node==root)) {d.w = d.name.length*textLengthMulti; return d.dx > d.w ? "" : d.name.slice(d.name.length/2,d.name.length)};} })
     	    .style("opacity", function(d) {return getOpacity(d);});
                 
     	 // objTypes=[];
@@ -112,21 +115,17 @@
       function name(d) {
     	  var alreadyIn = false;
     	  if ((node == root)) {
-    		  /*for (var i=0; i<objTypes.length;i++) {
-    			  if (d.parent.name==objTypes[i]){
-    				  alreadyIn=true;
-    				  return "";
-    			  }
+    	      console.log(data);
+    		  var biggest = true;
+    		  for (var i=0; i<d.parent.children.length; i++) {
+    		  	if (d.area < d.parent.children[i].area) {
+    		  	  biggest=false;
+    		  	}
     		  }
-    		  if (!alreadyIn) {
-    			  if(getOpacity(d)!=0){
-    				  objTypes.push(d.parent.name);
-        			  console.log(objTypes);
-        			  return d.parent.name;
-        			} else return "";
-    			  
-    		  }*/
-    	  	  return "";
+    		  if (biggest)
+    		  	return Math.round(d.parent.value/data.value*100*10)/10+" %";
+    		  else
+    		  	return "";
     	  }
     	  else
     		  return d.name;
@@ -197,6 +196,7 @@
             	}
             return opac;
       	}
+      	     	
 	  
   };
 
