@@ -28,9 +28,9 @@
         	</div>
         	
         	<div id="pagination">
-	           Page <span id="pages"></span>
-	           <button id="prev" onclick="next(false);" class="btn btn-primary">prev page</button>
-	           <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">next page</button>
+	           ${message:page} <span id="pages"></span>
+	           <button id="prev" onclick="next(false);" class="btn btn-primary">${message:previousPage}</button>
+	           <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">${message:nextPage}</button>
 	         </div>
         	
         	
