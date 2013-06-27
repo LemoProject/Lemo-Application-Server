@@ -315,27 +315,9 @@
 
 
   function validString(d) {
-  	var output="";
-  	for (var i=0; i<d.length; i++) {
-  	if (i>20) {
-  	  break;
-  	  }
-  	  else {
-  	  if(d.charAt(i)==" ") {
-  	  output += "_";
-  	  }
-  	  else if(d.charAt(i)==".") {
-  	  output += "_";
-  	  }
-  	  else if(d.charAt(i)=="?") {
-  	  output += "_";
-  	  }
-  	  else {
-  	  output += d.charAt(i);
-  	  }
-  	  }
-  	  }
-  	  return output;
+  	var str = d.slice(0,20);
+  	var output = str.replace(/[^\A-Z0-9€…†§+$]/gi,'_');
+  	return output;
   	}
     	  
   	  

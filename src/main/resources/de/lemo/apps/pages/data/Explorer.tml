@@ -33,7 +33,7 @@
 		              <p>${message:noCourses}</p>
 		            </p:empty>
         		</t:grid>
-        		<t:form class="quickSearch">
+        		<form t:type="Form" t:id="quickSearchForm" class="quickSearch">
         		<div class="">
         		
         			<div class="input-append">
@@ -42,7 +42,7 @@
 					</div>
     				<br />
     			</div>
-    			</t:form>
+    			</form>
     		</div>
     	</div>
     	

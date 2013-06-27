@@ -33,5 +33,22 @@ public interface ServiceCourseDetails {
 	@Produces(MediaType.APPLICATION_JSON)
 	ResultListCourseObject getCoursesDetails(
 			@QueryParam(MetaParam.COURSE_IDS) List<Long> courseIds);
+	
+	@GET
+	@Path("{cid}/hash")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Long getCourseHash(@PathParam("cid") final Long id);
+	
+	/**
+	 * Checks whether a course should be filtered by gender attribute based on k-anonymity.
+	 * 
+	 * @param id  Course identifier.
+	 * 
+	 * @return	A Boolean value.
+	 */
+	@GET
+	@Path("{cid}/genderSupport")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean getGenderSupport(@PathParam("cid") final Long id);
 
 }
