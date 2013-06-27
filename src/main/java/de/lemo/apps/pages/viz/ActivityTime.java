@@ -391,14 +391,18 @@ public class ActivityTime {
 				graphParentArray.put(graphUserObject);
 				
 				
-				//adding locale format string for localized date formating
-				JSONObject localeObject = new JSONObject();
-				localeObject.put("locale", messages.get("customD3DateFormat"));
-				graphParentArray.put(localeObject);
+				
 
 			}
 
 		}
+		
+		//adding locale format string for localized date formating
+		JSONObject localeObject = new JSONObject();
+		localeObject.put("locale", messages.get("customD3DateFormat"));
+		graphParentArray.put(localeObject);
+		
+		this.logger.debug(" ResultJSON "+graphParentArray.toString());
 		return graphParentArray.toString();
 	}
 
