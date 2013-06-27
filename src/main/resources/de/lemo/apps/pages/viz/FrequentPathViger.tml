@@ -61,10 +61,10 @@ text.shadow {
 	        	</div>
 	        	<!-- d3js visualization -->
 	        </div>
-    		<p>page: </p>
+    		<p>${message:page} </p>
 		    <p  id="pages"></p>
-		    <button id="prev" onclick="next(false);" class="btn btn-primary">prev page</button>
-		    <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">next page</button>
+		    <button id="prev" onclick="next(false);" class="btn btn-primary">${message:previousPage}</button>
+		    <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">${message:nextPage}</button>
 		</div>
       
     	<div class="span3">

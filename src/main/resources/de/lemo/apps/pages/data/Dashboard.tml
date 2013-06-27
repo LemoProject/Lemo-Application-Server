@@ -179,7 +179,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog1 ();">Cancel</a>
+					<a href="#" class="btn" onclick="closeDialog1 ();">${message:cancel}</a>
 					<a href="#" class="btn btn-primary" onclick="okClicked1 ();">OK</a>
 				</div>
 			</form>
@@ -199,7 +199,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog2 ();">Cancel</a>
+					<a href="#" class="btn" onclick="closeDialog2 ();">${message:cancel}</a>
 					<a href="#" class="btn btn-primary" onclick="okClicked2 ();">OK</a>
 				</div>
 			</form>
@@ -219,7 +219,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#" class="btn" onclick="closeDialog3 ();">Cancel</a>
+					<a href="#" class="btn" onclick="closeDialog3 ();">${message:cancel}</a>
 					<a href="#" class="btn btn-primary" onclick="okClicked3 ();">OK</a>
 				</div>
 			</form>

@@ -334,7 +334,7 @@ public class ActivityLearningObject {
 			}
 
 			graphDataObject.put("values", graphDataValues);
-			graphDataObject.put("key", "Activities");
+			graphDataObject.put("key", this.messages.get("activities"));
 
 			final JSONObject graphDataObject2 = new JSONObject();
 			final JSONArray graphDataValues2 = new JSONArray();
@@ -350,7 +350,7 @@ public class ActivityLearningObject {
 				}
 			}
 			graphDataObject2.put("values", graphDataValues2);
-			graphDataObject2.put("key", "User");
+			graphDataObject2.put("key", this.messages.get("userOption"));
 
 			graphParentArray.put(graphDataObject);
 			graphParentArray.put(graphDataObject2);
