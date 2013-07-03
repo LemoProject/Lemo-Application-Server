@@ -156,12 +156,14 @@
 	                              model="userIds"/>
 	                              
 	                              <br />
-	                              
-	                              <t:jquery.palette
-	                              t:id="gender"
-	                              encoder="genderEncoder"
-	                              selected="selectedGender"
-	                              model="genderModel"/>
+	                             
+	                              <t:if test="course?.genderSupport"> 
+		                              <t:jquery.palette
+		                              t:id="gender"
+		                              encoder="genderEncoder"
+		                              selected="selectedGender"
+		                              model="genderModel"/>
+		                          </t:if>
                        
                      	 </div>
 			        </div>
