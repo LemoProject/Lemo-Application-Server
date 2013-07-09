@@ -85,7 +85,7 @@ import de.lemo.apps.pages.data.Search;
 				"../css/bootstrap.css",
 				"../css/jquery.jqplot.css",
 				"../css/nv.d3.css",
-				 "../css/jquery-ui-1.8.16.bootstrap.css",
+				"../css/jquery-ui-1.8.16.bootstrap.css",
 				"../css/apps.css"
 		})
 public class LayoutDashboard {

@@ -51,32 +51,36 @@ import de.lemo.apps.pages.data.Dashboard;
  * Layout for the admin dashboard
  */
 @Exclude(stylesheet = { "core" })
-// remove the Tapestry css
-@ImportJQueryUI( { "jquery.ui.mouse", "jquery.ui.slider", "jquery.ui.draggable", "jquery.ui.sortable" })
-@Import(library = { "../js/bootstrap-alert.js",
-
-				"../js/excanvas.js",
-				"../js/apps.js",
-				"../js/d3/libs/jquery.tipsy.js",	
-				"../js/bootstrap-transition.js",
-				"../js/bootstrap-modal.js",
-				"../js/bootstrap-dropdown.js",
-				"../js/bootstrap-scrollspy.js",
-				"../js/bootstrap-tab.js",
-				"../js/bootstrap-tooltip.js",
-				"../js/bootstrap-popover.js",
-				"../js/bootstrap-button.js",
-				"../js/bootstrap-collapse.js",
-				"../js/bootstrap-carousel.js",
-				"../js/bootstrap-typeahead.js",
-				"../js/csvExport.js"},
-
-stylesheet = { "../css/bootstrap-responsive.css",
-						"../css/bootstrap.css",
-						"../css/jquery.jqplot.css",
-						// "../css/jquery-ui-1.8.16.bootstrap.css",
-				"../css/apps.css" })
-
+@ImportJQueryUI({ "jquery.ui.mouse", "jquery.ui.slider", "jquery.ui.draggable", "jquery.ui.sortable" })
+@Import(library = {
+        "../js/bootstrap-alert.js",
+        "../js/excanvas.js",
+        "../js/apps.js",
+        "../js/spin.js",
+        "../js/d3/libs/d3.v2.js",
+        "../js/d3/libs/BoxPlot_Lib.js",
+        "../js/d3/libs/nv.d3.js",
+        "../js/d3/libs/jquery.tipsy.js",
+        "../js/bootstrap-transition.js",
+        "../js/bootstrap-modal.js",
+        "../js/bootstrap-dropdown.js",
+        "../js/bootstrap-scrollspy.js",
+        "../js/bootstrap-tab.js",
+        "../js/bootstrap-tooltip.js",
+        "../js/bootstrap-popover.js",
+        "../js/bootstrap-button.js",
+        "../js/bootstrap-collapse.js",
+        "../js/bootstrap-carousel.js",
+        "../js/bootstrap-typeahead.js",
+        "../js/csvExport.js"
+        },
+        stylesheet = { 
+                "../css/bootstrap-responsive.css",
+                "../css/bootstrap.css",
+                "../css/jquery.jqplot.css",
+               // "../css/jquery-ui-1.8.16.bootstrap.css",
+                "../css/apps.css"
+        })
 public class LayoutDashboardAdmin {
 
 	/**
