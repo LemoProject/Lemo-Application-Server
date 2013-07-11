@@ -85,7 +85,9 @@ public class Initialize {
 	public Object onProgressiveDisplay() {
 
 		final User user = this.ud.getUser(this.getUserName());
-		user.setLastLogin(new Date());
+		if(user.getCurrentLogin() != null)
+			user.setLastLogin(user.getCurrentLogin());
+		user.setCurrentLogin(new Date());
 		this.userDAO.update(user);
 
 		final List<Long> userCourses = user.getMyCourseIds();

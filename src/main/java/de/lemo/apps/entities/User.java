@@ -51,6 +51,7 @@ public class User extends AbstractEntity {
 	private String fullname;
 	private String email;
 	private Date lastLogin;
+	private Date currentLogin;
 
 	private boolean accountLocked;
 	private boolean credentialsExpired;
@@ -350,6 +351,15 @@ public class User extends AbstractEntity {
 
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
+	}
+
+	@NonVisual
+	public Date getCurrentLogin() {
+		return currentLogin;
+	}
+
+	public void setCurrentLogin(Date currentLogin) {
+		this.currentLogin = currentLogin;
 	}
 
 }
