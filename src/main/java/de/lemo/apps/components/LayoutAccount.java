@@ -1,5 +1,6 @@
 package de.lemo.apps.components;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.ActionLink;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
 import org.apache.tapestry5.services.Request;
@@ -16,6 +18,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.got5.tapestry5.jquery.ImportJQueryUI;
 import org.tynamo.security.services.SecurityService;
 import de.lemo.apps.annotation.Exclude;
+import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
@@ -55,14 +58,23 @@ public class LayoutAccount {
 	@Property
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
 	private String title;
+	
+	@Inject
+	private Locale currentLocale;
 
 	@Property
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
 	private String subpage;
+	
+	@Inject
+	private DateWorker dateWorker;
 
 	@Inject
 	@Path("../js/dashboard.js")
 	private Asset dashboardJS;
+	
+	@Inject
+	private Messages messages;
 
 	@Inject
 	@Path("../images/icons/glyphicons_019_cogwheel_white.png")
@@ -182,6 +194,16 @@ public class LayoutAccount {
 		} else {
 			return 0;
 		}
+	}
+	
+	public String getLastLogin() {
+		if(this.userWorker.getCurrentUser().getLastLogin() != null)
+		{	
+			final String res = this.dateWorker.getLocalizedDateTime(this.userWorker.getCurrentUser().getLastLogin(), this.currentLocale);
+			return res;
+		}
+		else
+			return messages.get("lastLoginFailed");
 	}
 
 	public String getActivePage(final String navName) {

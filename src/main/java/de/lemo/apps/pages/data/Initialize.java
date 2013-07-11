@@ -6,6 +6,7 @@
 	 */
 package de.lemo.apps.pages.data;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -41,6 +42,9 @@ public class Initialize {
 
 	@Inject
 	private HttpServletRequest request;
+	
+	@Inject
+	private UserDAO userDAO;
 
 	@Inject
 	UserDAO ud;
@@ -81,6 +85,8 @@ public class Initialize {
 	public Object onProgressiveDisplay() {
 
 		final User user = this.ud.getUser(this.getUserName());
+		user.setLastLogin(new Date());
+		this.userDAO.update(user);
 
 		final List<Long> userCourses = user.getMyCourseIds();
 		

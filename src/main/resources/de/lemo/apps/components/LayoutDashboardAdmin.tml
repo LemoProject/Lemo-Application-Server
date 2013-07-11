@@ -78,11 +78,11 @@
 			  			<b class="caret"></b>
 			  		</a>
 			  		<ul class="dropdown-menu">
-			  			<li class="nav-header">Settings</li>
+			  			<li class="nav-header">${message:settings}</li>
 						<li><t:pagelink page="account/myaccount">${message:myAccount}</t:pagelink></li>
 						<li class="nav-header">${message:language}</li>
-						<li class="${englishLocale}"><a t:type="ActionLink" t:id="enLocaleLink" href="#">en</a></li>
-    					<li class="${germanLocale}"><a t:type="ActionLink" t:id="deLocaleLink" href="#">de</a></li>  
+						<li class="${englishLocale}"><a t:type="ActionLink" t:id="enLocaleLink" href="#">English</a></li>
+    					<li class="${germanLocale}"><a t:type="ActionLink" t:id="deLocaleLink" href="#">Deutsch</a></li>  
 					</ul>
 			  	</li>
 			  	

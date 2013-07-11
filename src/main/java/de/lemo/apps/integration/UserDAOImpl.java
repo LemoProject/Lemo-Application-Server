@@ -8,6 +8,7 @@
 
 package de.lemo.apps.integration;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Criteria;
@@ -116,7 +117,9 @@ public class UserDAOImpl implements UserDAO {
 		if (results.size() == 0) {
 			return null;
 		}
-		return results.get(0);
+		User user = results.get(0);
+
+		return user;
 	}
 	
 	public void remove(final User user) {
