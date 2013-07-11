@@ -207,13 +207,13 @@ text.shadow {
                     </div>   
 			              <div id="collapseFour" class="accordion-body collapse">  
 			                <div class="accordion-inner"> 
-			                		<label class="control-label" id="minSupSlider-label">Minimum Support (0.1 - 1): ${supportValue}</label>         
+									<label class="control-label" id="minSupSlider-label">${message:freqSupport} ${supportValue}</label>         
 	                        		
 	  			                	<t:jquery.slider t:value="minSup" t:params="minSupParams" t:id="minSup" />
 	  			                	
 	  			                	<br />
 	  			                	
-	  			                	<label class="control-label" id="pathLengthSlider-label">Path Length (1 - 200): ${pathLengthValue}</label>         
+	  			                	<label class="control-label" id="pathLengthSlider-label">${message:freqPathLength} ${pathLengthValue}</label>           
 	                        		
 	  			                	<t:jquery.rangeslider t:id="pathLength" t:min="pathLengthMin" t:max="pathLengthMax" t:params="pathLengthParams" />
 									

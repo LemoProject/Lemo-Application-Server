@@ -359,7 +359,7 @@ public class FrequentPathBide {
 
 	public String getPathLengthValue() {
 		if ((this.pathLengthMin == null) && (this.pathLengthMax == null)) {
-			return "All paths";
+			return messages.get("freqAllPaths");
 		}
 		if ((this.pathLengthMin == null) && (this.pathLengthMax != null)) {
 			return "1 - " + this.pathLengthMax;
