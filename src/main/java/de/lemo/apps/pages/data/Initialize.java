@@ -122,7 +122,7 @@ public class Initialize {
 	
 	Object onProgress(){
 		JSONObject progress = new JSONObject();
-		logger.info("Prgress Request, progress:"+this.percentage);
+		logger.info("Progress Request, progress:"+this.percentage);
 		progress.append("progress", String.valueOf(this.percentage)+"%");
 		return progress;
 	}
