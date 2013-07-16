@@ -64,14 +64,15 @@
    * @param exportFunction
    *          f(data, chart, visibleOnly)->csv:String
    */
-  function createModalExportOptions(selector, exportFunction, data, chart) {
+  function createModalExportOptions(selector, exportFunction, data, chart, locale) {
     // TODO recreate as reusable tml template?
     // TODO Use better file name, like course + current date
+    console.log(locale);
     var button = $(selector);
     var exportModal = $('<div class="modal hide fade">' + '<div class="modal-header"><h3>CSV Export</h3></div>'
-        + '<div class="modal-body">' + '<p>Choose the data to download as CSV file.</p><br/>'
-        + '<a download="data.csv" id="data-export-visible" class="btn">Currently visible data</a><br/><br/>'
-        + '<a download="data.csv" id="data-export-all" class="btn">All loaded data</a>' + '</div>'
+        + '<div class="modal-body">' + '<p>'+locale.exportString+'</p><br/>'
+        + '<a download="data.csv" id="data-export-visible" class="btn">'+locale.currentlyVisible+'</a><br/><br/>'
+        + '<a download="data.csv" id="data-export-all" class="btn">'+locale.loadedData+'</a>' + '</div>'
         + '<div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a></div>' + '</div>');
     exportModal.insertAfter(button);
     button.click(function() {
@@ -205,8 +206,8 @@
    * @param chart
    *          nvd3 chart
    */
-  dataExport.lineWithFocusChartButton = function(selector, data, chart) {
-    createModalExportOptions(selector, exportUsageLineWithFocusChart, data, chart);
+  dataExport.lineWithFocusChartButton = function(selector, data, chart, locale) {
+    createModalExportOptions(selector, exportUsageLineWithFocusChart, data, chart, locale);
   };
 
 })(window.dataExport = window.dataExport || {}, window.jQuery, window._ || window.T5._);
