@@ -15,9 +15,9 @@
     var dataRequests = data[0].values;
     var dataUser = data[1].values;
     var nameSortToggle = false;
-    var perPage = 30,
+    var maxPerPage = 30,
     page = 1,
-    pages = 0;
+    pages = 1;
     
     var sortData = function(nameToggle){
 
@@ -35,6 +35,21 @@
 	    	}
 	    });
 	    dataUser.sort(function(a, b) {
+	    
+	    var result = [];
+	    
+	    for (var i = 0; i<dataRequests.length; i++) {
+	    	for (var j = 0; j<dataUser.length; j++) {
+	    		if (dataRequests[i].x == dataUser[j].x) {
+	    			result.push(dataUser[j]);
+	    			j=dataUser.length;
+	    		}
+	    	}
+	    }
+	    
+	    data[1].values = result;
+	    
+	    /*dataUser.sort(function(a, b) {
 	    	if(nameToggle){ // sorting by name
 	    		console.log("Sorting by name");
 	    		if ( a.x < b.x )
@@ -45,7 +60,7 @@
 	    	} else {
 	    		console.log("Sorting by value")
 	    		return (b.y - a.y); // sorting by value
-	    	}
+	    	}*/
 	    });
     }
     
@@ -67,7 +82,15 @@
     //sorting data
     sortData(nameSortToggle);
     
-    pages = Math.ceil(data[0].values.length/perPage);
+	var perPage = data[0].values.length;
+  
+	while (perPage > maxPerPage) {
+	   
+		pages++;
+	  	perPage = data[0].values.length/pages;
+	   
+	}   
+
     realData = jQuery.extend(true, [], data);
     realData[0].values = realData[0].values.slice((page-1)*perPage,page*perPage);
 	realData[1].values = realData[1].values.slice((page-1)*perPage,page*perPage);
