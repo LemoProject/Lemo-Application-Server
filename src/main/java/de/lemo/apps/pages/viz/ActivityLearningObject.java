@@ -354,6 +354,15 @@ public class ActivityLearningObject {
 
 			graphParentArray.put(graphDataObject);
 			graphParentArray.put(graphDataObject2);
+			
+			//adding locale format string for localized date formating
+			JSONObject localeObject = new JSONObject();
+			localeObject.put("locale", messages.get("customD3DateFormat"));
+			localeObject.put("exportString", messages.get("exportString"));
+			localeObject.put("currentlyVisible", messages.get("currentlyVisible"));
+			localeObject.put("loadedData", messages.get("loadedData"));
+			localeObject.put("close", messages.get("close"));
+			graphParentArray.put(localeObject);
 
 			this.logger.debug(graphParentArray.toString());
 

@@ -73,7 +73,7 @@
         + '<div class="modal-body">' + '<p>'+locale.exportString+'</p><br/>'
         + '<a download="data.csv" id="data-export-visible" class="btn">'+locale.currentlyVisible+'</a><br/><br/>'
         + '<a download="data.csv" id="data-export-all" class="btn">'+locale.loadedData+'</a>' + '</div>'
-        + '<div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a></div>' + '</div>');
+        + '<div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">'+locale.close+'</a></div>' + '</div>');
     exportModal.insertAfter(button);
     button.click(function() {
       exportModal.modal();
@@ -192,8 +192,8 @@
    * @param chart
    *          nvd3 chart
    */
-  dataExport.barChartButton = function(selector, data, chart) {
-    createModalExportOptions(selector, exportLOBarChart, data, chart);
+  dataExport.barChartButton = function(selector, data, chart, locale) {
+    createModalExportOptions(selector, exportLOBarChart, data, chart, locale);
   };
 
   /**

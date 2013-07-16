@@ -1,6 +1,8 @@
 package de.lemo.apps.components;
 
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 
@@ -17,6 +19,7 @@ import org.apache.tapestry5.json.JSONObject;
 					"../js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"
 
 })
+
 public class JqPlotLine extends JqPlot {
 
 	/**
@@ -26,6 +29,10 @@ public class JqPlotLine extends JqPlot {
 	 * @param config
 	 *            parameters object
 	 */
+
+	@Inject
+	private Messages messages;
+	
 	@Override
 	protected void configure(final JSONObject config) {
 
@@ -51,7 +58,7 @@ public class JqPlotLine extends JqPlot {
 				.put(
 						"yaxis",
 						new JSONLiteral(
-								"{padMin: 0, label: 'Activities', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
+								"{padMin: 0, label: '"+messages.get("activities")+"', labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer,labelOptions: {fontFamily: 'Arial',fontSize: '9pt'}}"));
 		axisDefaults.put("xaxis", new JSONLiteral("{padMin: 0, renderer:jQuery.jqplot.DateAxisRenderer}"));
 
 		seriesDefaults.put("axes", axisDefaults);

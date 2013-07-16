@@ -3,6 +3,7 @@
   d3custom.run = function() {
 
     var data = d3custom.data;
+    var locale = data.pop();
     var chart;
     
     if (!data) {
@@ -111,7 +112,7 @@
 		   		})
 	   .text(function(d) { return "Sorting: "; });*/
       	
-      dataExport.barChartButton('.export-button', d3.select('#viz svg').data(), chart);
+      dataExport.barChartButton('.export-button', d3.select('#viz svg').data(), chart, locale);
       
       
       

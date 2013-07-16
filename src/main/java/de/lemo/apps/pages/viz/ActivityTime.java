@@ -403,6 +403,7 @@ public class ActivityTime {
 		localeObject.put("exportString", messages.get("exportString"));
 		localeObject.put("currentlyVisible", messages.get("currentlyVisible"));
 		localeObject.put("loadedData", messages.get("loadedData"));
+		localeObject.put("close", messages.get("close"));
 		graphParentArray.put(localeObject);
 		
 		this.logger.debug(" ResultJSON "+graphParentArray.toString());
