@@ -29,10 +29,10 @@
 	  var quizzes = [],
   	  counter = 0,
   	  quizMin = 0,
-  	  quizMax = 0
-  	  perPage = 30,
+  	  quizMax = 0,
   	  page = 1,
-  	  pages = 0;
+  	  maxPerPage = 3,
+  	  pages = 1;
   
   //Seperating days per week and hours per day results and calculating Min and Max Values for domain setup
   $.each(data, function(i,v) {
@@ -52,16 +52,18 @@
 	    counter++;
   });
   
-  console.log(quizzes);
+  var perPage = quizzes.length;
   
-  pages = Math.ceil(quizzes.length/perPage);
-  
-  console.log(pages);
+  while (perPage > maxPerPage) {
+   
+  	pages++;
+  	perPage=quizzes.length/pages;
+  	perPage = Math.ceil(perPage);
+   
+  }
   
   quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
-  
-  console.log(quizzes_page);
-  
+    
   $("#pages").html('' + page + "/" + pages);
 
     if (pages > 1)
@@ -127,7 +129,7 @@
 	  
 	  svgBox.append("g")
 	      .attr("class","x axis grid")
-	      .attr("transform", "translate("+marginViz.left+"," + h +")")
+		  .attr("transform", "translate("+marginViz.left+"," + (h+5) +")")
 	      .call(make_x_axis()
             .tickSize(-height, 0, 0)
             .tickFormat(""))
@@ -233,12 +235,8 @@
       $("#pages").html('' + page + "/" + pages);
       
 	  quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
-      
-      console.log(quizzes_page);
     		
       users = quizzes_page.map(function(d){return d.name;}); 
-      
-      console.log(users);
    
    	  users.splice(0,0,' ');
    	  
@@ -257,7 +255,7 @@
       
       svgBox.append("g")
 	      .attr("class","x axis grid")
-	      .attr("transform", "translate("+marginViz.left+"," + h +")")
+	      .attr("transform", "translate("+marginViz.left+"," + (h+5) +")")
 	      .call(make_x_axis()
             .tickSize(-height, 0, 0)
             .tickFormat(""))
