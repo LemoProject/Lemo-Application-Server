@@ -17,7 +17,7 @@
 	  }
 	  
 	  var width = $('#viz').width(),
-	  	 height = 500,
+	  	 height = 600,
 	  	  days = [],
 	  	  hours = [],
 	  	  counter = 0,
@@ -75,7 +75,7 @@
   
   //console.log("Counter:"+counter+" QuizMin: "+quizMin+" QuizMax: "+quizMax);
   
-  var marginViz = {top: 5, right: 10, bottom: 50, left: 50},
+  var marginViz = {top: 5, right: 10, bottom: 100, left: 50},
   	marginPlot = {top: 5, right: 7, bottom: 0, left: 10},
     w = 30 - marginPlot.left - marginPlot.right,
     h = height - marginViz.top - marginViz.bottom;
@@ -93,7 +93,7 @@
    users.splice(0,0,' ');
     
   var xScale = d3.scale.ordinal()
-	  .rangePoints([0, width - marginViz.left -10 ])
+	  .rangePoints([0, width - marginViz.left -100 ])
 	  .domain(users);
 	
 	var yScale = d3.scale.linear()
@@ -136,11 +136,11 @@
 	      .call(xAxis) 
 	    .selectAll("text")  
 	    	.attr("class", function(d){return "boxId-"+d.replace(new RegExp("[\W :]","g"),"_");})
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
+            .style("text-anchor", "start")
+            .attr("dx", "0.6em")
+            .attr("dy", "0.3em")
             .attr("transform", function(d) {
-                return "rotate(-65)" 
+                return "rotate(45)" 
                 })
           
 	  svgBox.append("g")
