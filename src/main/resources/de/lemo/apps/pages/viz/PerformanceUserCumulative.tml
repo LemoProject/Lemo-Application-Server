@@ -135,7 +135,7 @@
 		            			 <t:jquery.palette 
 		            			   t:id="quizzes" 
 		            			   encoder="quizEncoder"
-		            			   model="quizIds"
+		            			   model="quizSelectModel"
 		            			   selected="selectedQuizzes"/>
 		            		  </div>
 			              </div>

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
@@ -32,6 +33,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
@@ -51,6 +53,7 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
@@ -177,7 +180,11 @@ public class PerformanceAVG {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private QuizValueEncoder quizEncoder;
+	
+	@Inject
+	@Property
+	private LongValueEncoder userIdEncoder;
 
 	@Property
 	@Persist
