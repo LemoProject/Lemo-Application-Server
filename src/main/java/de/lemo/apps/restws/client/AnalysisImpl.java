@@ -43,6 +43,7 @@ import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.slf4j.Logger;
 import de.lemo.apps.application.config.ServerConfiguration;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -237,7 +238,7 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Gebe leere Resultlist zurueck");
+		logger.info("Returning empty result set.");
 		return new ResultListResourceRequestInfo();
 	}
 
@@ -247,14 +248,18 @@ public class AnalysisImpl implements Analysis {
 			final Long startTime,
 			final Long endTime,
 			final List<Long> gender) {
-		ResultListLongObject result = null;
-
-		result = courseUsers.compute(courseIds, startTime, endTime, gender);
-
-		if (result == null) {
-			// TODO can it even be null?
-			result = new ResultListLongObject();
+		ResultListLongObject result = new ResultListLongObject();
+		
+		try {
+			if (init.defaultConnectionCheck()) {
+			
+				result = courseUsers.compute(courseIds, startTime, endTime, gender);
+				
+			}
+		} catch (final Exception e) {
+			logger.error(e.getMessage());
 		}
+		logger.info("Could not execute user query.");
 		return result;
 	}
 

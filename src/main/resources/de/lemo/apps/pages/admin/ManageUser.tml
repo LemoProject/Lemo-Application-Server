@@ -23,7 +23,7 @@
 				 	confirm.style.visibility="hidden";
 				 }
 				 var button = document.getElementById("deleteCourseButton");
-				 button.setAttribute("href","/beuth/apps/de/admin/manageuser.deletecourse/"+int);
+				 button.setAttribute("href","/lemo/apps/de/admin/manageuser.deletecourse/"+int);
 			}
 			
 			function expandCourseSearch(bool) {
@@ -47,7 +47,7 @@
 																				
 			
 			
-</script>    btn
+</script>
      
 	 <!-- Breadcrumb component-->
 	<div class="row-fluid">
@@ -73,7 +73,7 @@
 		    	
 		    	<div class="tabbable">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>User Details: ${user?.username} </h5></div></a></li>
+						<li class="active"><a href="#" data-toggle="tab"><div id="widget1"><h5>${message:userDetails} ${user?.username} </h5></div></a></li>
 					</ul>
 		    	</div>
 				<div class="row-fluid">

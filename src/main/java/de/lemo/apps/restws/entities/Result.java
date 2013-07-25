@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Represents a list with results from the dms
  *
  */
+@Deprecated
 @XmlRootElement
 public class Result {
 

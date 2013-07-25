@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -161,6 +163,12 @@ public class ActivityTime {
 	@Persist
 	@Property
 	private Date endDate;
+	
+	@Persist
+	private Map<Long, Date> beginMem;
+
+	@Persist
+	private Map<Long, Date> endMem;
 
 	@Property
 	@Persist
@@ -297,8 +305,8 @@ public class ActivityTime {
 		this.selectedCourses = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
-//		this.beginDate = null;
-//		this.endDate = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
@@ -411,14 +419,22 @@ public class ActivityTime {
 				graphParentArray.put(graphUserObject);
 				
 				
-				//adding locale format string for localized date formating
-				JSONObject localeObject = new JSONObject();
-				localeObject.put("locale", messages.get("customD3DateFormat"));
-				graphParentArray.put(localeObject);
+				
 
 			}
 
 		}
+		
+		//adding locale format string for localized date formating
+		JSONObject localeObject = new JSONObject();
+		localeObject.put("locale", messages.get("customD3DateFormat"));
+		localeObject.put("exportString", messages.get("exportString"));
+		localeObject.put("currentlyVisible", messages.get("currentlyVisible"));
+		localeObject.put("loadedData", messages.get("loadedData"));
+		localeObject.put("close", messages.get("close"));
+		graphParentArray.put(localeObject);
+		
+		this.logger.debug(" ResultJSON "+graphParentArray.toString());
 		return graphParentArray.toString();
 	}
 
@@ -427,18 +443,45 @@ public class ActivityTime {
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
-
+		
+		if(beginMem == null)
+		{
+			this.beginMem = new HashMap<Long, Date>();
+		}
+		
+		if(endMem == null)
+		{
+			this.endMem = new HashMap<Long, Date>();
+		}
+		
 		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
+			if(this.endMem.get(this.courseId) == null){
+				this.endDate = this.course.getLastRequestDate();
+			}else{
+				this.endDate = this.endMem.get(courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
+			if(this.beginMem.get(this.courseId) == null){
+				this.beginDate = this.course.getFirstRequestDate();
+			}
+			else
+			{
+				this.beginDate = this.beginMem.get(this.courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
+		}
+		
+		if(this.beginDate != null){
+			this.beginMem.put(this.courseId, this.beginDate);
+		}
+		if(this.endDate != null){
+			this.endMem.put(this.courseId, this.endDate);
 		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();

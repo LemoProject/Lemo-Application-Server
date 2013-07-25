@@ -24,10 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.OptionModel;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -72,6 +75,7 @@ import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.QuizValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoderWorker;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
@@ -124,7 +128,7 @@ public class Performance {
 	
 	@Inject
 	SelectModelFactory selectModelFactory;
-	
+
 	@Property
 	private SelectModel quizSelectModel;
 
@@ -162,6 +166,12 @@ public class Performance {
 	@Persist
 	@Property
 	private Date endDate;
+	
+	@Persist
+	private Map<Long, Date> beginMem;
+
+	@Persist
+	private Map<Long, Date> endMem;
 
 	@Property
 	@Persist
@@ -211,7 +221,11 @@ public class Performance {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
+	private List<Long> selectedUsers, selectedCourses;
+	
+	@Property
+	@Persist
+	private List<Quiz> selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -253,18 +267,45 @@ public class Performance {
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
-
+		
+		if(beginMem == null)
+		{
+			this.beginMem = new HashMap<Long, Date>();
+		}
+		
+		if(endMem == null)
+		{
+			this.endMem = new HashMap<Long, Date>();
+		}
+		
 		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
+			if(this.endMem.get(this.courseId) == null){
+				this.endDate = this.course.getLastRequestDate();
+			}else{
+				this.endDate = this.endMem.get(courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
+			if(this.beginMem.get(this.courseId) == null){
+				this.beginDate = this.course.getFirstRequestDate();
+			}
+			else
+			{
+				this.beginDate = this.beginMem.get(this.courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
+		}
+		
+		if(this.beginDate != null){
+			this.beginMem.put(this.courseId, this.beginDate);
+		}
+		if(this.endDate != null){
+			this.endMem.put(this.courseId, this.endDate);
 		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();
@@ -285,9 +326,12 @@ public class Performance {
 		this.selectedCourses = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
+		this.logger.info(" ----- Betrete Prepare Render");
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
@@ -307,7 +351,6 @@ public class Performance {
 		final List<String> quizzesTitles = new ArrayList<String>();
 		final List<Quiz> quizzesList = new ArrayList<Quiz>();
 		
-		
 		if ((quizList != null) && (quizList.getElements() != null)) {
 			this.logger.debug(" QuizList Elements "+quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
@@ -319,20 +362,23 @@ public class Performance {
 				this.quizIds.add(combinedQuizId);
 				this.logger.debug("Quiz item:"+combinedQuizId+ " -- " + quizStringList.get(x + 2));
 			}
+			this.quizEncoder.setUp(quizzesList);
 			
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
-
+			
 		} else {
-			this.logger.debug("No rated Objetcs found");
+			this.logger.info("No rated Objetcs found");
 			}
-		this.logger.debug(" ----- Verlasse Prepare Render");
-		
-		
+		this.logger.info(" ----- Verlasse Prepare Render");
 		
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
 		return this.courseValueEncoder.create(Course.class);
+	}
+	
+	public final ValueEncoder<Quiz> getQuizEncoder() {
+		return this.quizEncoder.create(Quiz.class);
 	}
 
 	// returns datepicker params
@@ -363,7 +409,7 @@ public class Performance {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
 
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
+			this.logger.info("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
 			List<Long> courseList = new ArrayList<Long>();
 			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
@@ -404,12 +450,15 @@ public class Performance {
 
 
 			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
-				quizzesList = this.selectedQuizzes;
+				for(Quiz q : this.selectedQuizzes)
+					quizzesList.add(q.getCombinedId());
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				logger.debug("Adding QuizzesMap");
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
 			} 
+			
+			this.logger.info("Quizzes: " +  quizzesList.toString());
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 

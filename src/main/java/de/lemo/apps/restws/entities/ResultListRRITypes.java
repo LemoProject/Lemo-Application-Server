@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ResultListRRITypes {
 
 	private List<ResourceRequestInfo> assignments;
-	private List<ResourceRequestInfo> courses;
+	private List<ResourceRequestInfo> chats;
 	private List<ResourceRequestInfo> forums;
 	private List<ResourceRequestInfo> questions;
 	private List<ResourceRequestInfo> quiz;
@@ -44,8 +44,8 @@ public class ResultListRRITypes {
 		this.assignments = assignments;
 	}
 
-	public void setCourseRRI(final List<ResourceRequestInfo> courses) {
-		this.courses = courses;
+	public void setChatRRI(final List<ResourceRequestInfo> chat) {
+		this.chats = chat;
 	}
 
 	public void setForumRRI(final List<ResourceRequestInfo> forums) {
@@ -74,7 +74,7 @@ public class ResultListRRITypes {
 
 	public ResultListRRITypes() {
 		this.assignments = new ArrayList<ResourceRequestInfo>();
-		this.courses = new ArrayList<ResourceRequestInfo>();
+		this.chats = new ArrayList<ResourceRequestInfo>();
 		this.forums = new ArrayList<ResourceRequestInfo>();
 		this.questions = new ArrayList<ResourceRequestInfo>();
 		this.quiz = new ArrayList<ResourceRequestInfo>();
@@ -94,8 +94,8 @@ public class ResultListRRITypes {
 	}
 
 	@XmlElement
-	public List<ResourceRequestInfo> getCoursesRRI() {
-		return this.courses;
+	public List<ResourceRequestInfo> getChatRRI() {
+		return this.chats;
 	}
 
 	@XmlElement
@@ -133,9 +133,9 @@ public class ResultListRRITypes {
 			return this.forums;
 		}
 
-//		if ((resourceType != null) && resourceType.equals(EResourceType.COURSE)) {
-//			return this.courses;
-//		}
+		if ((resourceType != null) && resourceType.equals(EResourceType.CHAT)) {
+			return this.chats;
+		}
 
 		if ((resourceType != null) && resourceType.equals(EResourceType.QUESTION)) {
 			return this.questions;

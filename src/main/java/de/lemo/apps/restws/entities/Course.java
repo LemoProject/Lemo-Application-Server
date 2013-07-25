@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Represents an course object
  *
  */
+@Deprecated
 @XmlRootElement
 public class Course {
 

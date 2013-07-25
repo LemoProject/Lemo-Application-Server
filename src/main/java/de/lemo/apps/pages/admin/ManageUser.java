@@ -163,6 +163,7 @@ public class ManageUser {
 	    return DashboardAdmin.class;
 	}
 	
+	
 	Object onSelectedFromSearch() {
 		if(courseString!=null) {
 			searchCoursesList = new ArrayList<Course>();

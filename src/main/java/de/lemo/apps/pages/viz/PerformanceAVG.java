@@ -24,10 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -71,6 +73,7 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
@@ -160,6 +163,12 @@ public class PerformanceAVG {
 	@Persist
 	@Property
 	private Date endDate;
+	
+	@Persist
+	private Map<Long, Date> beginMem;
+
+	@Persist
+	private Map<Long, Date> endMem;
 
 	@Property
 	@Persist
@@ -197,7 +206,11 @@ public class PerformanceAVG {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private LongValueEncoder userIdEncoder;
+	
+	@Inject
+	@Property
+	private QuizValueEncoder quizEncoder;
 
 	@Property
 	@Persist
@@ -205,7 +218,11 @@ public class PerformanceAVG {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
+	private List<Long> selectedUsers, selectedCourses;
+	
+	@Property
+	@Persist
+	private List<Quiz> selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -254,6 +271,8 @@ public class PerformanceAVG {
 		this.selectedCourses = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 	
 	void onPrepareForRender() {
@@ -286,6 +305,8 @@ public class PerformanceAVG {
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
 			}
+			
+			this.quizEncoder.setUp(quizzesList);
 
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
@@ -369,7 +390,10 @@ public class PerformanceAVG {
 
 
 			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
-				quizzesList = this.selectedQuizzes;
+				for(Quiz q : this.selectedQuizzes)
+				{
+					quizzesList.add(q.getCombinedId());
+				}
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
@@ -450,18 +474,45 @@ public class PerformanceAVG {
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
-
+		
+		if(beginMem == null)
+		{
+			this.beginMem = new HashMap<Long, Date>();
+		}
+		
+		if(endMem == null)
+		{
+			this.endMem = new HashMap<Long, Date>();
+		}
+		
 		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
+			if(this.endMem.get(this.courseId) == null){
+				this.endDate = this.course.getLastRequestDate();
+			}else{
+				this.endDate = this.endMem.get(courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
+			if(this.beginMem.get(this.courseId) == null){
+				this.beginDate = this.course.getFirstRequestDate();
+			}
+			else
+			{
+				this.beginDate = this.beginMem.get(this.courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
+		}
+		
+		if(this.beginDate != null){
+			this.beginMem.put(this.courseId, this.beginDate);
+		}
+		if(this.endDate != null){
+			this.endMem.put(this.courseId, this.endDate);
 		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();

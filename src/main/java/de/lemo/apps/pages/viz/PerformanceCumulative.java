@@ -25,10 +25,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -47,6 +49,7 @@ import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -63,6 +66,7 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
+import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
@@ -74,6 +78,7 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoder;
 
 /**
  * Visualisation for the cumulative performance
@@ -123,6 +128,9 @@ public class PerformanceCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -158,6 +166,12 @@ public class PerformanceCumulative {
 	@Persist
 	@Property
 	private Date endDate;
+	
+	@Persist
+	private Map<Long, Date> beginMem;
+
+	@Persist
+	private Map<Long, Date> endMem;
 
 	@Property
 	@Persist
@@ -192,11 +206,18 @@ public class PerformanceCumulative {
 	@Property
 	@Persist
 	private List<GenderEnum> selectedGender;
+	
+	@Property
+	private SelectModel quizSelectModel;
 
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private LongValueEncoder userIdEncoder;
+	
+	@Inject
+	@Property
+	private QuizValueEncoder quizEncoder;
 
 	@Property
 	@Persist
@@ -204,7 +225,11 @@ public class PerformanceCumulative {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedQuizzes;
+	private List<Long> selectedUsers;
+	
+	@Property
+	@Persist
+	private List<Quiz> selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -249,6 +274,8 @@ public class PerformanceCumulative {
 		this.selectedQuizzes = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
@@ -269,16 +296,24 @@ public class PerformanceCumulative {
 
 		final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 		final List<String> quizzesTitles = new ArrayList<String>();
+		final List<Quiz> quizzesList = new ArrayList<Quiz>();
 
 		if ((quizList != null) && (quizList.getElements() != null)) {
 			this.logger.debug(quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
 			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
 				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
+				quizzesList.add(new Quiz(quizStringList.get(x + 2),combinedQuizId));
 				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
+				this.logger.debug("Quiz item:"+combinedQuizId+ " -- " + quizStringList.get(x + 2));
 			}
+			
+			this.quizEncoder.setUp(quizzesList);
+			
+			quizSelectModel = selectModelFactory.create(quizzesList, "name");
+			
 			this.logger.debug("Rated Objetcs found");
 		} else {
 			this.logger.debug("No rated Objetcs found");
@@ -344,7 +379,10 @@ public class PerformanceCumulative {
 			}
 
 			if (this.selectedQuizzes != null) {
-				quizzesList = this.selectedQuizzes;
+				for(Quiz q : this.selectedQuizzes)
+				{
+					quizzesList.add(q.getCombinedId());
+				}
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
@@ -424,18 +462,45 @@ public class PerformanceCumulative {
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
-
+		
+		if(beginMem == null)
+		{
+			this.beginMem = new HashMap<Long, Date>();
+		}
+		
+		if(endMem == null)
+		{
+			this.endMem = new HashMap<Long, Date>();
+		}
+		
 		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
+			if(this.endMem.get(this.courseId) == null){
+				this.endDate = this.course.getLastRequestDate();
+			}else{
+				this.endDate = this.endMem.get(courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
+			if(this.beginMem.get(this.courseId) == null){
+				this.beginDate = this.course.getFirstRequestDate();
+			}
+			else
+			{
+				this.beginDate = this.beginMem.get(this.courseId);
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
+		}
+		
+		if(this.beginDate != null){
+			this.beginMem.put(this.courseId, this.beginDate);
+		}
+		if(this.endDate != null){
+			this.endMem.put(this.courseId, this.endDate);
 		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();

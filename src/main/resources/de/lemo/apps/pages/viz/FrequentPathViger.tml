@@ -59,13 +59,19 @@ text.shadow {
 	        	<div id="loading">  
 	        		<!-- spin.js loading animation -->
 	        	</div>
-	        	<!-- d3js visualization -->
-	        </div>
-    		<p>page: </p>
-		    <p  id="pages"></p>
-		    <button id="prev" onclick="next(false);" class="btn btn-primary">prev page</button>
-		    <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">next page</button>
-		</div>
+	       </div>
+	        	<!-- d3js visualization -->	       
+
+				<br />
+         	
+	        	<div id="pagination"  style="text-align:center">
+		           <button id="prev" onclick="next(false);" class="btn btn-primary pull-left">prev page</button>
+		           <button id="next" onclick="next(true);" class="btn btn-primary pull-right">next page</button>
+		           <p style="width:80%"> ${message:page} <span id="pages"></span> </p>
+		         </div>
+	         	
+	        	<br />
+	       </div>
       
     	<div class="span3">
     		<t:form t:type="form" t:id="customizeForm" class="pull-left">
@@ -181,11 +187,13 @@ text.shadow {
 			                              
 			                              <br />
 	                              
-	                              <t:jquery.palette
-	                              t:id="gender"
-	                              encoder="genderEncoder"
-	                              selected="selectedGender"
-	                              model="genderModel"/>
+	                              <t:if test="course?.genderSupport"> 
+		                              <t:jquery.palette
+		                              t:id="gender"
+		                              encoder="genderEncoder"
+		                              selected="selectedGender"
+		                              model="genderModel"/>
+		                          </t:if>
 			                     	
                          	</div>
 			              </div>
@@ -203,13 +211,13 @@ text.shadow {
                     </div>   
 			              <div id="collapseFour" class="accordion-body collapse">  
 			                <div class="accordion-inner"> 
-			                		<label class="control-label" id="minSupSlider-label">Minimum Support (0.1 - 1): ${supportValue}</label>         
+									<label class="control-label" id="minSupSlider-label">${message:freqSupport} ${supportValue}</label>         
 	                        		
 	  			                	<t:jquery.slider t:value="minSup" t:params="minSupParams" t:id="minSup" />
 	  			                	
 	  			                	<br />
 	  			                	
-	  			                	<label class="control-label" id="pathLengthSlider-label">Path Length (1 - 200): ${pathLengthValue}</label>         
+	  			                	<label class="control-label" id="pathLengthSlider-label">${message:freqPathLength} ${pathLengthValue}</label>         
 	                        		
 	  			                	<t:jquery.rangeslider t:id="pathLength" t:min="pathLengthMin" t:max="pathLengthMax" t:params="pathLengthParams" />
 									

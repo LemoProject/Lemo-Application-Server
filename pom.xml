@@ -298,7 +298,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>apps-${lemo-system-name}</finalName>
+		<finalName>${lemo-system-name}</finalName>
 		<plugins>
 
 			<plugin>

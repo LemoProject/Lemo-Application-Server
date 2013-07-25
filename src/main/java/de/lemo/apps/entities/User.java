@@ -25,6 +25,7 @@
 package de.lemo.apps.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -69,6 +70,8 @@ public class User extends AbstractEntity {
 	private String username;
 	private String fullname;
 	private String email;
+	private Date lastLogin;
+	private Date currentLogin;
 
 	private boolean accountLocked;
 	private boolean credentialsExpired;
@@ -359,6 +362,24 @@ public class User extends AbstractEntity {
 			return true;
 		}
 		return false;
+	}
+
+	@NonVisual
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	@NonVisual
+	public Date getCurrentLogin() {
+		return currentLogin;
+	}
+
+	public void setCurrentLogin(Date currentLogin) {
+		this.currentLogin = currentLogin;
 	}
 
 }

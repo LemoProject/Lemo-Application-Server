@@ -28,14 +28,12 @@ package de.lemo.apps.restws.entities;
 public enum EResourceType {
 
 	ASSIGNMENT,
-	//COURSE,
+	CHAT,
 	FORUM,
 	QUESTION,
 	QUIZ,
 	RESOURCE,
 	SCORM,
 	WIKI,
-	CHAT,
 	
-
 }

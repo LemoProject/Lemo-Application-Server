@@ -455,8 +455,12 @@ right:10px;
  background-color:#17becf;
  }
  
- .legend.unknown {
+ .legend.chat {
  background-color:#e377c2;
+ }
+ 
+  .legend.unknown {
+ background-color:#000000;
  }
  
 .legend.source {

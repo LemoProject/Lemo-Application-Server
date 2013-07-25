@@ -28,7 +28,8 @@ package de.lemo.apps.services.internal;
 
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.ValueEncoderFactory;
+import org.slf4j.Logger;
+
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 
@@ -37,6 +38,8 @@ public class CourseIdValueEncoderWorker implements CourseIdValueEncoder {
 
 	
 	private CourseDAO courseDAO;
+	@Inject
+	private Logger logger;
 
 	public CourseIdValueEncoderWorker(CourseDAO courseDAO){
 		this.courseDAO = courseDAO;

@@ -17,7 +17,7 @@
 	  }
 	  
 	  var width = $('#viz').width(),
-	  	 height = 500,
+	  	 height = 600,
 	  	  days = [],
 	  	  hours = [],
 	  	  counter = 0,
@@ -29,10 +29,10 @@
 	  var quizzes = [],
   	  counter = 0,
   	  quizMin = 0,
-  	  quizMax = 0
-  	  perPage = 30,
+  	  quizMax = 0,
   	  page = 1,
-  	  pages = 0;
+  	  maxPerPage = 30,
+  	  pages = 1;
   
   //Seperating days per week and hours per day results and calculating Min and Max Values for domain setup
   $.each(data, function(i,v) {
@@ -52,16 +52,18 @@
 	    counter++;
   });
   
-  console.log(quizzes);
+  var perPage = quizzes.length;
   
-  pages = Math.ceil(quizzes.length/perPage);
-  
-  console.log(pages);
+  while (perPage > maxPerPage) {
+   
+  	pages++;
+  	perPage=quizzes.length/pages;
+  	perPage = Math.ceil(perPage);
+   
+  }
   
   quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
-  
-  console.log(quizzes_page);
-  
+    
   $("#pages").html('' + page + "/" + pages);
 
     if (pages > 1)
@@ -73,7 +75,7 @@
   
   //console.log("Counter:"+counter+" QuizMin: "+quizMin+" QuizMax: "+quizMax);
   
-  var marginViz = {top: 5, right: 10, bottom: 50, left: 50},
+  var marginViz = {top: 5, right: 10, bottom: 100, left: 50},
   	marginPlot = {top: 5, right: 7, bottom: 0, left: 10},
     w = 30 - marginPlot.left - marginPlot.right,
     h = height - marginViz.top - marginViz.bottom;
@@ -91,7 +93,7 @@
    users.splice(0,0,' ');
     
   var xScale = d3.scale.ordinal()
-	  .rangePoints([0, width - marginViz.left -10 ])
+	  .rangePoints([0, width - marginViz.left -100 ])
 	  .domain(users);
 	
 	var yScale = d3.scale.linear()
@@ -127,18 +129,18 @@
 	  
 	  svgBox.append("g")
 	      .attr("class","x axis grid")
-	      .attr("transform", "translate("+marginViz.left+"," + h +")")
+		  .attr("transform", "translate("+marginViz.left+"," + (h+5) +")")
 	      .call(make_x_axis()
             .tickSize(-height, 0, 0)
             .tickFormat(""))
 	      .call(xAxis) 
 	    .selectAll("text")  
 	    	.attr("class", function(d){return "boxId-"+d.replace(new RegExp("[\W :]","g"),"_");})
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
+            .style("text-anchor", "start")
+            .attr("dx", "0.6em")
+            .attr("dy", "0.3em")
             .attr("transform", function(d) {
-                return "rotate(-65)" 
+                return "rotate(45)" 
                 })
           
 	  svgBox.append("g")
@@ -233,12 +235,8 @@
       $("#pages").html('' + page + "/" + pages);
       
 	  quizzes_page = quizzes.slice((page-1)*perPage,page*perPage);
-      
-      console.log(quizzes_page);
     		
       users = quizzes_page.map(function(d){return d.name;}); 
-      
-      console.log(users);
    
    	  users.splice(0,0,' ');
    	  
@@ -257,7 +255,7 @@
       
       svgBox.append("g")
 	      .attr("class","x axis grid")
-	      .attr("transform", "translate("+marginViz.left+"," + h +")")
+	      .attr("transform", "translate("+marginViz.left+"," + (h+5) +")")
 	      .call(make_x_axis()
             .tickSize(-height, 0, 0)
             .tickFormat(""))

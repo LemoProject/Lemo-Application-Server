@@ -227,8 +227,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					}
 				}
 
-				if (results.getCoursesRRI() != null) {
-					final List<ResourceRequestInfo> cou = results.getCoursesRRI();
+				if (results.getChatRRI() != null) {
+					final List<ResourceRequestInfo> cou = results.getChatRRI();
 					if (cou.size() > 0) {
 						for (int i = 0; i < cou.size(); i++) {
 							final ResourceRequestInfo res = cou.get(i);

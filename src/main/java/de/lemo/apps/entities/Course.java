@@ -70,6 +70,8 @@ public class Course extends AbstractEntity {
 	private Long maxParticipants;
 	private Long enroledParticipants;
 	private Boolean needUpdate;
+	private Boolean genderSupport;
+	private Boolean noDataAvailable;
 	private Long dataVersion;
 
 	@Inject
@@ -98,6 +100,9 @@ public class Course extends AbstractEntity {
 		this.maxParticipants = maxParticipants;
 		this.enroledParticipants = enroledParticipants;
 		this.needUpdate = false;
+		this.noDataAvailable = false;
+		this.genderSupport = true;
+		this.dataVersion = 0L;
 	}
 
 	/**
@@ -224,6 +229,38 @@ public class Course extends AbstractEntity {
 		this.needUpdate = needUpdate;
 	}
 
+	
+	/**
+	 * @return the genderSupport
+	 */
+	public Boolean getGenderSupport() {
+		return genderSupport;
+	}
+
+	
+	/**
+	 * @param genderSupport the genderSupport to set
+	 */
+	public void setGenderSupport(Boolean genderSupport) {
+		this.genderSupport = genderSupport;
+	}
+
+	
+	/**
+	 * @return the noDataAvailable
+	 */
+	public Boolean getNoDataAvailable() {
+		return noDataAvailable;
+	}
+
+	
+	/**
+	 * @param noDataAvailable the noDataAvailable to set
+	 */
+	public void setNoDataAvailable(Boolean noDataAvailable) {
+		this.noDataAvailable = noDataAvailable;
+	}
+
 	/**
 	 * @return the version
 	 */
@@ -282,7 +319,8 @@ public class Course extends AbstractEntity {
 	public void updateCourse(CourseObject courseObject) {
 		this.courseName = courseObject.getTitle();
 		this.courseDescription = courseObject.getDescription();
-
+		this.noDataAvailable = false;
+		
 		if (this.courseName == null && this.courseDescription != null && this.courseDescription.length() > 1) {
 			final int maxLength = 35;
 			int length = this.courseDescription.length();
@@ -292,18 +330,21 @@ public class Course extends AbstractEntity {
 			this.courseName = this.courseDescription.substring(0, length - 1);
 		}
 
-		if (courseObject.getFirstRequest() != null) {
+		if (courseObject.getFirstRequest() != null && !courseObject.getFirstRequest().equals(0)) {
 			this.firstRequestDate = new java.util.Date((long) courseObject.getFirstRequest()
 					* DateWorkerImpl.MILLISEC_MULTIPLIER);
-		}
+		} else this.noDataAvailable = true;
 
 		if (courseObject.getLastRequest() != null) {
 			this.lastRequestDate = new java.util.Date((long) courseObject.getLastRequest()
 					* DateWorkerImpl.MILLISEC_MULTIPLIER);
-		}
+		} 
+		
 		this.enroledParticipants = courseObject.getParticipants();
 		this.courseId = courseObject.getId();
 		this.needUpdate = false;
+		this.genderSupport = courseObject.isGenderSupport();
+		this.dataVersion = courseObject.getHash();
 	}
 	
 	@Override

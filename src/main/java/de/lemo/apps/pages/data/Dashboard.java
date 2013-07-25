@@ -41,6 +41,7 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.slf4j.Logger;
@@ -102,6 +103,10 @@ public class Dashboard {
 	@Path("../../images/icons/glyphicons_019_cogwheel.png")
 	@Property
 	private Asset wheel;
+	
+
+	@Inject
+	private Messages messages;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -302,7 +307,7 @@ public class Dashboard {
 					return this.getWidgetCourse3().getCourseDescription();
 				}
 			default:
-				return "Widget unused";
+				return this.messages.get("widgetUnused");
 		}
 	}
 

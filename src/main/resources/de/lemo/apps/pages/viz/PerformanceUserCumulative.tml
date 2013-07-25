@@ -21,11 +21,15 @@
         		<!-- d3js visualization -->
         	</div>
         	
-        	 <div id="pagination">
-	           Page <span id="pages"></span>
-	           <button id="prev" onclick="next(false);" class="btn btn-primary">prev page</button>
-	           <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">next page</button>
+        	 <br />
+         	
+        	<div id="pagination"  style="text-align:center">
+	           <button id="prev" onclick="next(false);" class="btn btn-primary pull-left">prev page</button>
+	           <button id="next" onclick="next(true);" class="btn btn-primary pull-right">next page</button>
+	           <p style="width:80%"> ${message:page} <span id="pages"></span> </p>
 	         </div>
+         	
+        	<br />
     	</div>
       
     	<div class="span3">
@@ -131,7 +135,7 @@
 		            			 <t:jquery.palette 
 		            			   t:id="quizzes" 
 		            			   encoder="quizEncoder"
-		            			   model="quizIds"
+		            			   model="quizSelectModel"
 		            			   selected="selectedQuizzes"/>
 		            		  </div>
 			              </div>
@@ -155,11 +159,13 @@
 	                              
 	                              <br />
 	                              
-	                              <t:jquery.palette
-	                              t:id="gender"
-	                              encoder="genderEncoder"
-	                              selected="selectedGender"
-	                              model="genderModel"/>
+	                             <t:if test="course?.genderSupport"> 
+		                              <t:jquery.palette
+		                              t:id="gender"
+		                              encoder="genderEncoder"
+		                              selected="selectedGender"
+		                              model="genderModel"/>
+		                          </t:if>
                        
                      	 </div>
 			        </div>
