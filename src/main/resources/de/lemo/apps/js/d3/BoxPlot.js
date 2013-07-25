@@ -31,7 +31,7 @@
   	  quizMin = 0,
   	  quizMax = 0,
   	  page = 1,
-  	  maxPerPage = 3,
+  	  maxPerPage = 30,
   	  pages = 1;
   
   //Seperating days per week and hours per day results and calculating Min and Max Values for domain setup
