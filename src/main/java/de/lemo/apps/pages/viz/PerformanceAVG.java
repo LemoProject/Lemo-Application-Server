@@ -53,6 +53,7 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
@@ -185,7 +186,11 @@ public class PerformanceAVG {
 
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder, quizEncoder;
+	private LongValueEncoder userIdEncoder;
+	
+	@Inject
+	@Property
+	private QuizValueEncoder quizEncoder;
 
 	@Property
 	@Persist
@@ -193,7 +198,11 @@ public class PerformanceAVG {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
+	private List<Long> selectedUsers, selectedCourses;
+	
+	@Property
+	@Persist
+	private List<Quiz> selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -276,6 +285,8 @@ public class PerformanceAVG {
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
 			}
+			
+			this.quizEncoder.setUp(quizzesList);
 
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
@@ -359,7 +370,10 @@ public class PerformanceAVG {
 
 
 			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
-				quizzesList = this.selectedQuizzes;
+				for(Quiz q : this.selectedQuizzes)
+				{
+					quizzesList.add(q.getCombinedId());
+				}
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
@@ -107,7 +108,7 @@ public class Performance {
 	
 	@Inject
 	SelectModelFactory selectModelFactory;
-	
+
 	@Property
 	private SelectModel quizSelectModel;
 
@@ -200,7 +201,11 @@ public class Performance {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedCourses, selectedQuizzes;
+	private List<Long> selectedUsers, selectedCourses;
+	
+	@Property
+	@Persist
+	private List<Quiz> selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -384,7 +389,7 @@ public class Performance {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
 
-			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
+			this.logger.info("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
 			List<Long> courseList = new ArrayList<Long>();
 			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
@@ -425,14 +430,15 @@ public class Performance {
 
 
 			if (this.selectedQuizzes != null && !this.selectedQuizzes.isEmpty()) {
-				quizzesList = this.selectedQuizzes;
+				for(Quiz q : this.selectedQuizzes)
+					quizzesList.add(q.getCombinedId());
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				logger.debug("Adding QuizzesMap");
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
 			} 
 			
-			this.logger.info(quizzesList.toString());
+			this.logger.info("Quizzes: " +  quizzesList.toString());
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
