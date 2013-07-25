@@ -196,7 +196,8 @@ set JAVA_OPTS=-Xmx1024m -XX:MaxPermSize=128M
 Lizenz
 --------------------------------------------------------------------------------
 Copyright (C) 2013
-Beuth Hochschule Berlin, Hochschule für Technik und Wirtschaft Berlin, Hochschule für Wirtschaft und Recht Berlin
+Beuth Hochschule Berlin, Hochschule für Technik und Wirtschaft Berlin,
+Hochschule für Wirtschaft und Recht Berlin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
