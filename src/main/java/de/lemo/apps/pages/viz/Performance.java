@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -52,6 +53,7 @@ import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.QuizValueEncoder;
+import de.lemo.apps.services.internal.QuizValueEncoderWorker;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 /**
@@ -142,6 +144,12 @@ public class Performance {
 	@Persist
 	@Property
 	private Date endDate;
+	
+	@Persist(PersistenceConstants.CLIENT)
+	private Date endMem;
+	
+	@Persist(PersistenceConstants.CLIENT)
+	private Date beginMem;
 
 	@Property
 	@Persist
@@ -233,15 +241,32 @@ public class Performance {
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
+		
+		if(this.beginDate != null){
+			this.beginMem = this.beginDate;
+		}
+		if(this.endDate != null){
+			this.endMem = this.endDate;
+		}
 
 		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
+			if(this.endMem == null){
+				this.endDate = this.course.getLastRequestDate();
+			}else{
+				this.endDate = this.endMem;
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
+			if(this.beginMem == null){
+				this.beginDate = this.course.getFirstRequestDate();
+			}
+			else
+			{
+				this.beginDate = this.beginMem;
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
@@ -268,6 +293,7 @@ public class Performance {
 	}
 
 	void onPrepareForRender() {
+		this.logger.info(" ----- Betrete Prepare Render");
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
@@ -299,13 +325,14 @@ public class Performance {
 				this.quizIds.add(combinedQuizId);
 				this.logger.debug("Quiz item:"+combinedQuizId+ " -- " + quizStringList.get(x + 2));
 			}
+			this.quizEncoder.setUp(quizzesList);
 			
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
 		} else {
-			this.logger.debug("No rated Objetcs found");
+			this.logger.info("No rated Objetcs found");
 			}
-		this.logger.debug(" ----- Verlasse Prepare Render");
+		this.logger.info(" ----- Verlasse Prepare Render");
 		
 		
 		
@@ -313,6 +340,10 @@ public class Performance {
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
 		return this.courseValueEncoder.create(Course.class);
+	}
+	
+	public final ValueEncoder<Quiz> getQuizEncoder() {
+		return this.quizEncoder.create(Quiz.class);
 	}
 
 	// returns datepicker params

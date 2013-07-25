@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -116,7 +117,13 @@ public class ActivityGraph {
 	@Persist
 	@Property
 	private Date endDate;
-
+	
+	@Persist(PersistenceConstants.CLIENT)
+	private Date endMem;
+	
+	@Persist(PersistenceConstants.CLIENT)
+	private Date beginMem;
+	
 	@Property
 	@Persist
 	private Integer resolution;
@@ -256,15 +263,30 @@ public class ActivityGraph {
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
+		
+		if(this.beginDate != null){
+			this.beginMem = this.beginDate;
+		}
+		if(this.endDate != null){
+			this.endMem = this.endDate;
+		}
 
 		if (this.endDate == null) {
-			this.endDate = this.course.getLastRequestDate();
+			if(this.endMem == null){
+				this.endDate = this.course.getLastRequestDate();
+			}else{
+				this.endDate = this.endMem;
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			this.beginDate = this.course.getFirstRequestDate();
+			if(this.beginMem == null){
+				this.beginDate = this.course.getFirstRequestDate();
+			}else{
+				this.beginDate = this.beginMem;
+			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();

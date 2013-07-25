@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -120,6 +121,12 @@ public class FrequentPathBide {
 	@Persist
 	@Property
 	private Date endDate;
+	
+	@Persist(PersistenceConstants.CLIENT)
+	private Date endMem;
+	
+	@Persist(PersistenceConstants.CLIENT)
+	private Date beginMem;
 
 	@Property
 	@Persist
@@ -183,15 +190,36 @@ public class FrequentPathBide {
 				&& allowedCourses.contains(course.getCourseId())) {
 			this.courseId = course.getCourseId();
 			this.course = course;
+			if(this.beginDate != null){
+				this.beginMem = this.beginDate;
+			}
+			if(this.endDate != null){
+				this.endMem = this.endDate;
+			}
+			
 			if (this.endDate == null) {
-				this.endDate = course.getLastRequestDate();
+				if(this.endMem == null)
+				{
+					this.endDate = course.getLastRequestDate();
+				}
+				else
+				{
+					this.endDate = this.endMem;
+				}
 			} else {
 				this.selectedUsers = null;
 				this.userIds = this.getUsers();
 			}
 
 			if (this.beginDate == null) {
-				this.beginDate = course.getFirstRequestDate();
+				if(this.beginMem == null)
+				{
+					this.beginDate = course.getFirstRequestDate();
+				}
+				else
+				{
+					this.beginDate = this.beginMem;
+				}
 			} else {
 				this.selectedUsers = null;
 				this.userIds = this.getUsers();
@@ -378,6 +406,23 @@ public class FrequentPathBide {
 
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();
+		
+		if(this.beginDate != null){
+			this.beginMem = this.beginDate;
+		}
+		if(this.endDate != null){
+			this.endMem = this.endDate;
+		}
+		if(this.beginDate == null && this.beginMem != null)
+		{
+			this.beginDate = this.beginMem;
+		}
+		if(this.endDate == null && this.endMem != null)
+		{
+			this.endDate = this.endMem;
+		}
+		
+		
 		beginCal.setTime(this.beginDate);
 		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);

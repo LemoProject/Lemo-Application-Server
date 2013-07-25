@@ -36,6 +36,7 @@ import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
+import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
