@@ -50,7 +50,7 @@
    */
   function drawGraph(data) {
     var w = $("#viz").width(), h = 500, amt = 800, maxPos = 11, fill = d3.scale.category20(), nodes = [], links = [], foci = [];
-    var page = 1, pages = 1;
+    var page = 1, pages = 1, maxLength = 1;
 
 
     var _nodes = data.nodes, _links = data.links;
@@ -94,7 +94,7 @@
     if (page == pages)
       $("#next").hide();
 
-
+	
     function init() {
       console.log("Bin im Init - Starting Node Init");
       var posCounter = 1;
@@ -109,6 +109,8 @@
           if (i >= 1 && _nodes[i - 1].pathId == _nodes[i].pathId) {
             posCounter++;
           } else {
+            if (posCounter > maxLength)
+            	maxLength = posCounter;
             posCounter = 1;
             // console.log("Neuer Pfad");
           }
@@ -172,7 +174,6 @@
       });
     }
 
-
     var vis = d3.select("#viz").append("svg:svg").attr("width", w).attr("height", h);
 
     var force = d3.layout.force().friction(.85).gravity(0).linkStrength(0).charge(0).size([w, h]).on("tick",
@@ -218,6 +219,12 @@
     nodes = force.nodes(), links = force.links();
 
     init();
+    
+    var height = h;
+    if (h < maxLength*26.5+70) 
+    	height = maxLength*26.5+70;
+    
+    d3.select("#viz svg").attr("height", height);
 
     var pathAmount = [];
 

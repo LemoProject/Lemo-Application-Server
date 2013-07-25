@@ -59,13 +59,19 @@ text.shadow {
 	        	<div id="loading">  
 	        		<!-- spin.js loading animation -->
 	        	</div>
-	        	<!-- d3js visualization -->
-	        </div>
-    		<p>${message:page} </p>
-		    <p  id="pages"></p>
-		    <button id="prev" onclick="next(false);" class="btn btn-primary">${message:previousPage}</button>
-		    <button id="next" onclick="next(true);" style="position:relative;left:800px;" class="btn btn-primary">${message:nextPage}</button>
-		</div>
+	       </div>
+	        	<!-- d3js visualization -->	       
+
+				<br />
+         	
+	        	<div id="pagination"  style="text-align:center">
+		           <button id="prev" onclick="next(false);" class="btn btn-primary pull-left">prev page</button>
+		           <button id="next" onclick="next(true);" class="btn btn-primary pull-right">next page</button>
+		           <p style="width:80%"> ${message:page} <span id="pages"></span> </p>
+		         </div>
+	         	
+	        	<br />
+	       </div>
       
     	<div class="span3">
     		<t:form t:type="form" t:id="customizeForm" class="pull-left">
