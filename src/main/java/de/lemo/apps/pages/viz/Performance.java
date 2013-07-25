@@ -287,7 +287,6 @@ public class Performance {
 		final List<String> quizzesTitles = new ArrayList<String>();
 		final List<Quiz> quizzesList = new ArrayList<Quiz>();
 		
-		
 		if ((quizList != null) && (quizList.getElements() != null)) {
 			this.logger.debug(" QuizList Elements "+quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
@@ -301,14 +300,11 @@ public class Performance {
 			}
 			
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
-
+			
 		} else {
 			this.logger.debug("No rated Objetcs found");
 			}
-		this.logger.debug(" ----- Verlasse Prepare Render");
-		
-		
-		
+		this.logger.debug(" ----- Verlasse Prepare Render");		
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -390,6 +386,8 @@ public class Performance {
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
 			} 
+			
+			this.logger.info(quizzesList.toString());
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
