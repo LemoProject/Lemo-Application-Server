@@ -104,7 +104,7 @@ public class Initialize {
 						try {
 							updateObject = this.init.getCourseDetails(userCourses.get(i));
 						} catch (RestServiceCommunicationException e) {
-							logger.error(e.getMessage());
+							logger.debug("Couldn't obtain data for course with Id " + userCourses.get(i) + ".");
 						}
 						if (updateObject != null) {
 							logger.debug("ID of updated object is: "+ updateObject.getId() 

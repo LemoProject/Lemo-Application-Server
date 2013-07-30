@@ -182,7 +182,7 @@ public class InitialisationImpl implements Initialisation {
 			logger.info("No course details found. Returning empty resultset.");
 			return new ResultListCourseObject();
 		} catch (final Exception e) {
-			throw new RestServiceCommunicationException(this.toString() + " " + e.getLocalizedMessage());
+			throw new RestServiceCommunicationException(this.toString() + " 0 " + e.getLocalizedMessage());
 		}
 	}
 
@@ -200,7 +200,7 @@ public class InitialisationImpl implements Initialisation {
 			return new CourseObject();
 
 		} catch (final Exception e) {
-			throw new RestServiceCommunicationException(this.toString() + " " + e.getLocalizedMessage());
+			throw new RestServiceCommunicationException();
 		}
 	}
 

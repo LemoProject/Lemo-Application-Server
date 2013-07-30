@@ -99,6 +99,10 @@
 	                                			<input t:type="TextField" t:id="username" value="userItem.username" 
 	                                        	disabled="true" />
 	                        			</p:username>
+	                        			<p:password>
+      										<t:label for="password"/>
+     			 							<t:passwordfield t:id="password" value="useritem.password"/>
+   	 									</p:password>
                         			</t:beaneditor>
 							    	<br />						    	
 							    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
