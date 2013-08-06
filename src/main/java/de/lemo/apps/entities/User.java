@@ -26,10 +26,8 @@ package de.lemo.apps.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -78,6 +76,7 @@ public class User extends AbstractEntity {
 
 	private String encryptedPassword;
 	private byte[] passwordSalt;
+	private String tempPassword;
 	private List<Roles> roles = new ArrayList<Roles>();
 
 	private Long widget1;
@@ -118,7 +117,7 @@ public class User extends AbstractEntity {
 		return builder.toString();
 	}
 
-	@Validate("required,regexp=^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z]+[\\.]{1}[0-9a-zA-Z]+[\\.]?[0-9a-zA-Z]+$")
+	@Validate("required,regexp=^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z-]+[\\.]{1}[0-9a-zA-Z]+[\\.]?[0-9a-zA-Z]+$")
 	public String getEmail() {
 		return this.email;
 	}
@@ -153,12 +152,29 @@ public class User extends AbstractEntity {
 	public String getPassword() {
 		return "";
 	}
+	
+	@Transient
+	@Validate("required")
+	public String getPasswordConfirmation() {
+		return "";
+	}
 
 	public void setPassword(final String newPassword) {
 		if (newPassword != null && !newPassword.equals(this.encryptedPassword) && !"".equals(newPassword)) {
 			ByteSource saltSource = new SecureRandomNumberGenerator().nextBytes();
 			this.passwordSalt = saltSource.getBytes();
 			this.encryptedPassword = new Sha1Hash(newPassword, saltSource).toString();
+		}
+	}
+	
+	public void setPasswordConf(final String newPassword) {
+		if (newPassword != null && !newPassword.equals(this.encryptedPassword) && !"".equals(newPassword)) {
+			ByteSource saltSource = new SecureRandomNumberGenerator().nextBytes();
+			this.passwordSalt = saltSource.getBytes();
+			if(this.tempPassword != null && this.tempPassword.equals(new Sha1Hash(newPassword, saltSource).toString()))
+				this.encryptedPassword = new Sha1Hash(newPassword, saltSource).toString();
+			else
+				this.tempPassword = new Sha1Hash(newPassword, saltSource).toString();
 		}
 	}
 
@@ -177,7 +193,7 @@ public class User extends AbstractEntity {
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
 	}
-
+	
 	@NonVisual
 	@Column(length = COLUMN_LENGTH)
 	public byte[] getPasswordSalt() {
