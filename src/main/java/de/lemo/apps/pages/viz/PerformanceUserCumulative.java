@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -110,12 +111,6 @@ public class PerformanceUserCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
-
-	@Inject
-	SelectModelFactory selectModelFactory;
-	
-	@Property
-	private SelectModel quizSelectModel;
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -129,6 +124,12 @@ public class PerformanceUserCumulative {
 	@Property
 	@SuppressWarnings("unused")
 	private SelectModel courseModel;
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
+	
+	@Property
+	private SelectModel quizSelectModel;
 
 	@Property
 	@Persist
@@ -152,11 +153,11 @@ public class PerformanceUserCumulative {
 	@Property
 	private Date endDate;
 	
-	@Persist(PersistenceConstants.CLIENT)
-	private Date endMem;
-	
-	@Persist(PersistenceConstants.CLIENT)
-	private Date beginMem;
+	@Persist
+	private Map<Long, Date> beginMem;
+
+	@Persist
+	private Map<Long, Date> endMem;
 
 	@Property
 	@Persist
@@ -199,7 +200,7 @@ public class PerformanceUserCumulative {
 	
 	@Inject
 	@Property
-	private LongValueEncoder userIdEncoder;
+	private LongValueEncoder userIdEncoder; 
 
 	@Property
 	@Persist
@@ -207,7 +208,11 @@ public class PerformanceUserCumulative {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, selectedQuizzes;
+	private List<Long> selectedUsers;
+	
+	@Property
+	@Persist
+	private List<Quiz> selectedQuizzes;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -252,6 +257,8 @@ public class PerformanceUserCumulative {
 		this.selectedQuizzes = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
@@ -283,6 +290,9 @@ public class PerformanceUserCumulative {
 				quizzesTitles.add(quizStringList.get(x + 2));
 				this.quizIds.add(combinedQuizId);
 			}
+			this.quizEncoder.setUp(quizzesList);
+			
+			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
@@ -350,7 +360,10 @@ public class PerformanceUserCumulative {
 			}
 
 			if (this.selectedQuizzes != null) {
-				quizzesList = this.selectedQuizzes;
+				for(Quiz q : this.selectedQuizzes)
+				{
+					quizzesList.add(q.getCombinedId());
+				}
 			} else if ((quizzesMap != null) && (quizzesMap.keySet() != null)) {
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
@@ -434,34 +447,44 @@ public class PerformanceUserCumulative {
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
 		
-		if(this.beginDate != null){
-			this.beginMem = this.beginDate;
+		if(beginMem == null)
+		{
+			this.beginMem = new HashMap<Long, Date>();
 		}
-		if(this.endDate != null){
-			this.endMem = this.endDate;
+		
+		if(endMem == null)
+		{
+			this.endMem = new HashMap<Long, Date>();
 		}
-
+		
 		if (this.endDate == null) {
-			if(this.endMem == null){
+			if(this.endMem.get(this.courseId) == null){
 				this.endDate = this.course.getLastRequestDate();
 			}else{
-				this.endDate = this.endMem;
+				this.endDate = this.endMem.get(courseId);
 			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			if(this.beginMem == null){
+			if(this.beginMem.get(this.courseId) == null){
 				this.beginDate = this.course.getFirstRequestDate();
 			}
 			else
 			{
-				this.beginDate = this.beginMem;
+				this.beginDate = this.beginMem.get(this.courseId);
 			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
+		}
+		
+		if(this.beginDate != null){
+			this.beginMem.put(this.courseId, this.beginDate);
+		}
+		if(this.endDate != null){
+			this.endMem.put(this.courseId, this.endDate);
 		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();

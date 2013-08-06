@@ -11,8 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.PersistenceConstants;
@@ -142,11 +145,11 @@ public class ActivityTimeCumulative {
 	@Property
 	private Date endDate;
 	
-	@Persist(PersistenceConstants.CLIENT)
-	private Date endMem;
-	
-	@Persist(PersistenceConstants.CLIENT)
-	private Date beginMem;
+	@Persist
+	private Map<Long, Date> beginMem;
+
+	@Persist
+	private Map<Long, Date> endMem;
 
 	@Property
 	@Persist
@@ -239,6 +242,8 @@ public class ActivityTimeCumulative {
 		this.selectedUsers = null;
 		this.selectedActivities = null;
 		this.selectedGender = null;
+		this.beginDate = null;
+		this.endDate = null;
 	}
 
 	void onPrepareForRender() {
@@ -354,34 +359,44 @@ public class ActivityTimeCumulative {
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
 		
-		if(this.beginDate != null){
-			this.beginMem = this.beginDate;
+		if(beginMem == null)
+		{
+			this.beginMem = new HashMap<Long, Date>();
 		}
-		if(this.endDate != null){
-			this.endMem = this.endDate;
+		
+		if(endMem == null)
+		{
+			this.endMem = new HashMap<Long, Date>();
 		}
-
+		
 		if (this.endDate == null) {
-			if(this.endMem == null){
+			if(this.endMem.get(this.courseId) == null){
 				this.endDate = this.course.getLastRequestDate();
 			}else{
-				this.endDate = this.endMem;
+				this.endDate = this.endMem.get(courseId);
 			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
 		if (this.beginDate == null) {
-			if(this.beginMem == null){
+			if(this.beginMem.get(this.courseId) == null){
 				this.beginDate = this.course.getFirstRequestDate();
 			}
 			else
 			{
-				this.beginDate = this.beginMem;
+				this.beginDate = this.beginMem.get(this.courseId);
 			}
 		} else {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
+		}
+		
+		if(this.beginDate != null){
+			this.beginMem.put(this.courseId, this.beginDate);
+		}
+		if(this.endDate != null){
+			this.endMem.put(this.courseId, this.endDate);
 		}
 		final Calendar beginCal = Calendar.getInstance();
 		final Calendar endCal = Calendar.getInstance();
