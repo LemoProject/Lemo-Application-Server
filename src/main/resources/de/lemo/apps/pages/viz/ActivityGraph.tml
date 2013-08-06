@@ -177,19 +177,19 @@
 			        	
 			        			
 			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
+			        			<br/>
   			                	<div class="slider" id="supportSlider"></div><br />
   			                	<br />
   			                
                         
 	                            <label class="control-label" id="chargeslider-label"></label>
   			                	<div class="slider" id="chargesupportSlider"></div><br />
-  			                	<br/>
   			                	
   			                	<label class="control-label" id="distanceslider-label"></label>
   			                	<div class="slider" id="distancesupportSlider"></div><br />
   			                	<br/>
   			                	
-  			                	<button id="reset" class="btn btn-tiny reset">Reset</button>   
+  			                	<button id="reset" class="btn btn-tiny reset">${message:reset}</button>   
                        
                      	 </div>
 			        </div>
@@ -218,10 +218,12 @@
 
         
       var q2result = ${questionResult};
-		
+      
+      var locale = ${locale};
       
       d3custom.nodes = q2result.nodes;
       d3custom.links = q2result.links;
+	  d3custom.locale = locale;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
   </script>

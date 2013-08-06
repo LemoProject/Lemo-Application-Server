@@ -11,7 +11,9 @@
       selectedNodes,
   	  vis,
   	  root;
-	  
+
+	  var locale = d3custom.locale;
+
 	  $(window).resize(function() {
 			width = $('#viz').width();
 			d3.select("svg")
@@ -61,6 +63,8 @@ var drawChart = function() {
     var _nodes = d3custom.nodes,
     	_links = d3custom.links;
     	
+   console.log(d3custom);
+    	
   //check if we have values to work with
     if(!_nodes || !_links) {
     	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
@@ -78,11 +82,11 @@ var drawChart = function() {
 		  currentDistance=-1;
 		  minCharge=0,
 		  //maxCharge=10,
-		  maxCharge=20000,
-		  currentCharge=-1;
+		  maxCharge=100,
+		  currentCharge=30;
     
    //Calculation of the optimal value for d3 Charge between nodes 
-   	var optCharge = maxCharge;///k;
+   	var optCharge = currentCharge;
    
    	//Calculation of the optimal value for d3 LinkDistance between nodes 
    	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/(_nodes.length/3);
@@ -139,11 +143,11 @@ var drawChart = function() {
     		 links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value});
     	 });
     	 
-    	 $( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + optCharge*k );
+    	 $( "#chargeslider-label" ).html( locale.charge+" ("+minCharge+"-"+maxCharge+"): " + optCharge );
     	 
-    	 $( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + optDistance );
+    	 $( "#distanceslider-label" ).html( locale.distance+" ("+minDistance+"-"+maxDistance+"): " + optDistance );
     	 
-    	 $( "#slider-label" ).html( "Visits: " + visits_min + " - " + visits_max );
+    	 $( "#slider-label" ).html( locale.visits+": " + visits_min + " - " + visits_max );
     	 
     	 //$.each(links, function(i,v) {
         	// console.log("Links Array ["+i+"]:"+v.target.name +"-"+v.source.name);
@@ -543,7 +547,7 @@ function focus(d) {
       });
       
       $( "#chargesupportSlider" ).bind( "slide", function(event, ui) {
-    	  currentCharge=-1*(optCharge/ui.value);
+    	  currentCharge=-1*ui.value;
     	  force.charge(currentCharge);
           
     	  console.log("charge Value: "+currentCharge);
@@ -563,7 +567,7 @@ function focus(d) {
 			max : visits_max,
 			values :  [visits_min, visits_max],
 			slide : function( event, ui ) {
-							$( "#slider-label" ).html( "Visits: " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+							$( "#slider-label" ).html( locale.visits+": " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
 
 							min = visits_min = ui.values[ 0 ];
 							max = visits_max = ui.values[ 1 ];
@@ -585,7 +589,7 @@ function focus(d) {
 			max :  maxDistance,
 			value : optDistance,
 			slide : function( event, ui ) {
-				$( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + ui.value );
+				$( "#distanceslider-label" ).html( locale.distance+" ("+minDistance+"-"+maxDistance+"): " + ui.value );
 				console.log("Distance Value: "+ui.value);
 				
     		}
@@ -600,9 +604,9 @@ function focus(d) {
 			range: false,
 			min : minCharge,
 			max :  maxCharge,
-			value: maxCharge,
+			value: optCharge,
 			slide : function( event, ui ) {
-				$( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + ui.value );
+				$( "#chargeslider-label" ).html( locale.charge+" ("+minCharge+"-"+maxCharge+"): " + ui.value );
     		
 				console.log("Charge Value: "+ui.value);
     		}
