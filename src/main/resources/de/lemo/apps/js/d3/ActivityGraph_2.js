@@ -11,6 +11,8 @@
         centerNodeId = null,
   	    vis,
   	    root;
+  	
+  	var locale = d3custom.locale;
   
     var startDistance = 200;
 	  
@@ -78,11 +80,11 @@
 		  maxDistance=300,
 		  currentDistance=-1;
 		  minCharge=0,
-		  maxCharge=15000,
-		  currentCharge=-1;
+		  maxCharge=200,
+		  currentCharge=30;
     
     // calculation of the optimal value for d3 Charge between nodes
-   	var optCharge = maxCharge;
+   	var optCharge = currentCharge;
    
    	// calculation of the optimal value for d3 LinkDistance between nodes
    	var optDistance=(maxDistance/(1/Math.sqrt(_links.length)))/(_nodes.length/3);
@@ -105,7 +107,7 @@
 
     this.addLink = function (source, target) {
       links.push({"source":findNode(source),"target":findNode(target)});
-      update();
+      drawGraph();
     }
 
     var findNode = function(id,mynodes) {
@@ -158,11 +160,6 @@
     	});
       return neighbours;
     }
-
-    var existNode = function(id,mynodes) {
-        for (var i in mynodes) {if (mynodes[i]["id"] == id) return true; }
-        return false;
-    }
     
     // initialize by transfering elements from _nodes to nodes and _links to links
     function init(){
@@ -173,11 +170,11 @@
     		 links.push({"source":nodes[v.source],"target":nodes[v.target],"value":v.value, "distance":(maxDistance - linkDistanceScale(v.value)*40)});
     	 });
     	 
-    	 $( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + optCharge*k );
+    	 $( "#chargeslider-label" ).html( locale.charge+" ("+minCharge+"-"+maxCharge+"): " + optCharge );
     	 
-    	 $( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + optDistance );
+    	 $( "#distanceslider-label" ).html( locale.distance+" ("+minDistance+"-"+maxDistance+"): " + optDistance );
     	 
-    	 $( "#slider-label" ).html( "Visits: " + visits_min + " - " + visits_max );
+    	 $( "#slider-label" ).html( locale.visits+": " + visits_min + " - " + visits_max );
 
     	 currentCharge = -optCharge;
     	 currentDistance = optDistance;
@@ -194,10 +191,6 @@
     //init visualization
     init();
     
-    force
-    .nodes(nodes)
-    .links(links)
-    .start();
     
     // filter nodes by minimum and maximum value and then check which links are still existent
     function filterNodes(min, max){
@@ -227,8 +220,16 @@
   		});
     }
 
+	var existNode = function(id,mynodes) {
+        for (var i in mynodes) {if (mynodes[i]["id"] == id) return true; }
+        return false;
+    }
+    
+     var findNode = function(id,mynodes) {
+        for (var i in mynodes) {if (mynodes[i]["id"] == id) return mynodes[i];};
+    }
+
     function drawGraph() {
-    	
       var link = vis.selectAll("line.link")
 		    .data(links);
 
@@ -244,7 +245,7 @@
 	    	 	else if(d.value > 50 ) return "darkgreen"
 	    	 	else return "lightgrey";
 	    	})
-	      .style("stroke-width", 0)
+	      .style("stroke-width", 0);
 /*	    		function(d) {
  	 		    if(d.value <= 10) return 1
 	 		    else if(d.value > 10 && d.value <= 50) return 2
@@ -259,7 +260,7 @@
 
       var nodeEnter = node.enter().append("g")
         .attr("class", function(d,i) { return "node gnodeId-" + i; })
-        //.call(force.drag);
+        .call(force.drag);
  
  
 	    nodeEnter.append("circle")
@@ -410,7 +411,11 @@
 
       // Exit any old nodes.
       node.exit().remove();
-   
+   	  
+   	  force
+	   .nodes(nodes)
+	   .links(links)
+	   .start();
      
     }
     
@@ -487,9 +492,9 @@
 			
 			vis.selectAll("line.link")
 			 	.attr("x1", function(d) { return d.source.x; })
-		    .attr("y1", function(d) { return d.source.y; })
-		    .attr("x2", function(d) { return d.target.x; })
-		    .attr("y2", function(d) { return d.target.y; });
+		        .attr("y1", function(d) { return d.source.y; })
+		        .attr("x2", function(d) { return d.target.x; })
+		        .attr("y2", function(d) { return d.target.y; });
 		    
 			var nPos = 0,
 				  nAmount = 0;
@@ -570,21 +575,19 @@
       
     $( "#distancesupportSlider" ).bind( "slide", function(event, ui) {
       currentDistance=ui.value;
-    	force.linkDistance(currentDistance);
+      force.linkDistance(currentDistance);
       drawGraph();
     });
       
     $( "#chargesupportSlider" ).bind( "slide", function(event, ui) {
-      currentCharge=-1*(optCharge/ui.value);
+      currentCharge=-1*ui.value;
       force.charge(currentCharge);
       drawGraph();
     });
      
     $('#supportSlider').mouseup(function(){
-      filterNodes(visits_min,visits_max);
-      
+      filterNodes(visits_min,visits_max);      
       drawGraph();
-      force.start();
     });
       
       
@@ -594,8 +597,8 @@
 			max : visits_max,
 			values :  [visits_min, visits_max],
 			slide : function( event, ui ) {
-			  $( "#slider-label" ).html( "Visits: " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-        min = visits_min = ui.values[ 0 ];
+			  $( "#slider-label" ).html( locale.visits+": " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+        		min = visits_min = ui.values[ 0 ];
 				max = visits_max = ui.values[ 1 ];
 			}
     });
@@ -608,7 +611,7 @@
 			max :  maxDistance,
 			value : optDistance,
 			slide : function( event, ui ) {
-				$( "#distanceslider-label" ).html( "Distance ("+minDistance+"-"+maxDistance+"): " + ui.value );
+				$( "#distanceslider-label" ).html( locale.distance+" ("+minDistance+"-"+maxDistance+"): " + ui.value );
    		}
     });
      
@@ -616,9 +619,10 @@
    		range: false,
 			min : minCharge,
 			max :  maxCharge,
-			value: maxCharge,
+			value: optCharge,
 			slide : function( event, ui ) {
-			  $( "#chargeslider-label" ).html( "Charge ("+minCharge+"-"+maxCharge+"): " + ui.value );
+			console.log(force.charge());
+			  $( "#chargeslider-label" ).html( locale.charge+" ("+minCharge+"-"+maxCharge+"): " + ui.value );
     	}
     });
 

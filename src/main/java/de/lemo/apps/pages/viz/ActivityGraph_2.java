@@ -47,10 +47,12 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.DateWorker;
@@ -253,6 +255,14 @@ public class ActivityGraph_2 {
 	// returns datepicker params
 	public JSONLiteral getDatePickerParams() {
 		return this.dateWorker.getDatePickerParams(this.currentlocale);
+	}
+	
+	public String getLocale() {
+		JSONObject localeObject = new JSONObject();
+		localeObject.put("charge", messages.get("charge"));
+		localeObject.put("distance", messages.get("distance"));
+		localeObject.put("visits", messages.get("visits"));
+		return localeObject.toString();
 	}
 
 	public String getQuestionResult() {

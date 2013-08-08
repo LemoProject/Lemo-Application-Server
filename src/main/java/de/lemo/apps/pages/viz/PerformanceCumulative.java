@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
@@ -58,6 +59,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
@@ -128,9 +130,6 @@ public class PerformanceCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
-	
-	@Inject
-	SelectModelFactory selectModelFactory;
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -210,14 +209,17 @@ public class PerformanceCumulative {
 	@Property
 	private SelectModel quizSelectModel;
 
+	@Inject
+	SelectModelFactory selectModelFactory;
+
+	@Inject
+	@Property
+	private QuizValueEncoder quizEncoder;
+
 
 	@Inject
 	@Property
 	private LongValueEncoder userIdEncoder;
-	
-	@Inject
-	@Property
-	private QuizValueEncoder quizEncoder;
 
 	@Property
 	@Persist

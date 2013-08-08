@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
@@ -58,6 +59,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
@@ -129,7 +131,7 @@ public class PerformanceUserCumulative {
 
 	@Inject
 	private TypeCoercer coercer;
-
+	
 	@Property
 	private BreadCrumbInfo breadCrumb;
 
@@ -211,13 +213,14 @@ public class PerformanceUserCumulative {
 	@Persist
 	private List<GenderEnum> selectedGender;
 
-	@Inject
-	@Property
-	private LongValueEncoder userIdEncoder; 
-	
+
 	@Inject
 	@Property
 	private QuizValueEncoder quizEncoder;
+	
+	@Inject
+	@Property
+	private LongValueEncoder userIdEncoder; 
 
 	@Property
 	@Persist
@@ -311,6 +314,8 @@ public class PerformanceUserCumulative {
 			
 			quizSelectModel = selectModelFactory.create(quizzesList, "name");
 
+			quizSelectModel = selectModelFactory.create(quizzesList, "name");
+
 		} else {
 			this.logger.debug("No rated Objetcs found");
 		}
@@ -357,7 +362,7 @@ public class PerformanceUserCumulative {
 			} catch (RestServiceCommunicationException e1) {
 				logger.error(e1.getMessage());
 			}
-
+			
 			final Map<Long, String> quizzesMap = CollectionFactory.newMap();
 			final List<String> quizzesTitles = new ArrayList<String>();
 

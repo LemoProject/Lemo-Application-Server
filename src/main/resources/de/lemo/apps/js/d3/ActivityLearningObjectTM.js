@@ -22,10 +22,10 @@
       x = d3.scale.linear().range([0, w]),
       y = d3.scale.linear().range([0, h]),
       textLengthMulti = 4.5,
+      namesList = [],
+      parentNamesList=[],
       root,
-      node;
-      
-     
+      node;     
       
       var treemap = d3.layout.treemap()
       	.round(false)
@@ -114,23 +114,32 @@
       //});
       
       function name(d, tspan1) {
-    	  var alreadyIn = false;
-    	  if ((node == root)) {
-    	      console.log(data);
+    	   if ((node == root)) {
+    	      console.log(d);
     		  var biggest = true;
     		  for (var i=0; i<d.parent.children.length; i++) {
-    		  	if (d.area < d.parent.children[i].area) {
-    		  	  biggest=false;
-    		  	}
+	    		if (d.area < d.parent.children[i].area) {
+	    		  biggest=false;
+	    		}
     		  }
     		  if (biggest) {
-    		    if (tspan1)
-    		  		return d.parent.name;
-    		  	else 
+    		    if (tspan1) {
+    		    	if (parentNamesList.indexOf(d.parent.name)==-1) {
+	    		    	namesList.push(d.name);
+	    		    	parentNamesList.push(d.parent.name);
+	    		  		return d.parent.name;
+	    		  	}
+    		  	}
+    		  	else {
+    		  	  if (namesList.indexOf(d.name)!=-1) {
     		  		return "activites: "+d.parent.value+" / "+Math.round(d.parent.value/data.value*100*10)/10+" %";
+    		  	  }
+    		  	}
     		  }
     	  }
     	  else {
+    	  namesList=[];
+    	  parentNamesList=[];
     	  	if ( d.dx > d.name.length*textLengthMulti) {
     			if (tspan1)
     		  		return d.name.slice(0,d.name.length/2);
@@ -154,6 +163,8 @@
       	}
       	
       	function zoom(d) {
+    	  	nameslist=[];
+    	  	parentNamesList=[];
       		node = d;
       		var kx = w / d.dx, ky = h / d.dy;
       		x.domain([d.x, d.x + d.dx]);

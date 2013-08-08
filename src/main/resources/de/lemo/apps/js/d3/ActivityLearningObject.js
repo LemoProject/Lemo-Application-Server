@@ -109,7 +109,6 @@
 
   
       chart.yAxis.tickFormat(d3.format('d'));
-	  console.log(data);
       d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
       d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
 
