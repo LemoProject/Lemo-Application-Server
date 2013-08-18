@@ -256,7 +256,7 @@
   }
 
   function sortfunction4(a, b){
-  	return (b.type.localeCompare(a.type));
+  	return (a.type.localeCompare(b.type));
   }
 
   sortBy = function(d) {
@@ -316,7 +316,7 @@
 
   function validString(d) {
   	var str = d.slice(0,20);
-  	var output = str.replace(/[^\A-Z0-9€…†§+$]/gi,'_');
+  	var output = str.replace(/[^\A-Z0-9ï¿½ï¿½ï¿½ï¿½+$]/gi,'_');
   	return output;
   	}
     	  
