@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $("#draggable").draggable();
     $("#draggable2").draggable();
+    $('.tooltips').tipsy({gravity: 's'});
   });
   
   function color(name) {
@@ -25,3 +26,5 @@ $(document).ready(function() {
        return "#17becf";
      return "#e377c2";
    }
+   
+   
