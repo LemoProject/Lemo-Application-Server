@@ -44,6 +44,7 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
@@ -80,6 +81,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeHeatmap")
 @Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
+@Secure
 public class ActivityTimeHeatmap {
 	
 	private static final int THOU = 1000;

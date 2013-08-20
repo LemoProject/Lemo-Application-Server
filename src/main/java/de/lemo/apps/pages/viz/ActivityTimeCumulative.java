@@ -48,6 +48,7 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -87,6 +88,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeCumulutive")
 @Import(library = { "../../js/d3/ActivityTimeCumulative.js" })
+@Secure
 public class ActivityTimeCumulative {
 
 	private static final int THOU = 1000;

@@ -51,6 +51,7 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 /**
  * Start page of application test.
  */
+@Secure
 public class Start {
 
 	@Property

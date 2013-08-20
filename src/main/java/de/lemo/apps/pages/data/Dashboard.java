@@ -40,6 +40,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -72,6 +73,7 @@ import de.lemo.apps.services.internal.jqplot.XYDateDataItem;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "dashboardTitle")
 @BreadCrumbReset
+@Secure
 public class Dashboard {
 
 	

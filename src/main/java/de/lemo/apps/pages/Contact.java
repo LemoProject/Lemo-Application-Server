@@ -26,10 +26,13 @@
 	 */
 package de.lemo.apps.pages;
 
+import org.apache.tapestry5.annotations.Secure;
+
 /**
  * Placeholder for the tapestry framework
  *
  */
+@Secure
 public class Contact {
 
 }

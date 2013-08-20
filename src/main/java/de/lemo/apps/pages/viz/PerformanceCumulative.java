@@ -41,6 +41,7 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -88,6 +89,7 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformanceCumulative")
 @Import(library = { "../../js/d3/BoxPlot.js" })
+@Secure
 public class PerformanceCumulative {
 
 	private static final int THOU = 1000;

@@ -26,10 +26,13 @@
 	 */
 package de.lemo.apps.pages;
 
+import org.apache.tapestry5.annotations.Secure;
+
 /**
  * Placeholder class for the tapestrry framework
  *
  */
+@Secure
 public class About {
 
 }
