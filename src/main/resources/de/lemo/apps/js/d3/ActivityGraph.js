@@ -204,9 +204,7 @@ var drawChart = function() {
 
 	}    
     
-function update2() {
-	
-	
+function update2() {	
 	
 	var link = vis.selectAll("line.link")
 		.data(links);//, function(d) { return d.target.id; });

@@ -196,6 +196,7 @@
     function filterNodes(min, max){
 		nodes = [];
 		links = [];
+		drawGraph();
 		var tempNodes = [],
 			oldNodes = [],
 			oldNodesCounter = 0,
@@ -204,20 +205,25 @@
 		
     	$.each(_nodes, function(i,v) {
     		if(v.value >= min && v.value <= max){
-    			nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
+    		 nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type, "focus": -1});
    		 		nodesCounter++;
     		} else {
 				  oldNodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
 				  oldNodesCounter++;
 				}
 	   	});
+	   	
+	   	console.log(nodes);
     	
     	$.each(_links, function(i,v) {
-			if(existNode(v.target,nodes) && existNode(v.source,nodes)){
-				 links.push({"source":findNode(v.source,nodes),"target":findNode(v.target,nodes),"value":v.value});
+    		if(existNode(v.target,nodes) && existNode(v.source,nodes)){
+    		 links.push({"source":nodes[findNode(v.source,nodes)],"target":nodes[findNode(v.target,nodes)],"value":v.value, "distance":(maxDistance - linkDistanceScale(v.value)*40)});
+				 	
 				 linkCounter++;
 			}
   		});
+  		
+  		console.log(links);
     }
 
 	var existNode = function(id,mynodes) {
@@ -226,7 +232,7 @@
     }
     
      var findNode = function(id,mynodes) {
-        for (var i in mynodes) {if (mynodes[i]["id"] == id) return mynodes[i];};
+        for (var i in mynodes) {if (mynodes[i]["id"] == id) return i;};
     }
 
     function drawGraph() {
@@ -511,7 +517,7 @@
 				  o.y += (foci[0].y - o.y) ;
 				  o.x += (foci[0].x - o.x) ;
 				}
-
+		
 //				else if (o.focus==2) {
 //				  o.y += (foci[1].y+nPos - o.y) * k;
 //				  o.x += (foci[1].x-nPos - o.x) * k;
@@ -540,7 +546,7 @@
 
     // return links from and to the node ds
     function selectArcs(d) {
-      return vis.selectAll( "line.to-" + d.index + ",line.from-" + d.index)
+      return vis.selectAll( "line.to-" + d.id + ",line.from-" + d.id)
     }
     
     
