@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
@@ -55,6 +56,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
@@ -266,6 +268,13 @@ public class ActivityLearningObjectTM {
 	// returns datepicker params
 	public JSONLiteral getDatePickerParams() {
 		return this.dateWorker.getDatePickerParams(this.currentlocale);
+	}
+	
+	public String getLocale() {
+		JSONObject localeObject = new JSONObject();
+		localeObject.put("user", messages.get("user"));
+		localeObject.put("activities", messages.get("activities"));
+		return localeObject.toString();
 	}
 
 	public String getQuestionResult() {

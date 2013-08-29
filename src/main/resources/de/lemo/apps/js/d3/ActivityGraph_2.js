@@ -413,7 +413,7 @@
         });
 	
 	    nodeEnter.append("nodetitle")
-	      .text(function(d) { return "<b>Learning object:</b> "+ d.name+"<br /><br /><b>Lerning object type:</b> "+ d.type+"<br /><br /> <b>Activities</b>: "+d.value;});
+	      .text(function(d) { return "<b>"+locale.learningObject+":</b> "+ d.name+"<br /><br /><b>"+locale.resourcetypeLabel+":</b> "+ d.type+"<br /><br /> <b>"+locale.activities+"</b>: "+d.value;});
 
       // Exit any old nodes.
       node.exit().remove();
