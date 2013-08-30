@@ -101,7 +101,7 @@ public class Initialize {
 				for (int i = 0; i < userCourses.size(); i++) {
 					this.percentage = Math.round((i+1)*multi);
 					logger.debug("Looking if course ID:"+userCourses.get(i)+" needs update.");
-					if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
+					//if (this.courseDAO.courseNeedsUpdate(userCourses.get(i))) {
 						CourseObject updateObject = null;
 						try {
 							updateObject = this.init.getCourseDetails(userCourses.get(i));
@@ -113,7 +113,7 @@ public class Initialize {
 									+ "  ----  "+updateObject.getTitle()+ "  ----  "+ updateObject.getDescription() );
 							this.courseDAO.update(updateObject);
 						}
-					}
+					//}
 					
 				}
 			}
