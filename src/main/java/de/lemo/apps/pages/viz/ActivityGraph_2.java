@@ -264,6 +264,9 @@ public class ActivityGraph_2 {
 		localeObject.put("charge", messages.get("charge"));
 		localeObject.put("distance", messages.get("distance"));
 		localeObject.put("visits", messages.get("visits"));
+		localeObject.put("activities", messages.get("activities"));
+		localeObject.put("learningObject", messages.get("learning-object"));
+		localeObject.put("resourcetypeLabel", messages.get("resourcetype-label"));
 		return localeObject.toString();
 	}
 

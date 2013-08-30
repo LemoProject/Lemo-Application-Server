@@ -8,6 +8,7 @@
 	  var data = [];
 	  
 	  data = d3custom.data;
+	  var locale = d3custom.locale;
 	  
 	//check if we have values to work with
 	  if(!data) {
@@ -66,7 +67,7 @@
     	  	.style("fill", function(d) { return color(d.parent.name); });
     	  
     	  cell.append("squaretitle")
-			.text(function(d) { return "<b>"+d.name+"</b>: <br /> Activities: "+d.requests+"<br /> User: "+d.user+" </br>"+Math.round(d.value/data.value*100*10)/10+" %";});
+			.text(function(d) { return "<b>"+d.name+"</b>: <br /> "+locale.activities+": "+d.requests+"<br /> "+locale.user+": "+d.user+" </br>"+Math.round(d.value/data.value*100*10)/10+" %";});
 
       
     	  var textEnter = cell.append("svg:text")
@@ -132,7 +133,7 @@
     		  	}
     		  	else {
     		  	  if (namesList.indexOf(d.name)!=-1) {
-    		  		return "activites: "+d.parent.value+" / "+Math.round(d.parent.value/data.value*100*10)/10+" %";
+    		  		return locale.activities+": "+d.parent.value+" / "+Math.round(d.parent.value/data.value*100*10)/10+" %";
     		  	  }
     		  	}
     		  }

@@ -63,8 +63,6 @@ var drawChart = function() {
     var _nodes = d3custom.nodes,
     	_links = d3custom.links;
     	
-   console.log(d3custom);
-    	
   //check if we have values to work with
     if(!_nodes || !_links) {
     	$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
@@ -119,7 +117,7 @@ var drawChart = function() {
     }
 
     var findNode = function(id,mynodes) {
-        for (var i in mynodes) {if (mynodes[i]["id"] == id) return mynodes[i];};
+        for (var i in mynodes) {if (mynodes[i]["id"] == id) return i; }
     }
     
     var findNeighbours = function(id,mylinks) {
@@ -176,40 +174,37 @@ var drawChart = function() {
     function filterNodes(min, max){
 		nodes = [];
 		links = [];
+		update2();
 		var tempNodes = [],
 			oldNodes = [],
 			oldNodesCounter = 0,
 			nodesCounter = 0,
 			linkCounter = 0;
-		
+
     	$.each(_nodes, function(i,v) {
     		//console.log("Schreibe Nodes"+i);
     		if(v.value >= min && v.value <= max){
-    			 nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
+    			nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
    		 		//console.log("Nodes"+nodesCounter+" --- "+nodes[nodesCounter].name +" ---ID:"+nodes[nodesCounter].id +" ---- "+v.name);
    		 		nodesCounter++;
-    		} else {
-				oldNodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type});
-				//console.log("OldNodes"+oldNodesCounter+" --- "+oldNodes[oldNodesCounter].name +" ---- "+v.name);
-				oldNodesCounter++;
-				}
+    		} 
 	   	 });
     	
     	$.each(_links, function(i,v) {
     		//console.log("Bin in Links Schleife -- Target: "+ v.target +" Source: "+ v.source+" --- " +existNode(v.target,nodes)+"----"+existNode(v.source,nodes));
 			if(existNode(v.target,nodes) && existNode(v.source,nodes)){
-					
-				 links.push({"source":findNode(v.source,nodes),"target":findNode(v.target,nodes),"value":v.value});
-				// console.log("Links"+linkCounter+" --- "+links[linkCounter].source.name +" ---- "+v.source.name);
+				 	
+				 links.push({"source":nodes[findNode(v.source,nodes)],"target":nodes[findNode(v.target,nodes)],"value":v.value});
+				 //console.log("Links"+linkCounter+" --- "+links[linkCounter].source.name +" ---- "+v.source.name);
 				 linkCounter++;
 			}
   		});
+  		
+  		console.log(links);
 
 	}    
     
-function update2() {
-	
-	
+function update2() {	
 	
 	var link = vis.selectAll("line.link")
 		.data(links);//, function(d) { return d.target.id; });
@@ -278,8 +273,8 @@ function update2() {
 		var neighbourSelectString = "";
 		$.each(neighbours, function(i,v) {
 			if(neighbourSelectString=="")
-				neighbourSelectString = neighbourSelectString+"g.gnodeId-"+v.id;
-			else neighbourSelectString = neighbourSelectString+", g.gnodeId-"+v.id;
+				neighbourSelectString = neighbourSelectString+"g.gnodeId-"+v.index;
+			else neighbourSelectString = neighbourSelectString+", g.gnodeId-"+v.index;
 		});
 		//console.log("NeighbourhoddString: "+neighbourSelectString);
 		var neighbourNodes = vis.selectAll(neighbourSelectString);
@@ -346,7 +341,7 @@ function update2() {
 	});
 	
 	nodeEnter.append("nodetitle")
-	   .text(function(d) { return "<b>Learning object:</b> "+ d.name+"<br /><br /><b>Lerning object type:</b> "+ d.type+"<br /><br /> <b>Activities</b>: "+d.value;});
+	   .text(function(d) { return "<b>"+locale.learningObject+":</b> "+ d.name+"<br /><br /><b>"+locale.resourcetypeLabel+":</b> "+ d.type+"<br /><br /> <b>"+locale.activities+"</b>: "+d.value;});
 
 
 
@@ -497,16 +492,16 @@ function focus(d) {
 
 
         function selectArcs(d) {
-     	   visSelect = vis.selectAll( "line.to-" + d.index +
-                    ",line.from-" + d.index);
+     	   visSelect = vis.selectAll( "line.to-" + d.id +
+                    ",line.from-" + d.id);
      	   console.log(visSelect);
-     	   return vis.selectAll( "line.to-" + d.index +
-                                  ",line.from-" + d.index)
+     	   return vis.selectAll( "line.to-" + d.id +
+                                  ",line.from-" + d.id)
         }        
         
         function selectNodes(d) {
-      	   return vis.selectAll( "line.to-" + d.index +
-                                   ",line.from-" + d.index)
+      	   return vis.selectAll( "line.to-" + d.id +
+                                   ",line.from-" + d.id)
          }     
         
         

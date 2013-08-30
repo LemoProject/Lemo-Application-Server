@@ -202,28 +202,28 @@
 		    				</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/ActivityTime" context="${CurrentCourse?.id}"><img src="${usageAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:visActivityTime}</b> </t:pagelink> 
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AT-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/ActivityLearningObject" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="75px" /><br /><br /><b>${message:visActivityLearningObject}</b> </t:pagelink> 
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ALO-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/ActivityLearningObjectTM" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOTreeMapIcon}" height="50px" width="75px" /><br /><br /><b>${message:visActivityLearningObjectTreemap}</b> </t:pagelink> 
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ALOTM-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/Activitygraph" context="${CurrentCourse?.id}"><img src="${navAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityGraph}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/Activitygraph_2" context="${CurrentCourse?.id}"><img src="${navAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityGraph} 2</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
@@ -237,32 +237,32 @@
 		    				</div>
 		    				<div class="span2" align="center">
 			    				<t:pagelink page="viz/FrequentPathBide" context="${CurrentCourse?.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visFrequentPathBIDE}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:FP-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 		    				
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/FrequentPathViger" context="${CurrentCourse?.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visFrequentPathViger}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:FP-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/Performance" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformance}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:P-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/PerformanceAvg" context="${CurrentCourse?.id}"><img src="${usageAnalysisLOIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceAvg}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PA-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/PerformanceCumulative" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceCumulative}</b> </t:pagelink>
-			    				<span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PC-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
@@ -276,25 +276,25 @@
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/PerformanceUserCumulative" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceUserCumulative}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PUC-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/activityTimeCumulative" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="75px" /><br /><br /><b>${message:visActivityTimeCumulutive}</b> </t:pagelink> 
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATC-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/CircleGraph" context="${CurrentCourse?.id}"><img src="${circleGraphIcon}" height="50px" width="60px" /><br /><br /><b>${message:visCircleGraph}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:CG-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
 			    				<t:pagelink page="viz/ActivityTimeHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="60px" /><br /><br /><b>${message:visActivityTimeHeatmap}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="tooltip">info</span>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATHM-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
