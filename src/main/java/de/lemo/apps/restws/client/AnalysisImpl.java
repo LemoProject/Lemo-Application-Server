@@ -354,7 +354,7 @@ public class AnalysisImpl implements Analysis {
 			final Long startTime,
 			final Long endTime,
 			final List<Long> gender) {
-		logger.info("Starte BIDE Request");
+		logger.info("Starte VIGER Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {

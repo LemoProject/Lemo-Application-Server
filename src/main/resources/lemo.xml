@@ -19,7 +19,7 @@
 	      		email="user&#64;example.com" 
 	      		fullname="Teacher" 
 	      		
-	      		courses="1523768147 212591 1482 112100 11476 112200 113905 137666 221 222 223 224 225 226 227 4574430 4574443 4917073 4917091 136597 14296 14442 14615 14767 13308 13217"/>
+	      		courses=""/>
       		
  	      <user name="global" 
  	      		password="lemolemo" 
@@ -38,7 +38,7 @@
       <property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
       <property name="hibernate.show_sql">false</property>
       <property name="hibernate.format_sql">true</property>
-      <property name="hibernate.hbm2ddl.auto">create</property>
+      <property name="hibernate.hbm2ddl.auto">update</property>
       <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
       <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
       <property name="hibernate.c3p0.acquire_increment">3</property>
