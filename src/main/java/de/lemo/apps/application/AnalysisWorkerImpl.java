@@ -214,8 +214,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					resolution.longValue(), resourceTypesNames, gender);
 			this.logger.debug("Extended Analysls Details: " + results);
 			if (results != null) {
-				if (results.getAssignmentRRI() != null) {
-					final List<ResourceRequestInfo> ass = results.getAssignmentRRI();
+				if (results.getTaskRRI() != null) {
+					final List<ResourceRequestInfo> ass = results.getTaskRRI();
 					if (ass.size() > 0) {
 						for (int i = 0; i < ass.size(); i++) {
 							final ResourceRequestInfo res = ass.get(i);
@@ -227,8 +227,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					}
 				}
 
-				if (results.getChatRRI() != null) {
-					final List<ResourceRequestInfo> cou = results.getChatRRI();
+				if (results.getLearningObjectRRI() != null) {
+					final List<ResourceRequestInfo> cou = results.getLearningObjectRRI();
 					if (cou.size() > 0) {
 						for (int i = 0; i < cou.size(); i++) {
 							final ResourceRequestInfo res = cou.get(i);
@@ -240,8 +240,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					}
 				}
 
-				if (results.getResourcesRRI() != null) {
-					final List<ResourceRequestInfo> ress = results.getResourcesRRI();
+				if (results.getLearningObjectRRI() != null) {
+					final List<ResourceRequestInfo> ress = results.getLearningObjectRRI();
 					if (ress.size() > 0) {
 						for (int i = 0; i < ress.size(); i++) {
 							final ResourceRequestInfo res = ress.get(i);
@@ -253,8 +253,8 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 					}
 				}
 
-				if (results.getResourcesRRI() != null) {
-					final List<ResourceRequestInfo> ress = results.getForumRRI();
+				if (results.getLearningObjectRRI() != null) {
+					final List<ResourceRequestInfo> ress = results.getCollaborativeObjectRRI();
 					if (ress.size() > 0) {
 						for (int i = 0; i < ress.size(); i++) {
 							final ResourceRequestInfo res = ress.get(i);

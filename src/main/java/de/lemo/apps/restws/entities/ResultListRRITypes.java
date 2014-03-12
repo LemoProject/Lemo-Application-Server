@@ -31,132 +31,58 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ResultListRRITypes {
 
-	private List<ResourceRequestInfo> assignments;
-	private List<ResourceRequestInfo> chats;
-	private List<ResourceRequestInfo> forums;
-	private List<ResourceRequestInfo> questions;
-	private List<ResourceRequestInfo> quiz;
-	private List<ResourceRequestInfo> resources;
-	private List<ResourceRequestInfo> scorms;
-	private List<ResourceRequestInfo> wikis;
+	private List<ResourceRequestInfo> tasks;
+	private List<ResourceRequestInfo> learningObjects;
+	private List<ResourceRequestInfo> collaborativeObjects;
 
 	public void setAssignmentRRI(final List<ResourceRequestInfo> assignments) {
-		this.assignments = assignments;
+		this.tasks = assignments;
 	}
 
 	public void setChatRRI(final List<ResourceRequestInfo> chat) {
-		this.chats = chat;
+		this.learningObjects = chat;
 	}
 
 	public void setForumRRI(final List<ResourceRequestInfo> forums) {
-		this.forums = forums;
+		this.collaborativeObjects = forums;
 	}
 
-	public void setQuestionRRI(final List<ResourceRequestInfo> questions) {
-		this.questions = questions;
-	}
-
-	public void setQuizRRI(final List<ResourceRequestInfo> quiz) {
-		this.quiz = quiz;
-	}
-
-	public void setResourceRRI(final List<ResourceRequestInfo> resources) {
-		this.resources = resources;
-	}
-
-	public void setScormRRI(final List<ResourceRequestInfo> scorms) {
-		this.scorms = scorms;
-	}
-
-	public void setWikiRRI(final List<ResourceRequestInfo> wikis) {
-		this.wikis = wikis;
-	}
 
 	public ResultListRRITypes() {
-		this.assignments = new ArrayList<ResourceRequestInfo>();
-		this.chats = new ArrayList<ResourceRequestInfo>();
-		this.forums = new ArrayList<ResourceRequestInfo>();
-		this.questions = new ArrayList<ResourceRequestInfo>();
-		this.quiz = new ArrayList<ResourceRequestInfo>();
-		this.resources = new ArrayList<ResourceRequestInfo>();
-		this.scorms = new ArrayList<ResourceRequestInfo>();
-		this.wikis = new ArrayList<ResourceRequestInfo>();
+		this.tasks = new ArrayList<ResourceRequestInfo>();
+		this.learningObjects = new ArrayList<ResourceRequestInfo>();
+		this.collaborativeObjects = new ArrayList<ResourceRequestInfo>();
 	}
 
 	@XmlElement
-	public List<ResourceRequestInfo> getAssignmentRRI() {
-		return this.assignments;
+	public List<ResourceRequestInfo> getTaskRRI() {
+		return this.tasks;
 	}
 
 	@XmlElement
-	public List<ResourceRequestInfo> getForumRRI() {
-		return this.forums;
+	public List<ResourceRequestInfo> getCollaborativeObjectRRI() {
+		return this.collaborativeObjects;
 	}
 
 	@XmlElement
-	public List<ResourceRequestInfo> getChatRRI() {
-		return this.chats;
+	public List<ResourceRequestInfo> getLearningObjectRRI() {
+		return this.learningObjects;
 	}
 
-	@XmlElement
-	public List<ResourceRequestInfo> getQuestionsRRI() {
-		return this.questions;
-	}
-
-	@XmlElement
-	public List<ResourceRequestInfo> getQuizRRI() {
-		return this.quiz;
-	}
-
-	@XmlElement
-	public List<ResourceRequestInfo> getResourcesRRI() {
-		return this.resources;
-	}
-
-	@XmlElement
-	public List<ResourceRequestInfo> getScormRRI() {
-		return this.scorms;
-	}
-
-	@XmlElement
-	public List<ResourceRequestInfo> getWikiRRI() {
-		return this.wikis;
-	}
 
 	public List<ResourceRequestInfo> getResultListByResourceType(final EResourceType resourceType) {
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.ASSIGNMENT)) {
-			return this.assignments;
+		if ((resourceType != null) && resourceType.equals(EResourceType.TASK)) {
+			return this.tasks;
 		}
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.FORUM)) {
-			return this.forums;
+		if ((resourceType != null) && resourceType.equals(EResourceType.COLLABORATIVEOBJECT)) {
+			return this.collaborativeObjects;
 		}
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.CHAT)) {
-			return this.chats;
+		if ((resourceType != null) && resourceType.equals(EResourceType.LEARNINGOBJECT)) {
+			return this.learningObjects;
 		}
-
-		if ((resourceType != null) && resourceType.equals(EResourceType.QUESTION)) {
-			return this.questions;
-		}
-
-		if ((resourceType != null) && resourceType.equals(EResourceType.QUIZ)) {
-			return this.quiz;
-		}
-
-		if ((resourceType != null) && resourceType.equals(EResourceType.RESOURCE)) {
-			return this.resources;
-		}
-
-		if ((resourceType != null) && resourceType.equals(EResourceType.SCORM)) {
-			return this.scorms;
-		}
-
-		if ((resourceType != null) && resourceType.equals(EResourceType.WIKI)) {
-			return this.wikis;
-		}
-
 		return new ArrayList<ResourceRequestInfo>();
 	}
 
