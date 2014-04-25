@@ -25,7 +25,7 @@
         	<!-- Legend -->
       		<div>
       			<span class="pull-left"><h5>${message:legend}:</h5></span>
-    			<span class="legend LearningObject pull-left"></span> <span class="pull-left"><p>${message:EResourceType.LearningObject} </p></span>
+    			<span class="legend learningObject pull-left"></span> <span class="pull-left"><p>${message:EResourceType.LearningObject} </p></span>
     			<span class="legend collaborativeObject pull-left"></span> <span class="pull-left"><p>${message:EResourceType.CollaborativeObject} </p></span>
     			<span class="legend task pull-left"></span> <span class="pull-left"><p>${message:EResourceType.Task} </p></span>
     			<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN} </p></span>

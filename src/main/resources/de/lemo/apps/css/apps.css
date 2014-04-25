@@ -423,40 +423,16 @@ right:10px;
  margin-left:10px;
  }
  
- .legend.resource {
+ .legend.learningObject {
  background-color:#ff8f1e;
  }
  
- .legend.course {
- background-color:#1f77b4;
- }
- 
- .legend.forum {
+ .legend.collaborativeObject {
  background-color:#2ca02c;
  }
  
- .legend.question {
- background-color:#9467bd;
- }
- 
- .legend.quiz {
- background-color:#d62728;
- }
- 
- .legend.assignment {
- background-color:#8c564b;
- }
- 
- .legend.scorm {
- background-color:#7f7f7f;
- }
- 
- .legend.wiki {
- background-color:#17becf;
- }
- 
- .legend.chat {
- background-color:#e377c2;
+ .legend.task {
+ background-color:#1f77b4;
  }
  
   .legend.unknown {

@@ -1,5 +1,5 @@
 /**
- * File ./src/main/java/de/lemo/apps/components/JqPlot.java
+           * File ./src/main/java/de/lemo/apps/components/JqPlot.java
  * Lemo-Application-Server for learning analytics.
  * Copyright (C) 2013
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
