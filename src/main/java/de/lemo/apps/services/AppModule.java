@@ -170,7 +170,7 @@ public class AppModule {
 		return decorator.build(serviceInterface, delegate, serviceId);
 	}
 
-	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm) {
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration) {
             JndiLdapRealm ldapRealm = new JndiLdapRealm();
             ldapRealm.setUserDnTemplate("cn={0},ou=Users,dc=example,dc=com");
             JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
