@@ -172,6 +172,7 @@ public class AppModule {
 
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration) {
             JndiLdapRealm ldapRealm = new JndiLdapRealm();
+            ldapRealm.setAuthorizationCachingEnabled(false);
             ldapRealm.setUserDnTemplate("cn={0},ou=Users,dc=example,dc=com");
             JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
             contextFactory.setUrl("ldap://localhost:10389");
