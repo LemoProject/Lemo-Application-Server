@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
+import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.hibernate.HibernateSymbols;
@@ -169,7 +171,11 @@ public class AppModule {
 	}
 
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm) {
-		configuration.add(realm);
+            JndiLdapRealm ldapRealm = new JndiLdapRealm();
+            ldapRealm.setUserDnTemplate("cn={0},ou=Users,dc=example,dc=com");
+            JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
+            contextFactory.setUrl("ldap://localhost:10389");
+            configuration.add(ldapRealm);
 	}
 
 	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {
