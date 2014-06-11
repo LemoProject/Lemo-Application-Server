@@ -27,8 +27,11 @@
 package de.lemo.apps.pages;
 
 import java.util.Date;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.AuthenticationStrategy;
 import org.apache.shiro.subject.Subject;
 import org.apache.tapestry5.alerts.AlertManager;
 import org.apache.tapestry5.annotations.*;
@@ -40,8 +43,10 @@ import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.slf4j.Logger;
+import org.tynamo.security.internal.ModularRealmAuthenticator;
 import org.tynamo.security.services.PageService;
 import org.tynamo.security.services.SecurityService;
+
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.data.Register;
@@ -87,6 +92,9 @@ public class Start {
 
 	@Inject
 	private SecurityService securityService;
+	
+	@Inject
+	private ModularRealmAuthenticator modularRealmAuthenticator;
 
 	@SuppressWarnings("deprecation")
 	@Inject
@@ -125,6 +133,8 @@ public class Start {
 	public Object onSubmitFromLoginForm() {
 
 		try {
+			AuthenticationStrategy authenticationStrategy = new AtLeastOneSuccessfulStrategy();
+			this.modularRealmAuthenticator.setAuthenticationStrategy(authenticationStrategy);
 			final Subject currentUser = this.securityService.getSubject();
 
 			if (currentUser == null) {
