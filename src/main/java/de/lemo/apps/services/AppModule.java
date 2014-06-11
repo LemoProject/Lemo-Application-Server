@@ -22,6 +22,7 @@ package de.lemo.apps.services;
 
 import java.io.IOException;
 import java.util.Map.Entry;
+
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
@@ -46,6 +47,7 @@ import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 import org.tynamo.seedentity.SeedEntityIdentifier;
+
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
 import de.lemo.apps.application.DateWorker;
@@ -58,7 +60,6 @@ import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
-import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
@@ -80,7 +81,6 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoderWorker;
 import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.QuizValueEncoderWorker;
-
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -170,15 +170,17 @@ public class AppModule {
 		return decorator.build(serviceInterface, delegate, serviceId);
 	}
 
-	public static void contributeWebSecurityManager(Configuration<Realm> configuration) {
-            JndiLdapRealm ldapRealm = new JndiLdapRealm();
-            ldapRealm.setAuthorizationCachingEnabled(false);
-            ldapRealm.setUserDnTemplate("cn={0},ou=Users,dc=example,dc=com");
-            JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
-            contextFactory.setUrl("ldap://localhost:10389");
-            configuration.add(ldapRealm);
-	}
 
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm) {
+        JndiLdapRealm ldapRealm = new JndiLdapRealm();
+        ldapRealm.setAuthorizationCachingEnabled(false);
+        ldapRealm.setUserDnTemplate("cn={0},ou=Users,dc=example,dc=com");
+        JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
+        contextFactory.setUrl("ldap://localhost:10389");    
+        configuration.add(realm);
+        configuration.add(ldapRealm);
+	}
+	
 	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {
 		for (User user : ServerConfiguration.getInstance().getUserImports()) {
 			for (Course course : user.getMyCourses()) {
