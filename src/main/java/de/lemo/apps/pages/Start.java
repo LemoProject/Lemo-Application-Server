@@ -47,6 +47,7 @@ import org.tynamo.security.internal.ModularRealmAuthenticator;
 import org.tynamo.security.services.PageService;
 import org.tynamo.security.services.SecurityService;
 
+import de.lemo.apps.entities.User;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.data.Register;
@@ -86,6 +87,10 @@ public class Start {
 	private Initialisation init;
 	
 	@Inject UserDAO userDAO;
+	
+	@Property
+	@Persist
+	private User userItem;
 	
 	@InjectPage
 	private Register registerPage;
@@ -144,6 +149,17 @@ public class Start {
 			final UsernamePasswordToken token = new UsernamePasswordToken(this.username, this.password);
 			this.logger.info("Prepare Logintoken. Username: " + this.username);
 			currentUser.login(token);
+			if(!userDAO.doExist(this.username))
+			{
+				try{
+					userItem = new User(username,username,username,"lemo");
+					this.
+					logger.info("Login: The user " + username + " doesn't exist. And will be created.");
+					userDAO.save(userItem);
+				} catch(Exception e){
+					logger.info("Login: Can't create user. " + e.getMessage());
+				}
+			}
 
 		} catch (AuthenticationException ex) {
 			this.logger.info("Login unsuccessful.");

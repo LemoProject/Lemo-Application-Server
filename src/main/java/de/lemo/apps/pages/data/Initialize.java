@@ -87,7 +87,8 @@ public class Initialize {
 
 	public Object onProgressiveDisplay() {
 
-		final User user = this.ud.getUser(this.getUserName());
+		User user = this.ud.getUser(this.getUserName());
+		
 		if(user.getCurrentLogin() != null)
 			user.setLastLogin(user.getCurrentLogin());
 		user.setCurrentLogin(new Date());
