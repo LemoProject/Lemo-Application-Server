@@ -171,12 +171,13 @@ public class AppModule {
 	}
 
 
-	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm) {
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm,final Logger log) {
         JndiLdapRealm ldapRealm = new JndiLdapRealm();
         ldapRealm.setAuthorizationCachingEnabled(false);
-        ldapRealm.setUserDnTemplate("cn={0},ou=Users,dc=example,dc=com");
+        ldapRealm.setUserDnTemplate(ServerConfiguration.getInstance().getUserDnTemplate());
         JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
-        contextFactory.setUrl("ldap://localhost:10389");    
+        contextFactory.setUrl(ServerConfiguration.getInstance().getContextFactoryUrl()); 
+        log.info(String.format("ContextFactoryURL: %s", ServerConfiguration.getInstance().getContextFactoryUrl()));   
         configuration.add(realm);
         configuration.add(ldapRealm);
 	}
