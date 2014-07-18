@@ -90,6 +90,7 @@ public class User extends AbstractEntity {
 		this.fullname = fullname;
 		this.username = username;
 		this.email = email;
+		this.passwordSalt = new byte[] {};
 	}
 
 	public User(final String fullname, final String username, final String email, final String password) {
