@@ -22,8 +22,10 @@ package de.lemo.apps.services;
 
 import java.io.IOException;
 import java.util.Map.Entry;
+
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
+import org.apache.tapestry5.MetaDataConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.hibernate.HibernateSymbols;
@@ -35,6 +37,7 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Match;
+import org.apache.tapestry5.services.BaseURLSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
@@ -44,6 +47,7 @@ import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 import org.tynamo.security.SecuritySymbols;
 import org.tynamo.seedentity.SeedEntityIdentifier;
+
 import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.AnalysisWorkerImpl;
 import de.lemo.apps.application.DateWorker;
@@ -78,7 +82,6 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoderWorker;
 import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.QuizValueEncoderWorker;
-
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
 
@@ -201,7 +204,26 @@ public class AppModule {
 			}
 		});
 	}
-
+	public void contributeMetaDataLocator(MappedConfiguration<String,String> configuration)
+	{
+	    configuration.add(MetaDataConstants.SECURE_PAGE, "true");
+	}
+	public static void contributeServiceOverride(MappedConfiguration<Class,Object> configuration)
+	{
+	    BaseURLSource source = new BaseURLSource()
+	    {
+	        public String getBaseURL(boolean secure)
+	        {
+	            String protocol = secure ? "https" : "http";
+	 
+	            int port = secure ? 8443 : 8080;
+	 
+	            return String.format("%s://localhost:%d", protocol, port);
+	        }
+	    };
+	 
+	    configuration.add(BaseURLSource.class, source);
+	}	
 	/**
 	 * This is a service definition, the service will be named "TimingFilter". The interface, RequestFilter, is used
 	 * within

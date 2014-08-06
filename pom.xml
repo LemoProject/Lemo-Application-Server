@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.lemo</groupId>
 	<artifactId>apps</artifactId>
-	<version>PT2S8_Final-49-gf3e3760</version><!-- FLAG 1 identifier DONT DELETE -->
+	<version>v0.7-22-g1ce3d75</version><!-- FLAG 1 identifier DONT DELETE -->
 	<packaging>war</packaging>
 	<name>Lemo Application Server</name>
 
@@ -225,7 +225,7 @@
 			<artifactId>resteasy-jackson-provider</artifactId>
 			<version>2.3.0.GA</version>
 		</dependency>
-
+		
 		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
 			plugin (which runs the tests) will fail, preventing Maven from packaging 
 			the WAR. Tapestry includes a large number of testing facilities designed 
@@ -328,7 +328,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- Run the application using "mvn jetty:run" -->
+		<!-- Run the application using "mvn jetty:run" -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
@@ -347,7 +347,49 @@
 						</systemProperty>
 					</systemProperties>
 					<contextPath>/${lemo-system-name}/${project.artifactId}</contextPath>
+				    <scanIntervalSeconds>5</scanIntervalSeconds>
+				    <connectors>
+				      <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+				        <port>8080</port>
+				        <maxIdleTime>60000</maxIdleTime>
+				      </connector>
+				      <connector implementation="org.mortbay.jetty.security.SslSocketConnector">
+				        <port>8443</port>
+				        <maxIdleTime>60000</maxIdleTime>
+				        <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+				        <password>jetty6</password>
+				        <keyPassword>jetty6</keyPassword>
+				      </connector>
+				    </connectors>
 				</configuration>
+			</plugin>			
+			<plugin>
+			  <groupId>org.codehaus.mojo</groupId>
+			  <artifactId>keytool-maven-plugin</artifactId>
+			  <executions>
+			    <execution>
+			      <phase>generate-resources</phase>
+			      <id>clean</id>
+			      <goals>
+			        <goal>clean</goal>
+			      </goals>
+			    </execution>
+			    <execution>
+			      <phase>generate-resources</phase>
+			      <id>genkey</id>
+			      <goals>
+			        <goal>generateKeyPair</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			  <configuration>
+			    <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+			    <dname>cn=my.hostname.tld</dname><!-- put your CN here-->
+			    <keypass>jetty6</keypass>
+			    <storepass>jetty6</storepass>
+			    <alias>jetty6</alias>
+			    <keyalg>RSA</keyalg>
+			  </configuration>
 			</plugin>
 
 			<plugin>
@@ -380,7 +422,7 @@
 					<warDirectory>target/${project.build.finalName}.war</warDirectory>
 					<!-- remote tomcat manager -->
 					<server>${tomcat-server}</server>
-					<url>${tomcat-url}/manager</url>
+					<url>http://localhost:8080/manager</url>
 					<!-- Using additional slashes doesn't work here, due to a tapestry bug 
 						caused by url encoding the .war file name. Bug got fixed in Tapestry 5.3.7 
 						(not yet released). -->
@@ -493,8 +535,8 @@
 			<id>PullRequest Repository Public</id>
 			<url>http://nexus.pullrequest.org/content/repositories/public/</url>
 		</repository>
-
 	</repositories>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -502,7 +544,5 @@
 		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.9</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>
-		<lemo2-tomcat-url>http://lemo2.f4.htw-berlin.de:8080</lemo2-tomcat-url>
-		<lemo3-tomcat-url>http://141.45.146.174:8080</lemo3-tomcat-url>
 	</properties>
 </project>
