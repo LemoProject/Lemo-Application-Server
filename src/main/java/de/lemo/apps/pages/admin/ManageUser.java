@@ -124,21 +124,18 @@ public class ManageUser {
 	
     Boolean onActivate(User user){
     	this.userItem = user;
-    	this.searchCoursesList = null;
     	return false;
+    }
+    
+    User onPassivate() { 
+    	return this.userItem; 
     }
     
     void cleanUpRender() {
     	this.searchCoursesList = null;
     	form.clearErrors();
     }
-    
-//    Object onActivate(){
-//    	if (this.userItem == null) {
-//    		return DashboardAdmin.class; 
-//    	} else return this;
-//    }
-    
+      
 	
 	public List<Course> getUserCourses() {
 		return this.courseDAO.findAllByOwner(userItem, false);
@@ -224,7 +221,6 @@ public class ManageUser {
 				} else {logger.debug("Course result List is null");}
 			} else {logger.debug("Result object is null");}
 		}
-		
 		return request.isXHR() ? formZone.getBody() : null;
 	}
 	

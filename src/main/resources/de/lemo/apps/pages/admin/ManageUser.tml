@@ -23,7 +23,7 @@
 				 	confirm.style.visibility="hidden";
 				 }
 				 var button = document.getElementById("deleteCourseButton");
-				 button.setAttribute("href","/lemo/apps/de/admin/manageuser.deletecourse/"+int);
+				 button.setAttribute("href","../manageuser.deletecourse/"+int);
 			}
 			
 			function expandCourseSearch(bool) {
