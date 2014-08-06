@@ -27,10 +27,12 @@
 package de.lemo.apps.application.config;
 
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
+
 import com.google.common.collect.Lists;
 
 @XmlType
@@ -51,5 +53,11 @@ class ApplicationServer {
 	@XmlElementWrapper(name = "users", required = true)
 	@XmlElement(name = "user", required = true)
 	public List<UserConfig> users = Lists.newArrayList();
+	
+	@XmlElement(name = "user-dn-template", required = true)
+	public String userDnTemplate;
+
+	@XmlElement(name = "context-factory-url", required = true)
+	public String contextFactoryUrl;
 	
 }

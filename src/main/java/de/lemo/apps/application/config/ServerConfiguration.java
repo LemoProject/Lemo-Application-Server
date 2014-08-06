@@ -30,12 +30,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
 import org.apache.log4j.Logger;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.Roles;
 import de.lemo.apps.entities.User;
@@ -51,6 +55,8 @@ public enum ServerConfiguration {
 	private String serverName;
 	private Map<String, String> dbConfig;
 	private String dmsUrl;
+	private String userDnTemplate;
+	private String contextFactoryUrl;
 
 	private List<User> userImports;
 
@@ -81,6 +87,8 @@ public enum ServerConfiguration {
 
 		this.serverName = lemoConfig.applicationServer.name;
 		this.dmsUrl = lemoConfig.applicationServer.dataManagementServerURL;
+		this.userDnTemplate = lemoConfig.applicationServer.userDnTemplate;
+		this.contextFactoryUrl = lemoConfig.applicationServer.contextFactoryUrl;
 
 		this.dbConfig = Maps.newHashMap();
 		for (final PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
@@ -180,6 +188,14 @@ public enum ServerConfiguration {
 
 	public List<User> getUserImports() {
 		return this.userImports;
+	}
+
+	public String getUserDnTemplate() {
+		return this.userDnTemplate;
+	}
+
+	public String getContextFactoryUrl() {
+		return this.contextFactoryUrl;
 	}
 
 }

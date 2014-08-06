@@ -8,7 +8,9 @@ package de.lemo.apps.pages.data;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
@@ -21,6 +23,7 @@ import org.apache.tapestry5.corelib.components.EventLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.slf4j.Logger;
+
 import de.lemo.apps.entities.Roles;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
@@ -84,7 +87,8 @@ public class Initialize {
 
 	public Object onProgressiveDisplay() {
 
-		final User user = this.ud.getUser(this.getUserName());
+		User user = this.ud.getUser(this.getUserName());
+		
 		if(user.getCurrentLogin() != null)
 			user.setLastLogin(user.getCurrentLogin());
 		user.setCurrentLogin(new Date());

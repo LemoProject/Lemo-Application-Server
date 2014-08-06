@@ -65,7 +65,7 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 		final String password = String.copyValueOf(userToken.getPassword());
 		
 		final User loginUser = userDAO.getUser(userToken.getUsername());
-		
+
 		AuthenticationInfo authInfo = null;
 
 		if (loginUser == null) {

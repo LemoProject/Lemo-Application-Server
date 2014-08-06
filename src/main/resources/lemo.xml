@@ -62,6 +62,10 @@
       <property name="hibernate.connection.autoReconnect">true</property>
     </database>
     
+
+   	<user-dn-template name="test-server">cn={0},ou=Users,dc=example,dc=com</user-dn-template>
+   	<context-factory-url name="test-server">ldap://localhost:10389</context-factory-url>
+   	
     <dms-url>${lemo-dms-url}</dms-url>
 
     

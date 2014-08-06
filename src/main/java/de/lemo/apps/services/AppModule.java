@@ -26,6 +26,8 @@ import java.util.Map.Entry;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.tapestry5.MetaDataConstants;
+import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
+import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.hibernate.HibernateSymbols;
@@ -171,8 +173,16 @@ public class AppModule {
 		return decorator.build(serviceInterface, delegate, serviceId);
 	}
 
-	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm) {
-		configuration.add(realm);
+
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm,final Logger log) {
+        JndiLdapRealm ldapRealm = new JndiLdapRealm();
+        ldapRealm.setAuthorizationCachingEnabled(false);
+        ldapRealm.setUserDnTemplate(ServerConfiguration.getInstance().getUserDnTemplate());
+        JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
+        contextFactory.setUrl(ServerConfiguration.getInstance().getContextFactoryUrl()); 
+        log.info(String.format("ContextFactoryURL: %s", ServerConfiguration.getInstance().getContextFactoryUrl()));   
+        configuration.add(realm);
+        configuration.add(ldapRealm);
 	}
 
 	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {
