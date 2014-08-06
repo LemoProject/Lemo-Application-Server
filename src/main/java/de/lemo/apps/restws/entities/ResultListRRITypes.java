@@ -72,15 +72,15 @@ public class ResultListRRITypes {
 
 	public List<ResourceRequestInfo> getResultListByResourceType(final EResourceType resourceType) {
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.TASK)) {
+		if ((resourceType != null) && resourceType.equals(EResourceType.ASSESSMENT)) {
 			return this.tasks;
 		}
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.COLLABORATIVEOBJECT)) {
+		if ((resourceType != null) && resourceType.equals(EResourceType.COLLABORATION)) {
 			return this.collaborativeObjects;
 		}
 
-		if ((resourceType != null) && resourceType.equals(EResourceType.LEARNINGOBJECT)) {
+		if ((resourceType != null) && resourceType.equals(EResourceType.ACCESS)) {
 			return this.learningObjects;
 		}
 		return new ArrayList<ResourceRequestInfo>();

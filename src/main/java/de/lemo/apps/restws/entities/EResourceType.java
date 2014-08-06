@@ -27,8 +27,8 @@ package de.lemo.apps.restws.entities;
  */
 public enum EResourceType {
 
-	LEARNINGOBJECT,
-	TASK,
-	COLLABORATIVEOBJECT,
+	ACCESS,
+	ASSESSMENT,
+	COLLABORATION,
 	
 }
