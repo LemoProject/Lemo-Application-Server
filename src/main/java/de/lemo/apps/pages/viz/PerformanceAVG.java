@@ -300,12 +300,12 @@ public class PerformanceAVG {
 		if ((quizList != null) && (quizList.getElements() != null)) {
 			this.logger.debug(quizList.getElements().toString());
 			final List<String> quizStringList = quizList.getElements();
-			for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-				final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-				quizzesList.add(new Quiz(quizStringList.get(x + 2),combinedQuizId));
-				quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-				quizzesTitles.add(quizStringList.get(x + 2));
-				this.quizIds.add(combinedQuizId);
+			for (Integer x = 0; x < quizStringList.size(); x = x + 2) {
+				final Long quizId = Long.parseLong(quizStringList.get(x) );
+				quizzesList.add(new Quiz(quizStringList.get(x + 1),quizId));
+				quizzesMap.put(quizId, quizStringList.get(x + 1));
+				quizzesTitles.add(quizStringList.get(x + 1));
+				this.quizIds.add(quizId);
 			}
 			
 			this.quizEncoder.setUp(quizzesList);
@@ -378,10 +378,10 @@ public class PerformanceAVG {
 			if ((quizList != null) && (quizList.getElements() != null)) {
 				this.logger.debug(quizList.getElements().toString());
 				final List<String> quizStringList = quizList.getElements();
-				for (Integer x = 0; x < quizStringList.size(); x = x + 3) {
-					final Long combinedQuizId = Long.parseLong((quizStringList.get(x) + quizStringList.get(x + 1)));
-					quizzesMap.put(combinedQuizId, quizStringList.get(x + 2));
-					quizzesTitles.add(quizStringList.get(x + 2));
+				for (Integer x = 0; x < quizStringList.size(); x = x + 2) {
+					final Long quizId = Long.parseLong(quizStringList.get(x) );
+					quizzesMap.put(quizId, quizStringList.get(x + 1));
+					quizzesTitles.add(quizStringList.get(x + 1));
 				}
 
 			} else {
