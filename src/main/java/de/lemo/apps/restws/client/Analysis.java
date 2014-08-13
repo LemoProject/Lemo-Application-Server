@@ -47,7 +47,8 @@ public interface Analysis {
 			Long startTime,
 			Long endTime,
 			List<String> resourceTypes,
-			List<Long> gender);
+			List<Long> gender,
+			List<Long> learningObjects);
 
 	ResultListRRITypes computeCourseActivityExtendedDetails(
 			List<Long> courses,
@@ -55,7 +56,8 @@ public interface Analysis {
 			Long endTime,
 			Long resolution,
 			List<String> resourceTypes,
-			List<Long> gender);
+			List<Long> gender,
+			List<Long> learningObjects);
 
 	ResultListResourceRequestInfo computeLearningObjectUsage(
 			List<Long> courseIds,
@@ -63,13 +65,15 @@ public interface Analysis {
 			List<String> types,
 			Long startTime,
 			Long endTime,
-			List<Long> gender);
+			List<Long> gender,
+			List<Long> learningObjects);
 
 	String computeCourseUserPaths(
 			List<Long> courseIds,
 			Long startTime,
 			Long endTime,
-			List<Long> gender);
+			List<Long> gender,
+			List<Long> learningObjects);
 
 	String computeUserPathAnalysis(
 			List<Long> courseIds,
@@ -78,7 +82,8 @@ public interface Analysis {
 			Boolean considerLogouts,
 			Long startTime,
 			Long endTime,
-			List<Long> gender);
+			List<Long> gender,
+			List<Long> learningObjects);
 
 	ResultListLongObject computeCourseUsers(
 			List<Long> courseIds,
@@ -117,7 +122,8 @@ public interface Analysis {
 			List<Long> departments,
 			List<Long> degrees,
 			Long startTime,
-			Long endTime);
+			Long endTime,
+			List<Long> learningObjects);
 
 	List<Long> computePerformanceHistogram(
 			List<Long> courses,
