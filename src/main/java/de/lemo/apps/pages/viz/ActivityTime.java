@@ -241,10 +241,6 @@ public class ActivityTime {
 	@Property(write = false)
 	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
 
-	// Select Model for learning object multi-select component
-	@Property(write = false)
-	private final SelectModel learningObjectModel = new EnumSelectModel(GenderEnum.class, this.messages);
-	
 	@Property
 	@Persist
 	private List<EResourceType> selectedActivities;
