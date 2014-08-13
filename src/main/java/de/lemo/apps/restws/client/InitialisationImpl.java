@@ -23,7 +23,9 @@ package de.lemo.apps.restws.client;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -43,6 +45,7 @@ import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
+
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.CourseObject;
@@ -51,6 +54,7 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.service.ServiceConnectorManager;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
+import de.lemo.apps.restws.proxies.service.ServiceLearningObjects;
 import de.lemo.apps.restws.proxies.service.ServiceLoginAuthentification;
 import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
@@ -66,6 +70,7 @@ public class InitialisationImpl implements Initialisation {
 	private static final String SERVICE_STARTTIME_URL = SERVICE_PREFIX_URL + "/starttime";
 	private static final String SERVICE_COURSE_URL = SERVICE_PREFIX_URL + "/courses";
 	private static final String SERVICE_RATED_OBJECTS_URL = SERVICE_PREFIX_URL + "/ratedobjects";
+	private static final String SERVICE_LEARNING_OBJECTS_URL = SERVICE_PREFIX_URL + "/learningobjects";
 	private static final String SERVICE_AUTH_URL = SERVICE_PREFIX_URL + "/authentification";
 	private static final String SERVICE_USER_COURSES_URL = SERVICE_PREFIX_URL + "/teachercourses";
 	private static final String SERVICE_CONNECTOR_MANAGER = SERVICE_PREFIX_URL + "/connectors";
@@ -96,6 +101,10 @@ public class InitialisationImpl implements Initialisation {
 	private ServiceRatedObjects ratedObjects =
 			ProxyFactory
 					.create(ServiceRatedObjects.class, InitialisationImpl.SERVICE_RATED_OBJECTS_URL, clientExecutor);
+
+	private ServiceLearningObjects learningObjects =
+			ProxyFactory
+					.create(ServiceLearningObjects.class, InitialisationImpl.SERVICE_LEARNING_OBJECTS_URL, clientExecutor);
 
 	private ServiceLoginAuthentification loginAuth =
 			ProxyFactory
@@ -214,6 +223,22 @@ public class InitialisationImpl implements Initialisation {
 
 			}
 			logger.info("No Rated objects found. Returning empty resultset.");
+			return new ResultListStringObject();
+		} catch (final Exception e) {
+			throw new RestServiceCommunicationException(this.toString() + " " + e.getLocalizedMessage());
+		}
+	}
+	
+	public ResultListStringObject getLearningObjects(final List<Long> courseIds) throws RestServiceCommunicationException {
+
+		try {
+
+			if (defaultConnectionCheck()) {
+
+				return learningObjects.getLearningObjects(courseIds);
+
+			}
+			logger.info("No Learning objects found. Returning empty resultset.");
 			return new ResultListStringObject();
 		} catch (final Exception e) {
 			throw new RestServiceCommunicationException(this.toString() + " " + e.getLocalizedMessage());

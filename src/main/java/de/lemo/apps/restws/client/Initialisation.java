@@ -42,6 +42,8 @@ public interface Initialisation {
 
 	ResultListStringObject getRatedObjects(List<Long> courseIds) throws RestServiceCommunicationException;
 
+	ResultListStringObject getLearningObjects(List<Long> courseIds) throws RestServiceCommunicationException;
+	
 	ResultListLongObject identifyUserName(final String login) throws RestServiceCommunicationException;
 
 	ResultListLongObject getUserCourses(Long userId) throws RestServiceCommunicationException;
