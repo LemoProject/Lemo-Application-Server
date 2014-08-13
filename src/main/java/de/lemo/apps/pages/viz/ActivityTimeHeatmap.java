@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.PersistenceConstants;
@@ -50,15 +51,18 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
@@ -67,14 +71,19 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
+import de.lemo.apps.entities.LearningObject;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
+import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
+import de.lemo.apps.services.internal.LearningObjectValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
@@ -88,6 +97,27 @@ public class ActivityTimeHeatmap {
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
+	
+	@Inject
+	@Property
+	private LearningObjectValueEncoder learningObjectEncoder;
+	
+	@Property
+	private SelectModel learningObjectSelectModel;
+	
+	@Property
+	@Persist
+	private List<LearningObject> selectedLearningObjects;
+
+	@Inject
+	private Initialisation init;
+	
+	// Select Model for learning object multi-select component
+	@Property(write = false)
+	private final SelectModel learningObjectModel = new EnumSelectModel(GenderEnum.class, this.messages);
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
 
 	@Inject
 	private Logger logger;
@@ -225,7 +255,7 @@ public class ActivityTimeHeatmap {
 
 	@Property
 	@Persist
-	private List<Long> userIds, courseIds;
+	private List<Long> userIds, courseIds, learningObjectIds;
 
 	@Property
 	@Persist
@@ -307,6 +337,40 @@ public class ActivityTimeHeatmap {
 	void onPrepareForRender() {
 		this.courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.userIds = this.getUsers();
+		
+		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+		this.courseModel = new CourseIdSelectModel(courses);
+		this.userIds = this.getUsers();
+
+		this.learningObjectIds = new ArrayList<Long>();
+
+		final List<Long> courseList = new ArrayList<Long>();
+		courseList.add(this.courseId);
+		ResultListStringObject learningObjectList = null;
+		try {
+			learningObjectList = this.init.getLearningObjects(courseList);
+		} catch (RestServiceCommunicationException e) {
+			logger.error(e.getMessage());
+		}
+
+		final List<LearningObject> learningList = new ArrayList<LearningObject>();
+
+		if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
+			this.logger.debug(learningObjectList.getElements().toString());
+			final List<String> learningStringList = learningObjectList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				final Long learningId = Long.parseLong(learningStringList.get(x) );
+				learningList.add(new LearningObject(learningStringList.get(x + 1),learningId));
+				this.learningObjectIds.add(learningId);
+			}
+			
+			this.learningObjectEncoder.setUp(learningList);
+
+			learningObjectSelectModel = selectModelFactory.create(learningList, "name");
+
+		} else {
+			this.logger.debug("No Learning Objetcs found");
+		}
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -332,6 +396,41 @@ public class ActivityTimeHeatmap {
 			
 		} else {
 			courseList.add(this.courseId);
+		}
+		
+		List<Long> learningList = new ArrayList<Long>();
+
+		ResultListStringObject learningObjectList = null;
+		try {
+			learningObjectList = this.init.getLearningObjects(courseList);
+		} catch (RestServiceCommunicationException e) {
+			logger.error(e.getMessage());
+		}
+
+		final Map<Long, String> learningMap = CollectionFactory.newMap();
+		final List<String> learningTitles = new ArrayList<String>();
+
+		if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
+			this.logger.debug(learningObjectList.getElements().toString());
+			final List<String> learningObjectStringList = learningObjectList.getElements();
+			for (Integer x = 0; x < learningObjectStringList.size(); x = x + 2) {
+				final Long quizId = Long.parseLong(learningObjectStringList.get(x) );
+				learningMap.put(quizId, learningObjectStringList.get(x + 1));
+				learningTitles.add(learningObjectStringList.get(x + 1));
+			}
+
+		} else {
+			this.logger.debug("No Learning Objetcs found");
+		}
+		
+		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
+			for(LearningObject q : this.selectedLearningObjects)
+			{
+				learningList.add(q.getCombinedId());
+			}
+		} else if ((learningMap != null) && (learningMap.keySet() != null)) {
+			learningList = new ArrayList<Long>();
+			learningList.addAll(learningMap.keySet());
 		}
 
 		final boolean considerLogouts = true;
@@ -361,7 +460,7 @@ public class ActivityTimeHeatmap {
 		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, types, null, null);
+				beginStamp, endStamp, (long) this.resolutionComputed, types, null, learningList);
 		
 
 		final JSONArray graphParentArray = new JSONArray();

@@ -172,6 +172,23 @@
                      	 </div>
 			        </div>
 			      </div>  
+			      <!--  Learning objects  -->
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
+                        ${message:learning-object} <b class="caret"></b>
+                      </a>
+                    </div>
+			              <div id="collapseSix" class="accordion-body collapse">
+			                <div class="accordion-inner">    
+		            			 <t:jquery.palette 
+	                              t:id="learningObjects"
+	                              encoder="learningObjectEncoder"
+	                              selected="selectedLearningObjects"
+	                              model="learningObjectModel"/>		            			 			
+		            		  </div>
+			              </div>
+                  </div>  
 	
 			            
 			 </div><!-- accordion -->

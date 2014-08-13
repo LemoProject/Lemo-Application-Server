@@ -53,9 +53,11 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -64,6 +66,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.AnalysisWorker;
@@ -72,13 +75,18 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
+import de.lemo.apps.entities.LearningObject;
+import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
+import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.BoxPlot;
 import de.lemo.apps.restws.entities.EResourceType;
+import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
+import de.lemo.apps.services.internal.LearningObjectValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 /**
@@ -96,6 +104,23 @@ public class ActivityTimeCumulative {
 
 	@Inject
 	private Logger logger;
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
+	
+	@Inject
+	private Initialisation init;
+	
+	@Inject
+	@Property
+	private LearningObjectValueEncoder learningObjectEncoder;
+	
+	@Property
+	private SelectModel learningObjectSelectModel;
+	
+	@Property
+	@Persist
+	private List<LearningObject> selectedLearningObjects;
 
 	@Inject
 	private DateWorker dateWorker;
@@ -198,6 +223,10 @@ public class ActivityTimeCumulative {
 	@Property(write = false)
 	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
 
+	// Select Model for learning object multi-select component
+	@Property(write = false)
+	private final SelectModel learningObjectModel = new EnumSelectModel(GenderEnum.class, this.messages);
+	
 	
 	@Property
 	@Persist
@@ -218,7 +247,7 @@ public class ActivityTimeCumulative {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers;
+	private List<Long> selectedUsers, learningObjectIds;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -267,9 +296,43 @@ public class ActivityTimeCumulative {
 	}
 
 	void onPrepareForRender() {
+		
+		this.courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+		this.userIds = this.getUsers();
+		
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
+
+		this.learningObjectIds = new ArrayList<Long>();
+
+		final List<Long> courseList = new ArrayList<Long>();
+		courseList.add(this.courseId);
+		ResultListStringObject learningObjectList = null;
+		try {
+			learningObjectList = this.init.getLearningObjects(courseList);
+		} catch (RestServiceCommunicationException e) {
+			logger.error(e.getMessage());
+		}
+
+		final List<LearningObject> learningList = new ArrayList<LearningObject>();
+
+		if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
+			this.logger.debug(learningObjectList.getElements().toString());
+			final List<String> learningStringList = learningObjectList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				final Long learningId = Long.parseLong(learningStringList.get(x) );
+				learningList.add(new LearningObject(learningStringList.get(x + 1),learningId));
+				this.learningObjectIds.add(learningId);
+			}
+			
+			this.learningObjectEncoder.setUp(learningList);
+
+			learningObjectSelectModel = selectModelFactory.create(learningList, "name");
+
+		} else {
+			this.logger.debug("No Learning Objetcs found");
+		}
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -304,6 +367,41 @@ public class ActivityTimeCumulative {
 			for (int i = 0; i < courses.size(); i++) {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
+			
+			List<Long> learningList = new ArrayList<Long>();
+
+			ResultListStringObject learningObjectList = null;
+			try {
+				learningObjectList = this.init.getLearningObjects(courses);
+			} catch (RestServiceCommunicationException e) {
+				logger.error(e.getMessage());
+			}
+
+			final Map<Long, String> learningMap = CollectionFactory.newMap();
+			final List<String> learningTitles = new ArrayList<String>();
+
+			if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
+				this.logger.debug(learningObjectList.getElements().toString());
+				final List<String> learningObjectStringList = learningObjectList.getElements();
+				for (Integer x = 0; x < learningObjectStringList.size(); x = x + 2) {
+					final Long quizId = Long.parseLong(learningObjectStringList.get(x) );
+					learningMap.put(quizId, learningObjectStringList.get(x + 1));
+					learningTitles.add(learningObjectStringList.get(x + 1));
+				}
+
+			} else {
+				this.logger.debug("No Learning Objetcs found");
+			}
+			
+			if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
+				for(LearningObject q : this.selectedLearningObjects)
+				{
+					learningList.add(q.getCombinedId());
+				}
+			} else if ((learningMap != null) && (learningMap.keySet() != null)) {
+				learningList = new ArrayList<Long>();
+				learningList.addAll(learningMap.keySet());
+			}
 
 			List<String> types = null;
 			if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
@@ -315,7 +413,7 @@ public class ActivityTimeCumulative {
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
-			final String result = this.analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp);
+			final String result = this.analysis.computeCumulativeUserAccess(courses, types, null, null, beginStamp, endStamp, learningList);
 
 			this.logger.debug("ResultString RAW: "+result);	
 			
