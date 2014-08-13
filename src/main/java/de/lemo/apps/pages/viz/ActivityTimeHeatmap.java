@@ -361,7 +361,7 @@ public class ActivityTimeHeatmap {
 		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, types, null);
+				beginStamp, endStamp, (long) this.resolutionComputed, types, null, null);
 		
 
 		final JSONArray graphParentArray = new JSONArray();

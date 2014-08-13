@@ -195,6 +195,11 @@ public class ActivityTime {
 	@Property(write = false)
 	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
 				GenderEnum.class);
+	
+	// Value Encoder for learning object multi-select component
+	@Property(write = false)
+	private final ValueEncoder<GenderEnum> learningObjectEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
+				GenderEnum.class);	
 
 	@Property(write = false)
 	@Retain
@@ -213,6 +218,9 @@ public class ActivityTime {
 	@Property(write = false)
 	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
 
+	// Select Model for learning object multi-select component
+	@Property(write = false)
+	private final SelectModel learningObjectModel = new EnumSelectModel(GenderEnum.class, this.messages);
 	
 	@Property
 	@Persist
@@ -232,7 +240,7 @@ public class ActivityTime {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers; 
+	private List<Long> selectedUsers, selectedLearningObjects; 
 	
 	@Property
 	@Persist
@@ -363,7 +371,7 @@ public class ActivityTime {
 		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, types, gender);
+				beginStamp, endStamp, (long) this.resolutionComputed, types, gender, null);
 
 		final JSONArray graphParentArray = new JSONArray();
 		JSONObject graphDataObject = new JSONObject();

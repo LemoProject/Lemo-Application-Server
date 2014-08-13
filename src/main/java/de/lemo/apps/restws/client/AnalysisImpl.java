@@ -138,14 +138,15 @@ public class AnalysisImpl implements Analysis {
 			final Long endtime,
 			final Long resolution,
 			final List<String> resourceTypes,
-			final List<Long> gender) {
+			final List<Long> gender,
+			final List<Long> learningObjects) {
 
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				String result = qcourseActivity.compute(courses, users, starttime, endtime,
-						resolution, resourceTypes, gender);
+						resolution, resourceTypes, gender, learningObjects);
 
 				return datahelper.convertJSONStringToResultListHashMap(result);
 

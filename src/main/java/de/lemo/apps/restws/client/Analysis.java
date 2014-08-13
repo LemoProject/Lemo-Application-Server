@@ -22,6 +22,7 @@ package de.lemo.apps.restws.client;
 
 import java.util.List;
 import java.util.Map;
+
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
@@ -38,7 +39,8 @@ public interface Analysis {
 			Long endtime,
 			Long resolution,
 			List<String> resourceTypes,
-			List<Long> gender);
+			List<Long> gender,
+			List<Long> learningObjects);
 
 	ResultListResourceRequestInfo computeCourseActivityExtended(
 			List<Long> courses,
