@@ -163,13 +163,14 @@ public class AnalysisImpl implements Analysis {
 	public ResultListResourceRequestInfo computeCourseActivityExtended(final List<Long> courses, final Long startTime,
 			final Long endTime,
 			final List<String> resourceTypes,
-			final List<Long> gender) {
+			final List<Long> gender,
+			final List<Long> learningList) {
 
 		try {
 
 			if (init.defaultConnectionCheck()) {
 				ResultListResourceRequestInfo result = qActivityResourceType.compute(
-						courses, startTime, endTime, resourceTypes, gender);
+						courses, startTime, endTime, resourceTypes, gender, learningList);
 				return result;
 			}
 
@@ -184,7 +185,8 @@ public class AnalysisImpl implements Analysis {
 	public ResultListRRITypes computeCourseActivityExtendedDetails(final List<Long> courses, final Long startTime,
 			final Long endTime,
 			final Long resolution, final List<String> resourceTypes,
-			final List<Long> gender) {
+			final List<Long> gender,
+			final List<Long> learningList) {
 
 		try {
 			if (init.defaultConnectionCheck()) {
@@ -198,7 +200,7 @@ public class AnalysisImpl implements Analysis {
 				}
 
 				ResultListRRITypes result = qActivityResourceTypeResolution.compute(courses,
-						startTime, endTime, resolution, resourceTypes, gender);
+						startTime, endTime, resolution, resourceTypes, gender, learningList);
 
 				return result;
 
@@ -215,7 +217,8 @@ public class AnalysisImpl implements Analysis {
 	public ResultListResourceRequestInfo computeLearningObjectUsage(final List<Long> courseIds,
 			final List<Long> userIds,
 			final List<String> types, final Long startTime, final Long endTime,
-			final List<Long> gender) {
+			final List<Long> gender,
+			final List<Long> learningList) {
 
 		try {
 
@@ -230,7 +233,7 @@ public class AnalysisImpl implements Analysis {
 				}
 
 				ResultListResourceRequestInfo result = qLOUsage.compute(courseIds, userIds, types, startTime,
-						endTime, gender);
+						endTime, gender, learningList);
 
 				return result;
 
@@ -272,20 +275,21 @@ public class AnalysisImpl implements Analysis {
 			final Boolean considerLogouts,
 			final Long startTime,
 			final Long endTime,
-			final List<Long> gender) {
+			final List<Long> gender,
+			final List<Long> learningList) {
 
-		String result = userPathAnalysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime, gender);
+		String result = userPathAnalysis.compute(courseIds, userIds, types, considerLogouts, startTime, endTime, gender, learningList);
 		return result;
 	}
 
 	@Override
 	public String computeCourseUserPaths(final List<Long> courseIds, final Long startTime, final Long endTime,
-										final List<Long> gender) {
+										final List<Long> gender, final List<Long> learningList) {
 
 		try {
 
 			if (init.defaultConnectionCheck()) {
-				String result = qUserPath.compute(courseIds, startTime, endTime, gender);
+				String result = qUserPath.compute(courseIds, startTime, endTime, gender, learningList);
 				return result;
 			}
 
@@ -382,14 +386,15 @@ public class AnalysisImpl implements Analysis {
 			final List<Long> departments,
 			final List<Long> degrees,
 			final Long startTime,
-			final Long endTime) {
+			final Long endTime,
+			final List<Long> learningList) {
 		this.logger.debug("Starting CumulativeUserAnalysis ... ");
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				String result = qCumulativeAnalysis.compute(courseIds, types, departments, degrees, startTime,
-						endTime);
+						endTime, learningList);
 
 				this.logger.debug("CumulativeUserAnalysis result: " + result);
 

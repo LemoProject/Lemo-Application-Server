@@ -28,6 +28,7 @@ package de.lemo.apps.application;
 
 import java.util.Date;
 import java.util.List;
+
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.restws.entities.EResourceType;
@@ -41,7 +42,7 @@ public interface AnalysisWorker {
 			List<EResourceType> resourceTypes, List<GenderEnum> genderList);
 
 	List<ResourceRequestInfo> learningObjectUsage(Course course, Date beginDate, Date endDate,
-			List<Long> selectedUsers, List<EResourceType> resourceTypes, List<GenderEnum> genderList);
+			List<Long> selectedUsers, List<EResourceType> resourceTypes, List<GenderEnum> genderList, final List<Long> learningList);
 
 	ResultListRRITypes usageAnalysisExtendedDetails(Course course, Date beginDate, Date endDate,
 			Integer resolution, List<EResourceType> resourceTypes,  List<GenderEnum> genderList);

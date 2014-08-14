@@ -39,11 +39,13 @@
 package de.lemo.apps.restws.proxies.questions;
 
 import java.util.List;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import de.lemo.apps.restws.proxies.questions.parameters.MetaParam;
 
 /**
@@ -60,6 +62,7 @@ public interface QCumulativeUserAccess {
 			@FormParam(MetaParam.DEPARTMENT) List<Long> departments,
 			@FormParam(MetaParam.DEGREE) List<Long> degrees,
 			@FormParam(MetaParam.START_TIME) Long starttime,
-			@FormParam(MetaParam.END_TIME) Long endtime);
+			@FormParam(MetaParam.END_TIME) Long endtime,
+			@FormParam(MetaParam.LEARNING_OBJ_IDS) List<Long> learningObjects);
 
 }

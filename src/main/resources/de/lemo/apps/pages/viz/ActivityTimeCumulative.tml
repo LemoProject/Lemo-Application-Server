@@ -130,7 +130,7 @@
 	                              t:id="learningObjects"
 	                              encoder="learningObjectEncoder"
 	                              selected="selectedLearningObjects"
-	                              model="learningObjectModel"/>		            			 			
+	                              model="learningObjectSelectModel"/>		            			 			
 		            		  </div>
 			              </div>
                   </div>  

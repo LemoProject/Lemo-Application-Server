@@ -98,7 +98,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis");
 			final ResultListResourceRequestInfo results = this.analysis.computeCourseActivityExtended(courses,
 					beginStamp,
-					endStamp, resourceTypesNames,gender);
+					endStamp, resourceTypesNames,gender,null);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
 					&& (results.getResourceRequestInfos().size() > 0)) {
@@ -115,7 +115,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public List<ResourceRequestInfo> learningObjectUsage(final Course course, final Date beginDate, final Date endDate,
-			final List<Long> selectedUsers, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList) {
+			final List<Long> selectedUsers, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList, final List<Long> learningList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -155,7 +155,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis");
 			final ResultListResourceRequestInfo results = this.analysis.computeLearningObjectUsage(courses,
 					selectedUsers,
-					resourceTypesNames, beginStamp, endStamp, gender);
+					resourceTypesNames, beginStamp, endStamp, gender, learningList);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
 					&& (results.getResourceRequestInfos().size() > 0)) {
@@ -211,7 +211,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis Details");
 			final ResultListRRITypes results = this.analysis.computeCourseActivityExtendedDetails(courses, beginStamp,
 					endStamp,
-					resolution.longValue(), resourceTypesNames, gender);
+					resolution.longValue(), resourceTypesNames, gender, null);
 			this.logger.debug("Extended Analysls Details: " + results);
 			if (results != null) {
 				if (results.getTaskRRI() != null) {
