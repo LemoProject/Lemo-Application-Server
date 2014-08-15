@@ -47,7 +47,12 @@ public enum Roles {
 	/**
 	 * Default role with access to specified courses.
 	 */
-	TEACHER("Dashboard");
+	TEACHER("Dashboard"),
+	
+	/**
+	 * Default role with access to specified courses.
+	 */
+	STUDENT("Dashboard");
 	
 	private final String startpage;
 
