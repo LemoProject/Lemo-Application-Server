@@ -423,15 +423,15 @@ right:10px;
  margin-left:10px;
  }
  
- .legend.learningObject {
+ .legend.access {
  background-color:#ff8f1e;
  }
  
- .legend.collaborativeObject {
+ .legend.collaboration {
  background-color:#2ca02c;
  }
  
- .legend.task {
+ .legend.assessment {
  background-color:#1f77b4;
  }
  

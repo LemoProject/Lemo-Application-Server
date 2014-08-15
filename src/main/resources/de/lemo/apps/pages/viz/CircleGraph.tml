@@ -36,14 +36,9 @@
         	<!-- Legend -->
       		<div class="row-fluid">
       			<span class="pull-left"><h5>${message:legend}:</h5></span>
-    			<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.RESOURCE} </p></span>
-    			<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.FORUM} </p></span>
-    			<span class="legend question pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUESTION} </p></span>
-    			<span class="legend quiz pull-left"></span> <span class="pull-left"><p>${message:EResourceType.QUIZ} </p></span>
-    			<span class="legend assignment pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSIGNMENT} </p></span>
-    			<span class="legend scorm pull-left"></span> <span class="pull-left"><p>${message:EResourceType.SCORM} </p></span>
-    			<span class="legend wiki pull-left"></span> <span class="pull-left"><p>${message:EResourceType.WIKI} </p></span>
-    			<span class="legend chat pull-left"></span> <span class="pull-left"><p>${message:EResourceType.CHAT} </p></span>
+    			<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSESSMENT} </p></span>
+    			<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.COLLABORATION} </p></span>
+    			<span class="legend question pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ACCESS} </p></span>
     			<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN} </p></span>
     		
 			 </div>
