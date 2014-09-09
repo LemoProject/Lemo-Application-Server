@@ -13,6 +13,7 @@
   	    root;
   	
   	var locale = d3custom.locale;
+	var color = d3.scale.category20();
   
     var startDistance = 200;
 	  
