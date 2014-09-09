@@ -13,6 +13,7 @@
   	  root;
 
 	  var locale = d3custom.locale;
+	  var color = d3.scale.category20();
 
 	  $(window).resize(function() {
 			width = $('#viz').width();
@@ -25,8 +26,7 @@
 	  
 	   
 var drawChart = function() {  
-	  
-
+   
    var outer = d3.select("#viz").append("svg:svg")
       .attr("width", w)
       .attr("height", h)
