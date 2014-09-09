@@ -9,6 +9,7 @@
 	  
 	  data = d3custom.data;
 	  var locale = d3custom.locale;
+	  var color = d3.scale.category20();
 	  
 	//check if we have values to work with
 	  if(!data) {

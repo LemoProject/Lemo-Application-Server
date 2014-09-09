@@ -5,6 +5,8 @@
 	  
   var nodes = d3custom.nodes,
       links = d3custom.links;
+  
+  var color = d3.scale.category20();
     	
   //check if we have values to work with
     if(!nodes || !links) {
