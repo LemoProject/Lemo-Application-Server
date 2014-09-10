@@ -13,7 +13,6 @@
   	  root;
 
 	  var locale = d3custom.locale;
-	  var color = d3.scale.category20();
 
 	  $(window).resize(function() {
 			width = $('#viz').width();
@@ -249,7 +248,7 @@ function update2() {
 		 	return (c > 100 ? 100 : c);
 		 })
 	 //.style("fill", function(d) { return color(1); })
-	 .style("fill", function(d) { return color(d.type); })
+	 .style("fill", function(d) { return hashColor(d.name); })
 		 //.call(force.drag)
 	 
 	.on("click", function(d){
@@ -368,8 +367,30 @@ function update2() {
    
 
 }
-    
 
+function hashColor(objectName,category) {
+	String.prototype.hashCode = function(){
+	var hash = 0;
+	if (this.length == 0) return hash;
+	/*	for (i = 0; i < this.length; i++) {
+		char = this.charCodeAt(i);
+		hash = ((hash<<5)-hash)+char;
+		hash = hash & hash; // Convert to 32bit integer
+	}*/
+        for (i = this.length-1; i >= 0; i--) {
+            char = this.charCodeAt(i);
+            hash = char + (hash << 6) + (hash << 16) - hash;
+        }	
+	return Math.abs(hash);
+	}
+	var uniqueColor;
+	if(typeof(category)==='undefined')
+		uniqueColor = objectName; 
+	else 
+		uniqueColor = category;
+	uniqueColor = "#".concat(uniqueColor.toString().hashCode().toString(16).substring(2, 8));
+		return uniqueColor;
+}
 function focus(d) {
 	  if (d.focus==1) {
 	      nodes.forEach(function (o) {

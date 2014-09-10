@@ -49,7 +49,7 @@
    * Same implementation for bide and viger.
    */
   function drawGraph(data) {
-    var w = $("#viz").width(), h = 500, amt = 800, maxPos = 11, fill = d3.scale.category20(), nodes = [], links = [], foci = [];
+    var w = $("#viz").width(), h = 500, amt = 800, maxPos = 11, fill = hashColor(), nodes = [], links = [], foci = [];
     var page = 1, pages = 1, maxLength = 1;
 
 
@@ -210,6 +210,35 @@
     }
     ;
 
+    function hashColor(objectName,category) {
+    	String.prototype.hashCode = function(){
+    	var hash = 0;
+    	if (this.length == 0) return hash;
+    	/*	for (i = 0; i < this.length; i++) {
+    		char = this.charCodeAt(i);
+    		hash = ((hash<<5)-hash)+char;
+    		hash = hash & hash; // Convert to 32bit integer
+    	}*/
+            for (i = this.length-1; i >= 0; i--) {
+                char = this.charCodeAt(i);
+                hash = char + (hash << 6) + (hash << 16) - hash;
+            }	
+    	return Math.abs(hash);
+    	}
+    	var uniqueColor;
+    	if(typeof(category)==='undefined'){
+    		if(typeof(objectName)==='undefined'){
+    			uniqueColor = "white";
+    		} else
+    			uniqueColor = objectName;    		
+    	} 
+    	else 
+    		uniqueColor = category;
+    	uniqueColor = "#".concat(uniqueColor.toString().hashCode().toString(16).substring(2, 8));
+    	return uniqueColor;
+    }
+    
+    
     function greyout(color) {
       var newC = 0.3 * color.r + 0.6 * color.g + 0.1 * color.b;
       return d3.rgb(r = newC, g = newC, b = newC);
@@ -243,9 +272,9 @@
       node.exit().remove();
 
       node.selectAll("circle").attr("r", 8).style("fill", function(d) {
-        return fill(d.name);
+        return hashColor(d.title);
       }).style("stroke", function(d) {
-        return d3.rgb(fill(1)).darker(2);
+        return d3.rgb(d3.scale.category20(1)).darker(2);
       }).style("stroke-width", 1.5)
 
       node.selectAll("text").text(function(d) {
@@ -270,7 +299,7 @@
             });
           }
           d3.selectAll("g.node circle").style("fill", function(o, i) {
-            return fill(o.name);
+            return hashColor(o.name);
           });
 
           d3.selectAll("g.node text").text(function(o, i) {
@@ -281,7 +310,7 @@
         } else {
 
           d3.selectAll("g.node circle").style("fill", function(o, i) {
-            return fill(o.name);
+            return hashColor(o.name);
             // Alternative version with greyout of non focused resources
             // o.pid != d.pid ? greyout(d3.rgb(fill(o.name))) :
             // fill(o.name)
@@ -353,9 +382,9 @@
           force.start();
         }
       }).style("fill", function(d) {
-        return fill(d.name);
+        return hashColor(d.title);
       }).style("stroke", function(d) {
-        return d3.rgb(fill(1)).darker(2);
+        return d3.rgb(d3.scale.category20(1)).darker(2);
       }).style("stroke-width", 1.5);
 
       nodeEnter.append("svg:text").attr("class", "nodetext").attr("dx", function(d) {
