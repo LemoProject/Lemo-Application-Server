@@ -5,8 +5,7 @@
 	  
   var nodes = d3custom.nodes,
       links = d3custom.links;
-  
-  var color = d3.scale.category20();
+
     	
   //check if we have values to work with
     if(!nodes || !links) {
@@ -123,7 +122,7 @@
       var arcs2 = svg.selectAll("path.typeArc")
       //.transition()
       //.duration(750)
-      .attr("fill",function(d,i) {return color(nodes[0].children[i].type)});
+      .attr("fill",function(d,i) {return hashColor(nodes[0].children[i].name)});
 
   var path = svg.selectAll("path.linkCG")
       .data(links)
@@ -283,7 +282,7 @@
     splines = bundle(links);  
 
     var arcs2 = svg.selectAll("path.typeArc")
-      .attr("fill",function(d,i) {return color(nodes[0].children[i].type)});
+      .attr("fill",function(d,i) {return hashColor(nodes[0].children[i].name)});
 
     path = svg.selectAll("path.linkCG")
       .data(links)
@@ -321,7 +320,34 @@
   	var output = str.replace(/[^\A-Z0-9����+$]/gi,'_');
   	return output;
   	}
-    	  
+  
+  function hashColor(objectName,category) {
+    	String.prototype.hashCode = function(){
+    	var hash = 0;
+    	if (this.length == 0) return hash;
+    	/*	for (i = 0; i < this.length; i++) {
+    		char = this.charCodeAt(i);
+    		hash = ((hash<<5)-hash)+char;
+    		hash = hash & hash; // Convert to 32bit integer
+    	}*/
+            for (i = this.length-1; i >= 0; i--) {
+                char = this.charCodeAt(i);
+                hash = char + (hash << 6) + (hash << 16) - hash;
+            }	
+    	return Math.abs(hash);
+    	}
+    	var uniqueColor;
+    	if(typeof(category)==='undefined'){
+    		if(typeof(objectName)==='undefined'){
+    			uniqueColor = "white";
+    		} else
+    			uniqueColor = objectName;    		
+    	} 
+    	else 
+    		uniqueColor = category;
+    	uniqueColor = "#".concat(uniqueColor.toString().hashCode().toString(16).substring(2, 8));
+    	return uniqueColor;
+    }    	  
   	  
     }  
   })(window.d3custom = window.d3custom || {}, jQuery);
