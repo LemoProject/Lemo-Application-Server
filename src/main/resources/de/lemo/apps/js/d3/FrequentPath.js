@@ -272,7 +272,7 @@
       node.exit().remove();
 
       node.selectAll("circle").attr("r", 8).style("fill", function(d) {
-        return hashColor(d.title);
+        return hashColor(d.name);
       }).style("stroke", function(d) {
         return d3.rgb(d3.scale.category20(1)).darker(2);
       }).style("stroke-width", 1.5)
@@ -290,7 +290,7 @@
       }).attr("cy", function(o) {
         return 0;
       }).on("click", function(d) {
-
+    	console.log("d.selected:" + d.selected);
         if (d.selected == true) {
           for ( var i = 0; i < foci.length; i++) {
             foci[i] = ({
@@ -310,7 +310,7 @@
         } else {
 
           d3.selectAll("g.node circle").style("fill", function(o, i) {
-            return hashColor(o.name);
+            return hashColor(o.name);            
             // Alternative version with greyout of non focused resources
             // o.pid != d.pid ? greyout(d3.rgb(fill(o.name))) :
             // fill(o.name)
@@ -382,7 +382,7 @@
           force.start();
         }
       }).style("fill", function(d) {
-        return hashColor(d.title);
+        return hashColor(d.name);
       }).style("stroke", function(d) {
         return d3.rgb(d3.scale.category20(1)).darker(2);
       }).style("stroke-width", 1.5);

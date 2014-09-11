@@ -330,7 +330,7 @@ public class FrequentPathViger {
 	public void initSlider() {
 
 		if (this.minSup == null) {
-			this.minSup = 1;
+			this.minSup = 8;
 		}
 
 		this.minSupParams = new JSONObject();
