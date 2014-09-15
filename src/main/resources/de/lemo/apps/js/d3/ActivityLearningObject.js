@@ -49,18 +49,6 @@
 	    
 	    data[1].values = result;
 	    
-	    /*dataUser.sort(function(a, b) {
-	    	if(nameToggle){ // sorting by name
-	    		console.log("Sorting by name");
-	    		if ( a.x < b.x )
-	    		  return -1;
-	    		if ( a.x > b.x )
-	    		  return 1;
-	    		return 0;
-	    	} else {
-	    		console.log("Sorting by value")
-	    		return (b.y - a.y); // sorting by value
-	    	}*/
 	    });
     }
     
@@ -112,35 +100,18 @@
       d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
       d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
 
-      nv.utils.windowResize(chart.update);
-
-     /* var wrap = d3.selectAll('g.nv-wrap.nv-multiBarWithLegend');
-      var g = wrap.select('g');
-      var controlSelection = d3.selectAll('g.nv-controlsWrap').select("g.nv-legend").select("g")	
-      		.append('g')
-      		.attr('transform', 'translate(150,' + (5) +')')
-      		.attr("class", 'nv-series');
+      var rects = d3.selectAll('rect').style("fill", function(d, i) { if (detail(d.series)) {return hashColor(d.x);} else {return d3.rgb(hashColor(d.x)).brighter().toString();} });
+      function detail(d){
+    	  return d % 2 === 0;
+      }
       
-      controlSelection.append('svg:text')
-	   .attr('class', function() {
-		   		console.log("Sort Toggle added");
-	   			return	'sortControls'})
-	   .on('click', function(){
-		   		console.log("Sort Toggle clicked");
-		   		nameSortToggle = !nameSortToggle;
-		   		sortData(nameSortToggle);
-		   		//
-		   		
-		   		})
-	   .text(function(d) { return "Sorting: "; });*/
+      d3.select('.nv-group nv-series-0').attr('fill', 'green');
+      nv.utils.windowResize(chart.update);
       	
       dataExport.barChartButton('.export-button', d3.select('#viz svg').data(), chart, locale);
-      
-      
-      
+
       return chart;
-    });
-    
+    });  
       next = function(bool) {
       if (bool) {
         page++;
@@ -163,9 +134,35 @@
       
       d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
       d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
-      
       }
-
+      
+      function hashColor(objectName,category) {
+      	String.prototype.hashCode = function(){
+      	var hash = 0;
+      	if (this.length == 0) return hash;
+      	//	for (i = 0; i < this.length; i++) {
+      //		char = this.charCodeAt(i);
+      	//	hash = ((hash<<5)-hash)+char;
+      		//hash = hash & hash; // Convert to 32bit integer
+     // 	}
+              for (i = this.length-1; i >= 0; i--) {
+                  char = this.charCodeAt(i);
+                  hash = char + (hash << 6) + (hash << 16) - hash;
+              }	
+      	return Math.abs(hash);
+      	}
+      	var uniqueColor;
+      	if(typeof(category)==='undefined'){
+      		if(typeof(objectName)==='undefined'){
+      			uniqueColor = "white";
+      		} else
+      			uniqueColor = objectName;    		
+      	} 
+      	else 
+      		uniqueColor = category;
+      	uniqueColor = "#".concat(uniqueColor.toString().hashCode().toString(16).substring(2, 8));
+      	return uniqueColor;
+      }
 
   };
 
