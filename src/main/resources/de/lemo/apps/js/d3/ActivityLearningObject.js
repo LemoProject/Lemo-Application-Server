@@ -100,7 +100,7 @@
       d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
       d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
 
-      var rects = d3.selectAll('rect').style("fill", function(d, i) { if (detail(d.series)) {return hashColor(d.x);} else {return d3.rgb(hashColor(d.x)).brighter().toString();} });
+      var rects = d3.selectAll('rect').style("fill", function(d, i) { if (detail(d.series)) {return hashColor(d.x.substring(0,d.x.indexOf("_")));} else {return d.x === undefined ? "blue" : d3.rgb(hashColor(d.x.substring(0,d.x.indexOf("_")))).brighter().toString();} });
       function detail(d){
     	  return d % 2 === 0;
       }
