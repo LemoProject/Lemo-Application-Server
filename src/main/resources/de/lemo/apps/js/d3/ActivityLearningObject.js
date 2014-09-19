@@ -104,8 +104,6 @@
       function detail(d){
     	  return d % 2 === 0;
       }
-      
-      d3.select('.nv-group nv-series-0').attr('fill', 'green');
       nv.utils.windowResize(chart.update);
       	
       dataExport.barChartButton('.export-button', d3.select('#viz svg').data(), chart, locale);
@@ -134,6 +132,8 @@
       
       d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
       d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
+      var rects = d3.selectAll('rect').style("fill", function(d, i) { if (d.series % 2 === 0) {return hashColor(d.x.substring(0,d.x.indexOf("_")));} else {return d.x === undefined ? "blue" : d3.rgb(hashColor(d.x.substring(0,d.x.indexOf("_")))).brighter().toString();} });
+      
       }
       
       function hashColor(objectName,category) {
