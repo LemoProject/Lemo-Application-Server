@@ -55,6 +55,7 @@ import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.restws.proxies.service.ServiceConnectorManager;
 import de.lemo.apps.restws.proxies.service.ServiceCourseDetails;
 import de.lemo.apps.restws.proxies.service.ServiceLearningObjects;
+import de.lemo.apps.restws.proxies.service.ServiceLearningTypes;
 import de.lemo.apps.restws.proxies.service.ServiceLoginAuthentification;
 import de.lemo.apps.restws.proxies.service.ServiceRatedObjects;
 import de.lemo.apps.restws.proxies.service.ServiceStartTime;
@@ -71,6 +72,7 @@ public class InitialisationImpl implements Initialisation {
 	private static final String SERVICE_COURSE_URL = SERVICE_PREFIX_URL + "/courses";
 	private static final String SERVICE_RATED_OBJECTS_URL = SERVICE_PREFIX_URL + "/ratedobjects";
 	private static final String SERVICE_LEARNING_OBJECTS_URL = SERVICE_PREFIX_URL + "/learningobjects";
+	private static final String SERVICE_LEARNING_TYPES_URL = SERVICE_PREFIX_URL + "/learningtypes";
 	private static final String SERVICE_AUTH_URL = SERVICE_PREFIX_URL + "/authentification";
 	private static final String SERVICE_USER_COURSES_URL = SERVICE_PREFIX_URL + "/teachercourses";
 	private static final String SERVICE_CONNECTOR_MANAGER = SERVICE_PREFIX_URL + "/connectors";
@@ -106,6 +108,11 @@ public class InitialisationImpl implements Initialisation {
 			ProxyFactory
 					.create(ServiceLearningObjects.class, InitialisationImpl.SERVICE_LEARNING_OBJECTS_URL, clientExecutor);
 
+	private ServiceLearningTypes learningTypes =
+			ProxyFactory
+					.create(ServiceLearningTypes.class, InitialisationImpl.SERVICE_LEARNING_TYPES_URL, clientExecutor);
+
+	
 	private ServiceLoginAuthentification loginAuth =
 			ProxyFactory
 					.create(ServiceLoginAuthentification.class, InitialisationImpl.SERVICE_AUTH_URL, clientExecutor);
@@ -239,6 +246,22 @@ public class InitialisationImpl implements Initialisation {
 
 			}
 			logger.info("No Learning objects found. Returning empty resultset.");
+			return new ResultListStringObject();
+		} catch (final Exception e) {
+			throw new RestServiceCommunicationException(this.toString() + " " + e.getLocalizedMessage());
+		}
+	}
+	
+	public ResultListStringObject getLearningTypes(final List<Long> courseIds) throws RestServiceCommunicationException {
+
+		try {
+
+			if (defaultConnectionCheck()) {
+
+				return learningTypes.getLearningTypes(courseIds);
+
+			}
+			logger.info("No Learning types found. Returning empty resultset.");
 			return new ResultListStringObject();
 		} catch (final Exception e) {
 			throw new RestServiceCommunicationException(this.toString() + " " + e.getLocalizedMessage());

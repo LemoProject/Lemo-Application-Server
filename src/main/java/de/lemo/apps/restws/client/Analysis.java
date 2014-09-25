@@ -26,6 +26,7 @@ import java.util.Map;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
+import de.lemo.apps.restws.entities.ResultListStringObject;
 
 /**
  * Interface for the analysis for the gui
@@ -90,7 +91,7 @@ public interface Analysis {
 			Long startTime,
 			Long endTime,
 			List<Long> gender);
-
+	
 	String computeQFrequentPathBIDE(
 			Long userId,
 			List<Long> courseIds,

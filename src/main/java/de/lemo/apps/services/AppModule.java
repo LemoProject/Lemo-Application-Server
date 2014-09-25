@@ -82,6 +82,8 @@ import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.CourseIdValueEncoderWorker;
 import de.lemo.apps.services.internal.LearningObjectValueEncoder;
 import de.lemo.apps.services.internal.LearningObjectValueEncoderWorker;
+import de.lemo.apps.services.internal.LearningTypeValueEncoder;
+import de.lemo.apps.services.internal.LearningTypeValueEncoderWorker;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoderWorker;
 import de.lemo.apps.services.internal.QuizValueEncoder;
@@ -105,6 +107,7 @@ public class AppModule {
 		// Encoder
 		binder.bind(CourseIdValueEncoder.class, CourseIdValueEncoderWorker.class);
 		binder.bind(LearningObjectValueEncoder.class, LearningObjectValueEncoderWorker.class);
+		binder.bind(LearningTypeValueEncoder.class, LearningTypeValueEncoderWorker.class);
 		binder.bind(LongValueEncoder.class, LongValueEncoderWorker.class);
 		binder.bind(QuizValueEncoder.class, QuizValueEncoderWorker.class);
 		

@@ -68,7 +68,6 @@ import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Information;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.EConnectorManagerState;
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.SCConnector;
 import de.lemo.apps.restws.entities.SCConnectorManagerState;
 import de.lemo.apps.services.internal.CourseIdSelectModel;

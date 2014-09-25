@@ -163,9 +163,9 @@ text.shadow {
 			                <div class="accordion-inner">    
 		            			 <t:jquery.palette 
 		            			   t:id="activities" 
-		            			   encoder="activityEncoder"
-		            			   model="activityModel"
-		            			   selected="selectedActivities"/>
+	                              encoder="learningTypeEncoder"
+	                              selected="selectedLearningTypes"
+	                              model="learningTypeSelectModel"/>
 		            		  </div>
 			              </div>
                   </div>

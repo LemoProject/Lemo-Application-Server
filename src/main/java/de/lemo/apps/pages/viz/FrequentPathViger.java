@@ -53,6 +53,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
 import org.slf4j.Logger;
+
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.DateWorker;
@@ -60,12 +61,13 @@ import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
+import de.lemo.apps.entities.LearningType;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
+import de.lemo.apps.services.internal.LearningTypeValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
@@ -156,15 +158,6 @@ public class FrequentPathViger {
 	@Persist
 	private List<Course> courses;
 
-	// Value Encoder for activity multi-select component
-	@Property(write = false)
-	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
-			EResourceType.class);
-
-	// Select Model for activity multi-select component
-	@Property(write = false)
-	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
-
 	// Value Encoder for gender multi-select component
 	@Property(write = false)
 	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
@@ -174,9 +167,16 @@ public class FrequentPathViger {
 	@Property(write = false)
 	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
 
+	@Inject
+	@Property
+	private LearningTypeValueEncoder learningTypeEncoder;
+	
 	@Property
 	@Persist
-	private List<EResourceType> selectedActivities;
+	private List<LearningType> selectedLearningTypes;
+	
+	@Property
+	private SelectModel learningTypeSelectModel;
 	
 	@Property
 	@Persist
@@ -280,7 +280,7 @@ public class FrequentPathViger {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
-		this.selectedActivities = null;
+		this.selectedLearningTypes = null;
 		this.selectedGender = null;
 		this.minSup = 1;
 		this.pathLengthMin = null;
@@ -371,7 +371,11 @@ public class FrequentPathViger {
 
 		final boolean considerLogouts = false;
 
-		List<String> types = this.visWorker.getActivityIds(this.selectedActivities);
+		List<String> types = new ArrayList<String>();
+		for(LearningType lt : this.selectedLearningTypes)
+		{
+			types.add(lt.getName());
+		}
 		
 		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
 		

@@ -71,17 +71,18 @@ import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
+import de.lemo.apps.entities.LearningType;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LearningObjectValueEncoder;
+import de.lemo.apps.services.internal.LearningTypeValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
@@ -156,12 +157,23 @@ public class ActivityLearningObject {
 	@Property
 	private LearningObjectValueEncoder learningObjectEncoder;
 	
+	@Inject
+	@Property
+	private LearningTypeValueEncoder learningTypeEncoder;
+	
 	@Property
 	private SelectModel learningObjectSelectModel;
 	
 	@Property
+	private SelectModel learningTypeSelectModel;
+	
+	@Property
 	@Persist
 	private List<LearningObject> selectedLearningObjects;
+	
+	@Property
+	@Persist
+	private List<LearningType> selectedLearningTypes;
 	
 	@Property
 	@Persist
@@ -207,15 +219,6 @@ public class ActivityLearningObject {
 	private List<ResourceRequestInfo> showDetailsList;
 
 
-	// Value Encoder for activity multi-select component
-	@Property(write = false)
-	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
-			EResourceType.class);
-
-	// Select Model for activity multi-select component
-	@Property(write = false)
-	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
-	
 	
 	@Property(write = false)
 	@Retain
@@ -236,10 +239,7 @@ public class ActivityLearningObject {
 	@Property(write = false)
 	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
 
-	@Property
-	@Persist
-	private List<EResourceType> selectedActivities;
-		
+	
 	@Property
 	@Persist
 	private List<GenderEnum> selectedGender;
@@ -251,8 +251,8 @@ public class ActivityLearningObject {
 
 	@Property
 	@Persist
-	private List<Long> userIds, learningObjectIds;
-
+	private List<Long> userIds, learningObjectIds, learningTypeIds;
+	
 	@Property
 	@Persist
 	private List<Long> selectedUsers;
@@ -271,6 +271,12 @@ public class ActivityLearningObject {
 		return elements;
 	}
 	
+	public List<String> getLearningTypes() {
+		
+		final List<String> elements = null;
+		return elements;
+	}
+	
 	
 	
 	public List<ResourceRequestInfo> getResourceList() {
@@ -278,9 +284,12 @@ public class ActivityLearningObject {
 
 		List<ResourceRequestInfo> resultList;
 
-		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
+		if ((this.selectedLearningTypes != null) && (this.selectedLearningTypes.size() >= 1)) {
 			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities, this.selectedGender);
+			List<String> types = new ArrayList<String>();
+			for(LearningType lt : this.selectedLearningTypes)
+				types.add(lt.getName());
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, types, this.selectedGender);
 		} else {
 			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
 			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null, this.selectedGender);
@@ -322,7 +331,7 @@ public class ActivityLearningObject {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedGender = null;
-		this.selectedActivities = null;
+		this.selectedLearningTypes = null;
 		this.beginDate = null;
 		this.endDate = null;
 	}
@@ -334,15 +343,20 @@ public class ActivityLearningObject {
 
 		this.learningObjectIds = new ArrayList<Long>();
 
+
 		final List<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.courseId);
+		
 		ResultListStringObject learningObjectList = null;
 		try {
 			learningObjectList = this.init.getLearningObjects(courseList);
 		} catch (RestServiceCommunicationException e) {
 			logger.error(e.getMessage());
 		}
+		
+		
 
+		
 		final List<LearningObject> learningList = new ArrayList<LearningObject>();
 
 		if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
@@ -352,6 +366,7 @@ public class ActivityLearningObject {
 				final Long learningId = Long.parseLong(learningStringList.get(x) );
 				learningList.add(new LearningObject(learningStringList.get(x + 1),learningId));
 				this.learningObjectIds.add(learningId);
+				
 			}
 			
 			this.learningObjectEncoder.setUp(learningList);
@@ -360,6 +375,32 @@ public class ActivityLearningObject {
 
 		} else {
 			this.logger.debug("No Learning Objetcs found");
+		}
+
+		ResultListStringObject learningTypeList = null;
+		logger.info(courseList.toString());
+		try {
+			learningTypeList = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		final List<LearningType> learningTypes = new ArrayList<LearningType>();
+		
+		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
+			this.logger.debug(learningTypeList.getElements().toString());
+			final List<String> learningStringList = learningTypeList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
+				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
+				this.learningTypeIds.add(learningTypeId);
+			}
+			
+			this.learningTypeEncoder.setUp(learningTypes);
+
+			learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
+
+		} else {
+			this.logger.debug("No Learning Types found");
 		}
 	}
 
@@ -377,6 +418,7 @@ public class ActivityLearningObject {
 		courseList.add(this.courseId);
 		
 		List<Long> learningList = new ArrayList<Long>();
+		
 
 		ResultListStringObject learningObjectList = null;
 		try {
@@ -384,6 +426,8 @@ public class ActivityLearningObject {
 		} catch (RestServiceCommunicationException e) {
 			logger.error(e.getMessage());
 		}
+		
+		
 
 		final Map<Long, String> learningMap = CollectionFactory.newMap();
 		final List<String> learningTitles = new ArrayList<String>();
@@ -400,6 +444,27 @@ public class ActivityLearningObject {
 		} else {
 			this.logger.debug("No Learning Objetcs found");
 		}
+		
+		List<String> typeList = new ArrayList<String>();
+		ResultListStringObject learningTypeList = null;
+		logger.info(courseList.toString());
+		try {
+			learningTypeList = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
+			this.logger.debug(learningTypeList.getElements().toString());
+			final List<String> learningStringList = learningTypeList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				typeList.add(learningStringList.get(x +1));
+			}
+
+		} else {
+			this.logger.debug("No Learning Types found");
+		}
+		
+
 		
 		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
 			for(LearningObject q : this.selectedLearningObjects)
@@ -441,7 +506,7 @@ public class ActivityLearningObject {
 			@SuppressWarnings("unchecked")
 			final
 			List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
-					this.selectedUsers, this.selectedActivities, this.selectedGender, learningList);
+					this.selectedUsers, typeList, this.selectedGender, learningList);
 
 			final JSONArray graphParentArray = new JSONArray();
 			final JSONObject graphDataObject = new JSONObject();
@@ -559,7 +624,7 @@ public class ActivityLearningObject {
 
 	void onSuccessFromCustomizeForm() {
 		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
-		this.logger.debug("Selected activities: " + this.selectedActivities);
+		this.logger.debug("Selected activities: " + this.selectedLearningTypes);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 

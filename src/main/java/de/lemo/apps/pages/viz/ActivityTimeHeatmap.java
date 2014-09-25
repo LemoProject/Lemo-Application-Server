@@ -72,18 +72,19 @@ import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
+import de.lemo.apps.entities.LearningType;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LearningObjectValueEncoder;
+import de.lemo.apps.services.internal.LearningTypeValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
@@ -102,12 +103,23 @@ public class ActivityTimeHeatmap {
 	@Property
 	private LearningObjectValueEncoder learningObjectEncoder;
 	
+	@Inject
+	@Property
+	private LearningTypeValueEncoder learningTypeEncoder;
+	
 	@Property
 	private SelectModel learningObjectSelectModel;
 	
 	@Property
+	private SelectModel learningTypeSelectModel;
+	
+	@Property
 	@Persist
 	private List<LearningObject> selectedLearningObjects;
+	
+	@Property
+	@Persist
+	private List<LearningType> selectedLearningTypes;
 
 	@Inject
 	private Initialisation init;
@@ -214,10 +226,6 @@ public class ActivityTimeHeatmap {
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
 
-	// Value Encoder for activity multi-select component
-	@Property(write = false)
-	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
-			EResourceType.class);
 
 	@Property(write = false)
 	@Retain
@@ -227,10 +235,6 @@ public class ActivityTimeHeatmap {
 				.getMessages());
 		this.resourceGridModel.include("resourcetype", "title", "requests");
 	}
-
-	// Select Model for activity multi-select component
-	@Property(write = false)
-	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
 
 	// Value Encoder for gender multi-select component
 	@Property(write = false)
@@ -243,10 +247,6 @@ public class ActivityTimeHeatmap {
 
 	@Property
 	@Persist
-	private List<EResourceType> selectedActivities;
-		
-	@Property
-	@Persist
 	private List<GenderEnum> selectedGender;
 
 	@Inject
@@ -255,7 +255,7 @@ public class ActivityTimeHeatmap {
 
 	@Property
 	@Persist
-	private List<Long> userIds, courseIds, learningObjectIds;
+	private List<Long> userIds, courseIds, learningObjectIds, learningTypeIds;
 
 	@Property
 	@Persist
@@ -280,9 +280,12 @@ public class ActivityTimeHeatmap {
 
 		List<ResourceRequestInfo> resultList;
 
-		if ((this.selectedActivities != null) && (this.selectedActivities.size() >= 1)) {
+		if ((this.selectedLearningTypes != null) && (this.selectedLearningTypes.size() >= 1)) {
 			this.logger.debug("Starting Extended Analysis - Including LearnbObject Selection ...  ");
-			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, this.selectedActivities,this.selectedGender);
+			List<String> types = new ArrayList<String>();
+			for(LearningType lt : this.selectedLearningTypes)
+				types.add(lt.getName());
+			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, types, this.selectedGender);
 		} else {
 			this.logger.debug("Starting Extended Analysis - Including ALL LearnObjects ....");
 			resultList = this.analysisWorker.usageAnalysisExtended(this.course, this.beginDate, this.endDate, null, this.selectedGender);
@@ -328,7 +331,7 @@ public class ActivityTimeHeatmap {
 		this.course = null;
 		this.selectedUsers = null;
 		this.selectedCourses = null;
-		this.selectedActivities = null;
+		this.selectedLearningTypes = null;
 		this.selectedGender = null;
 		this.beginDate = null;
 		this.endDate = null;
@@ -370,6 +373,32 @@ public class ActivityTimeHeatmap {
 
 		} else {
 			this.logger.debug("No Learning Objetcs found");
+		}
+		
+		ResultListStringObject learningTypeList = null;
+		logger.info(courseList.toString());
+		try {
+			learningTypeList = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		final List<LearningType> learningTypes = new ArrayList<LearningType>();
+		
+		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
+			this.logger.debug(learningTypeList.getElements().toString());
+			final List<String> learningStringList = learningTypeList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
+				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
+				this.learningTypeIds.add(learningTypeId);
+			}
+			
+			this.learningTypeEncoder.setUp(learningTypes);
+
+			learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
+
+		} else {
+			this.logger.debug("No Learning Types found");
 		}
 	}
 
@@ -435,13 +464,9 @@ public class ActivityTimeHeatmap {
 
 		final boolean considerLogouts = true;
 
-		ArrayList<String> types = null;
-		if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-			types = new ArrayList<String>();
-			for (final EResourceType resourceType : this.selectedActivities) {
-				types.add(resourceType.name().toUpperCase());
-			}
-		}
+		List<String> types = new ArrayList<String>();
+		for(LearningType lt : this.selectedLearningTypes)
+			types.add(lt.getName());
 
 		Long endStamp = 0L;
 		Long beginStamp = 0L;
@@ -581,7 +606,7 @@ public class ActivityTimeHeatmap {
 
 	void onSuccessFromCustomizeForm() {
 		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
-		this.logger.debug("Selected activities: " + this.selectedActivities);
+		this.logger.debug("Selected activities: " + this.selectedLearningTypes);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 

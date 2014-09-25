@@ -22,7 +22,6 @@ package de.lemo.apps.restws.client;
 
 import java.util.Date;
 import java.util.List;
-import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.json.JSONObject;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.CourseObject;
@@ -43,6 +42,8 @@ public interface Initialisation {
 	ResultListStringObject getRatedObjects(List<Long> courseIds) throws RestServiceCommunicationException;
 
 	ResultListStringObject getLearningObjects(List<Long> courseIds) throws RestServiceCommunicationException;
+	
+	ResultListStringObject getLearningTypes(List<Long> courseIds) throws RestServiceCommunicationException;
 	
 	ResultListLongObject identifyUserName(final String login) throws RestServiceCommunicationException;
 

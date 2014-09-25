@@ -76,17 +76,18 @@ import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
+import de.lemo.apps.entities.LearningType;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.BoxPlot;
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LearningObjectValueEncoder;
+import de.lemo.apps.services.internal.LearningTypeValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 /**
@@ -115,12 +116,23 @@ public class ActivityTimeCumulative {
 	@Property
 	private LearningObjectValueEncoder learningObjectEncoder;
 	
+	@Inject
+	@Property
+	private LearningTypeValueEncoder learningTypeEncoder;
+	
 	@Property
 	private SelectModel learningObjectSelectModel;
 	
 	@Property
+	private SelectModel learningTypeSelectModel;
+	
+	@Property
 	@Persist
 	private List<LearningObject> selectedLearningObjects;
+	
+	@Property
+	@Persist
+	private List<LearningType> selectedLearningTypes;
 
 	@Inject
 	private DateWorker dateWorker;
@@ -204,16 +216,6 @@ public class ActivityTimeCumulative {
 	@Persist
 	private List<Course> courses;
 
-	// Value Encoder for activity multi-select component
-	@Property(write = false)
-	private final ValueEncoder<EResourceType> activityEncoder = new EnumValueEncoder<EResourceType>(this.coercer,
-			EResourceType.class);
-
-	// Select Model for activity multi-select component
-	@Property(write = false)
-	private final SelectModel activityModel = new EnumSelectModel(EResourceType.class, this.messages);
-
-	
 	// Value Encoder for gender multi-select component
 	@Property(write = false)
 	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
@@ -226,11 +228,6 @@ public class ActivityTimeCumulative {
 	// Select Model for learning object multi-select component
 	@Property(write = false)
 	private final SelectModel learningObjectModel = new EnumSelectModel(GenderEnum.class, this.messages);
-	
-	
-	@Property
-	@Persist
-	private List<EResourceType> selectedActivities;
 	
 	@Property
 	@Persist
@@ -247,7 +244,7 @@ public class ActivityTimeCumulative {
 
 	@Property
 	@Persist
-	private List<Long> selectedUsers, learningObjectIds;
+	private List<Long> selectedUsers, learningObjectIds, learningTypeIds;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -289,7 +286,7 @@ public class ActivityTimeCumulative {
 		this.courseId = null;
 		this.course = null;
 		this.selectedUsers = null;
-		this.selectedActivities = null;
+		this.selectedLearningTypes = null;
 		this.selectedGender = null;
 		this.beginDate = null;
 		this.endDate = null;
@@ -332,6 +329,32 @@ public class ActivityTimeCumulative {
 
 		} else {
 			this.logger.debug("No Learning Objetcs found");
+		}
+		
+		ResultListStringObject learningTypeList = null;
+		logger.info(courseList.toString());
+		try {
+			learningTypeList = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		final List<LearningType> learningTypes = new ArrayList<LearningType>();
+		
+		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
+			this.logger.debug(learningTypeList.getElements().toString());
+			final List<String> learningStringList = learningTypeList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
+				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
+				this.learningTypeIds.add(learningTypeId);
+			}
+			
+			this.learningTypeEncoder.setUp(learningTypes);
+
+			learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
+
+		} else {
+			this.logger.debug("No Learning Types found");
 		}
 	}
 
@@ -403,13 +426,9 @@ public class ActivityTimeCumulative {
 				learningList.addAll(learningMap.keySet());
 			}
 
-			List<String> types = null;
-			if ((this.selectedActivities != null) && !this.selectedActivities.isEmpty()) {
-				types = new ArrayList<String>();
-				for (final EResourceType resourceType : this.selectedActivities) {
-					types.add(resourceType.name().toLowerCase());
-				}
-			}
+			List<String> types = new ArrayList<String>();
+			for(LearningType lt : this.selectedLearningTypes)
+				types.add(lt.getName());
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
@@ -534,7 +553,7 @@ public class ActivityTimeCumulative {
 
 	void onSuccessFromCustomizeForm() {
 		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
-		this.logger.debug("Selected activities: " + this.selectedActivities);
+		this.logger.debug("Selected activities: " + this.selectedLearningTypes);
 		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 

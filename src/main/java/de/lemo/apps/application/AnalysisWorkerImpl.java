@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.restws.client.Analysis;
-import de.lemo.apps.restws.entities.EResourceType;
 import de.lemo.apps.restws.entities.ResourceRequestInfo;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
@@ -58,12 +57,11 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public List<ResourceRequestInfo> usageAnalysisExtended(final Course course, final Date beginDate,
-			final Date endDate, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList) {
+			final Date endDate, final List<String> resourceTypes, final List<GenderEnum> genderList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
-			List<String> resourceTypesNames = null;
 
 			if (endDate != null) {
 
@@ -75,14 +73,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
-			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
-				resourceTypesNames = new ArrayList<String>();
-				for (int i = 0; i < resourceTypes.size(); i++) {
-					resourceTypesNames.add(resourceTypes.get(i).toString());
-					this.logger.debug("Resource Typ: " + resourceTypes.get(i).toString());
-				}
-			}
-			
 			List<Long> gender = this.visWorker.getGenderIds(genderList);
 
 			final List<Long> roles = new ArrayList<Long>();
@@ -98,7 +88,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis");
 			final ResultListResourceRequestInfo results = this.analysis.computeCourseActivityExtended(courses,
 					beginStamp,
-					endStamp, resourceTypesNames,gender,null);
+					endStamp, resourceTypes,gender,null);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
 					&& (results.getResourceRequestInfos().size() > 0)) {
@@ -115,7 +105,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public List<ResourceRequestInfo> learningObjectUsage(final Course course, final Date beginDate, final Date endDate,
-			final List<Long> selectedUsers, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList, final List<Long> learningList) {
+			final List<Long> selectedUsers, final List<String> resourceTypes, final List<GenderEnum> genderList, final List<Long> learningList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
@@ -132,14 +122,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
-			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
-				resourceTypesNames = new ArrayList<String>();
-				for (int i = 0; i < resourceTypes.size(); i++) {
-					resourceTypesNames.add(resourceTypes.get(i).toString());
-					this.logger.debug("Resource Typ: " + resourceTypes.get(i).toString());
-				}
-			}
-			
 			List<Long> gender = this.visWorker.getGenderIds(genderList);
 
 			final List<Long> roles = new ArrayList<Long>();
@@ -155,7 +137,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis");
 			final ResultListResourceRequestInfo results = this.analysis.computeLearningObjectUsage(courses,
 					selectedUsers,
-					resourceTypesNames, beginStamp, endStamp, gender, learningList);
+					resourceTypes, beginStamp, endStamp, gender, learningList);
 			this.logger.debug("Extended Analysis: " + results);
 			if ((results != null) && (results.getResourceRequestInfos() != null)
 					&& (results.getResourceRequestInfos().size() > 0)) {
@@ -172,12 +154,11 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public ResultListRRITypes usageAnalysisExtendedDetails(final Course course, final Date beginDate,
-			final Date endDate, final Integer resolution, final List<EResourceType> resourceTypes, final List<GenderEnum> genderList) {
+			final Date endDate, final Integer resolution, final List<String> resourceTypes, final List<GenderEnum> genderList) {
 
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
-			List<String> resourceTypesNames = null;
 
 			if (endDate != null) {
 
@@ -189,13 +170,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
-			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
-				resourceTypesNames = new ArrayList<String>();
-				for (int i = 0; i < resourceTypes.size(); i++) {
-					resourceTypesNames.add(resourceTypes.get(i).toString());
-				}
-			}
-			
 			List<Long> gender = this.visWorker.getGenderIds(genderList);
 
 			final List<Long> roles = new ArrayList<Long>();
@@ -211,7 +185,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			this.logger.debug("Starting Extended Analysis Details");
 			final ResultListRRITypes results = this.analysis.computeCourseActivityExtendedDetails(courses, beginStamp,
 					endStamp,
-					resolution.longValue(), resourceTypesNames, gender, null);
+					resolution.longValue(), resourceTypes, gender, null);
 			this.logger.debug("Extended Analysls Details: " + results);
 			if (results != null) {
 				if (results.getTaskRRI() != null) {
@@ -277,7 +251,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public List<List<XYDateDataItem>> usageAnalysis(final Course course, final Date endDate, final int dateRange,
-			final Integer dateMultiplier, final List<EResourceType> resourceTypes) {
+			final Integer dateMultiplier, final List<String> resourceTypes) {
 
 		Date beginDate = endDate;
 
@@ -296,7 +270,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 	@Override
 	public List<List<XYDateDataItem>> usageAnalysis(final Course course, final Date beginDate, final Date endDate,
-			final List<EResourceType> resourceTypes) {
+			final List<String> resourceTypes) {
 
 		final List<List<XYDateDataItem>> dataList = CollectionFactory.newList();
 		final List<XYDateDataItem> list1 = CollectionFactory.newList();
@@ -309,7 +283,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 		if ((course != null) && (course.getId() != null)) {
 			Long endStamp = 0L;
 			Long beginStamp = 0L;
-			List<String> resourceTypesNames = null;
 
 			if (endDate != null) {
 				endStamp = new Long(endDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
@@ -320,12 +293,6 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 				beginStamp = new Long(beginDate.getTime() / DateWorkerImpl.MILLISEC_MULTIPLIER);
 			}
 
-			if ((resourceTypes != null) && (resourceTypes.size() >= 1)) {
-				resourceTypesNames = new ArrayList<String>();
-				for (int i = 0; i < resourceTypes.size(); i++) {
-					resourceTypesNames.add(resourceTypes.get(i).toString());
-				}
-			}
 
 			
 			final List<Long> courses = new ArrayList<Long>();
@@ -337,7 +304,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 			}
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + resolution);
 			final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courses, null,
-					beginStamp, endStamp, resolution, resourceTypesNames, null, null);
+					beginStamp, endStamp, resolution, resourceTypes, null, null);
 			ResultListLongObject uniqueResult = null;
 
 			if (results != null) {
