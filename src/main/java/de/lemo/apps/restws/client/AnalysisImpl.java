@@ -48,7 +48,6 @@ import de.lemo.apps.restws.entities.ResultListLongObject;
 import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.restws.proxies.questions.QActivityResourceType;
-import de.lemo.apps.restws.proxies.questions.QActivityResourceTypeResolution;
 import de.lemo.apps.restws.proxies.questions.QCourseActivityString;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;

@@ -377,8 +377,7 @@ public class ActivityLearningObject {
 			} else {
 				this.logger.debug("No Learning Objetcs found");
 			}
-			
-			this.logger.info("Hey");
+
 	
 			ResultListStringObject learningTypeList = null;
 			try {

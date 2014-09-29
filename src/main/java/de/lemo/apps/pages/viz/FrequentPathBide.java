@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.PersistenceConstants;
@@ -44,11 +45,13 @@ import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
@@ -66,6 +69,7 @@ import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.pages.data.Explorer;
 import de.lemo.apps.restws.client.Analysis;
 import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.ResultListStringObject;
 import de.lemo.apps.services.internal.CourseIdSelectModel;
 import de.lemo.apps.services.internal.CourseIdValueEncoder;
 import de.lemo.apps.services.internal.LearningTypeValueEncoder;
@@ -80,6 +84,9 @@ public class FrequentPathBide {
 	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
+	
+	@Inject
+	SelectModelFactory selectModelFactory;
 
 	@Inject
 	private Logger logger;
@@ -297,6 +304,40 @@ public class FrequentPathBide {
 		this.courseModel = new CourseIdSelectModel(courses);
 
 		this.userIds = this.getUsers();
+		
+		List<Long> cids = new ArrayList<Long>();
+		for(Course c : courses)
+		{
+			cids.add(c.getCourseId());
+		}
+		
+		ResultListStringObject learningTypeList = null;
+		try {
+			learningTypeList = this.init.getLearningTypes(cids);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		final List<LearningType> learningTypes = new ArrayList<LearningType>();
+		
+
+
+		
+		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
+			this.logger.debug(learningTypeList.toString());
+			final List<String> learningStringList = learningTypeList.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
+				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
+				//this.learningTypeIds.add(learningTypeId);
+			}
+
+			this.learningTypeEncoder.setUp(learningTypes);
+
+			this.learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
+
+		} else {
+			this.logger.debug("No Learning Types found");
+		}
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -381,10 +422,33 @@ public class FrequentPathBide {
 
 		final boolean considerLogouts = false;
 
-		List<String> types = new ArrayList<String>();
-		for(LearningType lt : this.selectedLearningTypes)
-		{
-			types.add(lt.getName());
+		List<String> learningTypeList = new ArrayList<String>();
+		final Set<String> learningTypeMap = CollectionFactory.newSet();
+		ResultListStringObject availableTypes = null;
+		try {
+			availableTypes = this.init.getLearningTypes(courseIds);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		if ((availableTypes != null) && (availableTypes.getElements() != null)) {
+			this.logger.debug(availableTypes.getElements().toString());
+			final List<String> learningStringList = availableTypes.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				learningTypeMap.add(learningStringList.get(x +1));
+			}
+
+		} else {
+			this.logger.debug("No Learning Types found");
+		}
+		
+		if (this.selectedLearningTypes != null && !this.selectedLearningTypes.isEmpty()) {
+			for(LearningType q : this.selectedLearningTypes)
+			{
+				learningTypeList.add(q.getName());
+			}
+		} else if (learningTypeMap != null ) {
+			learningTypeList = new ArrayList<String>();
+			learningTypeList.addAll(learningTypeMap);
 		}
 		
 		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
@@ -410,7 +474,7 @@ public class FrequentPathBide {
 
 		this.logger.debug("PathLength: " + this.pathLengthMin + "  --  " + this.pathLengthMax);
 
-		return this.analysis.computeQFrequentPathBIDE(userWorker.getCurrentUser().getId(), courseIds, this.selectedUsers, types, this.pathLengthMin, this.pathLengthMax,
+		return this.analysis.computeQFrequentPathBIDE(userWorker.getCurrentUser().getId(), courseIds, this.selectedUsers, learningTypeList, this.pathLengthMin, this.pathLengthMax,
 				this.minSupDouble, considerLogouts, beginStamp, endStamp, gender);
 	}
 
