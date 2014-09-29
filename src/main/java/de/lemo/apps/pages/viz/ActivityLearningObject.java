@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.ComponentResources;
@@ -143,7 +144,6 @@ public class ActivityLearningObject {
 	private Form customizeForm;
 
 	@Property
-	@SuppressWarnings("unused")
 	private SelectModel courseModel;
 
 	
@@ -251,7 +251,7 @@ public class ActivityLearningObject {
 
 	@Property
 	@Persist
-	private List<Long> userIds, learningObjectIds, learningTypeIds;
+	private List<Long> userIds, learningObjectIds;
 	
 	@Property
 	@Persist
@@ -337,70 +337,79 @@ public class ActivityLearningObject {
 	}
 
 	void onPrepareForRender() {
-		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		this.courseModel = new CourseIdSelectModel(courses);
-		this.userIds = this.getUsers();
-
-		this.learningObjectIds = new ArrayList<Long>();
-
-
-		final List<Long> courseList = new ArrayList<Long>();
-		courseList.add(this.courseId);
-		
-		ResultListStringObject learningObjectList = null;
-		try {
-			learningObjectList = this.init.getLearningObjects(courseList);
-		} catch (RestServiceCommunicationException e) {
-			logger.error(e.getMessage());
-		}
-		
-		
-
-		
-		final List<LearningObject> learningList = new ArrayList<LearningObject>();
-
-		if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
-			this.logger.debug(learningObjectList.getElements().toString());
-			final List<String> learningStringList = learningObjectList.getElements();
-			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
-				final Long learningId = Long.parseLong(learningStringList.get(x) );
-				learningList.add(new LearningObject(learningStringList.get(x + 1),learningId));
-				this.learningObjectIds.add(learningId);
+		try{
+			final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+			this.courseModel = new CourseIdSelectModel(courses);
+			this.userIds = this.getUsers();
+	
+			this.learningObjectIds = new ArrayList<Long>();
+	
+	
+			final List<Long> courseList = new ArrayList<Long>();
+			courseList.add(this.courseId);
+			
+			ResultListStringObject learningObjectList = null;
+			try {
+				learningObjectList = this.init.getLearningObjects(courseList);
+			} catch (RestServiceCommunicationException e) {
+				logger.error(e.getMessage());
+			}
+			
+			
+	
+			
+			final List<LearningObject> learningList = new ArrayList<LearningObject>();
+	
+			if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
+				this.logger.debug(learningObjectList.getElements().toString());
+				final List<String> learningStringList = learningObjectList.getElements();
+				for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+					final Long learningId = Long.parseLong(learningStringList.get(x) );
+					learningList.add(new LearningObject(learningStringList.get(x + 1),learningId));
+					this.learningObjectIds.add(learningId);
+					
+				}
 				
+				this.learningObjectEncoder.setUp(learningList);
+	
+				learningObjectSelectModel = selectModelFactory.create(learningList, "name");
+	
+			} else {
+				this.logger.debug("No Learning Objetcs found");
 			}
 			
-			this.learningObjectEncoder.setUp(learningList);
+			this.logger.info("Hey");
+	
+			ResultListStringObject learningTypeList = null;
+			try {
+				learningTypeList = this.init.getLearningTypes(courseList);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+			final List<LearningType> learningTypes = new ArrayList<LearningType>();
+			
 
-			learningObjectSelectModel = selectModelFactory.create(learningList, "name");
 
-		} else {
-			this.logger.debug("No Learning Objetcs found");
-		}
+			
+			if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
+				this.logger.debug(learningTypeList.toString());
+				final List<String> learningStringList = learningTypeList.getElements();
+				for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+					final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
+					learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
+					//this.learningTypeIds.add(learningTypeId);
+				}
 
-		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
-		try {
-			learningTypeList = this.init.getLearningTypes(courseList);
-		} catch (Exception e) {
+				this.learningTypeEncoder.setUp(learningTypes);
+	
+				this.learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
+	
+			} else {
+				this.logger.debug("No Learning Types found");
+			}
+		}catch(Exception e)
+		{
 			logger.error(e.getMessage());
-		}
-		final List<LearningType> learningTypes = new ArrayList<LearningType>();
-		
-		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
-			this.logger.debug(learningTypeList.getElements().toString());
-			final List<String> learningStringList = learningTypeList.getElements();
-			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
-				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
-				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
-				this.learningTypeIds.add(learningTypeId);
-			}
-			
-			this.learningTypeEncoder.setUp(learningTypes);
-
-			learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
-
-		} else {
-			this.logger.debug("No Learning Types found");
 		}
 	}
 
@@ -419,6 +428,7 @@ public class ActivityLearningObject {
 		
 		List<Long> learningList = new ArrayList<Long>();
 		
+		
 
 		ResultListStringObject learningObjectList = null;
 		try {
@@ -430,7 +440,6 @@ public class ActivityLearningObject {
 		
 
 		final Map<Long, String> learningMap = CollectionFactory.newMap();
-		final List<String> learningTitles = new ArrayList<String>();
 
 		if ((learningObjectList != null) && (learningObjectList.getElements() != null)) {
 			this.logger.debug(learningObjectList.getElements().toString());
@@ -438,30 +447,39 @@ public class ActivityLearningObject {
 			for (Integer x = 0; x < learningObjectStringList.size(); x = x + 2) {
 				final Long quizId = Long.parseLong(learningObjectStringList.get(x) );
 				learningMap.put(quizId, learningObjectStringList.get(x + 1));
-				learningTitles.add(learningObjectStringList.get(x + 1));
 			}
 
 		} else {
 			this.logger.debug("No Learning Objetcs found");
 		}
 		
-		List<String> typeList = new ArrayList<String>();
-		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
+		List<String> learningTypeList = new ArrayList<String>();
+		final Set<String> learningTypeMap = CollectionFactory.newSet();
+		ResultListStringObject availableTypes = null;
 		try {
-			learningTypeList = this.init.getLearningTypes(courseList);
+			availableTypes = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
-			this.logger.debug(learningTypeList.getElements().toString());
-			final List<String> learningStringList = learningTypeList.getElements();
+		if ((availableTypes != null) && (availableTypes.getElements() != null)) {
+			this.logger.debug(availableTypes.getElements().toString());
+			final List<String> learningStringList = availableTypes.getElements();
 			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
-				typeList.add(learningStringList.get(x +1));
+				learningTypeMap.add(learningStringList.get(x +1));
 			}
 
 		} else {
 			this.logger.debug("No Learning Types found");
+		}
+		
+		if (this.selectedLearningTypes != null && !this.selectedLearningTypes.isEmpty()) {
+			for(LearningType q : this.selectedLearningTypes)
+			{
+				learningTypeList.add(q.getName());
+			}
+		} else if (learningTypeMap != null ) {
+			learningTypeList = new ArrayList<String>();
+			learningTypeList.addAll(learningTypeMap);
 		}
 		
 
@@ -469,12 +487,14 @@ public class ActivityLearningObject {
 		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
 			for(LearningObject q : this.selectedLearningObjects)
 			{
-				learningList.add(q.getCombinedId());
+				learningList.add(q.getId());
 			}
 		} else if ((learningMap != null) && (learningMap.keySet() != null)) {
 			learningList = new ArrayList<Long>();
 			learningList.addAll(learningMap.keySet());
 		}
+		
+
 
 		final List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
 
@@ -506,7 +526,7 @@ public class ActivityLearningObject {
 			@SuppressWarnings("unchecked")
 			final
 			List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
-					this.selectedUsers, typeList, this.selectedGender, learningList);
+					this.selectedUsers, learningTypeList, this.selectedGender, learningList);
 
 			final JSONArray graphParentArray = new JSONArray();
 			final JSONObject graphDataObject = new JSONObject();
@@ -643,9 +663,9 @@ public class ActivityLearningObject {
 	
 	public String getResourceTypeName() {
 		if ((this.resourceItem != null) && (!this.resourceItem.getResourcetype().equals(""))) {
-			return this.messages.get("EResourceType." + this.resourceItem.getResourcetype());
+			return this.resourceItem.getResourcetype();
 		} else {
-			return this.messages.get("EResourceType.UNKNOWN");
+			return "UNKNOWN";
 		}
 	}
 	

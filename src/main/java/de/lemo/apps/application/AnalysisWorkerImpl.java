@@ -152,6 +152,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 		return new ArrayList<ResourceRequestInfo>();
 	}
 
+	/*
 	@Override
 	public ResultListRRITypes usageAnalysisExtendedDetails(final Course course, final Date beginDate,
 			final Date endDate, final Integer resolution, final List<String> resourceTypes, final List<GenderEnum> genderList) {
@@ -248,7 +249,7 @@ public class AnalysisWorkerImpl implements AnalysisWorker {
 
 		return new ResultListRRITypes();
 	}
-
+*/
 	@Override
 	public List<List<XYDateDataItem>> usageAnalysis(final Course course, final Date endDate, final int dateRange,
 			final Integer dateMultiplier, final List<String> resourceTypes) {

@@ -21,12 +21,12 @@ public class LearningObjectValueEncoderWorker implements LearningObjectValueEnco
 	{
 		this.learningMap = new HashMap<Long, LearningObject>();
 		for(LearningObject q : learningObjects)
-			this.learningMap.put(q.getCombinedId(), q);
+			this.learningMap.put(q.getId(), q);
 	}
 	
     @Override
     public String toClient(LearningObject value) {
-        return String.valueOf(value.getCombinedId()); 
+        return String.valueOf(value.getId()); 
     }
 
     @Override

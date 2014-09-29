@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.PersistenceConstants;
@@ -217,7 +218,7 @@ public class ActivityGraph_2 {
 
 	@Property
 	@Persist
-	private List<Long> userIds, learningObjectIds, learningTypeIds;
+	private List<Long> userIds, learningObjectIds;
 
 	@Property
 	@Persist
@@ -318,7 +319,6 @@ public class ActivityGraph_2 {
 			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
 				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
 				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
-				this.learningTypeIds.add(learningTypeId);
 			}
 			
 			this.learningTypeEncoder.setUp(learningTypes);
@@ -382,11 +382,40 @@ public class ActivityGraph_2 {
 		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
 			for(LearningObject q : this.selectedLearningObjects)
 			{
-				learningList.add(q.getCombinedId());
+				learningList.add(q.getId());
 			}
 		} else if ((learningMap != null) && (learningMap.keySet() != null)) {
 			learningList = new ArrayList<Long>();
 			learningList.addAll(learningMap.keySet());
+		}
+		
+		List<String> learningTypeList = new ArrayList<String>();
+		final Set<String> learningTypeMap = CollectionFactory.newSet();
+		ResultListStringObject availableTypes = null;
+		try {
+			availableTypes = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		if ((availableTypes != null) && (availableTypes.getElements() != null)) {
+			this.logger.debug(availableTypes.getElements().toString());
+			final List<String> learningStringList = availableTypes.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				learningTypeMap.add(learningStringList.get(x +1));
+			}
+
+		} else {
+			this.logger.debug("No Learning Types found");
+		}
+		
+		if (this.selectedLearningTypes != null && !this.selectedLearningTypes.isEmpty()) {
+			for(LearningType q : this.selectedLearningTypes)
+			{
+				learningTypeList.add(q.getName());
+			}
+		} else if (learningTypeMap != null ) {
+			learningTypeList = new ArrayList<String>();
+			learningTypeList.addAll(learningTypeMap);
 		}
 
 		final ArrayList<Long> courseIds = new ArrayList<Long>();
@@ -394,9 +423,7 @@ public class ActivityGraph_2 {
 		
 		final boolean considerLogouts = true;
 
-		List<String> types = new ArrayList<String>();
-		for(LearningType lt : this.selectedLearningTypes)
-			types.add(lt.getName());
+
 		
 		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
 
@@ -409,7 +436,7 @@ public class ActivityGraph_2 {
 			endStamp = new Long(this.endDate.getTime() / THOU);
 		}
 		
-		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, types, considerLogouts, beginStamp, endStamp, gender,learningList ); 
+		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, learningTypeList, considerLogouts, beginStamp, endStamp, gender,learningList ); 
 		
 		this.logger.debug("ResultString: "+result);
 		

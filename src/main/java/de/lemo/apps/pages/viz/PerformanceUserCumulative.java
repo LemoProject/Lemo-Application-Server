@@ -224,7 +224,7 @@ public class PerformanceUserCumulative {
 
 	@Property
 	@Persist
-	private List<Long> userIds, quizIds, learningTypeIds;
+	private List<Long> userIds, quizIds;
 
 	@Property
 	@Persist
@@ -335,7 +335,6 @@ public class PerformanceUserCumulative {
 			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
 				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
 				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
-				this.learningTypeIds.add(learningTypeId);
 			}
 			
 			this.learningTypeEncoder.setUp(learningTypes);

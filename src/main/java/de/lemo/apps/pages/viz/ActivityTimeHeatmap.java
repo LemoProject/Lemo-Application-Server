@@ -255,7 +255,7 @@ public class ActivityTimeHeatmap {
 
 	@Property
 	@Persist
-	private List<Long> userIds, courseIds, learningObjectIds, learningTypeIds;
+	private List<Long> userIds, courseIds, learningObjectIds;
 
 	@Property
 	@Persist
@@ -390,7 +390,6 @@ public class ActivityTimeHeatmap {
 			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
 				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
 				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
-				this.learningTypeIds.add(learningTypeId);
 			}
 			
 			this.learningTypeEncoder.setUp(learningTypes);
@@ -455,7 +454,7 @@ public class ActivityTimeHeatmap {
 		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
 			for(LearningObject q : this.selectedLearningObjects)
 			{
-				learningList.add(q.getCombinedId());
+				learningList.add(q.getId());
 			}
 		} else if ((learningMap != null) && (learningMap.keySet() != null)) {
 			learningList = new ArrayList<Long>();
@@ -464,9 +463,34 @@ public class ActivityTimeHeatmap {
 
 		final boolean considerLogouts = true;
 
-		List<String> types = new ArrayList<String>();
-		for(LearningType lt : this.selectedLearningTypes)
-			types.add(lt.getName());
+		List<String> learningTypeList = new ArrayList<String>();
+		final Set<String> learningTypeMap = CollectionFactory.newSet();
+		ResultListStringObject availableTypes = null;
+		try {
+			availableTypes = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		if ((availableTypes != null) && (availableTypes.getElements() != null)) {
+			this.logger.debug(availableTypes.getElements().toString());
+			final List<String> learningStringList = availableTypes.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				learningTypeMap.add(learningStringList.get(x +1));
+			}
+
+		} else {
+			this.logger.debug("No Learning Types found");
+		}
+		
+		if (this.selectedLearningTypes != null && !this.selectedLearningTypes.isEmpty()) {
+			for(LearningType q : this.selectedLearningTypes)
+			{
+				learningTypeList.add(q.getName());
+			}
+		} else if (learningTypeMap != null ) {
+			learningTypeList = new ArrayList<String>();
+			learningTypeList.addAll(learningTypeMap);
+		}
 
 		Long endStamp = 0L;
 		Long beginStamp = 0L;
@@ -485,7 +509,7 @@ public class ActivityTimeHeatmap {
 		this.resolutionComputed = RESOLUTION_MAX;
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, types, null, learningList);
+				beginStamp, endStamp, (long) this.resolutionComputed, learningTypeList, null, learningList);
 		
 
 		final JSONArray graphParentArray = new JSONArray();

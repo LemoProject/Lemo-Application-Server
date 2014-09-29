@@ -226,7 +226,7 @@ public class ActivityLearningObjectTM {
 
 	@Property
 	@Persist
-	private List<Long> userIds, learningObjectIds, learningTypeIds;
+	private List<Long> userIds, learningObjectIds;
 
 	@Property
 	@Persist
@@ -329,7 +329,6 @@ public class ActivityLearningObjectTM {
 			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
 				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
 				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
-				this.learningTypeIds.add(learningTypeId);
 			}
 			
 			this.learningTypeEncoder.setUp(learningTypes);
@@ -389,11 +388,40 @@ public class ActivityLearningObjectTM {
 		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
 			for(LearningObject q : this.selectedLearningObjects)
 			{
-				learningList.add(q.getCombinedId());
+				learningList.add(q.getId());
 			}
 		} else if ((learningMap != null) && (learningMap.keySet() != null)) {
 			learningList = new ArrayList<Long>();
 			learningList.addAll(learningMap.keySet());
+		}
+		
+		List<String> learningTypeList = new ArrayList<String>();
+		final Set<String> learningTypeMap = CollectionFactory.newSet();
+		ResultListStringObject availableTypes = null;
+		try {
+			availableTypes = this.init.getLearningTypes(courseList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		if ((availableTypes != null) && (availableTypes.getElements() != null)) {
+			this.logger.debug(availableTypes.getElements().toString());
+			final List<String> learningStringList = availableTypes.getElements();
+			for (Integer x = 0; x < learningStringList.size(); x = x + 2) {
+				learningTypeMap.add(learningStringList.get(x +1));
+			}
+
+		} else {
+			this.logger.debug("No Learning Types found");
+		}
+		
+		if (this.selectedLearningTypes != null && !this.selectedLearningTypes.isEmpty()) {
+			for(LearningType q : this.selectedLearningTypes)
+			{
+				learningTypeList.add(q.getName());
+			}
+		} else if (learningTypeMap != null ) {
+			learningTypeList = new ArrayList<String>();
+			learningTypeList.addAll(learningTypeMap);
 		}
 
 		final List<List<TextValueDataItem>> dataList = CollectionFactory.newList();
@@ -421,17 +449,11 @@ public class ActivityLearningObjectTM {
 			for (int i = 0; i < courses.size(); i++) {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
-			
-			List<String> types = new ArrayList<String>();
-			for(LearningType lt : this.selectedLearningTypes)
-			{
-				types.add(lt.getName());
-			}
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
 			final List<ResourceRequestInfo> results = this.analysisWorker.learningObjectUsage(this.course, this.beginDate, this.endDate,
-					this.selectedUsers, types, this.selectedGender,learningList);
+					this.selectedUsers, learningTypeList, this.selectedGender,learningList);
 
 			final HashMap<String, List<ResourceRequestInfo>> learningObjectTypes = new HashMap<String, List<ResourceRequestInfo>>();
 			if ((results != null) && (results.size() > 0)) {

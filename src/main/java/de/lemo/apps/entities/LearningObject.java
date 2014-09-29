@@ -3,16 +3,16 @@ package de.lemo.apps.entities;
 public class LearningObject {
 
 	private String name;
-	private Long combinedId;
+	private Long id;
 	
 	
 	public LearningObject(String name, Long combinedId){
 		this.name = name;
-		this.combinedId = combinedId;
+		this.id = combinedId;
 	}
 	
 	public LearningObject(Long combinedId){
-		this.combinedId = combinedId;
+		this.id = combinedId;
 	}
 	
 	/**
@@ -33,15 +33,15 @@ public class LearningObject {
 	/**
 	 * @return the combinedId
 	 */
-	public Long getCombinedId() {
-		return combinedId;
+	public Long getId() {
+		return id;
 	}
 	
 	/**
 	 * @param combinedId the combinedId to set
 	 */
-	public void setCombinedId(Long combinedId) {
-		this.combinedId = combinedId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class LearningObject {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((combinedId == null) ? 0 : combinedId.hashCode());
+				+ ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -63,10 +63,10 @@ public class LearningObject {
 		if (getClass() != obj.getClass())
 			return false;
 		LearningObject other = (LearningObject) obj;
-		if (combinedId == null) {
-			if (other.combinedId != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!combinedId.equals(other.combinedId))
+		} else if (!id.equals(other.id))
 			return false;
 		if (name == null) {
 			if (other.name != null)

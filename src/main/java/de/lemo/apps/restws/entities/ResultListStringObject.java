@@ -48,5 +48,11 @@ public class ResultListStringObject {
 	public void setElements(final List<String> elements) {
 		this.elements = elements;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.elements.toString();
+	}
 
 }

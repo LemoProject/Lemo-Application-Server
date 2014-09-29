@@ -12,7 +12,7 @@ public class LearningType {
 	
 	public String toString()
 	{
-		return this.getId() + "," + this.getName();
+		return this.getId() + "-" + this.getName();
 	}
 	
 	/**

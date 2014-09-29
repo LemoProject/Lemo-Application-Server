@@ -49,5 +49,11 @@ public class ResultListLongObject {
 	public void setElements(final List<Long> elements) {
 		this.elements = elements;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.elements.toString();
+	}
 
 }

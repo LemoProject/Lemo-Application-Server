@@ -94,9 +94,10 @@ public class AnalysisImpl implements Analysis {
 	private QActivityResourceType qActivityResourceType =
 			ProxyFactory.create(QActivityResourceType.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
+	/*
 	private QActivityResourceTypeResolution qActivityResourceTypeResolution =
 			ProxyFactory.create(QActivityResourceTypeResolution.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
-
+*/
 	private QLearningObjectUsage qLOUsage =
 			ProxyFactory.create(QLearningObjectUsage.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
@@ -181,6 +182,7 @@ public class AnalysisImpl implements Analysis {
 		return new ResultListResourceRequestInfo();
 	}
 
+	/*
 	@Override
 	public ResultListRRITypes computeCourseActivityExtendedDetails(final List<Long> courses, final Long startTime,
 			final Long endTime,
@@ -212,7 +214,7 @@ public class AnalysisImpl implements Analysis {
 		logger.info("Gebe leere Resultlist zurueck");
 		return new ResultListRRITypes();
 	}
-
+*/
 	@Override
 	public ResultListResourceRequestInfo computeLearningObjectUsage(final List<Long> courseIds,
 			final List<Long> userIds,

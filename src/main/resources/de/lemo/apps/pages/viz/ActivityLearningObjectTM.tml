@@ -22,16 +22,6 @@
         	
         	<br/>
         	
-        	<!-- Legend -->
-      		<div>
-      			<span class="pull-left"><h5>${message:legend}:</h5></span>
-    			<span class="legend learningObject pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ACCESS} </p></span>
-    			<span class="legend collaborativeObject pull-left"></span> <span class="pull-left"><p>${message:EResourceType.COLLABORATION} </p></span>
-    			<span class="legend task pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSESSMENT} </p></span>
-    			<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN} </p></span>
-    		
-			 </div>
-        	
     	</div>
     	
     	

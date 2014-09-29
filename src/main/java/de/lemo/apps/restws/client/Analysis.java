@@ -51,6 +51,7 @@ public interface Analysis {
 			List<Long> gender,
 			List<Long> learningObjects);
 
+	/*
 	ResultListRRITypes computeCourseActivityExtendedDetails(
 			List<Long> courses,
 			Long startTime,
@@ -59,7 +60,7 @@ public interface Analysis {
 			List<String> resourceTypes,
 			List<Long> gender,
 			List<Long> learningObjects);
-
+*/
 	ResultListResourceRequestInfo computeLearningObjectUsage(
 			List<Long> courseIds,
 			List<Long> userIds,
