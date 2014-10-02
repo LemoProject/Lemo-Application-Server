@@ -34,15 +34,7 @@
 	        <br/>
         	
         	<!-- Legend -->
-      		<div class="row-fluid">
-      			<span class="pull-left"><h5>${message:legend}:</h5></span>
-    			<span class="legend resource pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ASSESSMENT} </p></span>
-    			<span class="legend forum pull-left"></span> <span class="pull-left"><p>${message:EResourceType.COLLABORATION} </p></span>
-    			<span class="legend question pull-left"></span> <span class="pull-left"><p>${message:EResourceType.ACCESS} </p></span>
-    			<span class="legend unknown pull-left"></span> <span class="pull-left"><p>${message:EResourceType.UNKNOWN} </p></span>
-    		
-			 </div>
-			 
+		 
 			 <div class="row-fluid">
       			<span class="pull-left"><h5>${message:linksNodes}:</h5></span>
 			 	<span class="legend target pull-left"></span> <span class="pull-left"><p>${message:incoming} </p></span>

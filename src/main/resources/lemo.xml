@@ -14,13 +14,13 @@
 	      		fullname="Administrator" />
 	      		
 	      <user name="user" 
-	      		password="lemolemo" 
+	      		password="la" 
 	      		roles="teacher" 
 	      		email="user&#64;example.com" 
 	      		fullname="Teacher" 
 	      		
 	      		
-	      		courses=""/>
+	      		courses="1 2 3"/>
       		
  	      <user name="global" 
  	      		password="lemolemo" 
