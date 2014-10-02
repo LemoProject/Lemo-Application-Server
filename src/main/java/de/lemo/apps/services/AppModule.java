@@ -220,26 +220,6 @@ public class AppModule {
 			}
 		});
 	}
-	public void contributeMetaDataLocator(MappedConfiguration<String,String> configuration)
-	{
-	    configuration.add(MetaDataConstants.SECURE_PAGE, "true");
-	}
-	public static void contributeServiceOverride(MappedConfiguration<Class,Object> configuration)
-	{
-	    BaseURLSource source = new BaseURLSource()
-	    {
-	        public String getBaseURL(boolean secure)
-	        {
-	            String protocol = secure ? "https" : "http";
-	 
-	            int port = secure ? 8443 : 8080;
-	 
-	            return String.format("%s://localhost:%d", protocol, port);
-	        }
-	    };
-	 
-	    configuration.add(BaseURLSource.class, source);
-	}	
 	/**
 	 * This is a service definition, the service will be named "TimingFilter". The interface, RequestFilter, is used
 	 * within
