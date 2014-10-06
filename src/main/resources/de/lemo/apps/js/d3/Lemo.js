@@ -8,7 +8,6 @@ function hashColor(objectName,category) {
 		}	
 		if (hash.toString(16).length < 10)
 			hash = hash * 100;
-		console.log(this + " / " + hash);
 		return Math.abs(hash);
 	}
 	var uniqueColor;
