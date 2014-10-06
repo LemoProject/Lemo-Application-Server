@@ -104,7 +104,7 @@
 			d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
 			d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
 
-			var rects = d3.selectAll('rect').style("fill", function(d, i) { if (detail(d.series)) {return hashColor(d.x)} else {return d.x === undefined ? "blue" : d3.rgb(hashColor(d.x)).brighter().toString();} });
+			var rects = d3.selectAll('rect').style("fill", function(d, i) { if (detail(d.series)) {return hashColor(d.x.substring(0,d.x.lastIndexOf("_")))} else {return d.x === undefined ? "blue" : d3.rgb(hashColor(d.x.substring(0,d.x.lastIndexOf("_")))).brighter().toString();} });
 			function detail(d){
 				return d % 2 === 0;
 			}
@@ -140,30 +140,7 @@
 
 			d3.select('#viz svg').datum(realData).transition().duration(500).call(chart);
 			d3.selectAll('.nv-x text').attr('transform', 'translate(0,5)rotate(45)').style('text-anchor', 'start');
-			var rects = d3.selectAll('rect').style("fill", function(d, i) { if (d.series % 2 === 0) {return hashColor(d.x);} else {return d.x === undefined ? "blue" : d3.rgb(hashColor(d.x)).brighter().toString();} }); 			
-		}
-  
-		function hashColor(objectName,category) {
-			String.prototype.hashCode = function(){
-				var hash = 0;
-				if (this.length == 0) return hash;
-				for (i = this.length-1; i >= 0; i--) {
-					char = this.charCodeAt(i);
-					hash = char + (hash << 6) + (hash << 16) - hash;
-				}	
-				return Math.abs(hash);
-			}
-			var uniqueColor;
-			if(typeof(category)==='undefined'){
-				if(typeof(objectName)==='undefined'){
-					uniqueColor = "white";
-				} else
-					uniqueColor = objectName;    		
-			} 
-			else 
-				uniqueColor = category;
-			uniqueColor = "#".concat(uniqueColor.toString().hashCode().toString(16).substring(2, 8));
-			return uniqueColor;
+			var rects = d3.selectAll('rect').style("fill", function(d, i) { if (d.series % 2 === 0) {return hashColor(d.x.substring(0,d.x.lastIndexOf("_")));} else {return d.x === undefined ? "blue" : d3.rgb(d.x.substring(0,d.x.lastIndexOf("_"))).brighter().toString();} }); 			
 		}
 
 	};

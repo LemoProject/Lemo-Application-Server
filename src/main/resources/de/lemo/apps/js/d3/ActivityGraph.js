@@ -367,30 +367,6 @@ function update2() {
    
 
 }
-
-function hashColor(objectName,category) {
-	String.prototype.hashCode = function(){
-	var hash = 0;
-	if (this.length == 0) return hash;
-	/*	for (i = 0; i < this.length; i++) {
-		char = this.charCodeAt(i);
-		hash = ((hash<<5)-hash)+char;
-		hash = hash & hash; // Convert to 32bit integer
-	}*/
-        for (i = this.length-1; i >= 0; i--) {
-            char = this.charCodeAt(i);
-            hash = char + (hash << 6) + (hash << 16) - hash;
-        }	
-	return Math.abs(hash);
-	}
-	var uniqueColor;
-	if(typeof(category)==='undefined')
-		uniqueColor = objectName; 
-	else 
-		uniqueColor = category;
-	uniqueColor = "#".concat(uniqueColor.toString().hashCode().toString(16).substring(2, 8));
-		return uniqueColor;
-}
 function focus(d) {
 	  if (d.focus==1) {
 	      nodes.forEach(function (o) {

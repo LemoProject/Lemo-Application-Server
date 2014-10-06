@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
@@ -42,6 +43,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
@@ -95,6 +97,9 @@ public class ActivityTimeHeatmap {
 	private static final int THOU = 1000;
 	private static final  int RESOLUTION_MAX = 20;
 	static final int RESOLUTION_BASIC_MULTIPLIER = 4;
+
+	@Inject @Path("../../js/d3/Lemo.js")
+	private Asset lemoJs;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -570,6 +575,8 @@ public class ActivityTimeHeatmap {
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
 
+		javaScriptSupport.importJavaScriptLibrary(lemoJs);
+		
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
 		

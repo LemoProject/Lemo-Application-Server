@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
@@ -39,6 +40,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
@@ -80,6 +82,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/FrequentPath.js" })
 public class FrequentPathViger {
 
+	@Inject @Path("../../js/d3/Lemo.js")
+	private Asset lemoJs;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -494,6 +499,8 @@ public class FrequentPathViger {
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
 
+		javaScriptSupport.importJavaScriptLibrary(lemoJs);
+		
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
 		
