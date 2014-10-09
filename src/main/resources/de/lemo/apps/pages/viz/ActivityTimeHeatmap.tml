@@ -23,8 +23,7 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        	<div id="heatmap">
-        	</div>
+			<div id="cal-heatmap"></div>
         	
         	<br />
     			  
@@ -210,12 +209,17 @@
     
   </div>
   <script type="text/javascript">
-    (function(d3custom, $, undefined) {
-    
-      var q2result = ${questionResult};
-      
-      d3custom.data = q2result;
-      
-    })(window.d3custom = window.d3custom || {}, jQuery);
+  	var calendar = new CalHeatMap();
+    calendar.init({
+        data: ${questionResult},
+        start: new Date(2012, 0, 1),
+        range: 12, 
+        domain: "month", 
+        subDomain: "day",
+        browsing: true, 
+        afterLoadNextDomain: function (start, end) {
+            alert("You just loaded a new domain starting on " + start + " and ending on " + end);
+        }
+	})
   </script>
 </html>
