@@ -57,6 +57,7 @@ public enum ServerConfiguration {
 	private String dmsUrl;
 	private String userDnTemplate;
 	private String contextFactoryUrl;
+	private String userOptionEnabled;
 
 	private List<User> userImports;
 
@@ -89,7 +90,8 @@ public enum ServerConfiguration {
 		this.dmsUrl = lemoConfig.applicationServer.dataManagementServerURL;
 		this.userDnTemplate = lemoConfig.applicationServer.userDnTemplate;
 		this.contextFactoryUrl = lemoConfig.applicationServer.contextFactoryUrl;
-
+		this.userOptionEnabled = lemoConfig.applicationServer.userOptionEnabled;
+		
 		this.dbConfig = Maps.newHashMap();
 		for (final PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
 			this.dbConfig.put(property.key, property.value);
@@ -198,4 +200,11 @@ public enum ServerConfiguration {
 		return this.contextFactoryUrl;
 	}
 
+	public Boolean getUserOptionEnabled() {
+		if(this.userOptionEnabled.equalsIgnoreCase("true")){
+			return true;
+		} else{
+			return false;
+		}
+	}
 }

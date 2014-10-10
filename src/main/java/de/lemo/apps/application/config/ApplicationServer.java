@@ -59,5 +59,8 @@ class ApplicationServer {
 
 	@XmlElement(name = "context-factory-url", required = true)
 	public String contextFactoryUrl;
+
+	@XmlElement(name = "user-option-enabled", required = true)
+	public String userOptionEnabled;
 	
 }
