@@ -23,8 +23,9 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-			<div id="cal-heatmap"></div>
-        	
+			<div id="cal-heatmap1"></div>
+        	<div id="cal-heatmap2"></div>
+        	<div id="cal-heatmap3"></div>
         	<br />
     			  
             
@@ -209,17 +210,52 @@
     
   </div>
   <script type="text/javascript">
-  	var calendar = new CalHeatMap();
-    calendar.init({
+  	var cal1 = new CalHeatMap();
+  	var cal2 = new CalHeatMap();
+  	var cal3 = new CalHeatMap();
+    cal1.init({
+    	itemSelector: "#cal-heatmap1",
         data: ${questionResult},
         start: new Date(2012, 0, 1),
-        range: 12, 
+        range: 4, 
         domain: "month", 
-        subDomain: "day",
+        subDomain: "x_day",
+        domainMargin: 10,
+        cellSize: 25,
+		subDomainTextFormat: "%d",
+        browsing: true,
+        legend: [100,550,600,650], 
+        legendColors: ["#FFFFFF", "#FF0000"],
+        displayLegend: false,        
+	})
+	    cal2.init({
+    	itemSelector: "#cal-heatmap2",
+        data: ${questionResult},
+        start: new Date(2012, 4, 1),
+        range: 4, 
+        domain: "month", 
+        subDomain: "x_day",
+        domainMargin: 10,
+        cellSize: 25,
+		subDomainTextFormat: "%d",
         browsing: true, 
-        afterLoadNextDomain: function (start, end) {
-            alert("You just loaded a new domain starting on " + start + " and ending on " + end);
-        }
+        legendColors: ["#FFFFFF", "#FF0000"],
+        legend: [100,550,600,650], 
+        displayLegend: false,
+	})
+	    cal3.init({
+    	itemSelector: "#cal-heatmap3",
+        data: ${questionResult},
+        start: new Date(2012, 8, 1),
+        range: 4, 
+        domain: "month", 
+        subDomain: "x_day",
+        domainMargin: 10,
+        cellSize: 25,
+		subDomainTextFormat: "%d",
+        browsing: true, 
+        legend: [100,550,600,650], 
+        legendColors: ["#FFFFFF", "#FF0000"],
 	})
   </script>
 </html>
