@@ -125,6 +125,7 @@
 			              </div>
                   </div>
                   
+                  <t:if test="userOptionEnabled">
                   <!-- Member -->
                   <div class="accordion-group">
                     <div class="accordion-heading">
@@ -151,6 +152,7 @@
                      	 </div>
 			        </div>
 			      </div>
+			      </t:if>
 			       
 			       
 			     <!-- Courses -->

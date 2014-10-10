@@ -230,6 +230,9 @@ public class ActivityTimeHeatmap {
 
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
+	
+	@Property
+	final private Boolean userOptionEnabled = false;
 
 
 	@Property(write = false)
