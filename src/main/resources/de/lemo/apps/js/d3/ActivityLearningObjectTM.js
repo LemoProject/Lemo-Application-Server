@@ -9,7 +9,9 @@
 	  
 	  data = d3custom.data;
 	  var locale = d3custom.locale;
-	  var color = d3.scale.category20();
+	  var color = function(d) { 
+		  return hashColor(d); 
+		  };
 	  
 	//check if we have values to work with
 	  if(!data) {
@@ -41,16 +43,6 @@
       .append("svg:g")
       .attr("transform", "translate(.5,.5)");
       
-//      var svg = d3.select("#viz").append("div")
-//      	.style("width", w + "px")
-//      	.style("height", h + "px")
-//      	.append("svg:svg")
-//      	.attr("width", w)
-//      	.attr("height", h)
-//      	.append("svg:g")
-//      	.attr("transform", "translate(.5,.5)");
-      
-      //d3.json("TreeMap_Example_big.json", function(data) {
     	  node = root = data;
     	  var nodes = treemap.nodes(root)
     	  		.filter(function(d) { return !d.children; });
@@ -112,8 +104,6 @@
     		  d3.select("#User").classed("active", true);
     	  });
 
-
-      //});
       
       function name(d, tspan1) {
     	   if ((node == root)) {
