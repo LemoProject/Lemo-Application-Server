@@ -34,6 +34,10 @@
 		  chart.yAxis
 		  		.tickFormat(d3.format(''));
 		  
+		  chart.color(function(d) { 
+			  return hashColor(d.key); 
+			  });
+		  
 		  d3.select('#viz svg')
 		      .datum(data)
 		      .transition().duration(500)
@@ -43,8 +47,8 @@
 		 
 		  d3.selectAll('.nv-x text')
 		    .attr('transform', 'translate(0,5)rotate(45)')
-		    .style('text-anchor', 'start'); // in later nvd3 versions using attr instead of style should work too
-
+		    .style('text-anchor', 'start');
+  
 		  return chart;
 		});
 	  

@@ -96,7 +96,8 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 public class ActivityLearningObject {
 
 
-	@Inject @Path("../../js/d3/Lemo.js")
+	@Inject 
+	@Path("../../js/d3/Lemo.js")
 	private Asset lemoJs;
 
 	@Environmental
