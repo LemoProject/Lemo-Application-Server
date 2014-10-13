@@ -64,6 +64,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningType;
@@ -170,6 +171,10 @@ public class FrequentPathViger {
 	@Property
 	@Persist
 	private List<Course> courses;
+	
+	@Persist
+	@Property
+	private Boolean userOptionEnabled;
 
 	// Value Encoder for gender multi-select component
 	@Property(write = false)
@@ -500,6 +505,8 @@ public class FrequentPathViger {
 		this.logger.debug(" ----- Bin in Setup Render");
 
 		javaScriptSupport.importJavaScriptLibrary(lemoJs);
+		
+		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 		
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());

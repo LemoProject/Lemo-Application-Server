@@ -71,6 +71,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
@@ -224,7 +225,9 @@ public class ActivityLearningObject {
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
 
-
+	@Persist
+	@Property
+	private Boolean userOptionEnabled;
 	
 	@Property(write = false)
 	@Retain
@@ -589,6 +592,8 @@ public class ActivityLearningObject {
 	void setupRender() {
 		
 		javaScriptSupport.importJavaScriptLibrary(lemoJs);
+		
+		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 		
 		this.logger.debug(" ----- Bin in Setup Render");
 

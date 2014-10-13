@@ -62,6 +62,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningType;
@@ -203,6 +204,10 @@ public class FrequentPathBide {
 	@Property
 	@Persist
 	private List<Long> selectedUsers;
+	
+	@Persist
+	@Property
+	private Boolean userOptionEnabled;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
@@ -499,6 +504,8 @@ public class FrequentPathBide {
 
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
+		
+		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());

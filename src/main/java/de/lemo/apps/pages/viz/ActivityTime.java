@@ -69,6 +69,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
@@ -227,6 +228,10 @@ public class ActivityTime {
 
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
+	
+	@Persist
+	@Property
+	private Boolean userOptionEnabled;
 	
 	
 
@@ -606,6 +611,8 @@ public class ActivityTime {
 
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
+		
+		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
