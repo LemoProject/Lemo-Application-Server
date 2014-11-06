@@ -155,28 +155,14 @@
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                        ${message:advancedOption} <b class="caret"></b>
+                        ${message:support} <b class="caret"></b>
                       </a>
                     </div>   
 			        <div id="collapseFour" class="accordion-body collapse">  
 			        	<div class="accordion-inner">  
-			        	
-			        			
-			        			<label class="control-label" id="slider-label">Visits 1 - Max.:</label>
-			        			<br/>
-  			                	<div class="slider" id="supportSlider"></div><br />
-  			                	<br />
-  			                
-                        
-	                            <label class="control-label" id="chargeslider-label"></label>
-  			                	<div class="slider" id="chargesupportSlider"></div><br />
-  			                	
-  			                	<label class="control-label" id="distanceslider-label"></label>
-  			                	<div class="slider" id="distancesupportSlider"></div><br />
-  			                	<br/>
-  			                	
-  			                	<button id="reset" class="btn btn-tiny reset">${message:reset}</button>   
-                       
+
+							<t:jquery.slider t:value="support" t:params="params" t:DisplayTextField="true"/>
+                      
                      	 </div>
 			        </div>
 			      </div>  
@@ -227,6 +213,7 @@
       d3custom.nodes = q2result.nodes;
       d3custom.links = q2result.links;
 	  d3custom.locale = locale;
+	  d3custom.support = ${support};
       
     })(window.d3custom = window.d3custom || {}, jQuery);
   </script>

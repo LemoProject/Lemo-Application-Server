@@ -32,6 +32,7 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.hibernate.HibernateSymbols;
 import org.apache.tapestry5.hibernate.HibernateTransactionDecorator;
+import org.apache.tapestry5.internal.services.RequestImpl;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -98,6 +99,7 @@ import de.lemo.apps.services.security.BasicSecurityRealm;
 public class AppModule {
 
 	public static void bind(final ServiceBinder binder) {
+				
 		// Service for basic user authentification
 		binder.bind(AuthorizingRealm.class, BasicSecurityRealm.class);
 		binder.bind(UserDAO.class, UserDAOImpl.class);

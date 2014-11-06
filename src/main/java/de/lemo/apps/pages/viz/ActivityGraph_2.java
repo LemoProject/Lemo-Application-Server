@@ -1,5 +1,5 @@
 /**
- * File ./src/main/java/de/lemo/apps/pages/viz/ActivityGraph_2.java
+ * File ./src/main/java/de/lemo/apps/pages/viz/ActivityGraph.java
  * Lemo-Application-Server for learning analytics.
  * Copyright (C) 2013
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
@@ -16,7 +16,7 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ **/
 
 package de.lemo.apps.pages.viz;
 
@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -39,6 +39,8 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
@@ -50,10 +52,12 @@ import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.apache.tapestry5.util.EnumValueEncoder;
+import org.apache.tapestry5.EventConstants;
 import org.slf4j.Logger;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
@@ -61,6 +65,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
@@ -79,11 +84,14 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityGraph")
-@Import(library = { "../../js/d3/ActivityGraph_2.js" })
+@Import(library = { "../../js/d3/ActivityGraph2.js" })
 public class ActivityGraph_2 {
 
 	private static final int THOU = 1000;
-	
+
+	@Inject @Path("../../js/d3/Lemo.js")
+	private Asset lemoJs;
+
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -94,6 +102,9 @@ public class ActivityGraph_2 {
 	private DateWorker dateWorker;
 
 	@Inject
+	private VisualisationHelperWorker visWorker;
+
+	@Inject
 	private CourseIdValueEncoder courseValueEncoder;
 
 	@Inject
@@ -101,9 +112,6 @@ public class ActivityGraph_2 {
 
 	@Inject
 	private UserWorker userWorker;
-	
-	@Inject
-	private VisualisationHelperWorker visWorker;
 
 	@Inject
 	private CourseDAO courseDAO;
@@ -129,34 +137,37 @@ public class ActivityGraph_2 {
 	@Property
 	@SuppressWarnings("unused")
 	private SelectModel courseModel;
-	
+
 	@Inject
 	SelectModelFactory selectModelFactory;
-	
+
 	@Inject
 	private Initialisation init;
 	
 	@Inject
+	private Request request;
+
+	@Inject
 	@Property
 	private LearningObjectValueEncoder learningObjectEncoder;
-	
+
 	@Inject
 	@Property
 	private LearningTypeValueEncoder learningTypeEncoder;
-	
+
 	@Property
 	private SelectModel learningObjectSelectModel;
-	
+
 	@Property
 	private SelectModel learningTypeSelectModel;
-	
+
 	@Property
 	@Persist
-	private List<LearningObject> selectedLearningObjects;	
-	
+	private List<LearningObject> selectedLearningObjects;
+
 	@Property
 	@Persist
-	private List<LearningType> selectedLearningTypes;	
+	private List<LearningType> selectedLearningTypes;
 
 	@Property
 	@Persist
@@ -179,13 +190,13 @@ public class ActivityGraph_2 {
 	@Persist
 	@Property
 	private Date endDate;
-		
+
 	@Persist
 	private Map<Long, Date> beginMem;
 
 	@Persist
 	private Map<Long, Date> endMem;
-	
+
 	@Property
 	@Persist
 	private Integer resolution;
@@ -194,19 +205,14 @@ public class ActivityGraph_2 {
 	@Persist
 	private List<Course> courses;
 
-
-
-
-	
 	// Value Encoder for gender multi-select component
 	@Property(write = false)
 	private final ValueEncoder<GenderEnum> genderEncoder = new EnumValueEncoder<GenderEnum>(this.coercer,
-					GenderEnum.class);
-		
+			GenderEnum.class);
+
 	// Select Model for gender multi-select component
 	@Property(write = false)
 	private final SelectModel genderModel = new EnumSelectModel(GenderEnum.class, this.messages);
-
 
 	@Property
 	@Persist
@@ -224,6 +230,22 @@ public class ActivityGraph_2 {
 	@Persist
 	private List<Long> selectedUsers;
 
+	@Persist
+	@Property
+	private Boolean userOptionEnabled;
+
+	@Persist
+	@Property
+	private int support;
+	
+	@Property
+	private JSONObject params;
+	@OnEvent(EventConstants.ACTIVATE)
+	public void initSlider(){
+	params=new JSONObject();
+	params.put("value", support);
+	}
+	
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
@@ -274,6 +296,7 @@ public class ActivityGraph_2 {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
+
 		this.learningObjectIds = new ArrayList<Long>();
 
 		final List<Long> courseList = new ArrayList<Long>();
@@ -295,7 +318,7 @@ public class ActivityGraph_2 {
 				learningList.add(new LearningObject(learningStringList.get(x + 1),learningId));
 				this.learningObjectIds.add(learningId);
 			}
-			
+
 			this.learningObjectEncoder.setUp(learningList);
 
 			learningObjectSelectModel = selectModelFactory.create(learningList, "name");
@@ -303,7 +326,7 @@ public class ActivityGraph_2 {
 		} else {
 			this.logger.debug("No Learning Objetcs found");
 		}
-		
+
 		ResultListStringObject learningTypeList = null;
 		logger.info(courseList.toString());
 		try {
@@ -312,7 +335,7 @@ public class ActivityGraph_2 {
 			logger.error(e.getMessage());
 		}
 		final List<LearningType> learningTypes = new ArrayList<LearningType>();
-		
+
 		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
 			this.logger.debug(learningTypeList.getElements().toString());
 			final List<String> learningStringList = learningTypeList.getElements();
@@ -320,7 +343,7 @@ public class ActivityGraph_2 {
 				final Long learningTypeId = Long.parseLong(learningStringList.get(x) );
 				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
 			}
-			
+
 			this.learningTypeEncoder.setUp(learningTypes);
 
 			learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
@@ -338,7 +361,7 @@ public class ActivityGraph_2 {
 	public JSONLiteral getDatePickerParams() {
 		return this.dateWorker.getDatePickerParams(this.currentlocale);
 	}
-	
+
 	public String getLocale() {
 		JSONObject localeObject = new JSONObject();
 		localeObject.put("charge", messages.get("charge"));
@@ -353,7 +376,7 @@ public class ActivityGraph_2 {
 	public String getQuestionResult() {
 		List<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.courseId);
-		
+
 		List<Long> learningList = new ArrayList<Long>();
 
 		ResultListStringObject learningObjectList = null;
@@ -378,7 +401,7 @@ public class ActivityGraph_2 {
 		} else {
 			this.logger.debug("No Learning Objetcs found");
 		}
-		
+
 		if (this.selectedLearningObjects != null && !this.selectedLearningObjects.isEmpty()) {
 			for(LearningObject q : this.selectedLearningObjects)
 			{
@@ -388,7 +411,7 @@ public class ActivityGraph_2 {
 			learningList = new ArrayList<Long>();
 			learningList.addAll(learningMap.keySet());
 		}
-		
+
 		List<String> learningTypeList = new ArrayList<String>();
 		final Set<String> learningTypeMap = CollectionFactory.newSet();
 		ResultListStringObject availableTypes = null;
@@ -407,7 +430,7 @@ public class ActivityGraph_2 {
 		} else {
 			this.logger.debug("No Learning Types found");
 		}
-		
+
 		if (this.selectedLearningTypes != null && !this.selectedLearningTypes.isEmpty()) {
 			for(LearningType q : this.selectedLearningTypes)
 			{
@@ -420,11 +443,9 @@ public class ActivityGraph_2 {
 
 		final ArrayList<Long> courseIds = new ArrayList<Long>();
 		courseIds.add(this.courseId);
-		
+
 		final boolean considerLogouts = true;
 
-
-		
 		List<Long> gender = this.visWorker.getGenderIds(this.selectedGender);
 
 		Long endStamp = 0L;
@@ -435,30 +456,34 @@ public class ActivityGraph_2 {
 		if (this.endDate != null) {
 			endStamp = new Long(this.endDate.getTime() / THOU);
 		}
-		
-		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, learningTypeList, considerLogouts, beginStamp, endStamp, gender,learningList ); 
-		
-		this.logger.debug("ResultString: "+result);
-		
+
+		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, learningTypeList, considerLogouts, beginStamp, endStamp, gender, learningList); 
+
+		this.logger.info("ResultString: "+result);
+
 		return result;
 	}
 
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
 
+		javaScriptSupport.importJavaScriptLibrary(lemoJs);
+
+		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
+
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
-		
+
 		if(beginMem == null)
 		{
 			this.beginMem = new HashMap<Long, Date>();
 		}
-		
+
 		if(endMem == null)
 		{
 			this.endMem = new HashMap<Long, Date>();
 		}
-		
+
 		if (this.endDate == null) {
 			if(this.endMem.get(this.courseId) == null){
 				this.endDate = this.course.getLastRequestDate();
@@ -481,7 +506,7 @@ public class ActivityGraph_2 {
 			this.selectedUsers = null;
 			this.userIds = this.getUsers();
 		}
-		
+
 		if(this.beginDate != null){
 			this.beginMem.put(this.courseId, this.beginDate);
 		}
