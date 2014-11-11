@@ -160,9 +160,12 @@
                     </div>   
 			        <div id="collapseFour" class="accordion-body collapse">  
 			        	<div class="accordion-inner">  
-
-							<t:jquery.slider t:value="support" t:params="params" t:DisplayTextField="true"/>
-                      
+							<t:jquery.slider t:value="support" t:params="paramsZone" t:zone="myZone"
+							t:id="sliderZone" />
+							<br/>
+							<t:zone t:id="myZone" id="myZone">
+							${support}
+							</t:zone>
                      	 </div>
 			        </div>
 			      </div>  

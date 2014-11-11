@@ -234,16 +234,24 @@ public class ActivityGraph_2 {
 	@Property
 	private Boolean userOptionEnabled;
 
+	@Property
 	@Persist
-	@Property
 	private int support;
-	
+
 	@Property
-	private JSONObject params;
+	private JSONObject paramsZone;
 	@OnEvent(EventConstants.ACTIVATE)
-	public void initSlider(){
-	params=new JSONObject();
-	params.put("value", support);
+	public void initSliderZone(){
+	paramsZone=new JSONObject();
+	paramsZone.put("value", support);
+	}
+	@Component
+	private Zone myZone;
+	@OnEvent(value=EventConstants.ACTION, component="sliderZone")
+	public Object returnZone(){
+	String input = request.getParameter("slider");
+	support=Integer.parseInt(input);
+	return myZone.getBody();
 	}
 	
 	public List<Long> getUsers() {
