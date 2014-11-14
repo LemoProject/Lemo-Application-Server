@@ -95,33 +95,34 @@ public enum ServerConfiguration {
 		this.dbConfig = Maps.newHashMap();
 		for (final PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
 			this.dbConfig.put(property.key, property.value);
-			this.dbConfig.put("hibernate.show_sql", "false");
-			this.dbConfig.put("hibernate.format_sql", "true");
-			this.dbConfig.put("hibernate.hbm2ddl.auto", "update");
-			this.dbConfig.put("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider");
-			this.dbConfig.put("hibernate.connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
-			this.dbConfig.put("hibernate.cache.use_second_level_cache", "false");
-			this.dbConfig.put("hibernate.cache.use_query_level_cache", "false");
-			this.dbConfig.put("hibernate.c3p0.acquire_increment", "3");
-			this.dbConfig.put("hibernate.c3p0.min_size", "3");
-			this.dbConfig.put("hibernate.c3p0.timeout", "60");
-			this.dbConfig.put("hibernate.c3p0.max_size", "100");
-			this.dbConfig.put("hibernate.c3p0.idleConnectionTestPeriod", "100");
-			this.dbConfig.put("hibernate.c3p0.max_statements", "0");
-			this.dbConfig.put("hibernate.c3p0.propertyCycle", "2");
-			this.dbConfig.put("hibernate.c3p0.autoCommitOnClose", "false");
-			this.dbConfig.put("hibernate.c3p0.numHelperThreads", "3");
-			this.dbConfig.put("hibernate.c3p0.validate", "true");
-			this.dbConfig.put("hibernate.c3p0.acquireRetryAttempts", "50");
-			this.dbConfig.put("hibernate.c3p0.acquireRetryDelay", "1000");
-			this.dbConfig.put("hibernate.c3p0.maxConnectionAge", "120");
-			this.dbConfig.put("hibernate.c3p0.automaticTestTable", "connection_test_table");
-			this.dbConfig.put("hibernate.c3p0.testConnectionOnCheckout", "true");
-			this.dbConfig.put("hibernate.connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
-			this.dbConfig.put("hibernate.connection.shutdown","false");
-			this.dbConfig.put("hibernate.connection.autoReconnectForPools", "true");
-			this.dbConfig.put("hibernate.connection.autoReconnect","true");
 		}
+		//Properties migrated from lemo.xml
+		this.dbConfig.put("hibernate.show_sql", "false");
+		this.dbConfig.put("hibernate.format_sql", "true");
+		this.dbConfig.put("hibernate.hbm2ddl.auto", "update");
+		this.dbConfig.put("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider");
+		this.dbConfig.put("hibernate.connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
+		this.dbConfig.put("hibernate.cache.use_second_level_cache", "false");
+		this.dbConfig.put("hibernate.cache.use_query_level_cache", "false");
+		this.dbConfig.put("hibernate.c3p0.acquire_increment", "3");
+		this.dbConfig.put("hibernate.c3p0.min_size", "3");
+		this.dbConfig.put("hibernate.c3p0.timeout", "60");
+		this.dbConfig.put("hibernate.c3p0.max_size", "100");
+		this.dbConfig.put("hibernate.c3p0.idleConnectionTestPeriod", "100");
+		this.dbConfig.put("hibernate.c3p0.max_statements", "0");
+		this.dbConfig.put("hibernate.c3p0.propertyCycle", "2");
+		this.dbConfig.put("hibernate.c3p0.autoCommitOnClose", "false");
+		this.dbConfig.put("hibernate.c3p0.numHelperThreads", "3");
+		this.dbConfig.put("hibernate.c3p0.validate", "true");
+		this.dbConfig.put("hibernate.c3p0.acquireRetryAttempts", "50");
+		this.dbConfig.put("hibernate.c3p0.acquireRetryDelay", "1000");
+		this.dbConfig.put("hibernate.c3p0.maxConnectionAge", "120");
+		this.dbConfig.put("hibernate.c3p0.automaticTestTable", "connection_test_table");
+		this.dbConfig.put("hibernate.c3p0.testConnectionOnCheckout", "true");
+		this.dbConfig.put("hibernate.connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
+		this.dbConfig.put("hibernate.connection.shutdown","false");
+		this.dbConfig.put("hibernate.connection.autoReconnectForPools", "true");
+		this.dbConfig.put("hibernate.connection.autoReconnect","true");
 
 		this.userImports = this.createUsers(lemoConfig.applicationServer.users);
 	}

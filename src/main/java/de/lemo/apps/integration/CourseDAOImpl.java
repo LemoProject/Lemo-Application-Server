@@ -143,7 +143,6 @@ public class CourseDAOImpl implements CourseDAO {
 		if(!searchLongs.isEmpty()) res.add(Restrictions.in("courseId", searchLongs));
 		criteria.add(res);
 		final List<Course> results = criteria.list();
-		logger.info("SIZE::::::::" + results.size());
 		if (results.size() == 0) {
 			return new ArrayList<Course>();
 		}

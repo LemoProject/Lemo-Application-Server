@@ -69,7 +69,7 @@ public class ResultListHashMapObject {
 				this.elements.put(this.keys[i], this.entries.get(i));
 			}
 		} else {
-			logger.info("ResultListHashMap ---  Empty Resultset !!!");
+			logger.error("Returning empty result set.");
 		}
 
 		return this.elements;

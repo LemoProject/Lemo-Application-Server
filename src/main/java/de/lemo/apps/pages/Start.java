@@ -147,16 +147,16 @@ public class Start {
 			}
 
 			final UsernamePasswordToken token = new UsernamePasswordToken(this.username, this.password);
-			this.logger.info("Prepare Logintoken. Username: " + this.username);
+			this.logger.debug("Prepare Logintoken. Username: " + this.username);
 			currentUser.login(token);
 			if(!userDAO.doExist(this.username))
 			{
 				try{
 					userItem = new User(username,username,username);
-					this.logger.info("Login: The user " + username + " doesn't exist locally. And will be created.");
+					this.logger.debug("Login: The user " + username + " doesn't exist locally. And will be created.");
 					userDAO.save(userItem);
 				} catch(Exception e){
-					logger.info("Login: Can't create user. " + e.getMessage());
+					logger.debug("Login: Can't create user. " + e.getMessage());
 				}
 			}
 

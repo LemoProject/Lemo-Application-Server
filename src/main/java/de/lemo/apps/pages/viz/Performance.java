@@ -245,7 +245,6 @@ public class Performance {
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
-		this.logger.info("          ----        " + elements);
 		return elements;
 	}
 
@@ -347,7 +346,6 @@ public class Performance {
 	}
 
 	void onPrepareForRender() {
-		this.logger.info(" ----- Betrete Prepare Render");
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
 		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
@@ -387,7 +385,6 @@ public class Performance {
 			}
 		
 		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
 		try {
 			learningTypeList = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {
@@ -410,7 +407,6 @@ public class Performance {
 		} else {
 			this.logger.debug("No Learning Types found");
 		}
-		this.logger.info(" ----- Verlasse Prepare Render");
 		
 	}
 
@@ -450,7 +446,7 @@ public class Performance {
 				this.logger.debug("Courses: " + courses.get(i));
 			}
 
-			this.logger.info("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
+			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 
 			List<Long> courseList = new ArrayList<Long>();
 			if ((this.selectedCourses != null) && !this.selectedCourses.isEmpty()) {
@@ -498,8 +494,6 @@ public class Performance {
 				quizzesList = new ArrayList<Long>();
 				quizzesList.addAll(quizzesMap.keySet());
 			} 
-			
-			this.logger.info("Quizzes: " +  quizzesList.toString());
 
 			this.logger.debug("Starttime: " + beginStamp + " Endtime: " + endStamp + " Resolution: " + this.resolution);
 

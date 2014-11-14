@@ -69,19 +69,19 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 		AuthenticationInfo authInfo = null;
 
 		if (loginUser == null) {
-			logger.info("Login: The user " + username + " doesn't exist.");
+			logger.debug("Login: The user " + username + " doesn't exist.");
 			throw new AuthenticationException("The user " + username + " doesn't exist.");	
 		} else if(loginUser.checkPassword(password))
 			{
 				if (loginUser.isAccountLocked()) {
-					logger.info("Login: Account for user: " + username + " is locked.");
+					logger.debug("Login: Account for user: " + username + " is locked.");
 					throw new LockedAccountException("Account for user: " + username + " is locked.");
 				}
 				if (loginUser.isCredentialsExpired()) {
-					logger.info("Login: The credentials for user: " + username + " are expired.");
+					logger.debug("Login: The credentials for user: " + username + " are expired.");
 					throw new ExpiredCredentialsException("The credentials for user: " + username + " are expired.");
 				}
-				logger.info("Login: User "+ username +" logged in successfully.");
+				logger.debug("Login: User "+ username +" logged in successfully.");
 				authInfo = new SimpleAuthenticationInfo(userToken.getUsername(), userToken.getPassword(), "basic");
 		}
 

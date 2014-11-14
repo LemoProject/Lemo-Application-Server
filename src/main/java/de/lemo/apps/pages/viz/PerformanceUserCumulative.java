@@ -244,7 +244,6 @@ public class PerformanceUserCumulative {
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
-		this.logger.info("          ----        " + elements);
 		return elements;
 	}
 
@@ -326,7 +325,6 @@ public class PerformanceUserCumulative {
 		}
 		
 		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
 		try {
 			learningTypeList = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {

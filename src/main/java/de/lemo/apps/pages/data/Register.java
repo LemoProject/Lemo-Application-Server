@@ -118,7 +118,7 @@ public class Register {
 		try {
 
 			userCourseIds = init.getUserCourses(dmsUserId).getElements();
-			logger.info("Course received for user "+dmsUserId+": "+userCourseIds.size());
+			logger.debug("Course received for user "+dmsUserId+": "+userCourseIds.size());
 		} catch (RestServiceCommunicationException e1) {
 			logger.error(e1.getMessage());
 		}
@@ -126,7 +126,7 @@ public class Register {
 		
 		if (userCourseIds != null && userCourseIds.size() > 0) {
 			this.multi = 100 / userCourseIds.size();
-			logger.info("Loading  " + userCourseIds.size() + " courses");
+			logger.debug("Loading  " + userCourseIds.size() + " courses");
 			for (int i = 0; i < userCourseIds.size(); i++) {
 				Long courseId =  userCourseIds.get(i);
 				this.percentage = Math.round((i+1)*multi);
@@ -138,7 +138,7 @@ public class Register {
 						logger.error(e.getMessage());
 					}
 					if (courseObject != null) {
-						logger.info("New Course with Id: " + courseId + " added.");
+						logger.debug("New Course with Id: " + courseId + " added.");
 						Course savedCourse = this.courseDAO.save(courseObject);
 						user.getMyCourses().add(savedCourse);
 						logger.debug("Current sourse Amount: " + user.getMyCourses().size() + " .");
@@ -172,7 +172,7 @@ public class Register {
 	
 	Object onProgress(){
 		JSONObject progress = new JSONObject();
-		logger.info("Prgress Request, progress:"+this.percentage);
+		logger.debug("Progress Request, progress:"+this.percentage);
 		progress.append("progress", String.valueOf(this.percentage)+"%");
 		return progress;
 	}
