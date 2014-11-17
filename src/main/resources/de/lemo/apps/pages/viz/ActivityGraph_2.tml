@@ -153,18 +153,17 @@
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                        ${message:support} <b class="caret"></b>
+                        ${message:edge} <b class="caret"></b>
                       </a>
                     </div>   
 			        <div id="collapseFour" class="accordion-body collapse">  
 			        	<div class="accordion-inner">  
-			        	    <label class="control-label" id="sliderZone-label">${message:freqSupport} ${support}</label>
-							<t:jquery.slider t:value="support" t:params="paramsZone" t:zone="myZone"
-							t:id="sliderZone" />
+			        	    <label class="control-label" id="sliderZone-label">${message:edgeSupport} ${support}</label>
+							<t:jquery.slider t:value="support" t:params="paramsZone" t:id="sliderZone" /><!-- t:zone="myZone" -->
 							<br/>
-							<t:zone t:id="myZone" id="myZone">
-							${support}
-							</t:zone>
+						<!-- 	<t:zone t:id="myZone" id="myZone">
+							  ${support}
+							</t:zone>  -->
                      	 </div>
 			        </div>
 			      </div>  

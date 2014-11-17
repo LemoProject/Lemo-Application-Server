@@ -245,14 +245,14 @@ public class ActivityGraph_2 {
 	paramsZone=new JSONObject();
 	paramsZone.put("value", support);
 	}
-	@Component
+/*	@Component
 	private Zone myZone;
 	@OnEvent(value=EventConstants.ACTION, component="sliderZone")
 	public Object returnZone(){
 	String input = request.getParameter("slider");
 	support=Integer.parseInt(input);
 	return myZone.getBody();
-	}
+	}*/
 	
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();

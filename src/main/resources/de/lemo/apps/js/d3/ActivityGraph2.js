@@ -146,7 +146,8 @@
 				makeDiag();
 			    // Bind slide event to update minSup Value in front end
 			    $("#sliderZone-slider").bind("slide", function(event, ui) {
-			      $("#sliderZone-label").html("Minimum Support (0.1 - 1): " + ui.value / 100);
+			      var oldLabel = $("#sliderZone-label").text().split(":");
+			      $("#sliderZone-label").html( oldLabel[0]+":" + ui.value / 100);
 			    });
 			}   
 			
