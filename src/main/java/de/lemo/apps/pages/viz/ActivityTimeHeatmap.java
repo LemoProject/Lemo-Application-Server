@@ -92,7 +92,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeHeatmap")
-@Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
+//@Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
 public class ActivityTimeHeatmap {
 	
 	private static final int THOU = 1000;
@@ -522,7 +522,7 @@ public class ActivityTimeHeatmap {
 		final JSONArray graphParentArray = new JSONArray();
 		JSONObject graphDataObject = new JSONObject();
 		JSONObject graphUserObject = new JSONObject();
-		JSONArray graphDataValues = new JSONArray();
+		JSONObject graphDataValues = new JSONObject();
 		JSONArray graphUserValues = new JSONArray();
 
 		if (results != null) {
@@ -541,7 +541,7 @@ public class ActivityTimeHeatmap {
 
 				graphDataObject = new JSONObject();
 				graphUserObject = new JSONObject();
-				graphDataValues = new JSONArray();
+				graphDataValues = new JSONObject(); //new JSONArray();
 				graphUserValues = new JSONArray();
 
 				Long currentDateStamp = 0L;
@@ -551,14 +551,14 @@ public class ActivityTimeHeatmap {
 					final JSONArray graphDataValue = new JSONArray();
 					final JSONArray graphUserValue = new JSONArray();
 					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * THOU;
-					currentDateStamp = beginStamp * THOU + dateMultiplier.longValue();
+					currentDateStamp = (beginStamp * THOU + dateMultiplier.longValue())/1000;
 					graphDataValue.put(0, currentDateStamp);
 					graphDataValue.put(1, resultDataObjects.getElements().get(i));
 
 					graphUserValue.put(0, currentDateStamp);
 					graphUserValue.put(1, resultUserObjects.getElements().get(i));
 
-					graphDataValues.put(graphDataValue);
+					graphDataValues.put(currentDateStamp.toString(),resultDataObjects.getElements().get(i));
 					graphUserValues.put(graphUserValue);
 				}
 
@@ -571,7 +571,7 @@ public class ActivityTimeHeatmap {
 			}
 
 		}
-		return graphParentArray.toString();
+		return graphDataValues.toString();//graphParentArray.toString();
 	}
 
 	void setupRender() {

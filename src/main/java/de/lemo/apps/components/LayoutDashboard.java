@@ -63,7 +63,7 @@ import de.lemo.apps.pages.data.Search;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/spin.js",
-				"../js/d3/libs/d3.v2.js",
+				"../js/d3/libs/d3.js",
 				"../js/d3/libs/BoxPlot_Lib.js",
 				"../js/d3/libs/nv.d3.js",
 				"../js/d3/libs/jquery.tipsy.js",
@@ -78,7 +78,8 @@ import de.lemo.apps.pages.data.Search;
 				"../js/bootstrap-collapse.js",
 				"../js/bootstrap-carousel.js",
 				"../js/bootstrap-typeahead.js",
-				"../js/csvExport.js"
+				"../js/csvExport.js",
+				"../js/calHeatmap/cal-heatmap.min.js"
 		},
 		stylesheet = {
 				"../css/bootstrap-responsive.css",
@@ -86,7 +87,8 @@ import de.lemo.apps.pages.data.Search;
 				"../css/jquery.jqplot.css",
 				"../css/nv.d3.css",
 				"../css/jquery-ui-1.8.16.bootstrap.css",
-				"../css/apps.css"
+				"../css/apps.css",
+				"../js/calHeatmap/cal-heatmap.css"
 		})
 public class LayoutDashboard {
 
