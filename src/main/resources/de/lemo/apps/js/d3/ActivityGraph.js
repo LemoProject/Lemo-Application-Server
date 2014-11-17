@@ -80,7 +80,7 @@ var drawChart = function() {
 		  minCharge=0,
 		  //maxCharge=10,
 		  maxCharge=100,
-		  currentCharge=-1500;
+		  currentCharge=30;
     
    //Calculation of the optimal value for d3 Charge between nodes 
    	var optCharge = currentCharge;
@@ -92,16 +92,20 @@ var drawChart = function() {
    	if (optDistance < minDistance) optDistance = minDistance;
    	
   	var foci = [{x:0, y:300},{x:10+300,y:300},{x:900,y:300}];  
+   	
+   //	var foci = [{x:480, y:350},{x:480,y:100},{x:480,y:1000}];  
 
    	
    	console.log("OptLinkDistance with MaxDist: "+maxDistance+" and Nodes: "+_nodes.length+" and Links: "+_links.length+" and Intermediate Result: "+ (maxDistance/(1/Math.sqrt(_links.length)))+" = "+optDistance+" with k:"+k);
    	
     var force = d3.layout.force()
     .on("tick",function (e) {tick(e)})
-    .distance(optDistance)
+    //.distance(optDistance)
+    .distance(300)
     .charge(-optCharge)
     .friction(.9)
-    .gravity(300*k)
+    .gravity(300 * k)
+    //.gravity(100 * k)
     .size([w, h]);
     
     
@@ -129,21 +133,6 @@ var drawChart = function() {
     }
     
     function init(){
-        var support = 0.90;
-        var size = Math.floor(_links.length*(1-support));
-        var maxValue = 0;
-        _links.forEach(function(link){
-    	link.source = parseInt(link.source);
-    	link.target = parseInt(link.target);
-    	link.value = parseInt(link.value);
-    	if (link.value > maxValue) maxValue = link.value;
-        })
-        _links = _links.sort(function(a,b){return b.value-a.value}).slice(0,size);
-        var normalizingFaktor = 100/maxValue;
-        _links.forEach(function(link){
-            link.value = Math.round(link.value*normalizingFaktor);
-    	console.log(link)
-    	})
     	 $.each(_nodes, function(i,v) {
     		 nodes.push({"id":i, "name":v.name, "value": v.value, "type": v.type, "focus": -1});
     	 });
@@ -167,7 +156,7 @@ var drawChart = function() {
     	 
     	 update2();
     	
-    	 printLegend();
+    	// printLegend();
     	 
     }
 
@@ -256,7 +245,7 @@ function update2() {
 		 	if(d.value<=5 ) c = 5
 		 	if(d.value>5 && d.value<=20) c = d.value;
 		 	if(d.value>20) c = 20 + Math.sqrt(d.value);
-		 	return (c > 100 ? 100 : c)/3;
+		 	return (c > 100 ? 100 : c);
 		 })
 	 //.style("fill", function(d) { return color(1); })
 	 .style("fill", function(d) { return hashColor(d.name); })
@@ -326,7 +315,7 @@ function update2() {
 			 	if(d.value<=5 ) c = 5
 			 	if(d.value>5 && d.value<=20) c = d.value;
 			 	if(d.value>20) c = 20 + Math.sqrt(d.value);
-			 	return (c > 100 ? 100 : c)/3;} )
+			 	return (c > 100 ? 100 : c);} )
 		 //.style("fill", function(d) { return color(d.type); })
 		 .style("stroke", "#333");
 		 
@@ -344,7 +333,7 @@ function update2() {
 			 	if(d.value<=5 ) c = 5
 			 	else if(d.value>5 && d.value<=20) c = parseInt(d.value);
 			 		else if(d.value>20) c = 20 + Math.sqrt(d.value);
-			 	return (c > 100 ? 100+6 : c+6 )/3;} )
+			 	return (c > 100 ? 100+6 : c+6 );} )
 	    	//.style("fill", function(d) { return "red"; })
 	    	.style("stroke", "red");
 		 console.log("Selected Circle: "+selectedCircle);
