@@ -103,7 +103,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	public boolean toggleFavoriteCourse(final Long courseId, final Long userId) {
-		logger.info("Setting favorite course courseId:" + courseId);
+		logger.debug("Setting favorite course courseId:" + courseId);
 
 		Course course = this.courseDAO.getCourse(courseId); 
 		User user = this.getUser(userId);

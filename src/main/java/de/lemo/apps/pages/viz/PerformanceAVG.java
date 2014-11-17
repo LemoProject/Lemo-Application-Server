@@ -235,7 +235,6 @@ public class PerformanceAVG {
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / 1000, this.endDate.getTime() / 1000, this.visWorker.getGenderIds(this.selectedGender)).getElements();
-		this.logger.info("          ----        " + elements);
 		return elements;
 	}
 
@@ -321,7 +320,6 @@ public class PerformanceAVG {
 		}
 		
 		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
 		try {
 			learningTypeList = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {

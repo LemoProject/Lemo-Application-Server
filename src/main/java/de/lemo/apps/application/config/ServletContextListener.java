@@ -44,16 +44,16 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
 		final ServerConfiguration config = ServerConfiguration.getInstance();
 
 		this.logger = Logger.getLogger(this.getClass());
-		this.logger.info("Context initialized");
-		this.logger.info("ServerInfo:  " + servletContext.getServerInfo());
-		this.logger.info("ContextPath: " + servletContext.getContextPath());
+		this.logger.debug("Context initialized");
+		this.logger.debug("ServerInfo:  " + servletContext.getServerInfo());
+		this.logger.debug("ContextPath: " + servletContext.getContextPath());
 
 		config.loadConfig(servletContext.getContextPath());
 	}
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent sce) {
-		this.logger.info("Context destroyed");
+		this.logger.debug("Context destroyed");
 	}
 
 }

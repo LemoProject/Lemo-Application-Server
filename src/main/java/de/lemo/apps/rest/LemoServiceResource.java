@@ -51,7 +51,6 @@ public class LemoServiceResource {
 	@GET
 	@Produces("text/html")
 	public String getAllDomains() {
-		this.logger.info("Printing Hello World ...");
 		return "Hello LeMo User!";
 	}
 

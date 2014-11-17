@@ -258,7 +258,7 @@ public class ManageUser {
 		Course courseToAdd = searchCoursesList.get(courseID.intValue());
 		boolean exists= false;
 		for (Course c : courseList) {
-			logger.info("courseToAdd.courseName: "+courseToAdd.getCourseName()+"courseToAdd.getCourseId: "+courseToAdd.getCourseId()+"////c.courseName: "+c.getCourseName()+"c.getCourseId :"+c.getCourseId());
+			logger.debug("courseToAdd.courseName: "+courseToAdd.getCourseName()+"courseToAdd.getCourseId: "+courseToAdd.getCourseId()+"////c.courseName: "+c.getCourseName()+"c.getCourseId :"+c.getCourseId());
 			if(c.getCourseId().equals(courseToAdd.getCourseId())) {
 				courseToAdd = c;
 				exists=true;

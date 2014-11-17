@@ -136,7 +136,7 @@ public class InitialisationImpl implements Initialisation {
 	public InitialisationImpl(Logger logger) {
 		// Initialise the Rest session
 		this.logger = logger;
-		this.logger.info("Register Rest Service");
+		this.logger.debug("Register Rest Service");
 		RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
 	}
 

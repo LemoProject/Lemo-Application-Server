@@ -234,7 +234,6 @@ public class ActivityGraph {
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
-		this.logger.info("          ----        " + elements);
 		return elements;
 	}
 
@@ -311,7 +310,6 @@ public class ActivityGraph {
 		}
 		
 		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
 		try {
 			learningTypeList = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {
@@ -441,8 +439,6 @@ public class ActivityGraph {
 		}
 		
 		String result = this.analysis.computeUserPathAnalysis(courseIds, this.selectedUsers, learningTypeList, considerLogouts, beginStamp, endStamp, gender, learningList); 
-		
-		this.logger.info("ResultString: "+result);
 		
 		return result;
 	}

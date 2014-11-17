@@ -280,7 +280,6 @@ public class ActivityTimeHeatmap {
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
-		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
 	}
 
@@ -386,7 +385,6 @@ public class ActivityTimeHeatmap {
 		}
 		
 		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
 		try {
 			learningTypeList = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {
@@ -429,7 +427,6 @@ public class ActivityTimeHeatmap {
 			}
 			for(int i = 0;i < selectedCourses.size();i++ ){
 				courseList.add(this.selectedCourses.get(i).getCourseId());
-				logger.info("Course Id added: "+this.selectedCourses.get(i).getCourseId());
 			}
 			
 		} else {

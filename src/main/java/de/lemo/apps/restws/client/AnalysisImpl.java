@@ -155,7 +155,7 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Gebe leere Resultlist zurueck");
+		logger.debug("Returning empty result set.");
 		return new HashMap<Long, ResultListLongObject>();
 	}
 
@@ -177,7 +177,7 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Gebe leere Resultlist zurueck");
+		logger.info("Returning empty result set.");
 		return new ResultListResourceRequestInfo();
 	}
 
@@ -297,7 +297,7 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Gebe leere Resultlist zurueck");
+		logger.info("Returning empty result set.");
 		return "{}";
 	}
 
@@ -314,7 +314,6 @@ public class AnalysisImpl implements Analysis {
 			final Long startTime,
 			final Long endTime,
 			final List<Long> gender) {
-		logger.info("Starte BIDE Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {
@@ -344,7 +343,7 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error("Bide failed", e);
 		}
-		logger.info("Gebe leere Resultlist zurueck");
+		logger.info("Returning empty result set.");
 		return "null";
 	}
 
@@ -360,14 +359,12 @@ public class AnalysisImpl implements Analysis {
 			final Long startTime,
 			final Long endTime,
 			final List<Long> gender) {
-		logger.info("Starte VIGER Request");
 		try {
 
 			if (init.defaultConnectionCheck()) {
 
 				String result = qFrequentPathViger.compute(courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime, gender);
-				logger.info("BIDE result: " + result);
 
 				return result;
 
@@ -376,7 +373,7 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Gebe leere Resultlist zurueck");
+		logger.info("Returning empty result set.");
 		return "{}";
 	}
 

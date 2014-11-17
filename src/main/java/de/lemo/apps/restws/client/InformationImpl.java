@@ -72,7 +72,7 @@ public class InformationImpl implements Information {
 		}
 		
 		
-		logger.info("Version information could not be loaded.");
+		logger.error("Version information could not be obtained.");
 		return "";
 		
 	}
@@ -98,7 +98,7 @@ public class InformationImpl implements Information {
 		}
 		
 		
-		logger.info("DB version information could not be loaded.");
+		logger.error("DB version information could not be obtained.");
 		return "";
 		
 	}
@@ -125,7 +125,7 @@ public class InformationImpl implements Information {
 		}
 		
 		
-		logger.info("Courses could not be loaded. Returning empty resultset.");
+		logger.error("Courses could not be loaded. Returning empty resultset.");
 		return new ResultListCourseObject();
 		
 	}
@@ -145,7 +145,7 @@ public class InformationImpl implements Information {
 		} catch (final Exception e) {		
 				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
 		}
-		logger.info("Connector information could not be loaded.");
+		logger.error("Connector information could not be loaded.");
 		return new ArrayList<SCConnector>();
 	}
 	
@@ -164,7 +164,7 @@ public class InformationImpl implements Information {
 		} catch (final Exception e) {		
 				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
 		}
-		logger.info("Connector information could not be loaded.");
+		logger.error("Connector information could not be loaded.");
 		return new SCConnectorManagerState();
 	}
 
@@ -183,7 +183,7 @@ public class InformationImpl implements Information {
 		} catch (final Exception e) {		
 				throw new RestServiceCommunicationException(this.toString()+" "+e.getLocalizedMessage());
 		}
-		logger.info("Connector information could not be loaded.");
+		logger.error("Connector information could not be obtained.");
 		return false;
 	}
 
