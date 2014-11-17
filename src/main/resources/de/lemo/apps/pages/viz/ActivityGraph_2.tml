@@ -160,6 +160,7 @@
                     </div>   
 			        <div id="collapseFour" class="accordion-body collapse">  
 			        	<div class="accordion-inner">  
+			        	    <label class="control-label" id="sliderZone-label">${message:freqSupport} ${support}</label>
 							<t:jquery.slider t:value="support" t:params="paramsZone" t:zone="myZone"
 							t:id="sliderZone" />
 							<br/>
