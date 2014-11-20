@@ -5,15 +5,22 @@
 	  	var cal2 = new CalHeatMap();
 	  	var cal3 = new CalHeatMap();
 	  	var transformedData = transformData(d3custom.data);
+	  	var minVal = 100000000;
+	  	var maxVal = 0;
 	  	var startDate = calcStartDate(d3custom.data);
+
 	  	
 	  	function calcStartDate(data){
 	  		var tmin = new Date().getTime();
-	  		for(timestamp in data){
+	  		for(var timestamp in data){
 	  			if(timestamp < tmin){
-	  				tmin = timestamp;
+	  				tmin = timestamp; 
 	  				console.log(timestamp+ ' / '+tmin);
 	  			}
+	  			if(data[timestamp]>maxVal)
+	  				maxVal = data[timestamp];
+	  			if(data[timestamp]<minVal)
+	  				minVal = data[timestamp];
 	  		}
 	  		return new Date(tmin*1000);
 	  	}
@@ -33,7 +40,6 @@
 	        cellSize: 25,
 			subDomainTextFormat: "%d",
 	        browsing: true,
-	        legend: [100,550,600,650], 
 	        legendColors: ["#FFFFFF", "#FF0000"],
 	        displayLegend: false,        
 		})
@@ -49,7 +55,6 @@
 			subDomainTextFormat: "%d",
 	        browsing: true, 
 	        legendColors: ["#FFFFFF", "#FF0000"],
-	        legend: [100,550,600,650], 
 	        displayLegend: false,
 		})
 		    cal3.init({
@@ -63,7 +68,6 @@
 	        cellSize: 25,
 			subDomainTextFormat: "%d",
 	        browsing: true, 
-	        legend: [100,550,600,650], 
 	        legendColors: ["#FFFFFF", "#FF0000"],
 		})
 

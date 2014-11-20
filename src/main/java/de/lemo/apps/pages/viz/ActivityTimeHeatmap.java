@@ -513,10 +513,10 @@ public class ActivityTimeHeatmap {
 		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
 		
-		this.resolutionComputed = RESOLUTION_MAX;
+		this.resolutionComputed = this.resolution; //RESOLUTION_MAX;TODO: Check why resolution maximum in needed.
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, learningTypeList, null, learningList);
+				beginStamp, endStamp, (long) this.resolution, learningTypeList, null, learningList);
 		
 
 		final JSONArray graphParentArray = new JSONArray();
