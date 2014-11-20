@@ -212,52 +212,15 @@
     
   </div>
   <script type="text/javascript">
-  	var cal1 = new CalHeatMap();
-  	var cal2 = new CalHeatMap();
-  	var cal3 = new CalHeatMap();
-    cal1.init({
-    	itemSelector: "#cal-heatmap1",
-        data: ${questionResult},
-        start: new Date(2012, 0, 1),
-        range: 4, 
-        domain: "month", 
-        subDomain: "x_day",
-        domainMargin: 10,
-        cellSize: 25,
-		subDomainTextFormat: "%d",
-        browsing: true,
-        legend: [100,550,600,650], 
-        legendColors: ["#FFFFFF", "#FF0000"],
-        displayLegend: false,        
-	})
-	    cal2.init({
-    	itemSelector: "#cal-heatmap2",
-        data: ${questionResult},
-        start: new Date(2012, 4, 1),
-        range: 4, 
-        domain: "month", 
-        subDomain: "x_day",
-        domainMargin: 10,
-        cellSize: 25,
-		subDomainTextFormat: "%d",
-        browsing: true, 
-        legendColors: ["#FFFFFF", "#FF0000"],
-        legend: [100,550,600,650], 
-        displayLegend: false,
-	})
-	    cal3.init({
-    	itemSelector: "#cal-heatmap3",
-        data: ${questionResult},
-        start: new Date(2012, 8, 1),
-        range: 4, 
-        domain: "month", 
-        subDomain: "x_day",
-        domainMargin: 10,
-        cellSize: 25,
-		subDomainTextFormat: "%d",
-        browsing: true, 
-        legend: [100,550,600,650], 
-        legendColors: ["#FFFFFF", "#FF0000"],
-	})
+  (function(d3custom, $, undefined) {
+    	
+	
+    
+      var q2result = ${questionResult};
+      
+      d3custom.data = q2result;
+      
+    })(window.d3custom = window.d3custom || {}, jQuery);
+
   </script>
 </html>

@@ -92,7 +92,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeHeatmap")
-//@Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
+@Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
 public class ActivityTimeHeatmap {
 	
 	private static final int THOU = 1000;
