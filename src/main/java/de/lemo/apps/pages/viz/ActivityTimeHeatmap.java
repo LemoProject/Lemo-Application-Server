@@ -508,7 +508,7 @@ public class ActivityTimeHeatmap {
 
 		
 
-		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
+		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 2);
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
 		
 		this.resolutionComputed = this.resolution; 
