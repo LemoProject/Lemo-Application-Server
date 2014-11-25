@@ -243,7 +243,10 @@
 
 			if (node != level) {
 				chart.selectAll(".cell.child .label")
-				.style("display", "none");
+				.style("display", "inline");
+			} else {
+				chart.selectAll(".cell.child .label")
+				.style("display", "none");				
 			}
 
 			var zoomTransition = chart.selectAll("g.cell").transition().duration(transitionDuration)
