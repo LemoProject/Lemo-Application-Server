@@ -108,42 +108,71 @@ public class Explorer {
 
 	
 	@Inject
-	@Path("../../images/icons/Circle_Graph_Icon.png")
+	@Path("../../images/icons/navigation_circlegraph.svg")
 	@Property
 	private Asset circleGraphIcon;
 	
 	@Inject
-	@Path("../../images/icons/UsageAnalysis2_Icon.png")
+	@Path("../../images/icons/navigation_graph1.svg")
+	@Property
+	private Asset navigationGraph1Icon;
+
+	@Inject
+	@Path("../../images/icons/navigation_graph2.svg")
+	@Property
+	private Asset navigationGraph2Icon;
+	
+	@Inject
+	@Path("../../images/icons/activity_time.svg")
 	@Property
 	private Asset usageAnalysisIcon;
 
 	@Inject
-	@Path("../../images/icons/UsageAnalysisLO_Icon.png")
+	@Path("../../images/icons/activity_lo.svg")
 	@Property
 	private Asset usageAnalysisLOIcon;
 
 	@Inject
-	@Path("../../images/icons/UsageAnalysisLO_TreeMap_Icon.png")
+	@Path("../../images/icons/activity_treemap.svg")
 	@Property
 	private Asset usageAnalysisLOTreeMapIcon;
 
 	@Inject
-	@Path("../../images/icons/PathAnalysis_Icon.png")
+	@Path("../../images/icons/navigation_bide.svg")
 	@Property
 	private Asset navAnalysisIcon;
 
 	@Inject
-	@Path("../../images/icons/PathAnalysis2_Icon.png")
+	@Path("../../images/icons/navigation_viger.svg")
 	@Property
 	private Asset pathAnalysisIcon;
 
 	@Inject
-	@Path("../../images/icons/CumulativeUserAnalysis_Icon.png")
+	@Path("../../images/icons/performance_cumul.svg")
 	@Property
 	private Asset cumulativeUserAnalysisIcon;
 	
 	@Inject
-	@Path("../../images/Nutzungsanalyse.png")
+	@Path("../../images/icons/performance_user.svg")
+	@Property
+	private Asset performanceUserIcon;
+	
+	@Inject
+	@Path("../../images/icons/performance_performance.svg")
+	@Property
+	private Asset performanceIcon;
+	
+	@Inject
+	@Path("../../images/icons/performance_performanceavg.svg")
+	@Property
+	private Asset performanceAvgIcon;
+	
+	@Inject
+	@Path("../../images/icons/activity_cumul.svg")
+	@Property
+	private Asset activityCumulativeIcon;
+	@Inject
+	@Path("../../images/icons/activity_heatmap.svg")
 	@Property
 	private Asset heatMapAnalysisIcon;
 
