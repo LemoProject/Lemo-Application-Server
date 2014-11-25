@@ -466,8 +466,6 @@ public class ActivityTimeHeatmap {
 			learningList.addAll(learningMap.keySet());
 		}
 
-		final boolean considerLogouts = true;
-
 		List<String> learningTypeList = new ArrayList<String>();
 		final Set<String> learningTypeMap = CollectionFactory.newSet();
 		ResultListStringObject availableTypes = null;
@@ -519,7 +517,6 @@ public class ActivityTimeHeatmap {
 
 		final JSONArray graphParentArray = new JSONArray();
 		JSONObject graphDataObject = new JSONObject();
-		JSONObject graphUserObject = new JSONObject();
 		JSONObject graphDataValues = new JSONObject();
 		JSONArray graphUserValues = new JSONArray();
 
@@ -538,7 +535,6 @@ public class ActivityTimeHeatmap {
 						.subList(this.resolutionComputed, resultAllObjects.getElements().size() - 1));
 
 				graphDataObject = new JSONObject();
-				graphUserObject = new JSONObject();
 				graphDataValues = new JSONObject(); //new JSONArray();
 				graphUserValues = new JSONArray();
 
