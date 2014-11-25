@@ -96,8 +96,6 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 public class ActivityTimeHeatmap {
 	
 	private static final int THOU = 1000;
-	private static final  int RESOLUTION_MAX = 20;
-	static final int RESOLUTION_BASIC_MULTIPLIER = 4;
 
 	@Inject @Path("../../js/d3/Lemo.js")
 	private Asset lemoJs;
@@ -513,7 +511,7 @@ public class ActivityTimeHeatmap {
 		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
 		
-		this.resolutionComputed = this.resolution; //RESOLUTION_MAX;TODO: Check why resolution maximum in needed.
+		this.resolutionComputed = this.resolution; 
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
 				beginStamp, endStamp, (long) this.resolution, learningTypeList, null, learningList);

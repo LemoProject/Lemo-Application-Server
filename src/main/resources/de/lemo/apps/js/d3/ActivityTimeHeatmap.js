@@ -3,7 +3,6 @@
   d3custom.run = function() {
 	  	var cal1 = new CalHeatMap();
 	  	var cal2 = new CalHeatMap();
-	  	var cal3 = new CalHeatMap();
 	  	var transformedData = transformData(d3custom.data);
 	  	var minVal = 100000000;
 	  	var maxVal = 0;
@@ -15,7 +14,6 @@
 	  		for(var timestamp in data){
 	  			if(timestamp < tmin){
 	  				tmin = timestamp; 
-	  				console.log(timestamp+ ' / '+tmin);
 	  			}
 	  			if(data[timestamp]>maxVal)
 	  				maxVal = data[timestamp];
@@ -33,44 +31,32 @@
 	    	itemSelector: "#cal-heatmap1",
 	        data: transformedData,
 	        start: new Date(startDate.getFullYear(), startDate.getMonth(), 1),
-	        range: 4, 
+	        range: 6, 
 	        domain: "month", 
-	        subDomain: "x_day",
+	        subDomain: "day",
 	        domainMargin: 10,
 	        cellSize: 25,
 			subDomainTextFormat: "%d",
 	        browsing: true,
 	        legendColors: ["#FFFFFF", "#FF0000"],
-	        displayLegend: false,        
+	        displayLegend: false,   
+	        considerMissingDataAsZero: true,
 		})
 		    cal2.init({
 	    	itemSelector: "#cal-heatmap2",
 	        data: transformedData,
-	        start: new Date(startDate.getFullYear(), startDate.getMonth()+4, 1),
-	        range: 4, 
+	        start: new Date(startDate.getFullYear(), startDate.getMonth()+6, 1),
+	        range: 6, 
 	        domain: "month", 
-	        subDomain: "x_day",
+	        subDomain: "day",
 	        domainMargin: 10,
 	        cellSize: 25,
 			subDomainTextFormat: "%d",
 	        browsing: true, 
 	        legendColors: ["#FFFFFF", "#FF0000"],
 	        displayLegend: false,
+	        considerMissingDataAsZero: true,
 		})
-		    cal3.init({
-	    	itemSelector: "#cal-heatmap3",
-	        data: transformedData,
-	        start: new Date(startDate.getFullYear(), startDate.getMonth()+8, 1),
-	        range: 4, 
-	        domain: "month", 
-	        subDomain: "x_day",
-	        domainMargin: 10,
-	        cellSize: 25,
-			subDomainTextFormat: "%d",
-	        browsing: true, 
-	        legendColors: ["#FFFFFF", "#FF0000"],
-		})
-
   };
 
 })(window.d3custom = window.d3custom || {}, jQuery);
