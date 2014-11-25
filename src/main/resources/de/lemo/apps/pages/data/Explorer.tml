@@ -216,17 +216,17 @@
 			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ALOTM-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
+
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/Activitygraph" context="${CurrentCourse?.id}"><img src="${navigationGraph1Icon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityGraph}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
+			    				<t:pagelink page="viz/ActivityTimeHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeHeatmap}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATHM-Tooltip}">?</span>
 			    				<br /><br />
-			    			</div>
-			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/Activitygraph_2" context="${CurrentCourse?.id}"><img src="${navigationGraph2Icon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityGraph} 2</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
+			    			</div>		  
+			    						    			<div class="span2" align="center">
+			    				<t:pagelink page="viz/activityTimeCumulative" context="${CurrentCourse?.id}"><img src="${activityCumulativeIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeCumulutive}</b> </t:pagelink> 
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATC-Tooltip}">?</span>
 			    				<br /><br />
-			    			</div>
-			    			
+			    			</div>			      			
 			    		
 			    			<div class="span1">
 			    			</div>	
@@ -247,22 +247,26 @@
 			    				<br /><br />
 			    			</div>
 			    			
+
+			    			
+
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/Performance" context="${CurrentCourse?.id}"><img src="${performanceIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformance}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:P-Tooltip}">?</span>
+			    				<t:pagelink page="viz/CircleGraph" context="${CurrentCourse?.id}"><img src="${circleGraphIcon}" height="50px" width="85px" /><br /><br /><b>${message:visCircleGraph}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:CG-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
-			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/PerformanceAvg" context="${CurrentCourse?.id}"><img src="${performanceAvgIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceAvg}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PA-Tooltip}">?</span>
+
+			    			
+			    						    			<div class="span2" align="center">
+			    				<t:pagelink page="viz/Activitygraph" context="${CurrentCourse?.id}"><img src="${navigationGraph1Icon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityGraph}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
-			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/PerformanceCumulative" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceCumulative}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PC-Tooltip}">?</span>
+			    				<t:pagelink page="viz/Activitygraph_2" context="${CurrentCourse?.id}"><img src="${navigationGraph2Icon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityGraph} 2</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
@@ -280,21 +284,22 @@
 			    				<br /><br />
 			    			</div>
 			    			
+			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/activityTimeCumulative" context="${CurrentCourse?.id}"><img src="${activityCumulativeIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeCumulutive}</b> </t:pagelink> 
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATC-Tooltip}">?</span>
+			    				<t:pagelink page="viz/Performance" context="${CurrentCourse?.id}"><img src="${performanceIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformance}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:P-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/CircleGraph" context="${CurrentCourse?.id}"><img src="${circleGraphIcon}" height="50px" width="85px" /><br /><br /><b>${message:visCircleGraph}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:CG-Tooltip}">?</span>
+			    				<t:pagelink page="viz/PerformanceAvg" context="${CurrentCourse?.id}"><img src="${performanceAvgIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceAvg}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PA-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/ActivityTimeHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeHeatmap}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATHM-Tooltip}">?</span>
+			    				<t:pagelink page="viz/PerformanceCumulative" context="${CurrentCourse?.id}"><img src="${cumulativeUserAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visPerformanceCumulative}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:PC-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 			    			
