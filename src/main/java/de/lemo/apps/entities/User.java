@@ -54,7 +54,7 @@ import org.hibernate.annotations.NaturalId;
  * User object that represents an user in the lemo application
  */
 @Entity
-@Table(name = "user")
+@Table(name = "app_user")
 public class User extends AbstractEntity {
 
 	private static final long serialVersionUID = -432098998274596203L;
