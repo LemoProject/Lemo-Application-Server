@@ -36,6 +36,7 @@
       <property name="hibernate.connection.password">${apps-hibernate-password}</property>
       <!-- config-->
       <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!-- <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>-->
       <property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
 
     </database>

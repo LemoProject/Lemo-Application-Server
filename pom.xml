@@ -110,6 +110,25 @@
 			<artifactId>hsqldb</artifactId>
 			<version>1.8.0.7</version>
 		</dependency>
+		
+		<dependency>                                      
+    		<groupId>org.hibernate</groupId>                
+    		<artifactId>hibernate-entitymanager</artifactId>
+    		<version>3.6.8.Final</version>                  
+  		</dependency>   
+  		
+  		<dependency>                                      
+   			<groupId>org.apache.derby</groupId>             
+    		<artifactId>derbyclient</artifactId>                  
+    		<version>10.8.2.2</version>                       
+  		</dependency>   
+  		
+  		<dependency>                                      
+    		<groupId>org.apache.derby</groupId>             
+   			<artifactId>derby</artifactId>                  
+    		<version>10.8.2.2</version>                     
+    		<scope>runtime</scope>                          
+  		</dependency> 
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
