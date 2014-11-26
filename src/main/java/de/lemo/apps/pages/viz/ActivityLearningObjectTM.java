@@ -507,7 +507,7 @@ public class ActivityLearningObjectTM {
 				graphDataRootArray.put(graphLOTypeObject);
 			}
 
-			graphRootObject.put("name", "root");
+			graphRootObject.put("name", this.course.getCourseName());
 			graphRootObject.put("children", graphDataRootArray);
 
 			this.logger.debug(graphRootObject.toString());
