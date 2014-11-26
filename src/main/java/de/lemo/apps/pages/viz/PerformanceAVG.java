@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
@@ -38,6 +39,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.DateField;
@@ -85,9 +87,12 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformanceAvg")
-@Import(library = { "../../js/d3/Performance.js" })
+@Import(library = { "../../js/d3/PerformanceAvg.js" })
 public class PerformanceAVG {
 
+	@Inject @Path("../../js/d3/Lemo.js")
+	private Asset lemoJs;
+	
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -500,6 +505,8 @@ public class PerformanceAVG {
 
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
+		
+		javaScriptSupport.importJavaScriptLibrary(lemoJs);
 		
 		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 
