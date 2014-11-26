@@ -5,9 +5,8 @@
 
 
 		var objTypes = [];
-		var data = [];
-
-		data = d3custom.data;
+		var data = d3custom.data;
+		var locale = d3custom.locale;
 
 		//check if we have values to work with
 		if(!data) {
@@ -43,7 +42,15 @@
 		.attr("width", chartWidth)
 		.attr("height", chartHeight)
 		.append("svg:g");
+		
 		start(data,treemap);
+		
+      	$('squaretitle').parent().tipsy({
+      	    gravity: 'sw',
+      	    html: true,
+      	    title: function() { return $(this).find('squaretitle').text(); }
+      	  });
+      	
 		function start(data,treemap) {
 			node = root = data;
 			var nodes = treemap.nodes(root);
@@ -175,6 +182,9 @@
 			.text(function(d) {
 				return d.name;
 			});
+			
+			childrenCells.append("squaretitle")
+			.text(function(d) { return "<b>"+d.name+"</b>: <br /> "+locale.activities+": "+d.requests+"<br /> "+locale.user+": "+d.user+" </br>"+Math.round(d.value/data.value*100*10)/10+" %";});
 
 			// exit transition
 			childrenCells.exit()
