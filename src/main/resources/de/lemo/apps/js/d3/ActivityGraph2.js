@@ -4,7 +4,7 @@
 
 	d3custom.run = function() {
 
-
+		var locale = d3custom.locale;
 		var w= $('#viz').width(), 
 		h = 700,
 		color = function(d) { return hashColor(d.name)},
@@ -105,7 +105,7 @@
 			                    .style("fill", function(d,i) { return color(d); })
 			                    .call(force.drag);
 			    	nodes.append("nodetitle")
-				     .text(function(d) { return "<b> locale.learningObject :</b> "+ d.name+"<br /><br /><b> locale.resourcetypeLabel :</b> "+ d.type+"<br /><br /> <b> locale.activities </b>: "+d.value;});
+				     .text(function(d) { return "<b> "+locale.learningObject +":</b> "+ d.name+"<br /><br /><b> "+locale.resourcetypeLabel+" :</b> "+ d.type+"<br /><br /> <b> "+locale.activities+" </b>: "+d.value;});
 		        /* Run the Force effect */
 		        force.on("tick", function() {
 		                   edges.attr("x1", function(d) { return d.source.x; })
