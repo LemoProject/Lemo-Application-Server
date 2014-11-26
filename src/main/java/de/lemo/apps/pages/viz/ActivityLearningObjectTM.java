@@ -90,7 +90,9 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityLearningObjectTreemap")
-@Import(library = { "../../js/d3/ActivityLearningObjectTM.js" })
+@Import(library = { "../../js/d3/ActivityLearningObjectTM.js",
+					"../../js/d3/libs/modernizr.js"
+		})
 public class ActivityLearningObjectTM {
 
 	private static final int THOU = 1000;
