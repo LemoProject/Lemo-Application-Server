@@ -1,6 +1,12 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
+   <style>
+       .maps{
+       		float:left;
+       }
+       
+   </style>
          
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
@@ -16,15 +22,12 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-			<div id="cal-heatmap1"></div>
-        	<div id="cal-heatmap2"></div>
-        	<br />
-    			  
-            
-        	
-        	
+	        <t:loop source="1..12" value="currentValue">
+	        	<div class="maps" id="cal-heatmap${currentValue}"></div>
+	        </t:loop>
+        	<br /> 
     	</div>
-      
+        
     	<div class="span3">
     		<t:zone t:id="formZone" id="formZone">
     		</t:zone> 

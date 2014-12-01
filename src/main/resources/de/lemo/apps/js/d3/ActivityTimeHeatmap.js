@@ -27,36 +27,24 @@
 	  		return data;
 	  	}
 	  	
-	    cal1.init({
-	    	itemSelector: "#cal-heatmap1",
-	        data: transformedData,
-	        start: new Date(startDate.getFullYear(), startDate.getMonth(), 1),
-	        range: 6, 
-	        domain: "month", 
-	        subDomain: "day",
-	        domainMargin: 4,
-	        cellSize: 20,
-			subDomainTextFormat: "%d",
-	        browsing: true,
-	        legendColors: ["#FFFFFF", "#FF0000"],
-	        displayLegend: false,   
-	        considerMissingDataAsZero: true,
-		})
-		    cal2.init({
-	    	itemSelector: "#cal-heatmap2",
-	        data: transformedData,
-	        start: new Date(startDate.getFullYear(), startDate.getMonth()+6, 1),
-	        range: 6, 
-	        domain: "month", 
-	        subDomain: "day",
-	        domainMargin: 4,
-	        cellSize: 20,
-			subDomainTextFormat: "%d",
-	        browsing: true, 
-	        legendColors: ["#FFFFFF", "#FF0000"],
-	        displayLegend: false,
-	        considerMissingDataAsZero: true,
-		})
+	  	for (var i = 0; i < 12; i++){
+	  		var cal = new CalHeatMap();
+	  		cal.init({
+		    	itemSelector: "#cal-heatmap"+(i+1).toString(),
+		        data: transformedData,
+		        start: new Date(startDate.getFullYear(), startDate.getMonth()+i, 1),
+		        range: 1, 
+		        domain: "month", 
+		        subDomain: "day",
+		        domainMargin: 4,
+		        cellSize: 25,
+				subDomainTextFormat: "%d",
+		        browsing: true,
+		        legendColors: ["#FFFFFF", "#FF0000"],
+		        displayLegend: false,   
+		        considerMissingDataAsZero: true,
+			})
+	  	}
   };
 
 })(window.d3custom = window.d3custom || {}, jQuery);

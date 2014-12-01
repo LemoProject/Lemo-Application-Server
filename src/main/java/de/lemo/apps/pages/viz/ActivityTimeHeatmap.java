@@ -272,6 +272,9 @@ public class ActivityTimeHeatmap {
 	@Property
 	@Persist
 	private List<Course> selectedCourses;
+	
+	@Property
+	private int currentValue;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
