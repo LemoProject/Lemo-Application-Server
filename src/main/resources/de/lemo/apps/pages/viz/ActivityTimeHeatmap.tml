@@ -1,14 +1,7 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-    
-    <style>
-
-		#viz svg {
-		height: 500px;
-		}
-	</style>
-     
+         
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
