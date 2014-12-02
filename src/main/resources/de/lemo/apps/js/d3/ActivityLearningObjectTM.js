@@ -251,7 +251,7 @@
 			xscale.domain([d.x, d.x + d.dx]);
 			yscale.domain([d.y, d.y + d.dy]);
 
-			if (node != level) {
+			if (level.depth > 0) {
 				chart.selectAll(".cell.child .label")
 				.style("display", "inline");
 			} else {
