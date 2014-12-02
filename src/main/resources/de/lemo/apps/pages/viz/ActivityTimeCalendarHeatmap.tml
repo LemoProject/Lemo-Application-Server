@@ -1,14 +1,13 @@
 <html t:type="layoutdashboard" title="LeMo | Visualization"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-    
-    <style>
-
-		#viz svg {
-		height: 500px;
-		}
-	</style>
-     
+   <style>
+       .maps{
+       		float:left;
+       }
+       
+   </style>
+         
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
         <div class="span12">
@@ -23,16 +22,12 @@
 	<div class="row-fluid">
 		  
     	<div class="span9">
-        	<div id="heatmap">
-        	</div>
-        	
-        	<br />
-    			  
-            
-        	
-        	
+	        <t:loop source="1..12" value="currentValue">
+	        	<div class="maps" id="cal-heatmap${currentValue}"></div>
+	        </t:loop>
+        	<br /> 
     	</div>
-      
+        
     	<div class="span3">
     		<t:zone t:id="formZone" id="formZone">
     		</t:zone> 
@@ -125,6 +120,7 @@
 			              </div>
                   </div>
                   
+                  <t:if test="userOptionEnabled">
                   <!-- Member -->
                   <div class="accordion-group">
                     <div class="accordion-heading">
@@ -151,6 +147,7 @@
                      	 </div>
 			        </div>
 			      </div>
+			      </t:if>
 			       
 			       
 			     <!-- Courses -->
@@ -210,12 +207,15 @@
     
   </div>
   <script type="text/javascript">
-    (function(d3custom, $, undefined) {
+  (function(d3custom, $, undefined) {
+    	
+	
     
       var q2result = ${questionResult};
       
       d3custom.data = q2result;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
+
   </script>
 </html>

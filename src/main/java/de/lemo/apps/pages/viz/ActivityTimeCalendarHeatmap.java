@@ -71,6 +71,7 @@ import de.lemo.apps.application.AnalysisWorker;
 import de.lemo.apps.application.DateWorker;
 import de.lemo.apps.application.UserWorker;
 import de.lemo.apps.application.VisualisationHelperWorker;
+import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.GenderEnum;
 import de.lemo.apps.entities.LearningObject;
@@ -90,13 +91,11 @@ import de.lemo.apps.services.internal.LearningTypeValueEncoder;
 import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
-@BreadCrumb(titleKey = "visActivityTimeHeatmap")
-@Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
-public class ActivityTimeHeatmap {
+@BreadCrumb(titleKey = "visActivityTimeCalendarHeatmap")
+@Import(library = { "../../js/d3/ActivityTimeCalendarHeatmap.js" })
+public class ActivityTimeCalendarHeatmap {
 	
 	private static final int THOU = 1000;
-	private static final  int RESOLUTION_MAX = 20;
-	static final int RESOLUTION_BASIC_MULTIPLIER = 4;
 
 	@Inject @Path("../../js/d3/Lemo.js")
 	private Asset lemoJs;
@@ -230,6 +229,10 @@ public class ActivityTimeHeatmap {
 
 	@Persist
 	private List<ResourceRequestInfo> showDetailsList;
+	
+	@Persist
+	@Property
+	private Boolean userOptionEnabled;
 
 
 	@Property(write = false)
@@ -269,13 +272,15 @@ public class ActivityTimeHeatmap {
 	@Property
 	@Persist
 	private List<Course> selectedCourses;
+	
+	@Property
+	private int currentValue;
 
 	public List<Long> getUsers() {
 		final List<Long> courses = new ArrayList<Long>();
 		courses.add(this.course.getCourseId());
 		final List<Long> elements = this.analysis
 				.computeCourseUsers(courses, this.beginDate.getTime() / THOU, this.endDate.getTime() / THOU, this.visWorker.getGenderIds(this.selectedGender)).getElements();
-		this.logger.info(" User Ids:         ----        " + elements);
 		return elements;
 	}
 
@@ -381,7 +386,6 @@ public class ActivityTimeHeatmap {
 		}
 		
 		ResultListStringObject learningTypeList = null;
-		logger.info(courseList.toString());
 		try {
 			learningTypeList = this.init.getLearningTypes(courseList);
 		} catch (Exception e) {
@@ -424,7 +428,6 @@ public class ActivityTimeHeatmap {
 			}
 			for(int i = 0;i < selectedCourses.size();i++ ){
 				courseList.add(this.selectedCourses.get(i).getCourseId());
-				logger.info("Course Id added: "+this.selectedCourses.get(i).getCourseId());
 			}
 			
 		} else {
@@ -466,8 +469,6 @@ public class ActivityTimeHeatmap {
 			learningList.addAll(learningMap.keySet());
 		}
 
-		final boolean considerLogouts = true;
-
 		List<String> learningTypeList = new ArrayList<String>();
 		final Set<String> learningTypeMap = CollectionFactory.newSet();
 		ResultListStringObject availableTypes = null;
@@ -508,19 +509,18 @@ public class ActivityTimeHeatmap {
 
 		
 
-		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 1);
+		this.resolution = (this.dateWorker.daysBetween(this.beginDate, this.endDate) + 2);
 		this.logger.debug("Resolution: " + this.resolution + " ResolutionMultiplier: " + this.resolutionComputed);
 		
-		this.resolutionComputed = RESOLUTION_MAX;
+		this.resolutionComputed = this.resolution; 
 		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
-				beginStamp, endStamp, (long) this.resolutionComputed, learningTypeList, null, learningList);
+				beginStamp, endStamp, (long) this.resolution, learningTypeList, null, learningList);
 		
 
 		final JSONArray graphParentArray = new JSONArray();
 		JSONObject graphDataObject = new JSONObject();
-		JSONObject graphUserObject = new JSONObject();
-		JSONArray graphDataValues = new JSONArray();
+		JSONObject graphDataValues = new JSONObject();
 		JSONArray graphUserValues = new JSONArray();
 
 		if (results != null) {
@@ -538,8 +538,7 @@ public class ActivityTimeHeatmap {
 						.subList(this.resolutionComputed, resultAllObjects.getElements().size() - 1));
 
 				graphDataObject = new JSONObject();
-				graphUserObject = new JSONObject();
-				graphDataValues = new JSONArray();
+				graphDataValues = new JSONObject(); //new JSONArray();
 				graphUserValues = new JSONArray();
 
 				Long currentDateStamp = 0L;
@@ -549,14 +548,14 @@ public class ActivityTimeHeatmap {
 					final JSONArray graphDataValue = new JSONArray();
 					final JSONArray graphUserValue = new JSONArray();
 					Double dateMultiplier = dateResolution * 60 * 60 * 24  * i.longValue() * THOU;
-					currentDateStamp = beginStamp * THOU + dateMultiplier.longValue();
+					currentDateStamp = (beginStamp * THOU + dateMultiplier.longValue())/1000;
 					graphDataValue.put(0, currentDateStamp);
 					graphDataValue.put(1, resultDataObjects.getElements().get(i));
 
 					graphUserValue.put(0, currentDateStamp);
 					graphUserValue.put(1, resultUserObjects.getElements().get(i));
 
-					graphDataValues.put(graphDataValue);
+					graphDataValues.put(currentDateStamp.toString(),resultDataObjects.getElements().get(i));
 					graphUserValues.put(graphUserValue);
 				}
 
@@ -569,13 +568,15 @@ public class ActivityTimeHeatmap {
 			}
 
 		}
-		return graphParentArray.toString();
+		return graphDataValues.toString();//graphParentArray.toString();
 	}
 
 	void setupRender() {
 		this.logger.debug(" ----- Bin in Setup Render");
 
 		javaScriptSupport.importJavaScriptLibrary(lemoJs);
+		
+		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 		
 		final ArrayList<Long> courseList = new ArrayList<Long>();
 		courseList.add(this.course.getCourseId());
@@ -629,6 +630,7 @@ public class ActivityTimeHeatmap {
 	@AfterRender
 	public void afterRender() {
 		this.javaScriptSupport.addScript("");
+		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 
 	void onPrepareFromCustomizeForm() {

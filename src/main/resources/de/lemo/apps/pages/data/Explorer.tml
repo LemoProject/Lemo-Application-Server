@@ -221,8 +221,13 @@
 			    				<t:pagelink page="viz/ActivityTimeHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeHeatmap}</b> </t:pagelink>
 			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATHM-Tooltip}">?</span>
 			    				<br /><br />
-			    			</div>		  
-			    						    			<div class="span2" align="center">
+			    			</div>		
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="viz/ActivityTimeCalendarHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeCalendarHeatmap}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATHM-Tooltip}">?</span>
+			    				<br /><br />
+			    			</div>
+							<div class="span2" align="center">
 			    				<t:pagelink page="viz/activityTimeCumulative" context="${CurrentCourse?.id}"><img src="${activityCumulativeIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeCumulutive}</b> </t:pagelink> 
 			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATC-Tooltip}">?</span>
 			    				<br /><br />
