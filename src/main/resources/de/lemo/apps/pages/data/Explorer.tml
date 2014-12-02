@@ -223,8 +223,8 @@
 			    				<br /><br />
 			    			</div>		
 			    			<div class="span2" align="center">
-			    				<t:pagelink page="viz/ActivityTimeCalendarHeatmap" context="${CurrentCourse?.id}"><img src="${heatMapAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeCalendarHeatmap}</b> </t:pagelink>
-			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATHM-Tooltip}">?</span>
+			    				<t:pagelink page="viz/ActivityTimeCalendarHeatmap" context="${CurrentCourse?.id}"><img src="${calendarHeatMapAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visActivityTimeCalendarHeatmap}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:ATCHM-Tooltip}">?</span>
 			    				<br /><br />
 			    			</div>
 							<div class="span2" align="center">

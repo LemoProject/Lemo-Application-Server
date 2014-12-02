@@ -175,7 +175,11 @@ public class Explorer {
 	@Path("../../images/icons/activity_heatmap.svg")
 	@Property
 	private Asset heatMapAnalysisIcon;
-
+	@Inject
+	@Path("../../images/icons/activity_heatmap.svg")
+	@Property
+	private Asset calendarHeatMapAnalysisIcon;
+	
 	@Inject
 	private CourseDAO courseDAO;
 
