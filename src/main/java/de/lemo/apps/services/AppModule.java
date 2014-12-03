@@ -21,18 +21,17 @@
 package de.lemo.apps.services;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
-import org.apache.tapestry5.MetaDataConstants;
 import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
 import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.hibernate.HibernateSymbols;
 import org.apache.tapestry5.hibernate.HibernateTransactionDecorator;
-import org.apache.tapestry5.internal.services.RequestImpl;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -40,7 +39,6 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Match;
-import org.apache.tapestry5.services.BaseURLSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
@@ -63,7 +61,6 @@ import de.lemo.apps.application.VisualisationHelperWorker;
 import de.lemo.apps.application.VisualisationHelperWorkerImpl;
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.entities.Course;
-import de.lemo.apps.entities.Quiz;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.CourseDAOImpl;
@@ -91,6 +88,8 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.QuizValueEncoderWorker;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
+
+import javax.naming.Context;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to configure and extend
@@ -176,8 +175,9 @@ public class AppModule {
 	public static <T> T decorateTransactionally(final HibernateTransactionDecorator decorator,
 			final Class<T> serviceInterface,
 			final T delegate,
-			final String serviceId) {
-		System.out.println("AppModule: Generating Decorator for DAO Interface");
+			final String serviceId,
+			final Logger log) {
+		log.info("AppModule: Generating Decorator for DAO Interface");
 		return decorator.build(serviceInterface, delegate, serviceId);
 	}
 
@@ -188,9 +188,12 @@ public class AppModule {
         ldapRealm.setUserDnTemplate(ServerConfiguration.getInstance().getUserDnTemplate());
         JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
         contextFactory.setUrl(ServerConfiguration.getInstance().getContextFactoryUrl()); 
+        Map<String, String> env = contextFactory.getEnvironment();
+		env.put(Context.SECURITY_PROTOCOL, "ssl");
+		contextFactory.setEnvironment(env);
         log.info(String.format("ContextFactoryURL: %s", ServerConfiguration.getInstance().getContextFactoryUrl()));   
         configuration.add(realm);
-        configuration.add(ldapRealm);
+        configuration.add(ldapRealm);        
 	}
 
 	public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) {

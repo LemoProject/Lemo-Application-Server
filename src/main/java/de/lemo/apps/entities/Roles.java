@@ -76,7 +76,6 @@ public enum Roles {
 				}
 			}
 		}
-		System.out.println("Unable to Parse Role item: " + v);
 		throw new EnumValueNotFoundException();
 	}
 	
