@@ -293,12 +293,12 @@
 				<artifactId>maven-jetty-plugin</artifactId>
 				<version>6.1.26</version>
 				<configuration>
-					<!-- Log to the console. -->
+					<!-- Log requests to the console. 
+						    This doesn't do anything for Jetty, but is a workaround for a 
+							Maven bug that prevents the requestLog from being set. 
 					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
-						<!-- This doesn't do anything for Jetty, but is a workaround for a 
-							Maven bug that prevents the requestLog from being set. -->
 						<append>true</append>
-					</requestLog>
+					</requestLog>-->
 					<systemProperties>
 						<systemProperty>
 							<name>tapestry.execution-mode</name>
