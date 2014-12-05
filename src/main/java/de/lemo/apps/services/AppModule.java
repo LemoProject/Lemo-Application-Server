@@ -184,13 +184,18 @@ public class AppModule {
 
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm,final Logger log) {
         JndiLdapRealm ldapRealm = new JndiLdapRealm();
-        ldapRealm.setAuthorizationCachingEnabled(false);
+     //   ldapRealm.setAuthorizationCachingEnabled(false);
         ldapRealm.setUserDnTemplate(ServerConfiguration.getInstance().getUserDnTemplate());
         JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
-        contextFactory.setUrl(ServerConfiguration.getInstance().getContextFactoryUrl()); 
+        contextFactory.setUrl(ServerConfiguration.getInstance().getContextFactoryUrl());
         Map<String, String> env = contextFactory.getEnvironment();
 		env.put(Context.SECURITY_PROTOCOL, "ssl");
+		env.put(Context.SECURITY_AUTHENTICATION, "simple");
+		env.put(Context.SECURITY_AUTHENTICATION, "simple");
+		env.put(Context.SECURITY_AUTHENTICATION, "simple");
+		
 		contextFactory.setEnvironment(env);
+		log.info(env.toString());
         log.info(String.format("ContextFactoryURL: %s", ServerConfiguration.getInstance().getContextFactoryUrl()));   
         configuration.add(realm);
         configuration.add(ldapRealm);        

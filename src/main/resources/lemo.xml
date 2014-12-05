@@ -42,8 +42,8 @@
     </database>
     
 
-   	<user-dn-template name="test-server">cn={0},ou=Users,dc=example,dc=com</user-dn-template>
-   	<context-factory-url name="test-server">ldap://localhost:10389</context-factory-url>
+   	<user-dn-template name="test-server">cn={0},ou=idmusers,dc=login,dc=htw-berlin,dc=de</user-dn-template>
+   	<context-factory-url name="test-server">ldap://login-dc-01.login.htw-berlin.de:389</context-factory-url>
    	<user-option-enabled>true</user-option-enabled>
    	
     <dms-url>${lemo-dms-url}</dms-url>
