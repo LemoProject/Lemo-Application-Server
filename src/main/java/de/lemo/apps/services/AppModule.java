@@ -37,6 +37,7 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.services.Request;
@@ -88,6 +89,7 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
 import de.lemo.apps.services.internal.QuizValueEncoderWorker;
 import de.lemo.apps.services.internal.jqplot.js.JqPlotJavaScriptStack;
 import de.lemo.apps.services.security.BasicSecurityRealm;
+import de.lemo.apps.services.security.LdapAuthorizingRealm;
 
 import javax.naming.Context;
 
@@ -100,7 +102,8 @@ public class AppModule {
 	public static void bind(final ServiceBinder binder) {
 				
 		// Service for basic user authentification
-		binder.bind(AuthorizingRealm.class, BasicSecurityRealm.class);
+		binder.bind(AuthorizingRealm.class, BasicSecurityRealm.class).withId("BasicSecurityRealm");
+		binder.bind(AuthorizingRealm.class, LdapAuthorizingRealm.class).withId("LdapAuthorizingRealm");
 		binder.bind(UserDAO.class, UserDAOImpl.class);
 		binder.bind(CourseDAO.class, CourseDAOImpl.class);
 		binder.bind(QuestionDAO.class, QuestionDAOImpl.class);
@@ -182,21 +185,7 @@ public class AppModule {
 	}
 
 
-	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @Inject AuthorizingRealm realm,final Logger log) {
-        JndiLdapRealm ldapRealm = new JndiLdapRealm();
-     //   ldapRealm.setAuthorizationCachingEnabled(false);
-        ldapRealm.setUserDnTemplate(ServerConfiguration.getInstance().getUserDnTemplate());
-        JndiLdapContextFactory contextFactory = ((JndiLdapContextFactory)ldapRealm.getContextFactory());
-        contextFactory.setUrl(ServerConfiguration.getInstance().getContextFactoryUrl());
-        Map<String, String> env = contextFactory.getEnvironment();
-		env.put(Context.SECURITY_PROTOCOL, "ssl");
-		env.put(Context.SECURITY_AUTHENTICATION, "simple");
-		env.put(Context.SECURITY_AUTHENTICATION, "simple");
-		env.put(Context.SECURITY_AUTHENTICATION, "simple");
-		
-		contextFactory.setEnvironment(env);
-		log.info(env.toString());
-        log.info(String.format("ContextFactoryURL: %s", ServerConfiguration.getInstance().getContextFactoryUrl()));   
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration, @InjectService("BasicSecurityRealm") AuthorizingRealm realm, @InjectService("LdapAuthorizingRealm") AuthorizingRealm ldapRealm, final Logger log) {
         configuration.add(realm);
         configuration.add(ldapRealm);        
 	}
