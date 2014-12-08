@@ -59,11 +59,9 @@ public class LdapAuthorizingRealm extends AuthorizingRealm {
 			ldapConnection = new LdapNetworkConnection(connectionConfig);
 			ldapConnection.bind();
 		} catch (InvalidConnectionException e) {
-			e.printStackTrace();
 			logger.info("ldap.noConnection");
 			throw new AuthenticationException("ldap.noConnection");	
 		} catch (LdapException e) {
-			e.printStackTrace();
 			logger.info("ldap.wrongCredentials");
 			throw new AuthenticationException("ldap.wrongCredentials");	
 		}finally{
@@ -73,7 +71,7 @@ public class LdapAuthorizingRealm extends AuthorizingRealm {
 					ldapConnection.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.info("LdapConnection can't be closed.");
 				}
 		    } else { 
 		    	logger.info("ldapConnection not open");
