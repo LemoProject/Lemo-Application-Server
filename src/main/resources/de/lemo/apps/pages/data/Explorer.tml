@@ -275,6 +275,12 @@
 			    				<br /><br />
 			    			</div>
 			    			
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="viz/Prediction" context="${CurrentCourse?.id}"><img src="${navigationGraph2Icon}" height="50px" width="85px" /><br /><br /><b>${message:visPrediction}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:AG-Tooltip}">?</span>
+			    				<br /><br />
+			    			</div>
+			    			
 			    			<div class="span1">
 			    			</div>	
 			    		</div>

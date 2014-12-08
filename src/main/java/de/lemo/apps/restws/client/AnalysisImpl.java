@@ -27,13 +27,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -42,10 +43,9 @@ import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.slf4j.Logger;
+
 import de.lemo.apps.application.config.ServerConfiguration;
-import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.ResultListLongObject;
-import de.lemo.apps.restws.entities.ResultListRRITypes;
 import de.lemo.apps.restws.entities.ResultListResourceRequestInfo;
 import de.lemo.apps.restws.proxies.questions.QActivityResourceType;
 import de.lemo.apps.restws.proxies.questions.QCourseActivityString;
@@ -59,6 +59,7 @@ import de.lemo.apps.restws.proxies.questions.QPerformanceBoxPlot;
 import de.lemo.apps.restws.proxies.questions.QPerformanceHistogram;
 import de.lemo.apps.restws.proxies.questions.QPerformanceUserTest;
 import de.lemo.apps.restws.proxies.questions.QPerformanceUserTestBoxPlot;
+import de.lemo.apps.restws.proxies.questions.QPrediction;
 import de.lemo.apps.restws.proxies.questions.QUserPathAnalysis;
 
 /**
@@ -102,6 +103,9 @@ public class AnalysisImpl implements Analysis {
 
 	private QCourseUsers courseUsers =
 			ProxyFactory.create(QCourseUsers.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	private QPrediction prediction =
+			ProxyFactory.create(QPrediction.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
 	private QUserPathAnalysis userPathAnalysis =
 			ProxyFactory.create(QUserPathAnalysis.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
@@ -265,6 +269,21 @@ public class AnalysisImpl implements Analysis {
 			logger.error(e.getMessage());
 		}
 		logger.info("Could not execute user query.");
+		return result;
+	}
+	
+	@Override
+	public String computePrediction(
+			final List<Long> courseIds,
+			final List<Long> userIds,
+			final List<String> types,
+			final Boolean considerLogouts,
+			final Long startTime,
+			final Long endTime,
+			final List<Long> gender,
+			final List<Long> learningList) {
+
+		String result = prediction.compute(courseIds, userIds, types, considerLogouts, startTime, endTime, gender, learningList);
 		return result;
 	}
 

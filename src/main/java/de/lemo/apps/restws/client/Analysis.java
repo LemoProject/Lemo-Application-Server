@@ -77,6 +77,16 @@ public interface Analysis {
 			List<Long> gender,
 			List<Long> learningObjects);
 
+	String computePrediction(
+			List<Long> courseIds,
+			List<Long> userIds,
+			List<String> types,
+			Boolean considerLogouts,
+			Long startTime,
+			Long endTime,
+			List<Long> gender,
+			List<Long> learningObjects);
+
 	String computeUserPathAnalysis(
 			List<Long> courseIds,
 			List<Long> userIds,
