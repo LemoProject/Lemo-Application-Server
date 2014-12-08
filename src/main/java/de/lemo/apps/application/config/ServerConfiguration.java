@@ -56,6 +56,11 @@ public enum ServerConfiguration {
 	private Map<String, String> dbConfig;
 	private String dmsUrl;
 	private String userDnTemplate;
+	private String userRoot;
+	private String userPraefix;
+	private String ldapHost;
+	private String ldapPort;
+	private String ldapStartTls;
 	private String contextFactoryUrl;
 	private String userOptionEnabled;
 
@@ -91,6 +96,11 @@ public enum ServerConfiguration {
 		this.userDnTemplate = lemoConfig.applicationServer.userDnTemplate;
 		this.contextFactoryUrl = lemoConfig.applicationServer.contextFactoryUrl;
 		this.userOptionEnabled = lemoConfig.applicationServer.userOptionEnabled;
+		this.userPraefix = lemoConfig.applicationServer.userPraefix;
+		this.userRoot = lemoConfig.applicationServer.userRoot;
+	    this.ldapHost = lemoConfig.applicationServer.ldapHost;
+		this.ldapPort = lemoConfig.applicationServer.ldapPort;
+		this.ldapStartTls = lemoConfig.applicationServer.ldapStartTls;
 		
 		this.dbConfig = Maps.newHashMap();
 		for (final PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
@@ -259,5 +269,25 @@ public enum ServerConfiguration {
 		} else{
 			return false;
 		}
+	}
+
+	public String getUserPraefix() {
+		return userPraefix;
+	}
+
+	public String getUserRoot() {
+		return userRoot;	
+	}
+
+	public String getLdapHost() {
+		return ldapHost;
+	}
+
+	public int getLdapPort() {
+		return Integer.parseInt(ldapPort);
+	}
+
+	public Boolean getLdapStartTls() {
+		return ldapStartTls.equalsIgnoreCase("true")?true:false;
 	}
 }
