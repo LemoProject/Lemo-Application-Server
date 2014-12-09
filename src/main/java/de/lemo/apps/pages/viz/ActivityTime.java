@@ -227,6 +227,7 @@ public class ActivityTime {
 	private ResourceRequestInfo resourceItem;
 
 	@Persist
+	@Property
 	private List<ResourceRequestInfo> showDetailsList;
 	
 	@Persist
@@ -281,8 +282,7 @@ public class ActivityTime {
 		return elements;
 	}
 
-	@Cached
-	public List<ResourceRequestInfo> getResourceList() {
+	private void setShowDetailsList() {
 		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
 
 		List<ResourceRequestInfo> resultList;
@@ -299,7 +299,7 @@ public class ActivityTime {
 		}
 		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
 
-		return resultList;
+		this.showDetailsList = resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -407,6 +407,7 @@ public class ActivityTime {
 		} else {
 			this.logger.debug("No Learning Types found");
 		}
+		this.setShowDetailsList();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
