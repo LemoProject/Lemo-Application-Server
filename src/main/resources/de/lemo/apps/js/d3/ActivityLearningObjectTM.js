@@ -12,8 +12,7 @@
 		if(!data) {
 			$("#viz").prepend($('<div class="alert">No matching data found. Please check your filter setting.</div>'));
 			return;
-		}
-
+		}		
 		var chartWidth = 980 - 80;
 		if ($("#viz").width() < 920)
 			chartWidth = $("#viz").width();
@@ -65,7 +64,7 @@
 			// create parent cells
 			var parentCells = chart.selectAll("g.cell.parent")
 			.data(parents, function(d) {
-				return "p-" + d.name;
+				return "p-" + d.nameUnique;
 			});
 			var parentEnterTransition = parentCells.enter()
 			.append("g")
@@ -123,7 +122,7 @@
 			// create children cells
 			var childrenCells = chart.selectAll("g.cell.child")
 			.data(children, function(d) {
-				return "c-" + d.name;
+				return "c-" + d.nameUnique;
 			});
 			// enter transition
 			var childEnterTransition = childrenCells.enter()

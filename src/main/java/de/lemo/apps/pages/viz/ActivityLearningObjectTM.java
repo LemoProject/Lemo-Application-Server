@@ -489,15 +489,19 @@ public class ActivityLearningObjectTM {
 
 			final Set<String> keySet = learningObjectTypes.keySet();
 			final Iterator<String> it = keySet.iterator();
-			while (it.hasNext()) {
+			int objCounter = 0;
+			while (it.hasNext()) {			
 				final String learnObjectTypeName = it.next();
 				final JSONObject graphLOTypeObject = new JSONObject();
 				final JSONArray graphLOTypeChildreenArray = new JSONArray();
 				graphLOTypeObject.put("name", learnObjectTypeName);
+				graphLOTypeObject.put("nameUnique", learnObjectTypeName+"_"+String.valueOf(objCounter));
 				for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size(); i++) {
+					objCounter++;	
 					final JSONObject graphLOObject = new JSONObject();
 					final ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
 					graphLOObject.put("name", learnObject.getTitle());
+					graphLOObject.put("nameUnique", learnObject.getTitle()+"_"+String.valueOf(objCounter));
 					graphLOObject.put("requests", learnObject.getRequests());
 					graphLOObject.put("user", learnObject.getUsers());
 					graphLOObject.put("value", learnObject.getRequests());
