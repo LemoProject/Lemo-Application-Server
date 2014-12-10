@@ -136,7 +136,7 @@ public class Explorer {
 	@Path("../../images/icons/activity_treemap.svg")
 	@Property
 	private Asset usageAnalysisLOTreeMapIcon;
-
+		
 	@Inject
 	@Path("../../images/icons/navigation_bide.svg")
 	@Property
@@ -172,9 +172,10 @@ public class Explorer {
 	@Property
 	private Asset activityCumulativeIcon;
 	@Inject
-	@Path("../../images/icons/activity_heatmap.svg")
+	@Path("../../images/icons/activity_treemap_old.svg")
 	@Property
 	private Asset heatMapAnalysisIcon;
+	
 	@Inject
 	@Path("../../images/icons/activity_heatmap.svg")
 	@Property
