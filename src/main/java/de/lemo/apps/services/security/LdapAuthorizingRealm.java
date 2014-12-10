@@ -39,15 +39,8 @@ public class LdapAuthorizingRealm extends AuthorizingRealm {
 		String password = new String(userToken.getPassword());
 
 		String connectionBind = ServerConfiguration.getInstance().getUserPraefix()+"="+userName+","+ServerConfiguration.getInstance().getUserRoot();
-		logger.info(connectionBind);
-		logger.info(ServerConfiguration.getInstance().getUserPraefix());
-		logger.info(ServerConfiguration.getInstance().getUserRoot());
-		logger.info(ServerConfiguration.getInstance().getLdapHost());
-		logger.info(String.valueOf(ServerConfiguration.getInstance().getLdapPort()));
-		logger.info(String.valueOf(ServerConfiguration.getInstance().getLdapStartTls()));
 
 		LdapNetworkConnection ldapConnection = null;
-		// try to connect to the ldapServer
 		try {
 			LdapConnectionConfig connectionConfig = new LdapConnectionConfig();
 			connectionConfig.setLdapHost(ServerConfiguration.getInstance().getLdapHost());
@@ -59,22 +52,22 @@ public class LdapAuthorizingRealm extends AuthorizingRealm {
 			ldapConnection = new LdapNetworkConnection(connectionConfig);
 			ldapConnection.bind();
 		} catch (InvalidConnectionException e) {
-			logger.info("ldap.noConnection");
-			throw new AuthenticationException("ldap.noConnection");	
+			logger.info("LdapAuthorizingRealm: Connection could not be established.");
+			throw new AuthenticationException("LdapAuthorizingRealm: Connection could not be established.");	
 		} catch (LdapException e) {
-			logger.info("ldap.wrongCredentials");
-			throw new AuthenticationException("ldap.wrongCredentials");	
+			logger.info("LdapAuthorizingRealm: wrong credentials");
+			throw new AuthenticationException("LdapAuthorizingRealm: wrong credentials");	
 		}finally{
 		    if (ldapConnection != null) { 
-		    	logger.info("Closing ldapConnection.");
+		    	logger.info("LdapAuthorizingRealm: Closing ldap connection.");
 		        try {
 					ldapConnection.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					logger.info("LdapConnection can't be closed.");
+					logger.info("LdapAuthorizingRealm: Ldap connection can't be closed.");
 				}
 		    } else { 
-		    	logger.info("ldapConnection not open");
+		    	logger.info("LdapAuthorizingRealm: ldap connection not open");
 		    } 
 		}
 		// login to LDAP successful
