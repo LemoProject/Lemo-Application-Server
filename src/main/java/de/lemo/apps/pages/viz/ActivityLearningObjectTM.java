@@ -91,7 +91,8 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityLearningObjectTreemap")
 @Import(library = { "../../js/d3/ActivityLearningObjectTM.js",
-					"../../js/d3/libs/modernizr.js"
+					"../../js/d3/libs/modernizr.js",
+					"../../js/d3/libs/d3.v2.js"
 		})
 public class ActivityLearningObjectTM {
 

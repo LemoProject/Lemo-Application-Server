@@ -92,7 +92,9 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTime")
-@Import(library = { "../../js/d3/ActivityTime.js" })
+@Import(library = { "../../js/d3/ActivityTime.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class ActivityTime {
 	
 	private static final int THOU = 1000;

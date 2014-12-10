@@ -80,7 +80,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visFrequentPathViger")
-@Import(library = { "../../js/d3/FrequentPath.js" })
+@Import(library = { "../../js/d3/FrequentPath.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class FrequentPathViger {
 
 	@Inject @Path("../../js/d3/Lemo.js")

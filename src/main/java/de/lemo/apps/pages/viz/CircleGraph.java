@@ -93,8 +93,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visCircleGraph")
 @Import(library = { "../../js/d3/CircleGraph_2.js"
-				   ,"../../js/d3/libs/packages.js"
-					})
+				   ,"../../js/d3/libs/packages.js",
+					"../../js/d3/libs/d3.v2.js"
+})
 public class CircleGraph {
 
 	private static final int THOU = 1000;

@@ -89,7 +89,9 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformance")
-@Import(library = { "../../js/d3/Performance.js" })
+@Import(library = { "../../js/d3/Performance.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class Performance {
 	private static final int THOU = 1000;
 	

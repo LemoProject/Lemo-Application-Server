@@ -96,7 +96,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeCumulutive")
-@Import(library = { "../../js/d3/ActivityTimeCumulative.js" })
+@Import(library = { "../../js/d3/ActivityTimeCumulative.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class ActivityTimeCumulative {
 
 	private static final int THOU = 1000;

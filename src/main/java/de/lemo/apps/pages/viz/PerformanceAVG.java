@@ -87,7 +87,9 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformanceAvg")
-@Import(library = { "../../js/d3/PerformanceAvg.js" })
+@Import(library = { "../../js/d3/PerformanceAvg.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class PerformanceAVG {
 
 	@Inject @Path("../../js/d3/Lemo.js")

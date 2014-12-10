@@ -92,7 +92,9 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityLearningObject")
-@Import(library = { "../../js/d3/ActivityLearningObject.js" })
+@Import(library = { "../../js/d3/ActivityLearningObject.js",
+					"../../js/d3/libs/d3.v2.js"
+					})
 public class ActivityLearningObject {
 
 

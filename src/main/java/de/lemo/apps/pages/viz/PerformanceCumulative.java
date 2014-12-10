@@ -89,7 +89,9 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformanceCumulative")
-@Import(library = { "../../js/d3/BoxPlot.js" })
+@Import(library = { "../../js/d3/BoxPlot.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class PerformanceCumulative {
 
 	private static final int THOU = 1000;

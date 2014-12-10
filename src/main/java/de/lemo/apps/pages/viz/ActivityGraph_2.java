@@ -84,7 +84,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityGraph")
-@Import(library = { "../../js/d3/ActivityGraph2.js" })
+@Import(library = { "../../js/d3/ActivityGraph2.js",
+					"../../js/d3/libs/d3.v2.js"
+				   })
 public class ActivityGraph_2 {
 
 	private static final int THOU = 1000;
