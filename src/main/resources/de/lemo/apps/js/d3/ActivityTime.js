@@ -22,6 +22,8 @@
       dataExport.lineWithFocusChartButton('.export-button', d3.select('#viz svg').data(), chart, locale);
       
       nv.utils.windowResize(chart.update);
+      d3.rebind('clipVoronoi');
+      chart.clipVoronoi(false);
       
       return chart;
     });
