@@ -226,6 +226,7 @@ public class ActivityLearningObject {
 	private ResourceRequestInfo resourceItem;
 
 	@Persist
+	@Property
 	private List<ResourceRequestInfo> showDetailsList;
 
 	@Persist
@@ -290,7 +291,7 @@ public class ActivityLearningObject {
 	
 	
 	
-	public List<ResourceRequestInfo> getResourceList() {
+	private void setShowDetailsList() {
 		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
 
 		List<ResourceRequestInfo> resultList;
@@ -307,7 +308,7 @@ public class ActivityLearningObject {
 		}
 		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
 
-		return resultList;
+		this.showDetailsList = resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -421,6 +422,7 @@ public class ActivityLearningObject {
 		{
 			logger.error(e.getMessage());
 		}
+		this.setShowDetailsList();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {

@@ -51,7 +51,7 @@
 			              </div>
 			              <div style="height: auto;" id="collapse4" class="accordion-body in collapseExt">
 			                <div class="accordion-inner">	
-				    			<t:grid source="resourceList" row="resourceItem" model="resourceGridModel" inPlace="true" width="100%" class="table">
+				    			<t:grid source="showDetailsList" row="resourceItem" model="resourceGridModel" inPlace="true" width="100%" class="table">
 				    				<p:resourcetypeCell>
 				    					${resourceTypeName}
 				    				</p:resourcetypeCell>
