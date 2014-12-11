@@ -84,9 +84,16 @@
 			                    .links(_links)
 			                    .size([w,h])
 			                    .linkDistance([250])
+			                    
+			                   /* Add link distance depending on target node value.
+			                    * function(d) { 
+			                    	var scale = d3.scale.linear()
+                    				.domain([300, 900])
+                    				.range([250, 50]);		
+			                    	console.log(d.target.value);
+			                    	return scale(d.target.value) })*/
 			                    .charge([-1500])
-			                    .gravity(0.3)
-			                    .start();
+			                    .gravity(0.3);
 			    /* Draw the edges/links between the nodes */
 			    var edges = svg.selectAll("line")
 			                    .data(_links)
@@ -123,6 +130,9 @@
 		    				} else return "translate(" + 30 + "," + d.y + ")";                        
 		                            });
 			                   }); // End tick func
+		        force.start();
+		        for (var i = 100; i > 0; --i) force.tick();
+		        force.stop();
 			}; // End makeDiag worker func
 			
 			function init(){
@@ -141,7 +151,6 @@
 					link.value = Math.round(link.value*normalizingFaktor);
 					_nodes[link.target].connected=1;
 					_nodes[link.source].connected=1;
-					console.log(link)
 				})			
 				makeDiag();
 			    // Bind slide event to update minSup Value in front end
