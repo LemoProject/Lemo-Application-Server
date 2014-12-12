@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.lemo</groupId>
 	<artifactId>apps</artifactId>
-	<version>1.5</version><!-- FLAG 1 identifier DONT DELETE -->
+	<version>1.5.00</version><!-- FLAG 1 identifier DONT DELETE -->
 	<packaging>war</packaging>
 	<name>Lemo Application Server</name>
 
@@ -80,6 +80,21 @@
 		<!-- Uncomment this to add support for file uploads: <dependency> <groupId>org.apache.tapestry</groupId> 
 			<artifactId>tapestry-upload</artifactId> <version>${tapestry-release-version}</version> 
 			</dependency> -->
+	
+		<!-- Is needed for Tapestry 5.3.8 and Java 8,
+			 please check if still needed. -->
+		<dependency>
+		  <groupId>org.javassist</groupId>
+		  <artifactId>javassist</artifactId>
+		  <version>3.18.2-GA</version>
+		  <exclusions>
+			  <exclusion>
+			    <artifactId>javassist</artifactId>
+			    <groupId>javassist</groupId>
+			  </exclusion>
+		   </exclusions>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -467,7 +482,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<tapestry-release-version>5.3.6</tapestry-release-version>
+		<tapestry-release-version>5.3.8</tapestry-release-version>
 		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.9</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>
