@@ -117,6 +117,18 @@ public interface Analysis {
 			Long startTime,
 			Long endTime,
 			List<Long> gender);
+	
+	String computeQFrequentPathApriori(
+			List<Long> courseIds,
+			List<Long> userIds,
+			List<String> types,
+			Long minLength,
+			Long maxLength,
+			Double minSup,
+			Boolean sessionWise,
+			Long startTime,
+			Long endTime,
+			List<Long> gender);
 
 	String computeCumulativeUserAccess(
 			List<Long> courseIds,

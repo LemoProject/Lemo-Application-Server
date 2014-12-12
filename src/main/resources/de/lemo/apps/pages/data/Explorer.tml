@@ -252,6 +252,12 @@
 			    				<br /><br />
 			    			</div>
 			    			
+			    			<div class="span2" align="center">
+			    				<t:pagelink page="viz/FrequentPathApriori" context="${CurrentCourse?.id}"><img src="${pathAnalysisIcon}" height="50px" width="85px" /><br /><br /><b>${message:visFrequentPathApriori}</b> </t:pagelink>
+			    				<span>&nbsp;</span><span class="label label-info tooltips" title="${message:FP-Tooltip}">?</span>
+			    				<br /><br />
+			    			</div>
+			    			
 
 			    			
 
