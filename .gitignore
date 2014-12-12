@@ -12,3 +12,4 @@ log.txt
 /src/main/resources/hibernate.cfg.xml
 /target
 .classpath
+derby.log
