@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
@@ -42,6 +44,7 @@ import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.slf4j.Logger;
+
 import de.lemo.apps.application.config.ServerConfiguration;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.restws.entities.ResultListLongObject;
@@ -52,6 +55,7 @@ import de.lemo.apps.restws.proxies.questions.QCourseActivityString;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;
 import de.lemo.apps.restws.proxies.questions.QCumulativeUserAccess;
+import de.lemo.apps.restws.proxies.questions.QFrequentPathsApriori;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsViger;
 import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
@@ -115,6 +119,10 @@ public class AnalysisImpl implements Analysis {
 	private QFrequentPathsViger qFrequentPathViger =
 			ProxyFactory.create(QFrequentPathsViger.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
+	private QFrequentPathsApriori qFrequentPathApriori =
+			ProxyFactory.create(QFrequentPathsApriori.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	
 	private QCumulativeUserAccess qCumulativeAnalysis =
 			ProxyFactory.create(QCumulativeUserAccess.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
@@ -364,6 +372,36 @@ public class AnalysisImpl implements Analysis {
 			if (init.defaultConnectionCheck()) {
 
 				String result = qFrequentPathViger.compute(courseIds, userIds, types, minLength,
+						maxLength, minSup, sessionWise, startTime, endTime, gender);
+
+				return result;
+
+			}
+
+		} catch (final Exception e) {
+			logger.error(e.getMessage());
+		}
+		logger.info("Returning empty result set.");
+		return "{}";
+	}
+	
+	@Override
+	public String computeQFrequentPathApriori(
+			final List<Long> courseIds,
+			final List<Long> userIds,
+			final List<String> types,
+			final Long minLength,
+			final Long maxLength,
+			final Double minSup,
+			final Boolean sessionWise,
+			final Long startTime,
+			final Long endTime,
+			final List<Long> gender) {
+		try {
+
+			if (init.defaultConnectionCheck()) {
+
+				String result = qFrequentPathApriori.compute(courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime, gender);
 
 				return result;
