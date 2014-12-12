@@ -215,7 +215,6 @@
     
   </div>
   <script type="text/javascript">
-  
     (function(d3custom, $, undefined) {
 
       var q2result = ${questionResult};
@@ -223,5 +222,7 @@
       d3custom.data = q2result;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
+    d3.rebind('clipVoronoi');
+    nv.graphs[0].clipVoronoi(false);
   </script>
 </html>
