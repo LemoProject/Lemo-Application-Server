@@ -44,10 +44,10 @@
     </database>
     
    	<user-praefix name="test-server">cn</user-praefix>
-   	<user-root name="test-server">ou=idmusers,dc=login,dc=htw-berlin,dc=de</user-root>
-   	<ldap-host name="test-server">login-dc-01.login.htw-berlin.de</ldap-host>
-   	<ldap-port name="test-server">389</ldap-port>
-   	<ldap-startTls>true</ldap-startTls>
+   	<user-root name="test-server">ou=Users,dc=example,dc=com</user-root>
+   	<ldap-host name="test-server">localhost</ldap-host>
+   	<ldap-port name="test-server">10389</ldap-port>
+   	<ldap-startTls>false</ldap-startTls>
    	
    	<user-option-enabled>true</user-option-enabled>
    	
