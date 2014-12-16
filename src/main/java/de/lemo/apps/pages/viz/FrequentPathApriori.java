@@ -386,7 +386,7 @@ public class FrequentPathApriori {
 	public void initSlider() {
 
 		if (this.minSup == null) {
-			this.minSup = 3;
+			this.minSup = 8;
 		}
 
 		this.minSupParams = new JSONObject();
@@ -469,7 +469,7 @@ public class FrequentPathApriori {
 
 		// Check value for minumim support .. if no value is set it will default to 8 -> 0.8
 		if ((this.minSup == null) || this.minSup.equals(0)) {
-			this.minSup = 3;
+			this.minSup = 8;
 		}
 		this.minSupValue = new Double(this.minSup);
 		this.minSupValue = this.minSupValue / 10;
