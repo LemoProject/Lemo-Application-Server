@@ -272,7 +272,6 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Could not execute user query.");
 		return result;
 	}
 

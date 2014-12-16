@@ -14,7 +14,7 @@
 	      		fullname="Administrator" />
 	      		
 	      <user name="user" 
-	      		password="la" 
+	      		password="lemolemo" 
 	      		roles="teacher" 
 	      		email="user&#64;example.com" 
 	      		fullname="Teacher" 
@@ -37,7 +37,7 @@
       <!-- config-->
       <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
       <property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
-      <!-- <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+     <!--  <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
       <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>-->
       
 
