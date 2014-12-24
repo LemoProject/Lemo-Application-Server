@@ -119,7 +119,7 @@
 					dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
 					normX = deltaX / dist,
 					normY = deltaY / dist;
-					return {normX,normY};
+					return {normX:normX,normY:normY};
 				}				
 				/* Run the Force effect */
 				force.on("tick", function() {
