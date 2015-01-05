@@ -93,14 +93,10 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityLearningObject")
 @Import(library = { "../../js/d3/ActivityLearningObject.js",
-					"../../js/d3/libs/d3.v2.js"
+					"../../js/d3/libs/d3.v2.js",
+					"../../js/d3/Lemo.js"
 					})
 public class ActivityLearningObject {
-
-
-	@Inject 
-	@Path("../../js/d3/Lemo.js")
-	private Asset lemoJs;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -595,8 +591,6 @@ public class ActivityLearningObject {
 
 	void setupRender() {
 		
-		javaScriptSupport.importJavaScriptLibrary(lemoJs);
-		
 		userOptionEnabled = ServerConfiguration.getInstance().getUserOptionEnabled();
 		
 		this.logger.debug(" ----- Bin in Setup Render");
@@ -643,16 +637,11 @@ public class ActivityLearningObject {
 		if(this.endDate != null){
 			this.endMem.put(this.courseId, this.endDate);
 		}
-		final Calendar beginCal = Calendar.getInstance();
-		final Calendar endCal = Calendar.getInstance();
-		beginCal.setTime(this.beginDate);
-		endCal.setTime(this.endDate);
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
 	}
 
 	@AfterRender
 	public void afterRender() {
-		javaScriptSupport.addScript("$('#beginDate').val('%s');",getFirstRequestDate());
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 
