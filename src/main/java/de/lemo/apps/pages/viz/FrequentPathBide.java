@@ -531,7 +531,6 @@ public class FrequentPathBide {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

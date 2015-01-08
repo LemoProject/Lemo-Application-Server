@@ -331,9 +331,6 @@ public class FrequentPathViger {
 		}
 		final List<LearningType> learningTypes = new ArrayList<LearningType>();
 		
-
-
-		
 		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
 			this.logger.debug(learningTypeList.toString());
 			final List<String> learningStringList = learningTypeList.getElements();
@@ -525,7 +522,6 @@ public class FrequentPathViger {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

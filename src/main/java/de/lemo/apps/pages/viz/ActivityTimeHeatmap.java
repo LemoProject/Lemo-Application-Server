@@ -628,11 +628,6 @@ public class ActivityTimeHeatmap {
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
 	}
 
-	@AfterRender
-	public void afterRender() {
-		this.javaScriptSupport.addScript("");
-	}
-
 	void onPrepareFromCustomizeForm() {
 		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
 	}
