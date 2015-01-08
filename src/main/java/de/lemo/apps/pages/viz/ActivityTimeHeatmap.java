@@ -631,6 +631,11 @@ public class ActivityTimeHeatmap {
 	void onPrepareFromCustomizeForm() {
 		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
 	}
+	
+	@AfterRender
+	public void afterRender() {
+		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
+	}
 
 	void onSuccessFromCustomizeForm() {
 		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
