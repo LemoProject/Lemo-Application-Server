@@ -86,7 +86,7 @@
 									<t:label for="email"/>
 									<t:textfield t:id="email"/>
 									<t:label for="username"/>
-									<t:textfield t:id="username"/>
+									<t:textfield t:id="username" t:disabled="true" />
 									<t:label for="fullname"/>
 									<t:textfield t:id="fullname"/>
 									<t:label for="password"/>										

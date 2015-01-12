@@ -18,6 +18,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
+import de.lemo.apps.components.UserRegistrationForm;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
 
@@ -34,9 +35,6 @@ public class MyAccount {
     
     @Property
     private BreadCrumbInfo breadCrumb;
-
-    @Component(id = "accountform")
-    private Form form;
 
     @Inject
     private HttpServletRequest request;

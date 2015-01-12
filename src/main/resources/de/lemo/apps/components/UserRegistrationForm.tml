@@ -1,0 +1,55 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+			
+		<script>
+			function setConfirmation(bool) {
+				 var confirm = document.getElementById("deleteUserConfirmation");
+				 if (bool) {
+				 	confirm.style.visibility="visible";
+				 }
+				 else {				 
+				 	confirm.style.visibility="hidden";
+				 }
+			}
+		</script>
+<div>
+	<form t:id="accountform" class="well  pull-left">
+		<t:label for="email"/>
+		<t:textfield t:id="email"/>
+		<t:label for="username"/>
+		<t:textfield t:id="username" t:disabled="true" />
+		<t:label for="fullname"/>
+		<t:textfield t:id="fullname"/>
+		<t:label for="password"/>										
+        <t:textfield t:id="password"/>
+		<t:label for="passwordConfirmation"/>								
+		<t:textfield t:id="passwordConfirmation"/>	
+		<t:if test="authorization">
+		<t:label for="accountLocked"/>			 
+    	<t:checkbox t:id="accountLocked"/>  
+		<t:label for="credentialsExpired"/>
+    	<t:checkbox t:id="credentialsExpired"/>	
+    	</t:if>
+    	<br/>
+    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
+    	<div class="pull-right">&nbsp;&nbsp;</div>	
+    	<t:if test="authorization">						    					            	
+		<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
+    	<div class="pull-right">&nbsp;&nbsp;</div>	
+    	</t:if>
+    	<t:pagelink page="admin/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>	
+    </form>	
+</div>
+<div class="span4" id="deleteUserConfirmation" style="visibility:hidden">
+	<div class="alert alert-error pull-left" style="padding-right:14px;">
+		<div class="pull-left">
+		<br/>
+		<p class="pull-left">${DeleteString}</p>
+		<br/>
+		<t:actionlink t:id="delete" class="btn btn-danger pull-right">${message:Yes}</t:actionlink>
+		<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
+		<button class="btn btn-primary pull-right" onclick="setConfirmation(false);">${message:No}</button>
+		</div>
+	</div>
+</div>
+</html>

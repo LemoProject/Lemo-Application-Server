@@ -182,6 +182,13 @@ public class ManageUser {
 	    return DashboardAdmin.class;
 	}
 	
+	void onPrepareForRender(){
+		username = userItem.getUsername();
+		fullname = userItem.getFullname();
+		email = userItem.getEmail();
+		accountLocked = userItem.isAccountLocked();
+		credentialsExpired = userItem.isCredentialsExpired();		
+	}
 	
 	Object onSelectedFromSearch() {
 		if(courseString!=null) {
@@ -302,7 +309,14 @@ public class ManageUser {
     void onValidateFromAccountform() {
         if (password == null || !password.equals(passwordConfirmation)) {
             form.recordError(passwordField, "Password doesnt match.");
+        }else{
+    		userItem.setFullname(fullname);
+    		userItem.setEmail(email);
+    		userItem.setAccountLocked(accountLocked);
+    		userItem.setCredentialsExpired(credentialsExpired);      
+    		userItem.setPassword(password);
         }
+	
     }
 
 }
