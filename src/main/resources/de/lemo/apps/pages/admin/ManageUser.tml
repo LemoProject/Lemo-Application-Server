@@ -81,30 +81,23 @@
 					</div>
 					<div class="span7">
 						<div>
-						
-<!-- 							<br /> -->
-<!-- 							<br /> -->
-<!-- 						    Current user: -->
-<!-- 	    					 <t:beandisplay object="userItem" exclude="password" add="courseAmount"> -->
-<!--             					<p:courseamountCell>	 -->
-<!--             						${userCourses?.size()} -->
-<!--             					</p:courseamountCell> -->
-<!--        						 </t:beandisplay> -->
-	
 							<div>
 								<form t:id="accountform" class="well  pull-left">
-							    	<t:beaneditor t:id="editor" object="userItem" >
-								    	<p:username>
-	                                		<t:label for="username" />
-	                                			<input t:type="TextField" t:id="username" value="userItem.username" 
-	                                        	disabled="true" />
-	                        			</p:username>
-	                        			<p:password>
-      										<t:label for="password"/>
-     			 							<t:passwordfield t:id="password" value="useritem.password"/>
-   	 									</p:password>
-                        			</t:beaneditor>
-							    	<br />						    	
+									<t:label for="email"/>
+									<t:textfield t:id="email"/>
+									<t:label for="username"/>
+									<t:textfield t:id="username"/>
+									<t:label for="fullname"/>
+									<t:textfield t:id="fullname"/>
+									<t:label for="password"/>										
+					                <t:textfield t:id="password"/>
+									<t:label for="passwordConfirmation"/>								
+									<t:textfield t:id="passwordConfirmation"/>	
+									<t:label for="accountLocked"/>			 
+							    	<t:checkbox t:id="accountLocked"/>  
+									<t:label for="credentialsExpired"/>
+							    	<t:checkbox t:id="credentialsExpired"/>	
+							    	<br/>
 							    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
 							    	<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
 									<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
@@ -213,10 +206,4 @@
  
    </section>
   </div>  
-
-	     
-     
-
-     
-
 </html>

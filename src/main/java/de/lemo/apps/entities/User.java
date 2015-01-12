@@ -106,6 +106,16 @@ public class User extends AbstractEntity {
 		this.email = email;
 		this.setPassword(password);
 	}
+	
+	public User(final Long id, final String username, 
+			final String fullname, final String email, final String password, final String confirmPassword) {
+		this.id = id;
+		this.username = username;
+		this.fullname = fullname;
+		this.email = email;
+		this.setPassword(password);
+		this.setPasswordConfirmation(confirmPassword);
+	}
 
 	@Override
 	public String toString() {
@@ -158,6 +168,10 @@ public class User extends AbstractEntity {
 	@Validate("required")
 	public String getPasswordConfirmation() {
 		return "";
+	}
+	
+	
+	public void setPasswordConfirmation(final String password) {
 	}
 
 	public void setPassword(final String newPassword) {

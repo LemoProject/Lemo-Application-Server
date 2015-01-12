@@ -39,6 +39,7 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.PasswordField;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -96,6 +97,27 @@ public class ManageUser {
 
 	@Component(id = "accountform")
 	private Form form;
+
+	@Property
+	private String username;
+	@Property
+	private String fullname;
+	@Property
+	private String email;	
+	@Property
+	private String password;
+	@Property
+	private String passwordConfirmation;
+	@Property
+	private boolean accountLocked;
+	@Property
+	private boolean credentialsExpired;
+
+    @Component(id = "password")
+    private PasswordField passwordField;
+
+    @Component(id = "passwordConfirmation")
+    private PasswordField passwordConfirmationField;
 	
 	@Property
 	@Persist
@@ -276,5 +298,11 @@ public class ManageUser {
 		this.userDAO.update(userItem);
 		return this;
 	}
+	
+    void onValidateFromAccountform() {
+        if (password == null || !password.equals(passwordConfirmation)) {
+            form.recordError(passwordField, "Password doesnt match.");
+        }
+    }
 
 }
