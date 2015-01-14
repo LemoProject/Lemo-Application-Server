@@ -254,7 +254,8 @@ public class Dashboard {
 		final Course course = this.courseDAO.getCourse(courseId);
 		if (course != null) {
 			final Date endDate = course.getLastRequestDate();
-			return this.analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1, null);
+			final Date startDate = course.getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(course,startDate, endDate, null);
 		}
 		return new ArrayList();
 	}

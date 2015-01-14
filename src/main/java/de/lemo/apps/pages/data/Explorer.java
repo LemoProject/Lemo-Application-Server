@@ -338,7 +338,8 @@ public class Explorer {
 	public List getUsageAnalysisLastMonth() {
 		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
-			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+			final Date firstDate = this.getCurrentCourse().getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), firstDate, endDate, null);
 		} else {
 			return null;
 		}
@@ -350,7 +351,8 @@ public class Explorer {
 	public List getUsageAnalysis() {
 		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
-			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+			final Date firstDate = this.getCurrentCourse().getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), firstDate, endDate, null);
 		} else {
 			return null;
 		}
