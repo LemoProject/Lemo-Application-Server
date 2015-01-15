@@ -23,6 +23,7 @@ package de.lemo.apps.components;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.json.JSONObject;
 
@@ -59,13 +60,17 @@ public class JqPlotLine extends JqPlot {
 		final JSONObject seriesDefaults = new JSONObject();
 		final JSONObject axisDefaults = new JSONObject();
 		final JSONObject renderer = new JSONObject();
-
+		final JSONArray series = new JSONArray();
+		final JSONObject firstseries = new JSONObject();
 		// change to "jQuery.jqplot.BarRenderer" and create an corresponding class if Bar Chart is required
 		renderer.put("renderer", new JSONLiteral("jQuery.jqplot.LineRenderer"));
-
+		
+		firstseries.put("markerOptions", new JSONObject("{ show:false }"));
+		series.put(firstseries);
+		seriesDefaults.put("series", series);
+		
 		seriesDefaults.put("seriesDefaults", renderer);
 		seriesDefaults.put("legend", new JSONObject("{ show:false, location: 'e' }"));
-
 		seriesDefaults.put("highlighter", new JSONObject(
 				"{show: true, showLabel: true, tooltipAxes: 'y',sizeAdjust: 10.5 , tooltipLocation : 'ne'}"));
 		seriesDefaults.put("cursor", new JSONObject("{ show:true, zoom: true, constrainZoomTo: x, showTooltip:true }"));
