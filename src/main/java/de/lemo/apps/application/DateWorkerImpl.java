@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/application/DateWorkerImpl.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -124,7 +124,6 @@ public class DateWorkerImpl implements DateWorker {
 				", changeMonth: true" +
 				", changeYear: true" +
 				", buttonText: '" + this.messages.get("chooseDate") + "'" +
-				// ", minDate: '01.07.2012'" +
 				", maxDate: '0'"+
 				", buttonImage: '" + this.calendarIcon.toClientURL() + "'" +
 				", buttonImageOnly: false" +
