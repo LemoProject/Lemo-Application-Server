@@ -71,9 +71,6 @@ public class User extends AbstractEntity {
 	private Date lastLogin;
 	private Date currentLogin;
 
-	private boolean accountLocked;
-	private boolean credentialsExpired;
-
 	private String encryptedPassword;
 	private byte[] passwordSalt;
 	private String tempPassword;
@@ -217,22 +214,6 @@ public class User extends AbstractEntity {
 
 	public void setPasswordSalt(byte[] passwordSalt) {
 		this.passwordSalt = (byte[])passwordSalt.clone();
-	}
-
-	public boolean isAccountLocked() {
-		return this.accountLocked;
-	}
-
-	public void setAccountLocked(final boolean accountLocked) {
-		this.accountLocked = accountLocked;
-	}
-
-	public boolean isCredentialsExpired() {
-		return this.credentialsExpired;
-	}
-
-	public void setCredentialsExpired(final boolean credentialsExpired) {
-		this.credentialsExpired = credentialsExpired;
 	}
 
 	public void setRoles(final List<Roles> roles) {

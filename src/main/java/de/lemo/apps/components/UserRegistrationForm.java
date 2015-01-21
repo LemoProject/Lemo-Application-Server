@@ -64,9 +64,7 @@ public class UserRegistrationForm {
 	void onPrepareForRender(){
 		username = userItem.getUsername();
 		fullname = userItem.getFullname();
-		email = userItem.getEmail();
-		accountLocked = userItem.isAccountLocked();
-		credentialsExpired = userItem.isCredentialsExpired();		
+		email = userItem.getEmail();		
 	}
 	
     void onValidateFromAccountform() {   	
@@ -75,8 +73,6 @@ public class UserRegistrationForm {
 			userItem.setUsername(username);
 		}
 		userItem.setEmail(email);
-		userItem.setAccountLocked(accountLocked);
-		userItem.setCredentialsExpired(credentialsExpired); 
 		if(password != null){
 	        if (!password.equals(passwordConfirmation)) {
 	            form.recordError(passwordField, "Password doesnt match.");

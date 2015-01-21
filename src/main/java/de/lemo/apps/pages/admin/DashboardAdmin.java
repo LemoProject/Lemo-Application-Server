@@ -142,7 +142,7 @@ public class DashboardAdmin {
 	private final BeanModel userModel;
     {
     	userModel = beanModelSource.createEditModel(User.class, messages);
-    	userModel.include("username","fullname","email","accountlocked");
+    	userModel.include("username","fullname","email");
     	userModel.reorder("username","fullname","email");
     	userModel.add("view",null);
     }

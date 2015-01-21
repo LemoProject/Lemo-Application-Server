@@ -95,14 +95,7 @@ public class UserRealm extends AuthorizingRealm {
 		}
 
 		final User user = this.findByUsername(username);
-
-		if (user.isAccountLocked()) {
-			throw new LockedAccountException("Account [" + username + "] is locked.");
-		}
-		if (user.isCredentialsExpired()) {
-			final String msg = "The credentials for account [" + username + "] are expired";
-			throw new ExpiredCredentialsException(msg);
-		}
+		
 		return new SimpleAuthenticationInfo(username, user.getPassword(), "basic");
 	}
 

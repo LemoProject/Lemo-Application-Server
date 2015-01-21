@@ -32,12 +32,6 @@
         <t:textfield t:id="password"/>
 		<t:label for="passwordConfirmation"/>								
 		<t:textfield t:id="passwordConfirmation"/>	
-		<t:if test="authorization">
-		<t:label for="accountLocked"/>			 
-    	<t:checkbox t:id="accountLocked"/>  
-		<t:label for="credentialsExpired"/>
-    	<t:checkbox t:id="credentialsExpired"/>	
-    	</t:if>
     	<br/>
     	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
     	<div class="pull-right">&nbsp;&nbsp;</div>	
