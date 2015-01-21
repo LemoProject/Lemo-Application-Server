@@ -43,8 +43,6 @@ import de.lemo.apps.integration.UserDAO;
  */
 public class CreateUser {
 	
-	@Component(id = "accountform")
-	private Form form;
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -71,15 +69,4 @@ public class CreateUser {
 		this.userDAO.save(this.userItem);
 		return DashboardAdmin.class;
 	}
-	
-	Object onSelectedFromDashboard() {
-		this.userDAO.save(this.userItem);
-    	return DashboardAdmin.class;
-	}
-	
-	Object onSelectedFromNew() {
-		this.userDAO.save(this.userItem);
-    	return this;
-}
-
 }

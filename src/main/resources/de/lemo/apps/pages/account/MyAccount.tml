@@ -19,7 +19,7 @@
             <div class="alert alert-success" >${infoMessage}</div>
           </t:if>
 
-				    <t:userRegistrationForm userItem="myAccount" authorization="true"/>
+				    <t:userRegistrationForm userItem="myAccount" t:authorization="true" t:create="false"/>
 			 	</div>  
 			 </div> 
 		</div>

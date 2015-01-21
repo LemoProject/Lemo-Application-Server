@@ -49,6 +49,10 @@ public class UserRegistrationForm {
     @Property
 	private boolean authorization;
     
+    @Parameter(required=true)
+    @Property
+	private boolean create;
+    
 	@Inject
 	private Messages messages;
     
@@ -66,6 +70,9 @@ public class UserRegistrationForm {
             form.recordError(passwordField, "Password doesnt match.");
         }else{
     		userItem.setFullname(fullname);
+    		if(create){
+    			userItem.setUsername(username);
+    		}
     		userItem.setEmail(email);
     		userItem.setAccountLocked(accountLocked);
     		userItem.setCredentialsExpired(credentialsExpired);      
