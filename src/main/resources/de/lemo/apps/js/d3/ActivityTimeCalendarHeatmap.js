@@ -6,28 +6,44 @@
 	  	var transformedData = transformData(d3custom.data);
 	  	var minVal = 100000000;
 	  	var maxVal = 0;
-	  	var startDate = calcStartDate(d3custom.data);
+	  	var timeProgress = calcStartDate(d3custom.data);
+	  	var startDate = timeProgress.startDate;
+	  	var endDate = timeProgress.endDate;
 
 	  	
 	  	function calcStartDate(data){
 	  		var tmin = new Date().getTime();
+	  		var tmax = 0;
 	  		for(var timestamp in data){
 	  			if(timestamp < tmin){
 	  				tmin = timestamp; 
 	  			}
+	  			if(timestamp > tmax){
+	  				tmax = timestamp; 
+	  			}	  			
 	  			if(data[timestamp]>maxVal)
 	  				maxVal = data[timestamp];
 	  			if(data[timestamp]<minVal)
 	  				minVal = data[timestamp];
 	  		}
-	  		return new Date(tmin*1000);
+	  		return {startDate:new Date(tmin*1000),endDate:new Date(tmax*1000)};
 	  	}
 	  	
 	  	function transformData(data){
 	  		return data;
 	  	}
 	  	
-	  	for (var i = 0; i < 12; i++){
+	  	function monthDiff(d1, d2) {
+	  	    var months;
+	  	    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+	  	    months -= d1.getMonth();
+	  	    months += d2.getMonth()+1;
+	  	    return months <= 0 ? 0 : months;
+	  	}
+	  	
+	  	var numberOfMonthToDisplay=monthDiff(startDate,endDate);
+	  	
+	  	for (var i = 0; i < numberOfMonthToDisplay; i++){
 	  		var cal = new CalHeatMap();
 	  		cal.init({
 		    	itemSelector: "#cal-heatmap"+(i+1).toString(),
@@ -40,7 +56,11 @@
 		        cellSize: 25,
 				subDomainTextFormat: "%d",
 		        browsing: true,
-		        legendColors: ["#FFFFFF", "#FF0000"],
+		        legendColors: {
+		    		min: "#efefef",
+		    		max: "#ff0000",
+		    		empty: "white"
+		    	},
 		        displayLegend: false,   
 		        considerMissingDataAsZero: true,
 			})

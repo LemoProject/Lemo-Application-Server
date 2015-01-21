@@ -1,3 +1,4 @@
+//Javascript-Helperfunctions 
 function hashColor(objectName,category) {
 	String.prototype.hashCode = function(){
 		var hash = 0;
