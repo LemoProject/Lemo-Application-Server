@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/data/Search.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -60,7 +60,9 @@ public class Search {
 	}
 	
 	public void onActivate() {
-		allCourses = this.courseDAO.searchCourses(Arrays.asList(searchQuery.split(" ")));	
+		if(searchQuery!=null){
+			allCourses = this.courseDAO.searchCourses(Arrays.asList(searchQuery.split(" ")));
+		}
 	}
 
 	

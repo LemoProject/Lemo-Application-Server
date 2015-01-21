@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/services/security/UserRealm.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -95,14 +95,7 @@ public class UserRealm extends AuthorizingRealm {
 		}
 
 		final User user = this.findByUsername(username);
-
-		if (user.isAccountLocked()) {
-			throw new LockedAccountException("Account [" + username + "] is locked.");
-		}
-		if (user.isCredentialsExpired()) {
-			final String msg = "The credentials for account [" + username + "] are expired";
-			throw new ExpiredCredentialsException(msg);
-		}
+		
 		return new SimpleAuthenticationInfo(username, user.getPassword(), "basic");
 	}
 

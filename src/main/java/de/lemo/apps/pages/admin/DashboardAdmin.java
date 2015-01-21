@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/admin/DashboardAdmin.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -142,7 +142,7 @@ public class DashboardAdmin {
 	private final BeanModel userModel;
     {
     	userModel = beanModelSource.createEditModel(User.class, messages);
-    	userModel.include("username","fullname","email","accountlocked");
+    	userModel.include("username","fullname","email");
     	userModel.reorder("username","fullname","email");
     	userModel.add("view",null);
     }

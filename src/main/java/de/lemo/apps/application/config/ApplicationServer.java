@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/application/config/ApplicationServer.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -62,5 +62,20 @@ class ApplicationServer {
 
 	@XmlElement(name = "user-option-enabled", required = true)
 	public String userOptionEnabled;
+
+	@XmlElement(name = "user-praefix", required = true)
+	public String userPraefix;
+
+	@XmlElement(name = "user-root", required = true)
+	public String userRoot;
+
+	@XmlElement(name = "ldap-host", required = true)
+	public String ldapHost;
+
+	@XmlElement(name = "ldap-port", required = true)
+	public String ldapPort;
+
+	@XmlElement(name = "ldap-startTls", required = true)
+	public String ldapStartTls;
 	
 }

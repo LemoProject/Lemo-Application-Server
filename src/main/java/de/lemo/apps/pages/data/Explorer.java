@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/data/Explorer.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -136,7 +136,7 @@ public class Explorer {
 	@Path("../../images/icons/activity_treemap.svg")
 	@Property
 	private Asset usageAnalysisLOTreeMapIcon;
-
+		
 	@Inject
 	@Path("../../images/icons/navigation_bide.svg")
 	@Property
@@ -172,9 +172,10 @@ public class Explorer {
 	@Property
 	private Asset activityCumulativeIcon;
 	@Inject
-	@Path("../../images/icons/activity_heatmap.svg")
+	@Path("../../images/icons/activity_treemap_old.svg")
 	@Property
 	private Asset heatMapAnalysisIcon;
+	
 	@Inject
 	@Path("../../images/icons/activity_heatmap.svg")
 	@Property
@@ -337,7 +338,8 @@ public class Explorer {
 	public List getUsageAnalysisLastMonth() {
 		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
-			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+			final Date firstDate = this.getCurrentCourse().getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), firstDate, endDate, null);
 		} else {
 			return null;
 		}
@@ -349,7 +351,8 @@ public class Explorer {
 	public List getUsageAnalysis() {
 		if (this.getCurrentCourse() != null) {
 			final Date endDate = this.getCurrentCourse().getLastRequestDate();
-			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), endDate, Calendar.MONTH, -1, null);
+			final Date firstDate = this.getCurrentCourse().getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(this.getCurrentCourse(), firstDate, endDate, null);
 		} else {
 			return null;
 		}

@@ -14,24 +14,7 @@
       
 			<div class="row-fluid">
 				<div class="span12">	 
-
-          <t:if test="infoMessage">
-            <div class="alert alert-success" >${infoMessage}</div>
-          </t:if>
-        
-					<form t:id="accountform" class="well  pull-left">
-				    	<t:beaneditor t:id="editor" object="myaccount" >
-				    		<p:password>
-      							<t:label for="password"/>
-     			 				<t:passwordfield t:id="password" value="myaccount.password"/>
-   	 						</p:password>
-				    	</t:beaneditor>
-				    	<br />
-				    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
-				    	<div class="pull-right">&nbsp;&nbsp;</div>
-				    	<t:pagelink page="data/dashboard" class="btn pull-right">${message:cancel}</t:pagelink>
-		            	
-				    </form>	
+				    <t:userRegistrationForm userItem="myAccount" t:authorization="false" t:create="false"/>
 			 	</div>  
 			 </div> 
 		</div>

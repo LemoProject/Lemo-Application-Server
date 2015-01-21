@@ -18,6 +18,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
+import de.lemo.apps.components.UserRegistrationForm;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
 
@@ -35,9 +36,6 @@ public class MyAccount {
     @Property
     private BreadCrumbInfo breadCrumb;
 
-    @Component(id = "accountform")
-    private Form form;
-
     @Inject
     private HttpServletRequest request;
 
@@ -47,9 +45,6 @@ public class MyAccount {
     @Persist("Flash")
     private User myAccount;
 
-    @Property
-    @Persist("flash")
-    private String infoMessage;
 
     public String getUserName() {
         return this.request.getRemoteUser();
@@ -69,7 +64,6 @@ public class MyAccount {
 
     Object onSuccess() {
         this.ud.update(this.myAccount);
-        infoMessage = messages.get("accountUpdateSuccess");
         return this;
     }
 

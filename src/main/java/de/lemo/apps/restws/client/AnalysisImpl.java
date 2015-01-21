@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/restws/client/AnalysisImpl.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -52,6 +52,7 @@ import de.lemo.apps.restws.proxies.questions.QCourseActivityString;
 import de.lemo.apps.restws.proxies.questions.QCourseUserPaths;
 import de.lemo.apps.restws.proxies.questions.QCourseUsers;
 import de.lemo.apps.restws.proxies.questions.QCumulativeUserAccess;
+import de.lemo.apps.restws.proxies.questions.QFrequentPathsApriori;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsBIDE;
 import de.lemo.apps.restws.proxies.questions.QFrequentPathsViger;
 import de.lemo.apps.restws.proxies.questions.QLearningObjectUsage;
@@ -119,6 +120,10 @@ public class AnalysisImpl implements Analysis {
 	private QFrequentPathsViger qFrequentPathViger =
 			ProxyFactory.create(QFrequentPathsViger.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
+	private QFrequentPathsApriori qFrequentPathApriori =
+			ProxyFactory.create(QFrequentPathsApriori.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
+
+	
 	private QCumulativeUserAccess qCumulativeAnalysis =
 			ProxyFactory.create(QCumulativeUserAccess.class, AnalysisImpl.QUESTIONS_BASE_URL, clientExecutor);
 
@@ -268,7 +273,6 @@ public class AnalysisImpl implements Analysis {
 		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Could not execute user query.");
 		return result;
 	}
 	
@@ -383,6 +387,36 @@ public class AnalysisImpl implements Analysis {
 			if (init.defaultConnectionCheck()) {
 
 				String result = qFrequentPathViger.compute(courseIds, userIds, types, minLength,
+						maxLength, minSup, sessionWise, startTime, endTime, gender);
+
+				return result;
+
+			}
+
+		} catch (final Exception e) {
+			logger.error(e.getMessage());
+		}
+		logger.info("Returning empty result set.");
+		return "{}";
+	}
+	
+	@Override
+	public String computeQFrequentPathApriori(
+			final List<Long> courseIds,
+			final List<Long> userIds,
+			final List<String> types,
+			final Long minLength,
+			final Long maxLength,
+			final Double minSup,
+			final Boolean sessionWise,
+			final Long startTime,
+			final Long endTime,
+			final List<Long> gender) {
+		try {
+
+			if (init.defaultConnectionCheck()) {
+
+				String result = qFrequentPathApriori.compute(courseIds, userIds, types, minLength,
 						maxLength, minSup, sessionWise, startTime, endTime, gender);
 
 				return result;

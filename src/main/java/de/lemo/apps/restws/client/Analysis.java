@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/restws/client/Analysis.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -117,6 +117,18 @@ public interface Analysis {
 			List<Long> gender);
 
 	String computeQFrequentPathViger(
+			List<Long> courseIds,
+			List<Long> userIds,
+			List<String> types,
+			Long minLength,
+			Long maxLength,
+			Double minSup,
+			Boolean sessionWise,
+			Long startTime,
+			Long endTime,
+			List<Long> gender);
+	
+	String computeQFrequentPathApriori(
 			List<Long> courseIds,
 			List<Long> userIds,
 			List<String> types,

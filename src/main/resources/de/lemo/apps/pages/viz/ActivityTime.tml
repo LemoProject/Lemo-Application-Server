@@ -39,13 +39,10 @@
 			              </div>
 			              <div style="height: auto;" id="collapse4" class="accordion-body in collapseExt">
 			                <div class="accordion-inner">	
-				    			<t:grid source="resourceList" row="resourceItem" model="resourceGridModel" inPlace="true" width="100%" class="table">
+				    			<t:grid source="showDetailsList" row="resourceItem" model="resourceGridModel" inPlace="true" width="100%" class="table">
 				    				<p:resourcetypeCell>
 				    					${resourceTypeName}
 				    				</p:resourcetypeCell>
-<!--				    				<p:showCell>-->
-<!--				    					<t:actionlink t:id="showDetails" context="[resourceItem.id, resourceItem.resourceType]">details</t:actionlink>-->
-<!--				    				</p:showCell>-->
 				    			</t:grid>
     					   </div>
 			              </div>
@@ -208,15 +205,7 @@
                   </div>      
 
 			 </div><!-- accordion -->
-  			   		
-  			   		
 
-            
-       
-        			
-<!--    				<input type="text" class="input-large search-query"/>-->
-<!--    				<button type="submit" class="btn pull-right">${message:search}</button>-->
-<!--    		</div> THUMBNAIL-->
     		</div> <!--span12-->
     		</div> <!--row fluid-->
     		
@@ -226,22 +215,14 @@
     
   </div>
   <script type="text/javascript">
-  
     (function(d3custom, $, undefined) {
-    	
-      var beginDate = '${beginDate}';
-      var endDate = '${endDate}';
-      
-      $('#endDate').datepicker( "setDate", "-14");
-      
-      $('#beginDate').val(beginDate);
-      
-      
-      
+
       var q2result = ${questionResult};
       
       d3custom.data = q2result;
       
     })(window.d3custom = window.d3custom || {}, jQuery);
+    d3.rebind('clipVoronoi');
+    nv.graphs[0].clipVoronoi(false);
   </script>
 </html>

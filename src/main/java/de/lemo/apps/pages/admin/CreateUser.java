@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/admin/CreateUser.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2013 
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -43,8 +43,6 @@ import de.lemo.apps.integration.UserDAO;
  */
 public class CreateUser {
 	
-	@Component(id = "accountform")
-	private Form form;
 	
 	@Property
 	private BreadCrumbInfo breadCrumb;
@@ -71,15 +69,4 @@ public class CreateUser {
 		this.userDAO.save(this.userItem);
 		return DashboardAdmin.class;
 	}
-	
-	Object onSelectedFromDashboard() {
-		this.userDAO.save(this.userItem);
-    	return DashboardAdmin.class;
-	}
-	
-	Object onSelectedFromNew() {
-		this.userDAO.save(this.userItem);
-    	return this;
-}
-
 }

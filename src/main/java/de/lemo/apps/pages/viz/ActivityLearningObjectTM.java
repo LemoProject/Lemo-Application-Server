@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/ActivityLearningObjectTM.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -91,7 +91,8 @@ import de.lemo.apps.services.internal.jqplot.TextValueDataItem;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityLearningObjectTreemap")
 @Import(library = { "../../js/d3/ActivityLearningObjectTM.js",
-					"../../js/d3/libs/modernizr.js"
+					"../../js/d3/libs/modernizr.js",
+					"../../js/d3/libs/d3.v2.js"
 		})
 public class ActivityLearningObjectTM {
 
@@ -489,15 +490,19 @@ public class ActivityLearningObjectTM {
 
 			final Set<String> keySet = learningObjectTypes.keySet();
 			final Iterator<String> it = keySet.iterator();
-			while (it.hasNext()) {
+			int objCounter = 0;
+			while (it.hasNext()) {			
 				final String learnObjectTypeName = it.next();
 				final JSONObject graphLOTypeObject = new JSONObject();
 				final JSONArray graphLOTypeChildreenArray = new JSONArray();
 				graphLOTypeObject.put("name", learnObjectTypeName);
+				graphLOTypeObject.put("nameUnique", learnObjectTypeName+"_"+String.valueOf(objCounter));
 				for (int i = 0; i < learningObjectTypes.get(learnObjectTypeName).size(); i++) {
+					objCounter++;	
 					final JSONObject graphLOObject = new JSONObject();
 					final ResourceRequestInfo learnObject = learningObjectTypes.get(learnObjectTypeName).get(i);
 					graphLOObject.put("name", learnObject.getTitle());
+					graphLOObject.put("nameUnique", learnObject.getTitle()+"_"+String.valueOf(objCounter));
 					graphLOObject.put("requests", learnObject.getRequests());
 					graphLOObject.put("user", learnObject.getUsers());
 					graphLOObject.put("value", learnObject.getRequests());
@@ -575,7 +580,6 @@ public class ActivityLearningObjectTM {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

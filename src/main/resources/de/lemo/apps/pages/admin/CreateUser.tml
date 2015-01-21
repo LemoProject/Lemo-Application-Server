@@ -47,48 +47,7 @@
 					<div class="span1">
 					</div>
 					<div class="span11">
-						<div>
-						
-					<form t:id="accountform" class="well  pull-left">
-					
-				    	<t:beaneditor t:id="editor" object="userItem">	
-				    		<t:error for="username" ><p class="pull-left">username missing</p></t:error>
-				    		<t:error for="fullname"><p class="pull-left">fullname missing</p></t:error>
-				    		<t:error for="email"><p class="pull-left">email missing</p></t:error>
-				    		<t:error for="password"><p class="pull-left">password missing</p></t:error>
-				    	</t:beaneditor>
-				    	
-				    	<br />
-				    	
-				    	<div class="btn-group pull-right">
-				    	<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-					    	${message:save}
-					    	<span class="caret"></span>
-					 	</a>
-				    	
-					  	<ul class="dropdown-menu" style="margin-top:5px;">
-					   		<li>
-					   			<a t:type="LinkSubmit" t:id="Dashboard" href="#">${message:BackToDashboard}</a>					   			
-					   		</li>
-					   		<li class="divider"></li>
-					   		<li>
-					   			<a t:type="LinkSubmit" t:id="New" href="#">${message:NewUser}</a>	
-					   		</li>
-					  	</ul>
-					  	</div>
-					  	
-					  	
-					  	<div class="pull-right">&nbsp;&nbsp;</div>
-					  	<t:pagelink page="admin/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>
-				    	
-					  	
-				    	
-		            	
-				    </form>	
-       						
-
-    					
-    					</div>
+						<t:userRegistrationForm userItem="userItem" t:authorization="false" t:create="true"/>
 					</div>
 					<div class="span1">
 					

@@ -20,8 +20,6 @@
       }
     </style>
     
-    <link rel="stylesheet" href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css"/>
-    
     <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap.js"></script>
     
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -76,7 +74,7 @@
 
       <footer>
         <div class="span12">
-        	<p>&copy; LeMo Project 2012</p>
+        	<p>&copy; LeMo Project 2015</p>
         </div>
       </footer>
 

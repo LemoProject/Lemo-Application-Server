@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/data/Dashboard.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -254,7 +254,8 @@ public class Dashboard {
 		final Course course = this.courseDAO.getCourse(courseId);
 		if (course != null) {
 			final Date endDate = course.getLastRequestDate();
-			return this.analysisWorker.usageAnalysis(course, endDate, Calendar.MONTH, -1, null);
+			final Date startDate = course.getFirstRequestDate();
+			return this.analysisWorker.usageAnalysis(course,startDate, endDate, null);
 		}
 		return new ArrayList();
 	}

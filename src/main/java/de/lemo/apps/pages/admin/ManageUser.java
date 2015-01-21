@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/admin/ManageUser.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.PasswordField;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -93,9 +94,6 @@ public class ManageUser {
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
-
-	@Component(id = "accountform")
-	private Form form;
 	
 	@Property
 	@Persist
@@ -133,7 +131,6 @@ public class ManageUser {
     
     void cleanUpRender() {
     	this.searchCoursesList = null;
-    	form.clearErrors();
     }
       
 	
@@ -160,6 +157,8 @@ public class ManageUser {
 	    return DashboardAdmin.class;
 	}
 	
+	void onPrepareForRender(){		
+	}
 	
 	Object onSelectedFromSearch() {
 		if(courseString!=null) {

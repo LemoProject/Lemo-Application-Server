@@ -1,0 +1,57 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+			
+		<script>
+			function setConfirmation(bool) {
+				 var confirm = document.getElementById("deleteUserConfirmation");
+				 if (bool) {
+				 	confirm.style.visibility="visible";
+				 }
+				 else {				 
+				 	confirm.style.visibility="hidden";
+				 }
+			}
+		</script>
+<div>
+    <t:if test="infoMessage">
+      <div class="alert alert-success" >${infoMessage}</div>
+    </t:if>
+	<form t:id="accountform" class="well  pull-left">
+		<t:label for="email"/>
+		<t:textfield t:id="email" validate="email"/>
+		<t:label for="username"/>
+		<t:if test="create">
+			<t:textfield t:id="username" />
+			<p:else>
+				<t:textfield t:value="username" t:disabled="true" />
+			</p:else>
+		</t:if>
+		<t:label for="fullname"/>
+		<t:textfield t:id="fullname"/>
+		<t:label for="password"/>										
+        <t:textfield t:id="password"/>
+		<t:label for="passwordConfirmation"/>								
+		<t:textfield t:id="passwordConfirmation"/>	
+    	<br/>
+    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
+    	<div class="pull-right">&nbsp;&nbsp;</div>	
+    	<t:if test="authorization">						    					            	
+		<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
+    	<div class="pull-right">&nbsp;&nbsp;</div>	
+    	</t:if>
+    	<t:actionlink t:id="cancel" class="btn pull-right">${message:cancel}</t:actionlink>	
+    </form>	
+</div>
+<div class="span4" id="deleteUserConfirmation" style="visibility:hidden">
+	<div class="alert alert-error pull-left" style="padding-right:14px;">
+		<div class="pull-left">
+		<br/>
+		<p class="pull-left">${DeleteString}</p>
+		<br/>
+		<t:actionlink t:id="delete" class="btn btn-danger pull-right">${message:Yes}</t:actionlink>
+		<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
+		<button class="btn btn-primary pull-right" onclick="setConfirmation(false);">${message:No}</button>
+		</div>
+	</div>
+</div>
+</html>

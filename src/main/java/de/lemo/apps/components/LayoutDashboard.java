@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/components/LayoutDashboard.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -63,7 +63,6 @@ import de.lemo.apps.pages.data.Search;
 				"../js/excanvas.js",
 				"../js/apps.js",
 				"../js/spin.js",
-				"../js/d3/libs/d3.js",
 				"../js/d3/libs/BoxPlot_Lib.js",
 				"../js/d3/libs/nv.d3.js",
 				"../js/d3/libs/jquery.tipsy.js",

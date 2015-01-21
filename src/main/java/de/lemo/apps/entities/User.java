@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/entities/User.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -71,9 +71,6 @@ public class User extends AbstractEntity {
 	private Date lastLogin;
 	private Date currentLogin;
 
-	private boolean accountLocked;
-	private boolean credentialsExpired;
-
 	private String encryptedPassword;
 	private byte[] passwordSalt;
 	private String tempPassword;
@@ -105,6 +102,16 @@ public class User extends AbstractEntity {
 		this.fullname = fullname;
 		this.email = email;
 		this.setPassword(password);
+	}
+	
+	public User(final Long id, final String username, 
+			final String fullname, final String email, final String password, final String confirmPassword) {
+		this.id = id;
+		this.username = username;
+		this.fullname = fullname;
+		this.email = email;
+		this.setPassword(password);
+		this.setPasswordConfirmation(confirmPassword);
 	}
 
 	@Override
@@ -159,6 +166,10 @@ public class User extends AbstractEntity {
 	public String getPasswordConfirmation() {
 		return "";
 	}
+	
+	
+	public void setPasswordConfirmation(final String password) {
+	}
 
 	public void setPassword(final String newPassword) {
 		if (newPassword != null && !newPassword.equals(this.encryptedPassword) && !"".equals(newPassword)) {
@@ -203,22 +214,6 @@ public class User extends AbstractEntity {
 
 	public void setPasswordSalt(byte[] passwordSalt) {
 		this.passwordSalt = (byte[])passwordSalt.clone();
-	}
-
-	public boolean isAccountLocked() {
-		return this.accountLocked;
-	}
-
-	public void setAccountLocked(final boolean accountLocked) {
-		this.accountLocked = accountLocked;
-	}
-
-	public boolean isCredentialsExpired() {
-		return this.credentialsExpired;
-	}
-
-	public void setCredentialsExpired(final boolean credentialsExpired) {
-		this.credentialsExpired = credentialsExpired;
 	}
 
 	public void setRoles(final List<Roles> roles) {

@@ -34,6 +34,10 @@
             } else {
               console.log("data", data);
               d3custom.spinner.stop();
+	      	  if (data.bideResult.nodes.length==0) {
+	    			$("#viz").prepend($('<div class="alert">No result. Please change your filter setting.</div>'));
+	    			return;
+	    	  }
               drawGraph(data.bideResult);
             }
           }

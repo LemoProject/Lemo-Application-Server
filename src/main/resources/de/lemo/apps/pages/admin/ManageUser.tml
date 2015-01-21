@@ -3,17 +3,7 @@
       xmlns:p="tapestry:parameter">
      
       <script>
-			
-			function setConfirmation(bool) {
-				 var confirm = document.getElementById("deleteUserConfirmation");
-				 if (bool) {
-				 	confirm.style.visibility="visible";
-				 }
-				 else {				 
-				 	confirm.style.visibility="hidden";
-				 }
-			}
-			
+						
 			function setConfirmation2(bool, int) {
 				 var confirm = document.getElementById("deleteCourseConfirmation");
 				 if (bool) {
@@ -80,44 +70,7 @@
 					<div class="span1">
 					</div>
 					<div class="span7">
-						<div>
-						
-<!-- 							<br /> -->
-<!-- 							<br /> -->
-<!-- 						    Current user: -->
-<!-- 	    					 <t:beandisplay object="userItem" exclude="password" add="courseAmount"> -->
-<!--             					<p:courseamountCell>	 -->
-<!--             						${userCourses?.size()} -->
-<!--             					</p:courseamountCell> -->
-<!--        						 </t:beandisplay> -->
-	
-							<div>
-								<form t:id="accountform" class="well  pull-left">
-							    	<t:beaneditor t:id="editor" object="userItem" >
-								    	<p:username>
-	                                		<t:label for="username" />
-	                                			<input t:type="TextField" t:id="username" value="userItem.username" 
-	                                        	disabled="true" />
-	                        			</p:username>
-	                        			<p:password>
-      										<t:label for="password"/>
-     			 							<t:passwordfield t:id="password" value="useritem.password"/>
-   	 									</p:password>
-                        			</t:beaneditor>
-							    	<br />						    	
-							    	<button type="submit" class="btn btn-primary pull-right">${message:saveChanges}</button>
-							    	<div class="pull-right">&nbsp;&nbsp;</div>							    					            	
-									<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
-							    	<div class="pull-right">&nbsp;&nbsp;</div>		
-							    	<t:pagelink page="admin/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>	
-							    </form>	
-							 </div>
-							
-       						 <br />
-       						 <br />
-       				
-    					
-    					</div>
+						<t:userRegistrationForm userItem="userItem" t:authorization="true" t:create="false"/>
 					</div>
 					
 					 <div class="span4" id="deleteUserConfirmation" style="visibility:hidden">
@@ -213,10 +166,4 @@
  
    </section>
   </div>  
-
-	     
-     
-
-     
-
 </html>

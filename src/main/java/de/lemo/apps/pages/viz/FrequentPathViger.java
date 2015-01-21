@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/FrequentPathViger.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -80,7 +80,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visFrequentPathViger")
-@Import(library = { "../../js/d3/FrequentPath.js" })
+@Import(library = { "../../js/d3/FrequentPath.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class FrequentPathViger {
 
 	@Inject @Path("../../js/d3/Lemo.js")
@@ -329,9 +331,6 @@ public class FrequentPathViger {
 		}
 		final List<LearningType> learningTypes = new ArrayList<LearningType>();
 		
-
-
-		
 		if ((learningTypeList != null) && (learningTypeList.getElements() != null)) {
 			this.logger.debug(learningTypeList.toString());
 			final List<String> learningStringList = learningTypeList.getElements();
@@ -467,7 +466,7 @@ public class FrequentPathViger {
 
 		// Check value for minumim support .. if no value is set it will default to 8 -> 0.8
 		if ((this.minSup == null) || this.minSup.equals(0)) {
-			this.minSup = 1;
+			this.minSup = 8;
 		}
 		this.minSupValue = new Double(this.minSup);
 		this.minSupValue = this.minSupValue / 10;
@@ -523,7 +522,6 @@ public class FrequentPathViger {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

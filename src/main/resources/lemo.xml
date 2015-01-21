@@ -14,7 +14,7 @@
 	      		fullname="Administrator" />
 	      		
 	      <user name="user" 
-	      		password="la" 
+	      		password="lemolemo" 
 	      		roles="teacher" 
 	      		email="user&#64;example.com" 
 	      		fullname="Teacher" 
@@ -36,15 +36,20 @@
       <property name="hibernate.connection.password">${apps-hibernate-password}</property>
       <!-- config-->
       <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <!-- <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>-->
-      <property name="hibernate.dialect">de.lemo.apps.services.internal.MysqlDialectUtf8</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+      <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>-->
+      
 
     </database>
     
-
-   	<user-dn-template name="test-server">cn={0},ou=Users,dc=example,dc=com</user-dn-template>
-   	<context-factory-url name="test-server">ldap://localhost:10389</context-factory-url>
-   	<user-option-enabled>true</user-option-enabled>
+   	<user-praefix name="test-server">cn</user-praefix>
+   	<user-root name="test-server">ou=Users,dc=example,dc=com</user-root>
+   	<ldap-host name="test-server">localhost</ldap-host>
+   	<ldap-port name="test-server">10389</ldap-port>
+   	<ldap-startTls>false</ldap-startTls>
+   	
+   	<user-option-enabled>false</user-option-enabled>
    	
     <dms-url>${lemo-dms-url}</dms-url>
 

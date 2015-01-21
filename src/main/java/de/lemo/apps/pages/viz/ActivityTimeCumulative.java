@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/ActivityTimeCumulative.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -96,7 +96,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeCumulutive")
-@Import(library = { "../../js/d3/ActivityTimeCumulative.js" })
+@Import(library = { "../../js/d3/ActivityTimeCumulative.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class ActivityTimeCumulative {
 
 	private static final int THOU = 1000;
@@ -567,7 +569,6 @@ public class ActivityTimeCumulative {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

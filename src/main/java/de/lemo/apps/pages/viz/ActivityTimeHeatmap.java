@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/ActivityTimeHeatmap.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -91,7 +91,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTimeHeatmap")
-@Import(library = { "../../js/d3/ActivityTimeHeatmap.js" })
+@Import(library = { "../../js/d3/ActivityTimeHeatmap.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class ActivityTimeHeatmap {
 	
 	private static final int THOU = 1000;
@@ -626,13 +628,13 @@ public class ActivityTimeHeatmap {
 		this.resolution = this.dateWorker.daysBetween(this.beginDate, this.endDate);
 	}
 
-	@AfterRender
-	public void afterRender() {
-		this.javaScriptSupport.addScript("");
-	}
-
 	void onPrepareFromCustomizeForm() {
 		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
+	}
+	
+	@AfterRender
+	public void afterRender() {
+		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 
 	void onSuccessFromCustomizeForm() {

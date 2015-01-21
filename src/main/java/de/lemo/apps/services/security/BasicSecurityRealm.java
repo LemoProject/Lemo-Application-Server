@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/services/security/BasicSecurityRealm.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ **/
 
 package de.lemo.apps.services.security;
 
@@ -45,7 +45,7 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 
 	@Inject
 	private UserDAO userDAO;
-	
+
 	@Inject
 	private Logger logger;
 
@@ -63,7 +63,7 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 		final UsernamePasswordToken userToken = (UsernamePasswordToken) token;
 		final String username = userToken.getUsername();
 		final String password = String.copyValueOf(userToken.getPassword());
-		
+
 		final User loginUser = userDAO.getUser(userToken.getUsername());
 
 		AuthenticationInfo authInfo = null;
@@ -72,17 +72,9 @@ public class BasicSecurityRealm extends AuthorizingRealm {
 			logger.debug("Login: The user " + username + " doesn't exist.");
 			throw new AuthenticationException("The user " + username + " doesn't exist.");	
 		} else if(loginUser.checkPassword(password))
-			{
-				if (loginUser.isAccountLocked()) {
-					logger.debug("Login: Account for user: " + username + " is locked.");
-					throw new LockedAccountException("Account for user: " + username + " is locked.");
-				}
-				if (loginUser.isCredentialsExpired()) {
-					logger.debug("Login: The credentials for user: " + username + " are expired.");
-					throw new ExpiredCredentialsException("The credentials for user: " + username + " are expired.");
-				}
-				logger.debug("Login: User "+ username +" logged in successfully.");
-				authInfo = new SimpleAuthenticationInfo(userToken.getUsername(), userToken.getPassword(), "basic");
+		{
+			logger.debug("Login: User "+ username +" logged in successfully.");
+			authInfo = new SimpleAuthenticationInfo(userToken.getUsername(), userToken.getPassword(), "basic");
 		}
 
 		return authInfo;

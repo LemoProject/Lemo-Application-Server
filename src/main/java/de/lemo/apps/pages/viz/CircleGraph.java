@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/CircleGraph.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -93,8 +93,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visCircleGraph")
 @Import(library = { "../../js/d3/CircleGraph_2.js"
-				   ,"../../js/d3/libs/packages.js"
-					})
+				   ,"../../js/d3/libs/packages.js",
+					"../../js/d3/libs/d3.v2.js"
+})
 public class CircleGraph {
 
 	private static final int THOU = 1000;
@@ -516,7 +517,6 @@ public class CircleGraph {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

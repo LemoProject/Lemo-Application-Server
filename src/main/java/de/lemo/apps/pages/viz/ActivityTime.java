@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/ActivityTime.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -92,7 +92,9 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visActivityTime")
-@Import(library = { "../../js/d3/ActivityTime.js" })
+@Import(library = { "../../js/d3/ActivityTime.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class ActivityTime {
 	
 	private static final int THOU = 1000;
@@ -227,6 +229,7 @@ public class ActivityTime {
 	private ResourceRequestInfo resourceItem;
 
 	@Persist
+	@Property
 	private List<ResourceRequestInfo> showDetailsList;
 	
 	@Persist
@@ -281,8 +284,7 @@ public class ActivityTime {
 		return elements;
 	}
 
-	@Cached
-	public List<ResourceRequestInfo> getResourceList() {
+	private void setShowDetailsList() {
 		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
 
 		List<ResourceRequestInfo> resultList;
@@ -299,7 +301,7 @@ public class ActivityTime {
 		}
 		this.logger.debug("ExtendedAnalysisWorker Results: " + resultList);
 
-		return resultList;
+		this.showDetailsList = resultList;
 	}
 
 	public Object onActivate(final Course course) {
@@ -407,6 +409,7 @@ public class ActivityTime {
 		} else {
 			this.logger.debug("No Learning Types found");
 		}
+		this.setShowDetailsList();
 	}
 
 	public final ValueEncoder<Course> getCourseValueEncoder() {
@@ -662,7 +665,6 @@ public class ActivityTime {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 

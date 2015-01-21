@@ -1,7 +1,7 @@
 /**
  * File ./src/main/java/de/lemo/apps/pages/viz/PerformanceUserCumulative.java
  * Lemo-Application-Server for learning analytics.
- * Copyright (C) 2013
+ * Copyright (C) 2015
  * Leonard Kappe, Andreas Pursian, Sebastian Schwarzrock, Boris Wenzlaff
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -89,7 +89,9 @@ import de.lemo.apps.services.internal.QuizValueEncoder;
  */
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPerformanceUserCumulative")
-@Import(library = { "../../js/d3/BoxPlot.js" })
+@Import(library = { "../../js/d3/BoxPlot.js",
+		"../../js/d3/libs/d3.v2.js"
+})
 public class PerformanceUserCumulative {
 
 	private static final int THOU = 1000;
@@ -546,7 +548,6 @@ public class PerformanceUserCumulative {
 
 	@AfterRender
 	public void afterRender() {
-		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
 	}
 
