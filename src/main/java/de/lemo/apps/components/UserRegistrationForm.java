@@ -2,6 +2,7 @@ package de.lemo.apps.components;
 
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.PasswordField;
@@ -55,6 +56,10 @@ public class UserRegistrationForm {
     
 	@Inject
 	private Messages messages;
+	
+    @Property
+    @Persist("flash")
+    private String infoMessage;
     
 	void onPrepareForRender(){
 		username = userItem.getUsername();
@@ -65,20 +70,28 @@ public class UserRegistrationForm {
 	}
 	
     void onValidateFromAccountform() {   	
-    
-        if (password == null || !password.equals(passwordConfirmation)) {
-            form.recordError(passwordField, "Password doesnt match.");
-        }else{
-    		userItem.setFullname(fullname);
-    		if(create){
-    			userItem.setUsername(username);
-    		}
-    		userItem.setEmail(email);
-    		userItem.setAccountLocked(accountLocked);
-    		userItem.setCredentialsExpired(credentialsExpired);      
-    		userItem.setPassword(password);
-        }
+		userItem.setFullname(fullname);
+		if(create){
+			userItem.setUsername(username);
+		}
+		userItem.setEmail(email);
+		userItem.setAccountLocked(accountLocked);
+		userItem.setCredentialsExpired(credentialsExpired); 
+		if(password != null){
+	        if (!password.equals(passwordConfirmation)) {
+	            form.recordError(passwordField, "Password doesnt match.");
+	        }else{     
+	    		userItem.setPassword(password);
+	        }			
+		}
     }
+    
+    void onSuccess(){
+    	if(!create){
+    		infoMessage = messages.get("accountUpdateSuccess");
+    	}        
+    }
+    
 	public String getDeleteString() {
 		return messages.format("sureToDelete", userItem.getFullname());
 	}

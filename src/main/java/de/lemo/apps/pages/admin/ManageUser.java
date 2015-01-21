@@ -94,30 +94,6 @@ public class ManageUser {
 
 	@Property
 	private BreadCrumbInfo breadCrumb;
-
-	@Component(id = "accountform")
-	private Form form;
-
-	@Property
-	private String username;
-	@Property
-	private String fullname;
-	@Property
-	private String email;	
-	@Property
-	private String password;
-	@Property
-	private String passwordConfirmation;
-	@Property
-	private boolean accountLocked;
-	@Property
-	private boolean credentialsExpired;
-
-    @Component(id = "password")
-    private PasswordField passwordField;
-
-    @Component(id = "passwordConfirmation")
-    private PasswordField passwordConfirmationField;
 	
 	@Property
 	@Persist
@@ -155,7 +131,6 @@ public class ManageUser {
     
     void cleanUpRender() {
     	this.searchCoursesList = null;
-    	form.clearErrors();
     }
       
 	
@@ -182,12 +157,7 @@ public class ManageUser {
 	    return DashboardAdmin.class;
 	}
 	
-	void onPrepareForRender(){
-		username = userItem.getUsername();
-		fullname = userItem.getFullname();
-		email = userItem.getEmail();
-		accountLocked = userItem.isAccountLocked();
-		credentialsExpired = userItem.isCredentialsExpired();		
+	void onPrepareForRender(){		
 	}
 	
 	Object onSelectedFromSearch() {
@@ -305,18 +275,5 @@ public class ManageUser {
 		this.userDAO.update(userItem);
 		return this;
 	}
-	
-    void onValidateFromAccountform() {
-        if (password == null || !password.equals(passwordConfirmation)) {
-            form.recordError(passwordField, "Password doesnt match.");
-        }else{
-    		userItem.setFullname(fullname);
-    		userItem.setEmail(email);
-    		userItem.setAccountLocked(accountLocked);
-    		userItem.setCredentialsExpired(credentialsExpired);      
-    		userItem.setPassword(password);
-        }
-	
-    }
 
 }

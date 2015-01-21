@@ -13,6 +13,9 @@
 			}
 		</script>
 <div>
+    <t:if test="infoMessage">
+      <div class="alert alert-success" >${infoMessage}</div>
+    </t:if>
 	<form t:id="accountform" class="well  pull-left">
 		<t:label for="email"/>
 		<t:textfield t:id="email"/>

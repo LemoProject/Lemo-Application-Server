@@ -45,9 +45,6 @@ public class MyAccount {
     @Persist("Flash")
     private User myAccount;
 
-    @Property
-    @Persist("flash")
-    private String infoMessage;
 
     public String getUserName() {
         return this.request.getRemoteUser();
@@ -67,7 +64,6 @@ public class MyAccount {
 
     Object onSuccess() {
         this.ud.update(this.myAccount);
-        infoMessage = messages.get("accountUpdateSuccess");
         return this;
     }
 
