@@ -103,5 +103,4 @@ public class JqPlotBar extends JqPlot {
 		config.put("options", seriesDefaults);
 
 	}
-
 }

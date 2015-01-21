@@ -60,7 +60,9 @@ public class Search {
 	}
 	
 	public void onActivate() {
-		allCourses = this.courseDAO.searchCourses(Arrays.asList(searchQuery.split(" ")));	
+		if(searchQuery!=null){
+			allCourses = this.courseDAO.searchCourses(Arrays.asList(searchQuery.split(" ")));
+		}
 	}
 
 	
