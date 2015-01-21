@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import de.lemo.apps.entities.User;
 import de.lemo.apps.integration.UserDAO;
+import de.lemo.apps.pages.admin.DashboardAdmin;
 import de.lemo.apps.pages.data.Dashboard;
 
 public class UserRegistrationForm {
@@ -95,5 +96,13 @@ public class UserRegistrationForm {
 	Object onActionFromDelete() {
 	    this.userDAO.remove(this.userItem);
 	    return Dashboard.class;
+	}
+	
+	Object onActionFromCancel() {
+	    if(authorization){
+	    	return DashboardAdmin.class;
+	    }else{
+	    	return Dashboard.class;
+	    }	    
 	}
 }

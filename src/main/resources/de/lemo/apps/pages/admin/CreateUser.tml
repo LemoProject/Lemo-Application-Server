@@ -47,7 +47,7 @@
 					<div class="span1">
 					</div>
 					<div class="span11">
-						<t:userRegistrationForm userItem="userItem" t:authorization="true" t:create="true"/>
+						<t:userRegistrationForm userItem="userItem" t:authorization="false" t:create="true"/>
 					</div>
 					<div class="span1">
 					

@@ -14,7 +14,7 @@
       
 			<div class="row-fluid">
 				<div class="span12">	 
-				    <t:userRegistrationForm userItem="myAccount" t:authorization="true" t:create="false"/>
+				    <t:userRegistrationForm userItem="myAccount" t:authorization="false" t:create="false"/>
 			 	</div>  
 			 </div> 
 		</div>

@@ -18,7 +18,7 @@
     </t:if>
 	<form t:id="accountform" class="well  pull-left">
 		<t:label for="email"/>
-		<t:textfield t:id="email"/>
+		<t:textfield t:id="email" validate="email"/>
 		<t:label for="username"/>
 		<t:if test="create">
 			<t:textfield t:id="username" />
@@ -39,7 +39,7 @@
 		<p class="btn btn-danger pull-right" onclick="setConfirmation(true);">${message:deleteUser}</p>
     	<div class="pull-right">&nbsp;&nbsp;</div>	
     	</t:if>
-    	<t:pagelink page="admin/dashboardadmin" class="btn pull-right">${message:cancel}</t:pagelink>	
+    	<t:actionlink t:id="cancel" class="btn pull-right">${message:cancel}</t:actionlink>	
     </form>	
 </div>
 <div class="span4" id="deleteUserConfirmation" style="visibility:hidden">
