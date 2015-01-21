@@ -172,7 +172,7 @@
 				trans=d3.event.translate;
 				scale=d3.event.scale;
 				current_scale= scale;
-				scroll= vis.attr("transform",
+				scroll= svg.attr("transform",
 						"translate(" + trans + ")"
 						+ " scale(" + scale + ")");
 				console.log("SCALE: "+ scale + " TRANS: "+ trans);
@@ -182,7 +182,7 @@
 			function mousedown() {
 
 				// allow panning if nothing is selected
-				vis.call(d3.behavior.zoom().on("zoom"), rescale);
+				svg.call(d3.behavior.zoom().on("zoom"), rescale);
 				return;
 
 			}
