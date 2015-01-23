@@ -71,7 +71,7 @@
 					.size(10).sizeRange([500,1000]);
 
 			  chart.xAxis.tickFormat(d3.format('d'));
-			  chart.xAxis.axisLabel("#Downvotes");
+			  chart.xAxis.axisLabel(function(x){return $("#learningObjects option").text();});
 			  chart.xAxis.tickSubdivide(1);
 			  chart.yAxis.tickFormat(d3.format('d')); //.02f
 			  chart.yAxis.axisLabel("#Linkcount");
@@ -86,7 +86,7 @@
 					'<p>imageCount:' + e.point.imageCount + '</p>';
 			  });
 
-			  d3.select('#viz').
+			  d3.select('#viz svg')
 			      .datum(ajaxDataRenderer(jsonurl))
 			      .call(chart);
 

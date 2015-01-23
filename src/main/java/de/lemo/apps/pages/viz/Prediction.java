@@ -84,8 +84,20 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPrediction")
-@Import(library = { "../../js/d3/Prediction.js",
-					"../../js/d3/libs/d3.v2.js"})
+@Import(library = { "../../js/d3/libs/d3.v3.js",
+					"../../js/d3/libs/nv.d3.js",
+					"../../js/d3/libs/tooltip.js",
+					"../../js/d3/libs/utils.js",
+					"../../js/d3/libs/legend.js",
+					"../../js/d3/libs/axis.js",
+					"../../js/d3/libs/distribution.js",
+					"../../js/d3/libs/scatter.js",
+					"../../js/d3/libs/scatterChart.js",
+					"../../js/d3/Prediction.js"},
+					stylesheet = {
+				})			
+
+
 public class Prediction {
 
 	private static final int THOU = 1000;
@@ -132,35 +144,12 @@ public class Prediction {
 	@InjectComponent
 	private Zone formZone;
 
-	@Component(id = "customizeForm")
-	private Form customizeForm;
-
-	@Property
-	@SuppressWarnings("unused")
-	private SelectModel courseModel;
-
-	@Inject
-	SelectModelFactory selectModelFactory;
-
 	@Inject
 	private Initialisation init;
 	
 	@Inject
 	private Request request;
 
-	@Inject
-	@Property
-	private LearningObjectValueEncoder learningObjectEncoder;
-
-	@Inject
-	@Property
-	private LearningTypeValueEncoder learningTypeEncoder;
-
-	@Property
-	private SelectModel learningObjectSelectModel;
-
-	@Property
-	private SelectModel learningTypeSelectModel;
 
 	@Property
 	@Persist
@@ -177,12 +166,6 @@ public class Prediction {
 	@Property
 	@Persist
 	private Long courseId;
-
-	@Component(id = "beginDate")
-	private DateField beginDateField;
-
-	@Component(id = "endDate")
-	private DateField endDateField;
 
 	@Persist
 	@Property
@@ -277,9 +260,18 @@ public class Prediction {
 		}
 	}
 
+	//TODO this is just for debugging.
 	public Object onActivate() {
-		this.logger.debug("--- Bin im zweiten onActivate");
-		return Explorer.class;
+		this.courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
+		this.course=courses.get(0);
+		final List<Long> allowedCourses = this.userWorker.getCurrentUser().getMyCourseIds();
+		if ((allowedCourses != null) && (course != null) && (course.getCourseId() != null)
+				&& allowedCourses.contains(course.getCourseId())) {
+			this.courseId = course.getCourseId();
+			return true;
+		} else {
+			return Explorer.class;
+		}
 	}
 
 	public Course onPassivate() {
@@ -287,7 +279,6 @@ public class Prediction {
 	}
 
 	void cleanupRender() {
-		this.customizeForm.clearErrors();
 		// Clear the flash-persisted fields to prevent anomalies in onActivate
 		// when we hit refresh on page or browser
 		// button
@@ -302,7 +293,6 @@ public class Prediction {
 
 	void onPrepareForRender() {
 		final List<Course> courses = this.courseDAO.findAllByOwner(this.userWorker.getCurrentUser(), false);
-		this.courseModel = new CourseIdSelectModel(courses);
 		this.userIds = this.getUsers();
 
 		this.learningObjectIds = new ArrayList<Long>();
@@ -327,9 +317,6 @@ public class Prediction {
 				this.learningObjectIds.add(learningId);
 			}
 
-			this.learningObjectEncoder.setUp(learningList);
-
-			learningObjectSelectModel = selectModelFactory.create(learningList, "name");
 
 		} else {
 			this.logger.debug("No Learning Objetcs found");
@@ -351,9 +338,6 @@ public class Prediction {
 				learningTypes.add(new LearningType(learningStringList.get(x + 1),learningTypeId));
 			}
 
-			this.learningTypeEncoder.setUp(learningTypes);
-
-			learningTypeSelectModel = selectModelFactory.create(learningTypes, "name");
 
 		} else {
 			this.logger.debug("No Learning Types found");
@@ -531,16 +515,6 @@ public class Prediction {
 	public void afterRender() {
 		this.javaScriptSupport.addScript("");
 		javaScriptSupport.addScript("var options = document.getElementsByTagName('option');	for(var i = 0; i<options.length;i++){options[i].setAttribute('title', options[i].innerHTML);}");
-	}
-
-	void onPrepareFromCustomizeForm() {
-		this.course = this.courseDAO.getCourseByDMSId(this.courseId);
-	}
-
-	void onSuccessFromCustomizeForm() {
-		this.logger.debug("   ---  onSuccessFromCustomizeForm ");
-		this.logger.debug("Selected activities: " + this.selectedLearningTypes);
-		this.logger.debug("Selected users: " + this.selectedUsers);
 	}
 
 	public String getLocalizedDate(final Date inputDate) {

@@ -16,6 +16,7 @@ import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -30,6 +31,7 @@ import de.lemo.apps.exceptions.RestServiceCommunicationException;
 import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.admin.DashboardAdmin;
+import de.lemo.apps.pages.viz.Prediction;
 import de.lemo.apps.restws.client.Initialisation;
 import de.lemo.apps.restws.entities.CourseObject;
 
@@ -60,6 +62,9 @@ public class Initialize {
 	
 	@Inject
 	Logger logger;
+	
+	@InjectPage
+	Prediction prediction;
 
 	@Property
 	@Persist
@@ -120,7 +125,7 @@ public class Initialize {
 				}
 			}
 		}
-		return user.getRoles().contains(Roles.ADMIN) ? DashboardAdmin.class : Dashboard.class;
+		return user.getRoles().contains(Roles.ADMIN) ? DashboardAdmin.class : Prediction.class;
 
 	}
 	

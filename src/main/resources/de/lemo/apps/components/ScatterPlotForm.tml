@@ -1,0 +1,11 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<h1>Prediction</h1>				
+	<form t:type="form" t:id="featuresForm" id="featuresForm" method="post">
+		<t:label for="x_Axis"/>
+		<t:select t:id="x_Axis"/>
+		<t:label for="y_Axis"/>
+		<t:select t:id="y_Axis"/>
+		<t:label for="training_course"/>
+		<t:select t:id="training_course"/>
+	</form>
+</html>
