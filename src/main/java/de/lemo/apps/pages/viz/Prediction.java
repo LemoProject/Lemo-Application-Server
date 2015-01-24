@@ -95,6 +95,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 					"../../js/d3/libs/scatterChart.js",
 					"../../js/d3/Prediction.js"},
 					stylesheet = {
+						"../../css/apps-prediction.css"
 				})			
 
 

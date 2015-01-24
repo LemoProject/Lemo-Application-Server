@@ -1,0 +1,254 @@
+/*!
+ * LeMo Application Server Default CSS v. 0.1
+ *
+ */
+ 
+
+
+TABLE.t-data-grid THEAD TR {
+	background-color: #0074cc;
+}
+
+
+HTML>BODY DIV.t-error LI {
+    margin-left: 25px;
+}
+
+::-webkit-input-placeholder { font-style:italic; }
+::-moz-placeholder { font-style:italic; } /* firefox 19+ */
+:-ms-input-placeholder { font-style:italic; } /* ie */
+input:-moz-placeholder { font-style:italic; }
+
+#draggable {
+	width: 100px;
+	height: 70px;
+	background: silver;
+}
+
+/*!
+* Changes to Bootstrap default css behavior
+*/
+
+/*!
+* Changes the textcolor for navbar buttons like "Explorer". Default: white, Hover: Grey
+*/
+.navbar .nav > li > a.btn-primary {
+  color: #ffffff;
+  
+}
+
+.navbar .nav > li > a.btn-primary:hover {
+  color: #bbbbbb;
+}
+
+.accordion-toggle .caret {
+  margin-top: 8px;
+  margin-left: 2px;
+}
+
+
+/*!
+* Changes to Tapestry palette component (multiple select)
+*/
+
+DIV.t-palette SELECT { width: 100px; }
+
+
+
+
+/**
+* Tipsy Tooltip for D3.js Custom css
+*/
+
+.tipsy { font-size: 13px; position: absolute; padding: 5px; z-index: 100000; }
+  .tipsy-inner { opacity: 0.85; background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; }
+
+  /* Rounded corners */
+  .tipsy-inner { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+  
+  /* Uncomment for shadow */
+  /*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
+  
+  .tipsy-arrow { opacity: 0.85; position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
+  
+  /* Rules to colour arrows */
+  .tipsy-arrow-n { border-bottom-color: #000; }
+  .tipsy-arrow-s { border-top-color: #000; }
+  .tipsy-arrow-e { border-left-color: #000; }
+  .tipsy-arrow-w { border-right-color: #000; }
+  
+	.tipsy-n .tipsy-arrow { top: 0px; left: 50%; margin-left: -5px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent; }
+    .tipsy-nw .tipsy-arrow { top: 0; left: 10px; border-bottom-style: solid; border-top: none; border-left-color: transparent; border-right-color: transparent;}
+    .tipsy-ne .tipsy-arrow { top: 0; right: 10px; border-bottom-style: solid; border-top: none;  border-left-color: transparent; border-right-color: transparent;}
+  .tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -5px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; border-top-style: solid; border-bottom: none;  border-left-color: transparent; border-right-color: transparent; }
+    .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
+  .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
+  .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
+
+
+/**
+* jQuery UI Slider Custom css
+*/
+
+#supportSlider{
+
+	display:inline-block;
+	float:left;
+	margin:5px;
+	width:250px;
+
+}
+
+label#slider-label{
+	display:inline;
+}
+
+/**
+ *  tapestry-breadcrumbs separator
+ *  styling based on bootstrap breadcrumbs
+ */
+
+.breadcrumb li:after {
+    content: " / ";
+    white-space: pre-wrap; /* preserve space */
+    color: #999;
+}
+.breadcrumb li:last-child:after {
+    content: ""; /* remove trailing slash */
+}
+
+/**
+ *  jquery palette
+ */
+ 
+.ui-datepicker-trigger {
+display:none;
+}
+ 
+.t-palette-title {
+	background-color: #0055cc !important;
+	border-radius: 6px;
+}
+
+.t-palette-controls button {
+display: inline-block;
+padding: 4px 10px 4px;
+margin-bottom: 0;
+font-size: 13px;
+line-height: 18px;
+color: #333333;
+text-align: center;
+text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+vertical-align: middle;
+background-color: #f5f5f5;
+background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+background-image: linear-gradient(top, #ffffff, #e6e6e6);
+background-repeat: repeat-x;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+border: 1px solid #cccccc;
+border-bottom-color: #b3b3b3;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+cursor: pointer;
+}
+
+
+/**
+ *	Heatmap
+ */
+#accordion2 {
+margin-bottom:0px;
+}
+
+footer {
+position:fixed;
+bottom:0;
+right:10px;
+}
+
+/**
+ *	Legend
+ */
+ 
+ .legend { 
+ padding-left:30px;
+ padding-top:15px;
+ margin-right:4px;
+ margin-left:10px;
+ }
+ 
+ .legend.access {
+ background-color:#ff8f1e;
+ }
+ 
+ .legend.collaboration {
+ background-color:#2ca02c;
+ }
+ 
+ .legend.assessment {
+ background-color:#1f77b4;
+ }
+ 
+  .legend.unknown {
+ background-color:#000000;
+ }
+ 
+.legend.source {
+  background-color: #d62728;
+}
+
+.legend.srctar {
+background-color: #1f77b4
+}
+
+.legend.target {
+  background-color: #2ca02c;
+}
+
+#viz {
+width:100%;
+}
+
+#loading {
+width:100%;
+height:10px;
+}
+
+@media screen and (max-width: 1400px) {
+.t-palette-available {
+  width: 38%;
+}
+.t-palette-controls {
+  width: 18%;
+}
+.t-palette-selected {
+  width: 38%;
+}
+
+.accordion-inner {
+padding:4px;
+}
+
+DIV.t-palette SELECT {
+width:100%;
+}
+DIV.t-palette-controls BUTTON {
+width:100%;
+}
+
+DIV.t-palette-controls img {
+width:100%;
+}
+}
