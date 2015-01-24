@@ -54,12 +54,5 @@
       
     })(window.d3custom = window.d3custom || {}, jQuery);
     
-    
-	function changeDesign(){
-		nv.graphs[0].xAxis.axisLabel($("#learningObjects option").text());
-		nv.graphs[0].update()
-	}
-	$("#learningObjects option").change(changeDesign());
-	<!--http://www.elijahmanor.com/dont-initialize-all-the-things-in-jquery-ready/ -->
 </script>
 </html>
