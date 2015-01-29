@@ -5,7 +5,9 @@
 		<t:select t:id="x_Axis"/>
 		<t:label for="y_Axis"/>
 		<t:select t:id="y_Axis"/>
-		<t:label for="training_course"/>
-		<t:select t:id="training_course"/>
+		<t:label for="reference_course"/>
+		<t:select t:id="reference_course"/>
+		<t:label for="current_course"/>
+		<t:select t:id="current_course"/>
 	</form>
 </html>

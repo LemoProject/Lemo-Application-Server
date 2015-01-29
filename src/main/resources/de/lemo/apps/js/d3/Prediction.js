@@ -3,18 +3,16 @@
 		var ret = [],
 		shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
 		ret.push({
-			key: 'Durchgefallen',
+			key: 'nicht bestanden',
 			values: []
 		})
 		ret.push({
-			key: 'Bestanden',
+			key: 'bestanden',
 			values: []
 		})
-		var classValue;
 		var instance;
+		var countInstances = 0;
 		for (j = 0; j < data.elements.length; j++) {
-			classValue=0;
-			if(data.elements[j].progressPercentage>=80) classValue=1;
 			instance = {
 				x: data.elements[j].wordCount,
 				y: data.elements[j].imageCount, 
@@ -53,22 +51,13 @@
 			} else if (yAxis=="Progress Percentage"){
 				instance.y = data.elements[j].progressPercentage;
 			};
-			if(instance.x > 0 && instance.y > 0){
-				ret[classValue].values.push(instance);
+			if(instance.x > 0 || instance.y > 0){ 
+				countInstances+=1;
+				ret[data.elements[j].classId].values.push(instance);
 			}			
 		}
+		$( "#numberOfInstances" ).html( "Number of displayed instances: " + countInstances );
 		return ret;
-	}
-
-	d3custom.selectData = function(xAxis,yAxis){
-		if(xAxis=="Downvotes"){	
-			for(var i = 0; i< d3custom.data[1].values.length;i++){
-				d3custom.data[1].values[i].x=d3custom.data[1].values[i].downVotes
-			}
-			for(var i = 0; i< d3custom.data[0].values.length;i++){
-				d3custom.data[0].values[i].x=d3custom.data[0].values[i].downVotes
-			} 
-		}
 	}
 
 	d3custom.run = function() {
@@ -83,6 +72,8 @@
 				beforeSend: function( xhr ) {
 					xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
 				},
+				data:"cid="+$("#current_course option:selected").index()+
+						"&targetCourseId="+$("#reference_course option:selected").index(),
 				error: function(x, t, m) {
 					if(t==="timeout") {
 						alert("got timeout");
@@ -95,6 +86,8 @@
 					ret=data;
 				}
 			});
+			console.log("cid="+$("#current_course option:selected").index()
+						+"&targetCourseId="+$("#reference_course option:selected").index());
 			return ret;
 		};
 
