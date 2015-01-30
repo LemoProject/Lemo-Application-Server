@@ -78,4 +78,7 @@ class ApplicationServer {
 	@XmlElement(name = "ldap-startTls", required = true)
 	public String ldapStartTls;
 	
+	@XmlElement(name = "ldaps", required = true)
+	public String ldaps;
+	
 }

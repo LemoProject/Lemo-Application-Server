@@ -61,6 +61,7 @@ public enum ServerConfiguration {
 	private String ldapHost;
 	private String ldapPort;
 	private String ldapStartTls;
+	private String ldaps;
 	private String contextFactoryUrl;
 	private String userOptionEnabled;
 
@@ -101,6 +102,7 @@ public enum ServerConfiguration {
 	    this.ldapHost = lemoConfig.applicationServer.ldapHost;
 		this.ldapPort = lemoConfig.applicationServer.ldapPort;
 		this.ldapStartTls = lemoConfig.applicationServer.ldapStartTls;
+		this.ldaps = lemoConfig.applicationServer.ldaps;
 		
 		this.dbConfig = Maps.newHashMap();
 		for (final PropertyConfig property : lemoConfig.applicationServer.appDbConfig) {
@@ -290,4 +292,9 @@ public enum ServerConfiguration {
 	public Boolean getLdapStartTls() {
 		return ldapStartTls.equalsIgnoreCase("true")?true:false;
 	}
+
+	public Boolean getLdaps() {
+		return ldaps.equalsIgnoreCase("true")?true:false;
+	}
+
 }
