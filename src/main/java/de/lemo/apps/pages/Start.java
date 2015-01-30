@@ -27,6 +27,7 @@
 package de.lemo.apps.pages;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -47,11 +48,14 @@ import org.tynamo.security.internal.ModularRealmAuthenticator;
 import org.tynamo.security.services.PageService;
 import org.tynamo.security.services.SecurityService;
 
+import de.lemo.apps.entities.Course;
 import de.lemo.apps.entities.User;
 import de.lemo.apps.exceptions.RestServiceCommunicationException;
+import de.lemo.apps.integration.CourseDAO;
 import de.lemo.apps.integration.UserDAO;
 import de.lemo.apps.pages.data.Register;
 import de.lemo.apps.restws.client.Initialisation;
+import de.lemo.apps.restws.entities.CourseObject;
 import de.lemo.apps.restws.entities.ResultListLongObject;
 
 /**
@@ -86,7 +90,11 @@ public class Start {
 	@Inject
 	private Initialisation init;
 	
-	@Inject UserDAO userDAO;
+	@Inject 
+	UserDAO userDAO;
+	
+	@Inject
+	private CourseDAO courseDAO;
 	
 	@Property
 	@Persist
@@ -152,9 +160,8 @@ public class Start {
 			if(!userDAO.doExist(this.username))
 			{
 				try{
-					userItem = new User(username,username,username);
 					this.logger.debug("Login: The user " + username + " doesn't exist locally. And will be created.");
-					userDAO.save(userItem);
+					addCourses();
 				} catch(Exception e){
 					logger.debug("Login: Can't create user. " + e.getMessage());
 				}
@@ -197,5 +204,64 @@ public class Start {
 
 		return this.pageService.getSuccessPage();
 	}
+	
+	private void addCourses(){
+		User user = new User(username, username, username + "@localhost");
+		
+		userDAO.save(user);
+		
+		ResultListLongObject result;
+		Long dmsUserId = null;
+		try {
+			result = init.identifyUserName(this.username);
+			dmsUserId = result.getElements().get(result.getElements().size()-1);
+		} catch (RestServiceCommunicationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
+		List<Long> userCourseIds = null;
+		try {
+
+			userCourseIds = init.getUserCourses(dmsUserId).getElements();
+			logger.debug("Course received for user "+dmsUserId+": "+userCourseIds.size());
+		} catch (RestServiceCommunicationException e1) {
+			logger.error(e1.getMessage());
+		}
+		
+		
+		if (userCourseIds != null && userCourseIds.size() > 0) {
+			double multi = 100 / userCourseIds.size();
+			logger.debug("Loading  " + userCourseIds.size() + " courses");
+			for (int i = 0; i < userCourseIds.size(); i++) {
+				Long courseId =  userCourseIds.get(i);
+				double percentage = Math.round((i+1)*multi);
+				if (!this.courseDAO.doExistByForeignCourseId(courseId)) {
+					CourseObject courseObject = null;
+					try {
+						courseObject = this.init.getCourseDetails(courseId);
+					} catch (RestServiceCommunicationException e) {
+						logger.error(e.getMessage());
+					}
+					if (courseObject != null) {
+						logger.debug("New Course with Id: " + courseId + " added.");
+						Course savedCourse = this.courseDAO.save(courseObject);
+						user.getMyCourses().add(savedCourse);
+						logger.debug("Current sourse Amount: " + user.getMyCourses().size() + " .");
+					} else {
+						logger.debug("Course with Id: " + courseId + " could not be retrieved.");
+					}
+				} else {
+					logger.debug("Course with Id: " + courseId + " is already cached.");
+					user.getMyCourses().add(this.courseDAO.getCourseByDMSId(courseId));
+				}
+			}
+			
+
+		} else {
+			logger.info("Could not find any courses for this user.");
+		}
+		
+		userDAO.save(user);
+	}
 }
