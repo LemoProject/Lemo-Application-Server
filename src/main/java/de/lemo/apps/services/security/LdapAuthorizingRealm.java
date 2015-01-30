@@ -45,7 +45,8 @@ public class LdapAuthorizingRealm extends AuthorizingRealm {
 			LdapConnectionConfig connectionConfig = new LdapConnectionConfig();
 			connectionConfig.setLdapHost(ServerConfiguration.getInstance().getLdapHost());
 			connectionConfig.setLdapPort(ServerConfiguration.getInstance().getLdapPort());
-			connectionConfig.setUseTls(ServerConfiguration.getInstance().getLdapStartTls());
+			connectionConfig.setUseSsl(ServerConfiguration.getInstance().getLdaps());
+			connectionConfig.setUseTls(ServerConfiguration.getInstance().getLdapStartTls());				
 			connectionConfig.setCredentials(password);
 			connectionConfig.setName(connectionBind);
 			ldapConnection = new LdapNetworkConnection(connectionConfig);
