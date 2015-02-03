@@ -18,15 +18,7 @@
 	      		roles="teacher" 
 	      		email="user&#64;example.com" 
 	      		fullname="Teacher" 
-	      		
-	      		
-	      		courses="1 2 3"/>
-      		
- 	      <user name="global" 
- 	      		password="lemolemo" 
- 	      		roles="global" 
- 	      		email="lemo&#64;example.com" 
- 	      		fullname="Global user"/>  
+	      		courses=""/>
     </users>
 	
     <database>
@@ -35,9 +27,9 @@
       <property name="hibernate.connection.username">${apps-hibernate-username}</property>
       <property name="hibernate.connection.password">${apps-hibernate-password}</property>
       <!-- config-->
-     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <!--  <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+         <!--  <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
       <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>-->
       
 
