@@ -35,11 +35,11 @@
 
     </database>
     
-   	<user-praefix>cn</user-praefix>
-   	<user-root>ou=Users,dc=example,dc=com</user-root>
-   	<ldap-host>localhost</ldap-host>
-   	<ldap-port>10389</ldap-port>
-   	<ldap-startTls>false</ldap-startTls>
+   	<user-praefix name="test-server">cn</user-praefix>
+   	<user-root name="test-server">ou=Users,dc=example,dc=com</user-root>
+   	<ldap-host name="test-server">localhost</ldap-host>
+   	<ldap-port name="test-server">10389</ldap-port>
+    <ldap-startTls>true</ldap-startTls>
    	<ldaps>false</ldaps>
    	
    	<user-option-enabled>false</user-option-enabled>
