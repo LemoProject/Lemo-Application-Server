@@ -400,29 +400,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<plugin>
-				<groupId>com.github.searls</groupId>
-				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>1.2.0.0</version>
-				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<preloadSources>
-						<source>${project.basedir}/src/test/resources/js/jquery.min.js</source>
-						<source>${project.basedir}/src/test/resources/js/underscore-min.js</source>
-					</preloadSources>
-					<jsSrcDir>${project.basedir}/src/main/resources/de/lemo/apps/js</jsSrcDir>
-					<jsTestSrcDir>${project.basedir}/src/test/js</jsTestSrcDir>
-				</configuration>
-			</plugin>
-
 		</plugins>
 
 		<resources>
