@@ -42,7 +42,10 @@
 	  	}
 	  	
 	  	var numberOfMonthToDisplay=monthDiff(startDate,endDate);
-	  	
+	  	var totalCount=100, vektor = new Array(totalCount);
+	  	for(var i = minVal,j=0; i < maxVal; i += (maxVal-minVal)/totalCount,j+=1){
+	  	    vektor[j]=i;   
+	  	}
 	  	for (var i = 0; i < numberOfMonthToDisplay; i++){
 	  		var cal = new CalHeatMap();
 	  		cal.init({
@@ -61,6 +64,7 @@
 		    		max: "#ff0000",
 		    		empty: "white"
 		    	},
+		    	legend : vektor,
 		        displayLegend: false,   
 		        considerMissingDataAsZero: true,
 			})
