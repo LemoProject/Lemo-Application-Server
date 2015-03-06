@@ -1,158 +1,307 @@
 (function(d3custom, $, undefined) {
-	d3custom.prepareData = function(data,xAxis,yAxis) {
-		var ret = [],
-		shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
-		ret.push({
-			key: 'nicht bestanden',
-			values: []
-		})
-		ret.push({
-			key: 'bestanden',
-			values: []
-		})
-		var instance;
-		var countInstances = 0;
-		for (j = 0; j < data.elements.length; j++) {
-			instance = {
-				x: data.elements[j].wordCount,
-				y: data.elements[j].imageCount, 
-				downVotes: data.elements[j].downVotes,
-				upVotes: data.elements[j].upVotes, 
-				linkCount: data.elements[j].linkCount,
-				wordCount: data.elements[j].wordCount, 
-				imageCount: data.elements[j].imageCount,
-				progressPercentage: data.elements[j].progressPercentage,
-				userId: data.elements[j].userId, 
-				shape: shapes[j % 6]
-			}
-			if(xAxis=="Downvotes"){
-				instance.x = data.elements[j].downVotes;
-			} else if (xAxis=="Upvotes"){
-				instance.x = data.elements[j].upVotes;
-			} else if (xAxis=="Linkcount"){
-				instance.x = data.elements[j].linkCount;
-			} else if (xAxis=="Wordcount"){
-				instance.x = data.elements[j].wordCount;
-			} else if (xAxis=="Imagecount"){
-				instance.x = data.elements[j].imageCount;
-			} else if (xAxis=="Progress Percentage"){
-				instance.x = data.elements[j].progressPercentage;
-			};
-			if(yAxis=="Downvotes"){
-				instance.y = data.elements[j].downVotes;
-			} else if (yAxis=="Upvotes"){
-				instance.y = data.elements[j].upVotes;
-			} else if (yAxis=="Linkcount"){
-				instance.y = data.elements[j].linkCount;
-			} else if (yAxis=="Wordcount"){
-				instance.y = data.elements[j].wordCount;
-			} else if (yAxis=="Imagecount"){
-				instance.y = data.elements[j].imageCount;
-			} else if (yAxis=="Progress Percentage"){
-				instance.y = data.elements[j].progressPercentage;
-			};
-			if(instance.x > 0 || instance.y > 0){ 
-				countInstances+=1;
-				ret[data.elements[j].classId].values.push(instance);
-			}			
-		}
-		$( "#numberOfInstances" ).html( "Number of displayed instances: " + countInstances );
-		return ret;
+	d3custom.run = function() {
+			  window.translate = function(x, y) {
+			    return "translate(" + x + "," + y + ")";
+			  };
+
+			  window.getRandomRange = function(min, max) {
+			    return Math.random() * (max - min) + min;
+			  };
+
+			  window.range = function(end) {
+			    var array, i;
+			    array = new Array();
+			    i = 0;
+			    while (i < end) {
+			      array.push(i);
+			      i++;
+			    }
+			    return array;
+			  };
+
+			  window.nested_min_max = function(data, nested_key, fn) {
+			    return [
+			      d3.min(data, function(x) {
+			        return d3.min(x[nested_key], fn);
+			      }), d3.max(data, function(x) {
+			        return d3.max(x[nested_key], fn);
+			      })
+			    ];
+			  };
+
+			  window.unique = function(array) {
+			    var i, l, o, r;
+			    o = {};
+			    i = void 0;
+			    l = this.length;
+			    r = [];
+			    i = 0;
+			    while (i < l) {
+			      o[array[i]] = array[i];
+			      i += 1;
+			    }
+			    for (i in o) {
+			      r.push(o[i]);
+			    }
+			    return r;
+			  };
+
+	    // The url for the json data
+	    var jsonurl = "http://localhost:8081/lemo/dms/questions/queryDatabase/";
+	    d3custom.rawData = ajaxDataRenderer(jsonurl);
+		d3custom.addGraph(d3custom.rawData);
+	};
+
+	  var ajaxDataRenderer = function(url) {
+		  var course1 = $("#current_course")[0].selectedIndex;
+		  var course2 = $("#reference_course")[0].selectedIndex;
+		  console.log("1:"+course1+" 2: "+course2);
+		    var ret = [];
+		    $.ajax({
+		      // have to use synchronous here, else the function
+		      // will return before the data is fetched
+		      type:"POST",
+		      async: false,
+		      url: url,
+			 beforeSend: function( xhr ) {
+			xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+			},
+		      error: function(x, t, m) {
+		        if(t==="timeout") {
+		            alert("got timeout");
+		        } else {
+		            alert(x);
+		        }
+		},
+			data:"cid="+course1+"&targetCourseId="+course2,
+		      dataType:"json",
+		      success: function(data) {
+
+			ret = data.elements;
+		     }
+		    });
+		    return ret;
+		  };
+		  
+	var getVariableName = function(name){
+		if(name==="Answercount"){
+			return "answerCount";
+		}else if(name==="ClassId"){
+			return "classId";
+		}else if(name==="Commentcount"){
+			return 'commentCount';
+		}else if(name==="Downvotes"){
+			return "downVotes";
+		}else if(name==="Imagecount"){
+			return "imageCount";
+		}else if(name==="Linkcount"){
+			return "linkCount";
+		}else if(name==="Postcount"){
+			return "postCount";
+		}else if(name==="Post Rating Max"){
+			return "postRatingMax";
+		}else if(name==="Post Rating Min"){
+			return "postRatingMin";
+		}else if(name==="Post Rating Sum"){
+			return "postRatingSum";
+		}else if(name==="Progress Percentage"){
+			return "progressPercentage";
+		}else if(name==="Received Downvotes"){
+			return "receivedDownVotes";
+		}else if(name==="Reveived Upvotes"){
+			return "receivedUpVotes";
+		}else if(name==="Segment Progress"){
+			return "segmentProgress";
+		}else if(name==="Upvotes"){
+			return "upVotes";
+		}else if(name==="Wordcount"){
+			return "wordCount";
+		}		
 	}
 
-	d3custom.run = function() {
-		var ajaxDataRenderer = function(url) {
-			var ret = [];
-			$.ajax({
-				// have to use synchronous here, else the function
-				// will return before the data is fetched
-				type:"POST",
-				async: false,
-				url: url,
-				beforeSend: function( xhr ) {
-					xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-				},
-				data:"cid="+$("#current_course option:selected").index()+
-						"&targetCourseId="+$("#reference_course option:selected").index(),
-				error: function(x, t, m) {
-					if(t==="timeout") {
-						alert("got timeout");
-					} else {
-						alert(x);
-					}
-				},
-				dataType:"json",
-				success: function(data) {
-					ret=data;
-				}
-			});
-			console.log("cid="+$("#current_course option:selected").index()
-						+"&targetCourseId="+$("#reference_course option:selected").index());
-			return ret;
-		};
+	d3custom.addGraph = function(dataset) {
 
-		//Format A
-		var chart;
-		// The url for our json data
-		var jsonurl = 'http://localhost:8081/lemo/dms/questions/queryDatabase/';
+		var xAxisText = $("#x_Axis option:selected").text();
+		var yAxisText = $("#y_Axis option:selected").text();
 		
-		d3custom.rawData = ajaxDataRenderer(jsonurl);
 
-		nv.addGraph(function() {
-			var xAxis = $("#x_Axis option:selected").text();
-			var yAxis = $("#y_Axis option:selected").text();
-			chart = nv.models.scatterChart()
-			.showDistX(false)
-			.showDistY(false)
-			.useVoronoi(true)
-			.color(d3.scale.category10().range())
-			.transitionDuration(300)
-			.size(10).sizeRange([500,1000]);
+	        var margin = {top: 10, right: 10, bottom: 60, left: 60},
+	            width = 950 - margin.left - margin.right,
+	            height = 550 - margin.top - margin.bottom;
+	        var centered = undefined;
 
-			chart.xAxis.tickFormat(d3.format('d'));
-			chart.xAxis.tickSubdivide(1);
-			chart.xAxis.axisLabel(xAxis);
-			chart.yAxis.tickFormat(d3.format('d')); //.02f
-			chart.yAxis.axisLabelDistance(20);
-			chart.yAxis.axisLabel(yAxis);
-			chart.tooltipContent(function(key, xVal, yVal, e, chart) {
-				return '<h4>User: ' + e.point.userId + '</h4>' + 
-				'<p>downVotes:' + e.point.downVotes + '</p>' +
-				'<p>upVotes:' + e.point.upVotes + '</p>' +
-				'<p>linkCount:' + e.point.linkCount + '</p>' +
-				'<p>wordCount:' + e.point.wordCount + '</p>' +
-				'<p>Progress Percentage:' + e.point.progressPercentage + '</p>' +
-				'<p>imageCount:' + e.point.imageCount + '</p>';
+	        var svg = d3.select("#viz")
+	            .append("svg")
+	            .attr("width", width + margin.left + margin.right)
+	            .attr("height", height + margin.top + margin.bottom)
+	            .append("g")
+	            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	        svg.append("defs").append("clipPath")
+	            .attr("id", "clip")
+	            .append("rect")
+	            .attr("width", width)
+	            .attr("height", height);				
+
+	        var xScale = d3.scale.linear()
+	            .domain([d3.min(dataset, function(d) {
+	                return d[getVariableName(xAxisText)];
+	            }), d3.max(dataset, function(d) {
+	                return d[getVariableName(xAxisText)];
+	            })])
+	            .range([0, width]);
+	        var yScale = d3.scale.linear()
+	            .domain([d3.min(dataset, function(d) {
+	                return d[getVariableName(yAxisText)];
+	            }), d3.max(dataset, function(d) {
+	                return d[getVariableName(yAxisText)];
+	            })])
+	            .range([height, 0]);
+
+	        radiusScale = d3.scale.sqrt()
+	            .domain([d3.min(dataset, function(d) {
+	                return d['answerCount'];
+	            }), d3.max(dataset, function(d) {
+	                return d['answerCount'];
+	            })])
+	            .range([3, 15]);
+
+	        var rect = svg.append("rect")
+	            .attr("class", "background")
+	            .attr("pointer-events", "all")
+	            .attr("fill", "none")
+	            .attr("width", width)
+	            .attr("height", height)
+	            .call(d3.behavior.zoom().x(xScale).y(yScale).on("zoom", redraw));
+
+	        var circles = svg.selectAll("circle")
+	            .data(dataset)
+	            .enter()
+	            .append("circle")
+	            .attr("clip-path", "url(#clip)")
+	            .attr("r", function(d) {
+	                return radiusScale(d['answerCount']);
+	            })
+	            .attr("fill", function(d) {
+	                return d['classId']===0?"skyblue":"orange";
+	            });
+
+	        circles.append("nodetitle")
+			.text(function(d) {
+				var tooltip = "UserId: " + d.userId +
+								"</br>Class: " + d.classId +
+								"</br>Commentcount: " + d.commentCount +
+								"</br>Downvotes: " + d.downVotes +
+								"</br>ImageCount: " + d.imageCount +
+								"</br>Linkcount: " + d.linkCount +
+								"</br>Postcount: " + d.postCount +
+								"</br>Post Rating Max: " + d.postRatingMax +
+								"</br>Post Rating Min: " + d.postRatingMin +
+								"</br>Post Rating Sum: " + d.postRatingSum +
+								"</br>Progress Percentage: " + d.progressPercentage +
+								"</br>Received Up Votes: " + d.receivedUpVotes +
+								"</br>Received Down Votes: " + d.receivedDownVotes +
+								"</br>SegmentProgress: " + d.segmentProgress +
+								"</br>Upvotes: " + d.upVotes +
+								"</br>Wordcount: " + d.wordCount;
+				return tooltip;
+				});
+	        
+			$('nodetitle').parent().tipsy({ 
+				gravity: 'sw', 
+				html: true, 
+				title: function() { return $(this).find('nodetitle').text(); }
 			});
 
-			d3custom.data = d3custom.prepareData(d3custom.rawData,xAxis,yAxis);
-			d3.select('#viz svg')
-			.datum(d3custom.data)
-			.call(chart);
+	        var xAxis = d3.svg.axis()
+	            .scale(xScale)
+	            .orient("bottom")
+	            .ticks(5)
+	            .tickSize(-height)
+	            .tickFormat(d3.format("s"));
 
-			nv.utils.windowResize(chart.update);
+	        var yAxis = d3.svg.axis()
+	            .scale(yScale)
+	            .orient("left")
+	            .ticks(10)
+	            .tickFormat(d3.format("s"))
+	            .tickSize(-width);
 
-			chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
+	        svg.append("g")
+	            .attr("class", "x axis")
+	            .attr("transform", "translate(0," + (height) + ")")
+	            .call(xAxis);
+	        svg.append("g")
+	            .attr("class", "y axis")
+	            .attr("transform", "translate(" + 0 + ",0)")
+	            .call(yAxis);
 
-			return chart;
-		});
 
-		d3custom.changeDesign = function(){
-			var xAxis = $("#x_Axis option:selected").text();
-			var yAxis = $("#y_Axis option:selected").text();
-			for(var i=0; i < nv.graphs.length;i++){
-				nv.graphs[i].xAxis.axisLabel(xAxis);
-				nv.graphs[i].yAxis.axisLabel($("#y_Axis option:selected").text());
-				d3custom.data=d3custom.prepareData(d3custom.rawData,xAxis,yAxis);
-				d3.select('#viz svg')
-				.datum(d3custom.data);
-				//d3custom.selectData(xAxis,yAxis);
-				nv.graphs[i].update();				
+	        svg.append("text")
+	            .attr("class", "x label")
+	            .attr("text-anchor", "middle")
+	            .attr("x", width - width / 2)
+	            .attr("y", height + margin.bottom / 2)
+	            .text($("#x_Axis option:selected").text());
+
+
+	        svg.append("text")
+	            .attr("class", "y label")
+	            .attr("text-anchor", "middle")
+	            .attr("y", -margin.left + 5)
+	            .attr("x", 0 - (height / 2))
+	            .attr("dy", "1.5em")
+	            .attr("transform", "rotate(-90)")
+	            .text($("#y_Axis option:selected").text());
+
+	        var objects = svg.append("svg")
+	            .attr("class", "objects")
+	            .attr("width", width)
+	            .attr("height", height);
+
+	        hAxisLine = objects.append("svg:line")
+	            .attr("class", "axisLine hAxisLine");
+	        vAxisLine = objects.append("svg:line")
+	            .attr("class", "axisLine vAxisLine");
+
+
+	        function redraw(duration) {
+	            var duration = typeof duration !== 'undefined' ? duration : 0;
+	            if (d3.event) {
+	                svg.select(".x.axis").call(xAxis);
+	                svg.select(".y.axis").call(yAxis);
+	            }
+
+
+	            hAxisLine.transition().duration(duration)
+	                .attr("x1", 0)
+	                .attr("y1", 0)
+	                .attr("x2", width)
+	                .attr("y2", 0)
+	                .attr("transform", "translate(0," + (yScale(0)) + ")");
+	            vAxisLine.transition().duration(duration)
+	                .attr("x1", xScale(0))
+	                .attr("y1", yScale(height))
+	                .attr("x2", xScale(0))
+	                .attr("y2", yScale(-height));
+
+
+	            circles.transition().duration(duration)
+	                .attr("cx", function(d) {
+	                    return xScale(d[getVariableName(xAxisText)]);
+	                })
+	                .attr("cy", function(d) {
+	                    return yScale(d[getVariableName(yAxisText)]);
+	                })
+
+	        }; 
+	        redraw(0);
+			d3custom.changeDesign = function(){
+				d3.select("#viz svg").remove();
+				d3custom.addGraph(d3custom.rawData);
 			}
-		}
-		$("#x_Axis").change(d3custom.changeDesign);
-		$("#y_Axis").change(d3custom.changeDesign);
-		//http://www.elijahmanor.com/dont-initialize-all-the-things-in-jquery-ready/
+			$("#x_Axis").change(d3custom.changeDesign);
+			$("#y_Axis").change(d3custom.changeDesign);
 	};
 
 })(window.d3custom = window.d3custom || {}, jQuery);
