@@ -2,6 +2,7 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
    <style>
+   	/* CSS for scatterplot. */
 		.axis path, .axis line {
 		  fill: none;
 		  stroke: rgba(0, 0, 0, 0.1);
@@ -80,6 +81,7 @@
         <div id="viz">
         	<!-- d3js visualization -->        
         </div>
+        <h3>Sankeydiagram of the classifier:</h3>
         <div id="classifier">
         	<!-- d3js visualization -->        
         </div>

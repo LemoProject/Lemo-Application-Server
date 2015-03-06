@@ -5,6 +5,10 @@
 		height = 500 - margin.top - margin.bottom;
 
 		var treeData = JSON.parse(data.classifier);
+		
+		$.each(treeData.links, function(number, link){
+			link.value = Math.log(link.value);
+		});
 		var formatNumber = d3.format(",.0f"),
 		color = d3.scale.category20();
 
