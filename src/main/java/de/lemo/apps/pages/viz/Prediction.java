@@ -85,6 +85,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @RequiresAuthentication
 @BreadCrumb(titleKey = "visPrediction")
 @Import(library = { "../../js/d3/libs/d3.v3.js",
+					"../../js/d3/Classifier.js",
 					"../../js/d3/Prediction.js"})			
 
 

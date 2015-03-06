@@ -35,6 +35,33 @@
 		  stroke: rgba(0, 0, 0, 0.2);
 		  stroke-width: 2px;
 		  fill: none; }
+		
+		/* CSS for classifier visualisation 
+		#classifier {
+		  height: 500px;
+		}
+		
+		.node rect {
+		  cursor: move;
+		  fill-opacity: .9;
+		  shape-rendering: crispEdges;
+		}
+		
+		.node text {
+		  pointer-events: none;
+		  text-shadow: 0 1px 0 #fff;
+		}
+		
+		.link {
+		  fill: none;
+		  stroke: #000;
+		  stroke-opacity: .2;
+		}
+		
+		.link:hover {
+		  stroke-opacity: .5;
+		}
+
 	</style>       
   <!-- Breadcrumb component-->
 	<div class="row-fluid">
@@ -72,6 +99,9 @@
 <script type="text/javascript">
     (function(d3vis, $, undefined) {    
     })(window.d3vis = window.d3vis || {}, jQuery);
+    
+    (function(d3classifier, $, undefined) {    
+    })(window.d3classifier = window.d3classifier || {}, jQuery);
     
 </script>
 </html>
