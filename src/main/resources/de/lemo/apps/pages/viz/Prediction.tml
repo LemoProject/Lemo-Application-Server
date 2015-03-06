@@ -36,7 +36,7 @@
 		  stroke-width: 2px;
 		  fill: none; }
 		
-		/* CSS for classifier visualisation 
+		/* CSS for classifier visualisation */
 		#classifier {
 		  height: 500px;
 		}
