@@ -1,5 +1,5 @@
-(function(d3custom, $, undefined) {
-	d3custom.run = function() {
+(function(d3vis, $, undefined) {
+	d3vis.run = function() {
 			  window.translate = function(x, y) {
 			    return "translate(" + x + "," + y + ")";
 			  };
@@ -48,8 +48,8 @@
 
 	    // The url for the json data
 	    var jsonurl = "http://localhost:8081/lemo/dms/questions/queryDatabase/";
-	    d3custom.rawData = ajaxDataRenderer(jsonurl);
-		d3custom.addGraph(d3custom.rawData);
+	    d3vis.rawData = ajaxDataRenderer(jsonurl);
+		d3vis.addGraph(d3vis.rawData.elements);
 	};
 
 	  var ajaxDataRenderer = function(url) {
@@ -77,7 +77,7 @@
 		      dataType:"json",
 		      success: function(data) {
 
-			ret = data.elements;
+			ret = data;
 		     }
 		    });
 		    return ret;
@@ -119,7 +119,7 @@
 		}		
 	}
 
-	d3custom.addGraph = function(dataset) {
+	d3vis.addGraph = function(dataset) {
 
 		var xAxisText = $("#x_Axis option:selected").text();
 		var yAxisText = $("#y_Axis option:selected").text();
@@ -296,14 +296,14 @@
 
 	        }; 
 	        redraw(0);
-			d3custom.changeDesign = function(){
+			d3vis.changeDesign = function(){
 				d3.select("#viz svg").remove();
-				d3custom.addGraph(d3custom.rawData);
+				d3vis.addGraph(d3vis.rawData.elements);
 			}
-			$("#x_Axis").change(d3custom.changeDesign);
-			$("#y_Axis").change(d3custom.changeDesign);
+			$("#x_Axis").change(d3vis.changeDesign);
+			$("#y_Axis").change(d3vis.changeDesign);
 	};
 
-})(window.d3custom = window.d3custom || {}, jQuery);
+})(window.d3vis = window.d3vis || {}, jQuery);
 
-$(document).ready(window.d3custom.run);
+$(document).ready(window.d3vis.run);

@@ -53,6 +53,9 @@
         <div id="viz">
         	<!-- d3js visualization -->        
         </div>
+        <div id="classifier">
+        	<!-- d3js visualization -->        
+        </div>
         
        <p id="numberOfInstances"></p>
         	
@@ -67,8 +70,8 @@
     
   </div>
 <script type="text/javascript">
-    (function(d3custom, $, undefined) {    
-    })(window.d3custom = window.d3custom || {}, jQuery);
+    (function(d3vis, $, undefined) {    
+    })(window.d3vis = window.d3vis || {}, jQuery);
     
 </script>
 </html>
