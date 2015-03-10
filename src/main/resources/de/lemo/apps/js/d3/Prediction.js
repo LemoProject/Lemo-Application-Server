@@ -55,6 +55,19 @@
 	var ajaxDataRenderer = function(url) {
 		var course1 = $("#current_course")[0].selectedIndex;
 		var course2 = $("#reference_course")[0].selectedIndex;
+		var start = Date.parse(beginDate.value)/1000;
+		var end = Date.parse(endDate.value)/1000;
+		var startTime,endTime;
+		if(isNaN(start)){
+			startTime=0;
+		}else{
+			startTime=start;
+		}
+		if(isNaN(end)){
+			endTime=999999;
+		}else{
+			endTime=end;
+		}
 		console.log("1:"+course1+" 2: "+course2);
 		var ret = [];
 		$.ajax({
@@ -73,7 +86,7 @@
 					alert(x);
 				}
 			},
-			data:"cid="+course1+"&targetCourseId="+course2,
+			data:"cid="+course1+"&targetCourseId="+course2+"&start="+startTime+"&end="+endTime,
 			dataType:"json",
 			success: function(data) {
 
@@ -91,6 +104,8 @@
 			return "classId";
 		}else if(name==="Commentcount"){
 			return 'commentCount';
+		}else if(name==="Answercount"){
+			return 'answerCount';
 		}else if(name==="Downvotes"){
 			return "downVotes";
 		}else if(name==="Imagecount"){
@@ -111,8 +126,10 @@
 			return "receivedDownVotes";
 		}else if(name==="Reveived Upvotes"){
 			return "receivedUpVotes";
-		}else if(name==="Segment Progress"){
-			return "segmentProgress";
+		}else if(name==="Unit Progress"){
+			return "unitProgress";
+		}else if(name==="Lesson Progress"){
+			return "lessonProgress";
 		}else if(name==="Upvotes"){
 			return "upVotes";
 		}else if(name==="Wordcount"){
@@ -192,19 +209,21 @@
 			var tooltip = "UserId: " + d.userId +
 			"</br>Class: " + d.classId +
 			"</br>Commentcount: " + d.commentCount +
+			"</br>Answercount: " + d.answerCount +
+			"</br>Upvotes: " + d.upVotes +
 			"</br>Downvotes: " + d.downVotes +
 			"</br>ImageCount: " + d.imageCount +
 			"</br>Linkcount: " + d.linkCount +
 			"</br>Postcount: " + d.postCount +
+			"</br>Wordcount: " + d.wordCount +
 			"</br>Post Rating Max: " + d.postRatingMax +
 			"</br>Post Rating Min: " + d.postRatingMin +
 			"</br>Post Rating Sum: " + d.postRatingSum +
-			"</br>Progress Percentage: " + d.progressPercentage +
 			"</br>Received Up Votes: " + d.receivedUpVotes +
 			"</br>Received Down Votes: " + d.receivedDownVotes +
-			"</br>SegmentProgress: " + d.segmentProgress +
-			"</br>Upvotes: " + d.upVotes +
-			"</br>Wordcount: " + d.wordCount;
+			"</br>Lesson Progress: " + d.lessonProgress +
+			"</br>Unit Progress: " + d.unitProgress +
+			"</br>Progress Percentage: " + d.progressPercentage;
 			return tooltip;
 		});
 
