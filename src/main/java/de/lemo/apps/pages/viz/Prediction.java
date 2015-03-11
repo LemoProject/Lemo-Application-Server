@@ -87,7 +87,9 @@ import de.lemo.apps.services.internal.LongValueEncoder;
 @Import(library = { "../../js/d3/libs/d3.v3.js",
 					"../../js/d3/Classifier.js",
 					"../../js/d3/Sankey.js",
-					"../../js/d3/Prediction.js"})			
+					"../../js/d3/Prediction.js"},
+		stylesheet = {"../../css/prediction.css"})
+		
 
 
 public class Prediction {

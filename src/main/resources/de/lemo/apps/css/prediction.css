@@ -1,0 +1,61 @@
+
+/* CSS for scatterplot. */
+.axis path, .axis line {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.1);
+  shape-rendering: crispEdges; }
+.axis text {
+  font-family: sans-serif;
+  font-total_participants: 13px;
+  fill: #666666; }
+
+circle {
+  fill-opacity: 0.5; }
+  circle:hover {
+    fill-opacity: 0.9; }
+
+.label {
+  font-family: sans-serif;
+  font-total_participants: 14px; }
+
+.zone {
+  fill: #e6f5fa;
+  fill-opacity: 0.4; }
+
+.zone-label {
+  font-family: sans-serif;
+  font-total_participants: 14px;
+  font-weight: 300;
+  fill: #c4c4c4; }
+
+.objects .axisLine {
+  shape-rendering: crispEdges;
+  stroke: rgba(0, 0, 0, 0.2);
+  stroke-width: 2px;
+  fill: none; }
+
+/* CSS for classifier visualisation */
+#classifier {
+  height: 500px;
+}
+
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+
+.link:hover {
+  stroke-opacity: .5;
+}
