@@ -46,6 +46,19 @@
                </div>
             </div>
          </div>
+         <!-- Validation -->
+         <div class="accordion-group">
+            <div class="accordion-heading">
+               <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+               Validation<b class="caret"></b>
+               </a>
+            </div>
+            <div id="collapseThree" class="accordion-body collapse">
+               <div class="accordion-inner">
+               	<div id="Validation"></div>
+               </div>
+            </div>
+         </div>
             </form>
       </div>
 

@@ -1,5 +1,16 @@
 (function(d3vis, $, undefined) {
 	d3vis.run = function() {
+		$.makeTable = function (validationString) {
+			var validation = JSON.parse(validationString);
+		    var table = $('<table border=1>');
+		    $.each(validation, function (index, value) {
+		        var TableRow = "<tr>";
+		            TableRow += "<td>" + index + "</td>"+"<td>" + value + "</td>";
+		        TableRow += "</tr>";
+		        $(table).append(TableRow);
+		    });
+		    $(table).appendTo("#Validation");
+		};
 		window.translate = function(x, y) {
 			return "translate(" + x + "," + y + ")";
 		};
@@ -92,6 +103,7 @@
 
 				ret = data;
 				d3classifier.run(data);
+				$.makeTable(data.validation);
 			},
 		});
 		return ret;
