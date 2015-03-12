@@ -43,8 +43,11 @@
 	  	
 	  	var numberOfMonthToDisplay=monthDiff(startDate,endDate);
 	  	var totalCount=100, vektor = new Array(totalCount);
-	  	for(var i = minVal,j=0; i < maxVal; i += (maxVal-minVal)/totalCount,j+=1){
-	  	    vektor[j]=i;   
+	  	var logMaxVal = Math.log(maxVal*10);
+	  	var minStartVal = minVal;
+	  	if(minVal==0) minStartVal=1;
+	  	for(var i = minStartVal,j=0; i < logMaxVal; i += (logMaxVal-minStartVal)/totalCount,j+=1){
+	  	    vektor[j]=Math.log(i*10);   
 	  	}
 	  	for (var i = 0; i < numberOfMonthToDisplay; i++){
 	  		var cal = new CalHeatMap();
