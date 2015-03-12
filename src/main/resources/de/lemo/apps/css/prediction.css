@@ -1,4 +1,14 @@
-
+/* gayed-out overlay */
+#overlayDiv {
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
 /* CSS for scatterplot. */
 .axis path, .axis line {
   fill: none;

@@ -12,9 +12,8 @@
 		</ul>
 		</div>
 	</div>
-	
+	<div id="overlayDiv"></div>
 	<div class="row-fluid">
-		  
     	<div class="span9">
         <div id="viz">
         	<!-- d3js visualization -->        

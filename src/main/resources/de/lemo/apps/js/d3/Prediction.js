@@ -81,6 +81,7 @@
 		}
 		console.log("1:"+course1+" 2: "+course2);
 		var ret = [];
+		$("#overlayDiv").show();
 		$.ajax({
 			// have to use synchronous here, else the function
 			// will return before the data is fetched
@@ -104,6 +105,7 @@
 				ret = data;
 				d3classifier.run(data);
 				$.makeTable(data.validation);
+				$("#overlayDiv").hide();
 			},
 		});
 		return ret;
