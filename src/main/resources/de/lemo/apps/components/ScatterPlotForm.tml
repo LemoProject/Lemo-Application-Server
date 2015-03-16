@@ -6,7 +6,7 @@
          <div class="accordion-group">
             <div class="accordion-heading">
                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-               ${message:dateTimeOption} <b class="caret"></b>
+               Classification <b class="caret"></b>
                </a>
             </div>
             <div id="collapseOne" class="accordion-body collapse in">
@@ -23,6 +23,10 @@
                         <input t:id="endDate" class="input-small" t:value="endDate" t:format="${message:customDateFormat}" t:mixins="jquery/CustomDatepicker" t:params="datepickerparams"/>
                      </div>
                   </div>
+                  <t:label for="reference_course"/>
+                  <t:select t:id="reference_course"/>
+                  <t:label for="current_course"/>
+                  <t:select t:id="current_course"/>
                </div>
             </div>
          </div>
@@ -30,7 +34,7 @@
          <div class="accordion-group">
             <div class="accordion-heading">
                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-               Prediction<b class="caret"></b>
+               Scatterplot<b class="caret"></b>
                </a>
             </div>
             <div id="collapseTwo" class="accordion-body collapse">
@@ -39,10 +43,6 @@
                   <t:select t:id="x_Axis"/>
                   <t:label for="y_Axis"/>
                   <t:select t:id="y_Axis"/>
-                  <t:label for="reference_course"/>
-                  <t:select t:id="reference_course"/>
-                  <t:label for="current_course"/>
-                  <t:select t:id="current_course"/>
                </div>
             </div>
          </div>
@@ -50,7 +50,7 @@
          <div class="accordion-group">
             <div class="accordion-heading">
                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-               Validation<b class="caret"></b>
+               Evaluation<b class="caret"></b>
                </a>
             </div>
             <div id="collapseThree" class="accordion-body collapse">
