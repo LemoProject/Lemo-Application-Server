@@ -42,12 +42,14 @@
 	  	}
 	  	
 	  	var numberOfMonthToDisplay=monthDiff(startDate,endDate);
-	  	var totalCount=100, vektor = new Array(totalCount);
-	  	var logMaxVal = Math.log(maxVal*10);
+	  	var vectorSize = 100;
+	  	var vector = new Array(vectorSize);
+	  	var colorScale = d3.scale.pow().exponent(2);
+	  	colorScale.range([minVal,maxVal]);
+	  	colorScale.domain([0,vectorSize-1]);
 	  	var minStartVal = minVal;
-	  	if(minVal==0) minStartVal=1;
-	  	for(var i = minStartVal,j=0; i < logMaxVal; i += (logMaxVal-minStartVal)/totalCount,j+=1){
-	  	    vektor[j]=Math.log(i*10);   
+	  	for(var j=0; j<vectorSize; j+=1){
+	  	    vector[j]=1+colorScale(j);
 	  	}
 	  	for (var i = 0; i < numberOfMonthToDisplay; i++){
 	  		var cal = new CalHeatMap();
@@ -67,7 +69,7 @@
 		    		max: "#ff0000",
 		    		empty: "white"
 		    	},
-		    	legend : vektor,
+		    	legend : vector, //[0,5,10,20,90,200],
 		        displayLegend: false,   
 		        considerMissingDataAsZero: true,
 			})
