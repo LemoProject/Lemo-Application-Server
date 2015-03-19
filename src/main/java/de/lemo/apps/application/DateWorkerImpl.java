@@ -28,13 +28,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONLiteral;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
 
 public class DateWorkerImpl implements DateWorker {
@@ -115,7 +115,7 @@ public class DateWorkerImpl implements DateWorker {
 			 * anyway.
 			 */
 			monthNamesShort = new JSONArray(new java.text.DateFormatSymbols(locale).getShortMonths()).toString();
-		} catch (final JSONException e) {
+		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
 		final JSONLiteral datePickerConfig = new JSONLiteral("{" +
