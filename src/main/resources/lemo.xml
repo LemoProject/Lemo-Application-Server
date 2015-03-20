@@ -27,9 +27,9 @@
       <property name="hibernate.connection.username">${apps-hibernate-username}</property>
       <property name="hibernate.connection.password">${apps-hibernate-password}</property>
       <!-- config-->
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+      <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-         <!--  <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+       <!--  <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
       <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>-->
       
 
@@ -42,7 +42,7 @@
     <ldap-startTls>true</ldap-startTls>
    	<ldaps>false</ldaps>
    	
-   	<user-option-enabled>false</user-option-enabled>
+   	<user-option-enabled>true</user-option-enabled>
    	
     <dms-url>${lemo-dms-url}</dms-url>
 

@@ -533,6 +533,12 @@ public class ActivityTime {
 		
 		this.resolutionComputed = RESOLUTION_MAX;
 		
+		if(this.selectedUsers != null)
+		for(Long u : this.selectedUsers)
+			System.out.print(u + ",");
+		else
+			System.out.println("selected users is null");
+		
 		final Map<Long, ResultListLongObject> results = this.analysis.computeCourseActivity(courseList, this.selectedUsers,
 				beginStamp, endStamp, (long) this.resolutionComputed, learningTypeList, gender, learningList);
 
