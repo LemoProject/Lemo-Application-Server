@@ -42,6 +42,7 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Retain;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -71,6 +72,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 @SuppressWarnings({ "unused", "unused", "unused", "unused" })
 @RequiresAuthentication
 @BreadCrumb(titleKey = "myCourses")
+@Secure
 public class Explorer {
 
 	@SuppressWarnings("unused")

@@ -28,6 +28,7 @@ package de.lemo.apps.pages.account;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -42,6 +43,7 @@ import de.lemo.apps.restws.client.Initialisation;
  */
 @RequiresAuthentication
 @BreadCrumbReset
+@Secure
 public class ServerAdministration {
 
 	@Inject
