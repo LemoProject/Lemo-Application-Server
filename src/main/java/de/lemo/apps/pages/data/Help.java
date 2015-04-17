@@ -28,6 +28,7 @@ import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 
@@ -35,6 +36,7 @@ import de.lemo.apps.entities.Course;
 import de.lemo.apps.integration.CourseDAO;
 
 @RequiresAuthentication
+@Secure
 public class Help {
 	
 	@Inject

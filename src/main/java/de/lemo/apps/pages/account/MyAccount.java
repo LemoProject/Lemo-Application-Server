@@ -12,6 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -28,6 +29,7 @@ import de.lemo.apps.integration.UserDAO;
  */
 @RequiresAuthentication
 @BreadCrumbReset
+@Secure
 public class MyAccount {
 
     @Inject
