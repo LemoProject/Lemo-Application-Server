@@ -86,7 +86,7 @@ public class AnalysisImpl implements Analysis {
 	{
 		HttpParams params = this.httpClient.getParams();
 		HttpConnectionParams.setConnectionTimeout(params, 5000);
-		HttpConnectionParams.setSoTimeout(params, 20000);
+		HttpConnectionParams.setSoTimeout(params, 120000);
 	}
 
 	private ClientExecutor clientExecutor = new ApacheHttpClient4Executor(httpClient);
