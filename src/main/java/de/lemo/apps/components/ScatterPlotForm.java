@@ -30,6 +30,11 @@ public class ScatterPlotForm {
 	@Property
 	@Persist
 	@Validate("required")
+	private Features radius;
+	
+	@Property
+	@Persist
+	@Validate("required")
 	private Courses reference_course;
 
 	@Property
@@ -59,7 +64,11 @@ public class ScatterPlotForm {
 		endDate = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(1381795200000L);
-		beginDate = calendar.getTime();		
+		beginDate = calendar.getTime();	
+		radius = Features.PROGRESS_PERCENTAGE;
+		x_Axis  = Features.WORDCOUNT;
+		y_Axis = Features.UPVOTES;
+		
 	}
 	// returns datepicker params
 	public JSONLiteral getDatePickerParams() {

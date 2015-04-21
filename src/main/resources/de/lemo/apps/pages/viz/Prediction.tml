@@ -32,8 +32,6 @@
     		</t:zone> 
 			<t:ScatterPlotForm />
     	</div>
-    	
-    
   </div>
 <script type="text/javascript">
     (function(d3vis, $, undefined) {    

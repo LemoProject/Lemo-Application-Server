@@ -43,6 +43,8 @@
                   <t:select t:id="x_Axis"/>
                   <t:label for="y_Axis"/>
                   <t:select t:id="y_Axis"/>
+                  <t:label for="radius"/>
+                  <t:select t:id="radius"/>
                </div>
             </div>
          </div>

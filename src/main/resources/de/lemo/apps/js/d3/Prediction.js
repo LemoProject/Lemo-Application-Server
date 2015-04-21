@@ -155,7 +155,7 @@
 
 		var xAxisText = $("#x_Axis option:selected").text();
 		var yAxisText = $("#y_Axis option:selected").text();
-
+		var radiusText = $("#radius option:selected").text();
 
 		var margin = {top: 10, right: 10, bottom: 60, left: 60},
 		width = 950 - margin.left - margin.right,
@@ -192,9 +192,9 @@
 
 		radiusScale = d3.scale.sqrt()
 		.domain([d3.min(dataset, function(d) {
-			return d['answerCount'];
+			return d[getVariableName(radiusText)];
 		}), d3.max(dataset, function(d) {
-			return d['answerCount'];
+			return d[getVariableName(radiusText)];
 		})])
 		.range([3, 15]);
 
@@ -212,7 +212,7 @@
 		.append("circle")
 		.attr("clip-path", "url(#clip)")
 		.attr("r", function(d) {
-			return radiusScale(d['answerCount']);
+			return radiusScale(d[getVariableName(radiusText)]);
 		})
 		.attr("fill", function(d) {
 			return d['classId']===0?"skyblue":"orange";
@@ -336,6 +336,7 @@
 		}
 		$("#x_Axis").change(d3vis.changeDesign);
 		$("#y_Axis").change(d3vis.changeDesign);
+		$("#radius").change(d3vis.changeDesign);
 	};
 
 })(window.d3vis = window.d3vis || {}, jQuery);
