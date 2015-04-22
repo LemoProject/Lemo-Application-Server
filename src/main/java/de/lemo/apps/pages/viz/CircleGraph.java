@@ -49,6 +49,7 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -91,6 +92,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  *
  */
 @RequiresAuthentication
+@Secure
 @BreadCrumb(titleKey = "visCircleGraph")
 @Import(library = { "../../js/d3/CircleGraph_2.js"
 				   ,"../../js/d3/libs/packages.js",

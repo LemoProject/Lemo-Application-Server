@@ -20,6 +20,7 @@
 
 package de.lemo.apps.pages;
 
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.services.ExceptionReporter;
 
 /**
@@ -28,6 +29,7 @@ import org.apache.tapestry5.services.ExceptionReporter;
  * @version 1.0
  * @author Andreas Pursian
  */
+@Secure
 public class ExceptionReport implements ExceptionReporter {
 
 	private String error;

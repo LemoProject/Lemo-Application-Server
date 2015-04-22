@@ -49,6 +49,7 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Secure;
 import org.apache.tapestry5.corelib.components.DateField;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -95,6 +96,7 @@ import de.lemo.apps.services.internal.LongValueEncoder;
  * Visualisation for cumulative user access by week and days
  */
 @RequiresAuthentication
+@Secure
 @BreadCrumb(titleKey = "visActivityTimeCumulutive")
 @Import(library = { "../../js/d3/ActivityTimeCumulative.js",
 		"../../js/d3/libs/d3.v2.js"
